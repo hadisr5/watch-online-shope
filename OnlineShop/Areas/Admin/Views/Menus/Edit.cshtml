@@ -1,0 +1,120 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var Menu = db.Menus.Find(id);
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت منو ها</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/menus/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست منو ها</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+            <!--begin::Actions-->
+            @*<a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Today</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Month</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Year</a>*@
+            <!--end::Actions-->
+            <!--begin::Daterange-->
+            @*<a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="" data-placement="left" data-original-title="Select dashboard daterange">
+                    <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
+                    <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Aug 11</span>
+                </a>*@
+            <!--end::Daterange-->
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            ویرایش منو @Menu.title
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/Menus/Edit_Post" data-redirect="/Admin/AdminDashboard/Index#/Admin/Menus/index">
+                    <div class="kt-portlet__body">
+                        <input type="number" value="@Menu.id" name="id" style="display:none" />
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label>عنوان منو</label>
+                            <input type="text" class="form-control" placeholder="عنوان منو" name="title" value="@Menu.title">
+                            <span class="form-text text-muted">منو شما با این عنوان نمایش داده می شود </span>
+                        </div>
+                        <div class="form-group">
+                            <label>لینک منو</label>
+                            <input type="text" class="form-control" placeholder="لینک منو" name="link" value="@Menu.link">
+                            <span class="form-text text-muted"> با کلیک بر روی این منو به این لینک هدایت می شوید</span>
+                        </div>
+                        <div class="form-group">
+                            <label>منو مادر</label>
+                            <select type="text" class="form-control" placeholder="منو مادر را انتخاب کنید" name="Parent">
+                                <option>منو مادر ندارد</option>
+                                @{
+                                    var Menus = db.Menus.Where(r => r.Parent == null).ToList();
+                                    if (Menus.Count != 0)
+                                    {
+                                        foreach (var item in Menus)
+                                        {
+                                            if (Menu.Parent != null && Menu.Parent == item.id)
+                                            {
+                                                <option value="@item.id" selected>@item.title</option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.id">@item.title</option>
+                                            }
+                                        }
+                                    }
+                                }
+                            </select>
+                            <span class="form-text text-muted"> با انتخاب این مورد منو بصورت زیر منو مادر نمایش داده میشود</span>
+                        </div>
+                        <div class="form-group">
+                            <label>اولویت منو</label>
+                            <input type="number" class="form-control" placeholder="اولویت" name="priority" value="@Menu.priority">
+                            <span class="form-text text-muted">منو ها به ترتیب اولویت نمایش داده می شوند </span>
+                        </div>
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ویرایش منو </button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/Menus/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ویرایش منو')
+</script>

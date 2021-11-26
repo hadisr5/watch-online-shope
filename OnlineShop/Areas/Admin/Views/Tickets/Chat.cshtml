@@ -1,0 +1,505 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    Layout = null;
+    int id = Convert.ToInt16(ViewBag.id);
+    var ticket = db.Tickets.Find(id);
+    var ticketsCat = db.TicketChats.Where(r => r.ticketId == id).ToList();
+    ticketsCat = ticketsCat.OrderByDescending(r => r.id).ToList();
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت تیکت ها</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/Tickets/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست تیکت ها</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="m-portlet">
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                        تیکت شناسه @ticket.id
+                    </h3>
+                </div>
+            </div>
+            <div id="controls" style="display:none">
+                <button id="recordButton">
+                    record
+                </button>
+                <button id="pauseButton" disabled>Pause</button>
+                <button id="stopButton" disabled>توقف</button>
+            </div>
+
+            <div id="formats" style="display:none">Format: start recording to see sample rate</div>
+            <ol id="recordingsList"></ol>
+            <br />
+            <br />
+            <div id="app-cover">
+
+            </div>
+            <div id="app-box">
+                <div id="toggle-button" class="clickable" data-url="/admin/tickets/voice/@ticket.id"></div>
+                <div id="recorder-data">
+                    <div id="active-text" class="clickable rec-text"></div>
+                    <div id="stop-text" class="clickable rec-text active"></div>
+                </div>
+            </div>
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            <form class="myForm" id="form" method="post" action="/admin/Tickets/reply" data-redirect="/Admin/AdminDashboard/Index#/admin/tickets/chat/@id">
+                <!--begin: Datatable -->
+                <input type="text" style="display:none" value="@id" name="ticketId" />
+                @Html.AntiForgeryToken()
+                <textarea class="form-control" id="msg" style="width:100% ; min-height:100px" placeholder="پاسخ خود را اینجا تایپ کنید ..." name="text"></textarea>
+                <button type="submit" class="btn btn-info" style="margin-top:10px" id="sendTicket">ارسال</button>
+                <!--end: Datatable -->
+            </form>
+            <div id="tbody" style="margin-top:30px">
+                @{
+                    if (ticketsCat.Count != 0)
+                    {
+                        foreach (var item in ticketsCat)
+                        {
+                            if (item.isUser == null || item.isUser == false)
+                            {
+                                if (item.voice != null)
+                                {
+                                    <div class="alert alert-info m--margin-top-10 serverMsg ticketMSG">
+                                        <span class="sender">ادمین</span>
+                                        <br />
+                                        <audio controls>
+                                            <source src="/voice/@item.voice" type="audio/wav">
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                        <br />
+                                        <span class="sentDate">
+                                            @{
+                                                try
+                                                {
+                                                    DateTime d = Convert.ToDateTime(item.creationDate);
+                                                    PersianCalendar pc = new PersianCalendar();
+                                                    string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+                                                    @p
+                                                }
+                                                catch (Exception)
+                                                {
+                                                }
+                                            }
+                                        </span>
+                                    </div>
+
+                                }
+                                else
+                                {
+                                    <div class="alert alert-info m--margin-top-10 serverMsg ticketMSG">
+                                        <span class="sender">ادمین</span>
+                                        <br />
+                                        @item.text
+                                        <br />
+                                        <span class="sentDate">
+                                            @{
+                                                try
+                                                {
+                                                    DateTime d = Convert.ToDateTime(item.creationDate);
+                                                    PersianCalendar pc = new PersianCalendar();
+                                                    string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+                                                    @p
+                                                }
+                                                catch (Exception)
+                                                {
+                                                }
+                                            }
+                                        </span>
+                                    </div>
+                                }
+
+                            }
+                            else
+                            {
+                                <div class="alert alert-success m--margin-top-10 myMsg ticketMSG">
+                                    @{
+                                        string userName = "کاربر حذف شده است";
+                                        var user = db.Users.Where(r => r.id == ticket.userid).FirstOrDefault();
+                                        if (user != null)
+                                        {
+                                            userName = user.firstName + " " + user.lastName;
+                                        }
+                                    }
+                                    <span class="sender">@userName</span>
+                                    <br />
+                                    @item.text
+                                    <br />
+                                    <span class="sentDate">
+                                        @{
+                                            try
+                                            {
+                                                DateTime d = Convert.ToDateTime(item.creationDate);
+                                                PersianCalendar pc = new PersianCalendar();
+                                                string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+                                                @p
+                                            }
+                                            catch (Exception)
+                                            {
+                                            }
+                                        }
+                                    </span>
+                                </div>
+                            }
+                        }
+                    }
+                }
+
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <!--end::Form-->
+    </div>
+</div>
+<script>
+    titlePage("پاسخ به تیکت");
+</script>
+<style>
+    .alert.ticketMSG {
+        display: inline-block !important;
+    }
+
+        .alert.ticketMSG > .sender {
+            color: #e8e8e8;
+            margin-bottom: 16px;
+            display: inline-block;
+            font-style: italic;
+            font-size: 13px;
+        }
+
+    .myMsg {
+        width: 80%;
+        float: left;
+    }
+
+    .serverMsg {
+        width: 80%;
+        float: right;
+    }
+
+    span.sentDate {
+        margin-top: 20px;
+        display: inline-block;
+        font-size: 12px;
+        color: #fbfbfb;
+    }
+</style>
+<style>
+    app-cover {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        overflow-y: auto;
+    }
+
+    #app-box {
+        position: relative;
+        width: auto;
+        margin: -70px auto 0 auto;
+        margin-top: -40px;
+    }
+
+    #toggle-button {
+        width: 50px;
+        height: 100px;
+        background-color: #fff;
+        border-radius: 100px;
+        cursor: pointer;
+    }
+
+        #toggle-button:before {
+            content: '';
+            position: absolute;
+            top: 56px;
+            bottom: 6px;
+            right: 6px;
+            width: 38px;
+            opacity: 1;
+            background-color: #bcbcbc;
+            border-radius: 100px;
+            transition: 0.3s linear all;
+        }
+
+    div#active-text {
+        color: #6b6b6b;
+    }
+
+    #toggle-button.moveup:before {
+        top: 56px;
+        bottom: 6px;
+        background-color: #ff4f4f;
+        animation: moveup-1 0.3s linear forwards, moveup-2 0.3s linear 0.6s forwards, blink 1s ease-in-out 0.9s infinite;
+    }
+
+    #toggle-button.movedown:before {
+        top: 6px;
+        bottom: 56px;
+        background-color: #bcbcbc;
+        animation: movedown-1 0.3s linear 0s forwards,movedown-2 0.3s linear 0.6s forwards;
+    }
+
+    @@keyframes moveup-1 {
+        0% {
+            top: 56px;
+        }
+
+        100% {
+            top: 6px;
+        }
+    }
+
+    @@keyframes moveup-2 {
+        0% {
+            bottom: 6px;
+        }
+
+        100% {
+            bottom: 56px;
+        }
+    }
+
+    @@keyframes movedown-1 {
+        0% {
+            bottom: 56px;
+        }
+
+        100% {
+            bottom: 6px;
+        }
+    }
+
+    @@keyframes movedown-2 {
+        0% {
+            top: 6px;
+        }
+
+        100% {
+            top: 56px;
+        }
+    }
+
+    @@keyframes blink {
+        0% {
+            opacity: 1;
+        }
+
+        75% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    ol {
+        list-style: none;
+        padding: 0;
+    }
+
+    #recorder-data {
+        position: absolute;
+        top: 50%;
+        right: 60px;
+        width: 93px;
+        margin-top: -42px;
+    }
+
+    audio {
+        display: block
+    }
+
+    .rec-text {
+        color: #656565;
+        font-size: 30px;
+        line-height: 1;
+        transition: 0.3s ease color;
+        cursor: pointer;
+    }
+
+        .rec-text.active {
+            color: #fff;
+        }
+
+    #active-text {
+        margin-bottom: 16px;
+    }
+
+        #active-text.lspace {
+            letter-spacing: 2px;
+        }
+
+    #hint {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        color: #fff;
+        text-align: center;
+        padding: 10px;
+        background-color: #272727;
+    }
+</style>
+<script>
+ 
+
+
+
+    var touchstartX = 0;
+    var touchstartY = 0;
+    var touchendX = 0;
+    var touchendY = 0;
+
+
+    var gestureZone = document.getElementById('app-cover');
+    var toggleButton = document.getElementById('toggle-button');
+    var recText = document.getElementsByClassName('rec-text');
+    var activeText = document.getElementById('active-text');
+    var clickaBleElements = document.getElementsByClassName('clickable');
+    var timerInterval = null, swipeDir = -1, toggle = false, cElms = clickaBleElements.length;
+
+    gestureZone.addEventListener('touchstart', function (event) {
+        touchstartX = event.changedTouches[0].screenX;
+        touchstartY = event.changedTouches[0].screenY;
+    }, false);
+
+    gestureZone.addEventListener('touchend', function (event) {
+        touchendX = event.changedTouches[0].screenX;
+        touchendY = event.changedTouches[0].screenY;
+        handleGesture();
+    }, false);
+
+    function startRecorder() {
+        var sec = '00', min = 0;
+        activeText.classList.add('lspace');
+        activeText.innerText = min + ':' + sec;
+        timerInterval = setInterval(function () {
+            sec = parseInt(sec);
+            ++sec;
+            if (sec == 60) {
+                sec = '00';
+                ++min;
+            }
+            else {
+                if (sec < 10)
+                    sec = '0' + sec;
+            }
+
+            activeText.innerText = min + ':' + sec;
+        }, 1000);
+    }
+
+    function swipeUp() {
+        if (swipeDir == 2)
+            return;
+        else
+            swipeDir = 2;
+        $('#recordButton').click();
+        toggleButton.classList.remove('movedown');
+        toggleButton.classList.add('moveup');
+        setTimeout(function () {
+            recText[1].classList.remove('active');
+            activeText.classList.add('active');
+            startRecorder();
+        }, 600);
+    }
+
+    function swipeDown() {
+        if (swipeDir == -1 || swipeDir == 1)
+            return;
+        else
+            swipeDir = 1;
+        $('#stopButton').click();
+
+        toggleButton.classList.remove('moveup');
+        toggleButton.classList.add('movedown');
+        clearInterval(timerInterval);
+        setTimeout(function () {
+            recText[0].classList.remove('active');
+            document.getElementById('stop-text').classList.add('active');
+        }, 600);
+
+        setTimeout(function () {
+            activeText.classList.remove('lspace')
+            activeText.innerText = '';
+        }, 900);
+    }
+
+    function handleGesture() {
+        if (touchendY <= touchstartY)
+            swipeUp();
+
+        if (touchendY >= touchstartY)
+            swipeDown();
+    }
+
+    function toggleRecorder() {
+        if ((this.id == 'toggle-button') || (this.id == 'stop-text' && toggle == true) || (this.id == 'active-text' && toggle == false))
+            _toggleRecorder();
+        else
+            return;
+    }
+
+    function _toggleRecorder() {
+        if (toggle) {
+            swipeDown();
+            toggle = false;
+        }
+        else {
+            swipeUp();
+            toggle = true;
+        }
+    }
+
+    for (i = 0; i < cElms; i++) {
+        clickaBleElements[i].addEventListener("click", toggleRecorder, false);
+    }
+</script>
+<script>
+    URL = window.URL || window.webkitURL;
+
+    var gumStream; 						//stream from getUserMedia()
+    var rec; 							//Recorder.js object
+    var input; 							//MediaStreamAudioSourceNode we'll be recording
+
+    // shim for AudioContext when it's not avb.
+    var AudioContext = window.AudioContext || window.webkitAudioContext;
+    var audioContext //audio context to help us record
+
+    var recordButton = document.getElementById("recordButton");
+    var stopButton = document.getElementById("stopButton");
+    var pauseButton = document.getElementById("pauseButton");
+
+    //add events to those 2 buttons
+    recordButton.addEventListener("click", startRecording);
+    stopButton.addEventListener("click", stopRecording);
+    pauseButton.addEventListener("click", pauseRecording);
+</script>

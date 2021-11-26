@@ -1,0 +1,173 @@
+﻿@using OnlineShop.Models
+@{
+    int id = Convert.ToInt16(ViewBag.id);
+    var db = new OnlineShopEntities();
+    var faq = db.Faqs.Find(id);
+    ViewBag.Title = "Edit";
+    Layout = null;
+}
+
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">لیست سوالات متداول</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/faq/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست سوالات متداول</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+            <!--begin::Actions-->
+            @*<a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Today</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Month</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Year</a>*@
+            <!--end::Actions-->
+            <!--begin::Daterange-->
+            @*<a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="" data-placement="left" data-original-title="Select dashboard daterange">
+                    <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
+                    <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Aug 11</span>
+                </a>*@
+            <!--end::Daterange-->
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            اطلاعات سوال شناسه @id
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/faq/Edit_Faq" data-redirect="/Admin/AdminDashboard/Index#/Admin/faq/index">
+                    <input type="number" name="id" value="@id" class="hidden" />
+                    @Html.AntiForgeryToken()
+                    <div class="kt-portlet__body">
+                        <div class="example">
+                            <div class="example-preview">
+                                <ul class="nav nav-tabs nav-tabs-line">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#kt_tab_pane_1">اطلاعات</a>
+                                    </li>
+
+                                </ul>
+                                <div class="tab-content mt-5" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel" aria-labelledby="kt_tab_pane_2">
+                                        <div class="form-group">
+                                            <label>سوال</label>
+                                            <input type="text" class="form-control" value="@faq.Question" placeholder="سوال" name="Question"
+                                                   oninvalid="this.setCustomValidity('سوال را وارد کنید')" oninput="this.setCustomValidity('')" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>جواب</label>
+                                            <input type="text" class="form-control" value="@faq.Answer" placeholder="جواب" name="Answer"
+                                                   oninvalid="this.setCustomValidity('جواب را وارد کنید')" oninput="this.setCustomValidity('')" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>اولویت</label>
+                                            <input type="number" class="form-control" value="@faq.priority" placeholder="اولویت" name="priority">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label class="kt-checkbox">
+                                                    @if (faq.IsActive == true)
+                                                    {
+                                                        <input type="checkbox" name="IsActive" id="IsActive" checked value="true"><span> فعال </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" name="IsActive" id="IsActive" value="false"><span> فعال </span>
+                                                    }
+                                                    <span></span>
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>دسته بندی اصلی</label>
+                                            @{
+                                                var Cats = db.FaqCategories.ToList();
+                                                if (Cats.Count != 0)
+                                                {
+
+                                                    <select class="form-control" name="CategoryId" id="CategoryId">
+                                                        <option value="null">انتخاب نشده است</option>
+                                                        @foreach (var item in Cats)
+                                                        {
+                                                            if (faq.CategoryId == item.id)
+                                                            {
+                                                                <option value="@item.id" selected>@item.title</option>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item.id">@item.title</option>
+
+                                                            }
+                                                        }
+                                                    </select>
+
+                                                }
+                                                else
+                                                {
+                                                    <span>دسته بندی اصلی ثبت نشده است</span>
+                                                }
+                                            }
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button id="submit" class="btn btn-primary">ویرایش دسته بندی شناسه @id</button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/faq/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+<script>
+    var BootstrapSelect = { init: function () { $(".m_selectpicker").selectpicker() } }; jQuery(document).ready(function () { BootstrapSelect.init() });
+    var BootstrapSelect = { init: function () { $(".m_selectpicker").selectpicker() } }; jQuery(document).ready(function () { BootstrapSelect.init() });
+    $('#IsActive').change(function () {
+        if (this.checked) {
+            $(this).prop("value", "true");
+        }
+        else {
+            $(this).prop("value", "false");
+        }
+    });
+</script>
+
+<script>
+
+        $(document).ready(function () {
+            updatePropertyTable(@id);
+        })
+</script>

@@ -1,0 +1,228 @@
+﻿@using OnlineShop.Models
+@using System.Globalization;
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var giftOrder = db.GiftOrders.Find(id);
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title">AdminDashboard</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <a href="/Admin/AdminDashboard/Index#/Admin/GiftOrders/index" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
+            لیست سفارش جوایز
+        </a>
+    
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/admin/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+</div>
+<!-- end:: Content Head -->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        @{
+            string p = "";
+            try
+            {
+                DateTime d = Convert.ToDateTime(giftOrder.creationDate);
+                PersianCalendar pc = new PersianCalendar();
+                p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+            }
+            catch (Exception)
+            {
+            }
+        }
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <h1>
+                    سفارش شناسه @giftOrder.id
+                </h1>
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            <div class="m-portlet__head-title">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td colspan="2">
+                                اطلاعات سفارش
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                شناسه
+                            </td>
+                            <td>
+                                @giftOrder.id
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                تاریخ سفارش
+                            </td>
+                            <td>
+                                @p
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                امتیاز مصرف شده
+                            </td>
+                            <td>
+                                @giftOrder.pointRecived
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                جایزه
+                            </td>
+                            <td>
+                                @{
+                                    var gift = db.Gifts.Where(r => r.id == giftOrder.GiftId).FirstOrDefault();
+                                    if (gift!=null)
+                                    {
+                                        @gift.title   
+                                    }
+                                    else
+                                    {
+                                        @:جایزه حذف شده است
+                                    }
+                                }
+
+                            </td>
+                        </tr>
+           
+                        <tr>
+                            <td>کاربر</td>
+                            <td>
+                                @{
+                                    var user = db.Users.Where(r => r.id == giftOrder.userid).FirstOrDefault();
+                                    if (user != null)
+                                    {
+                                        <a href="/Admin/AdminDashboard/Index#/Admin/users/details/@giftOrder.userid">@user.firstName @user.lastName</a>
+                                    }
+                                    else
+                                    {
+                                        @:کاربر حذف شده است
+                                            }
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+              
+                <h4>وضعیت ارسال</h4>
+                <form class="kt-form myForm" method="post" action="/admin/GiftOrders/changeStatus/@giftOrder.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/GiftOrders/details/@giftOrder.id">
+                    <table class="table table-hover">
+                        @Html.AntiForgeryToken()
+                        <tbody>
+                            <tr>
+                                <td>
+                                    وضعیت ارسال
+                                </td>
+                                <td>
+                                    @{
+                                        if (giftOrder.isSent == true)
+                                        {
+                                            @:ارسال شده
+                                        }
+                                        else
+                                        {
+                                            @:ارسال نشده
+                                        }
+                                    }
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    وضعیت پرداخت
+                                </td>
+                                <td>
+                                    <select class="form-control" name="status" id="statusOrder">
+                                        @{
+                                            if (giftOrder.isSent == true)
+                                            {
+                                                <option value="True" selected>
+                                                    ارسال شده
+                                                </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="True">
+                                                    ارسال شده
+                                                </option>
+
+                                            }
+                                            if (giftOrder.isSent == false)
+                                            {
+
+                                                <option value="False" selected>
+                                                    ارسال نشده
+                                                </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="False">
+                                                    ارسال نشده
+                                                </option>
+                                            }
+
+                                        }
+
+                                    </select>
+                                    <input type="submit" style="display:none" id="submit" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+
+
+            </div>
+
+
+
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    titlePage('سفارش #@giftOrder.id')
+</script>
+<style>
+    .kt-svg-icon.fillStar g [fill] {
+        fill: #f59b3e;
+    }
+
+    .kt-svg-icon.emptyStar g [fill] {
+        fill: #9b9b9b;
+    }
+
+    a.btn.btn-bold.btn-sm.btn-font-sm.btn-label-brand {
+        margin-bottom: 4px;
+    }
+</style>
+

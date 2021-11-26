@@ -1,0 +1,80 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت دسته بندی ویژگی ها </h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+        <a href="#/admin/menus/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست دسته بندی ویژگی ها</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            اطلاعات دسته بندی ویژگی جدید
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" id="mainform" method="post" action="/admin/propertiesCategory/Create_Menu" data-redirect="/Admin/AdminDashboard/Index#/Admin/propertiesCategory/index">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label>عنوان</label>
+                            <input type="text" class="form-control" placeholder="عنوان دسته بندی ویژگی" name="groupname" id="groupname">
+                        </div>
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button  class="btn btn-primary">ایجاد دسته بندی ویژگی جدید</button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/propertiesCategory/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+<script>
+    $(document).on("submit", "#mainform", function (e) {
+        var result = CheckValidation();
+        return result;
+    })
+
+    function CheckValidation() {
+        if ($("#groupname").val() == "" || $("#groupname").val() == undefined) {
+            toastr.error("عنوان دسته بندی ویژگی را وارد کنید.")
+            return false;
+        }
+       
+        return true;
+    }
+</script>

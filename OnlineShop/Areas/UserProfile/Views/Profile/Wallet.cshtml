@@ -1,0 +1,263 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+    int useird = Convert.ToInt16(Session["userLogin"]);
+    var wallet = db.Wallets.Where(r => r.userId == useird).ToList();
+    int total = 0;
+}
+<main class="profile-user-page default">
+    <div class="container">
+        <div class="row">
+            <div class="profile-page col-xl-9 col-lg-8 col-md-12 order-2">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-12 profile-navbar">
+                            <div class="profile-navbar" style="margin:0">
+                                <h4>
+                                    کیف پول
+                                    <span class="mojoodi">
+
+                                    </span>
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="content-section default">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h1 class="title-tab-content">افزایش اعتبار (مقدار دلخواه)</h1>
+                                </div>
+                                <div class="col-12">
+                                    <form method="post" action="/userProfile/profile/payWallet" id="wallet_desired">
+                                        <div class="form-account-row">
+                                            <input dir="ltr" class="input-field text-right" type="text" autocomplete="off" placeholder="مبلغ دلخواه (تومان)" name="amount" id="price_1" onkeyup="number_to_letter('price_1');">
+                                        </div>
+                                        <span style="font-size: 9pt" id="letter_result_price_1"></span>
+                                        <div class="form-account-row text-center">
+                                            <button onclick="walletDesired();" class="btn btn-primary btn-no-icon">
+                                                پرداخت
+                                            </button>
+                                        </div>
+                                    </form>
+                                    <div class="message-light walletDesiredResponse" style="display: none"></div>
+                                </div>
+                            </div>
+                            @{
+                                if (wallet.Count != 0)
+                                {
+                                    <div class="profile-navbar">
+                                        <h4>
+                                            پرداخت های انجام شده
+                                        </h4>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-order">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th scope="col">شناسه</th>
+                                                    <th scope="col">پرداخت شده توسط</th>
+                                                    <th scope="col">مبلغ</th>
+                                                    <th scope="col">شناسه پرداخت</th>
+                                                    <th scope="col">تاریخ</th>
+                                                    <th scope="col">وضعیت پرداخت</th>
+                                                    <th scope="col">توضیحات</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    if (wallet.Count != 0)
+                                                    {
+                                                        foreach (var item in wallet)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    @item.id
+                                                                </td>
+                                                                <td>
+                                                                    @{
+                                                                        if (item.payByAdmin == true)
+                                                                        {
+                                                                            @:پرداخت شده توسط ادمین
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @:درگاه پرداخت
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                                <td class="fixPrice">
+                                                                    @item.amount تومان
+                                                                    @{
+                                                                        if (item.Success != null && item.Success == true)
+                                                                        {
+                                                                            total += Convert.ToInt32(item.amount);
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                                <td style="     font-family: monospace;font-weight: bold;">
+                                                                    @if (item.Token!=null)
+                                                                    {
+                                                                        @item.Token
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @{
+                                                                        try
+                                                                        {
+                                                                            DateTime d = Convert.ToDateTime(item.creationDate);
+                                                                            PersianCalendar pc = new PersianCalendar();
+                                                                            string p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                                            @p
+                                                                        }
+                                                                        catch (Exception)
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @{
+                                                                        if (item.Success != null && item.Success == true)
+                                                                        {
+                                                                            <span style="color: #40ad13">
+                                                                                پرداخت موفق
+                                                                            </span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span style="color:  #f96464;">
+                                                                                پرداخت ناموفق
+                                                                            </span>
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @item.desc
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    var payed = db.WalletPays.Where(r => r.userid == useird).ToList();
+                                    if (payed.Count != 0)
+                                    {
+                                        <div class="profile-navbar">
+                                            <h4>
+                                                برداشت از کیف پول
+                                            </h4>
+                                        </div>
+                                        <div class="table-responsive">
+
+
+                                            <table class="table table-order">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th scope="col">شناسه</th>
+                                                        <th scope="col">شناسه سفارش</th>
+                                                        <th scope="col">مبلغ</th>
+                                                        <th scope="col">تاریخ</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+
+
+                                                        foreach (var item in payed)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    @item.id
+                                                                </td>
+                                                                <td>
+                                                                    @item.basketId
+                                                                </td>
+                                                                <td>
+                                                                    <span class="fixPrice">
+                                                                        @item.amount تومان
+                                                                    </span>
+                                                                    @{
+                                                                        total -= Convert.ToInt32(item.amount);
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @{
+                                                                        try
+                                                                        {
+                                                                            DateTime d = Convert.ToDateTime(item.creationDate);
+                                                                            PersianCalendar pc = new PersianCalendar();
+                                                                            string p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                                            @p
+                                                                        }
+                                                                        catch (Exception)
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        }
+
+                                                    }
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    }
+
+
+                                }
+                                else
+                                {
+                                    <div class="content-section text-center">
+                                        <div class="icon-empty">
+                                            <i class="now-ui-icons travel_info"></i>
+                                        </div>
+                                        <h1 class="text-empty">موردی برای نمایش وجود ندارد!</h1>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @RenderPage("~/Areas/UserProfile/Views/Shared/_SideBar.cshtml")
+        </div>
+
+        @RenderPage("~/Areas/UserProfile/Views/Shared/_recentViews.cshtml")
+
+
+
+
+    </div>
+</main>
+@section JS{
+    <script>
+        changeMenu('wallet')
+        $('.mojoodi').html('<span class="fixPrice">موجودی کیف پول : ' +@WalletMoney() +' تومان</span>')
+    </script>
+}
+@functions{
+    OnlineShopEntities db = new OnlineShopEntities();
+    private Int64 WalletMoney()
+    {
+        long Total = 0;
+        int userid = Convert.ToInt32(Session["userLogin"]);
+        var allPays = db.Wallets.Where(r => r.userId == userid && (r.payByAdmin == true || r.Success == true)).ToList();
+        try
+        {
+            Total += Convert.ToInt64(allPays.Sum(r => r.amount));
+        }
+        catch (Exception er)
+        {
+        }
+        var allMinus = db.WalletPays.Where(r => r.userid == userid).ToList();
+        if (allMinus.Count != 0)
+        {
+            Total -= Convert.ToInt64(allMinus.Sum(r => r.amount));
+        }
+        return Total;
+    }
+}

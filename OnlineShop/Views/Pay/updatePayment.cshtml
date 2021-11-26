@@ -1,0 +1,204 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    var orders = Session["Orders"] as List<Order>;
+    Layout = null;
+
+    Int64 totalDiscount = 0;
+    Int64 sum = 0;
+
+    int userid = Convert.ToInt32(Session["userLogin"]);
+    var user = db.Users.Where(r => r.id == userid).FirstOrDefault();
+    var prime = false;
+    if (user.Special == true)
+    {
+        prime = true;
+    }
+    foreach (var item in orders)
+    {
+        var pro = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+        var off = db.Discounts.Where(r => r.percentage != null && r.status == 1 && r.productId == item.productId && r.expire > DateTime.Now).FirstOrDefault();
+        if (true)
+        {
+            var sellerPro = db.SellersProducts.Where(r => r.sellerId == item.SellerId && r.productId == item.productId).FirstOrDefault();
+            if (sellerPro == null || item.SellerId == null)
+            {
+                if (off != null)
+                {
+                    if (prime)
+                    {
+                        sum += Convert.ToInt64((pro.priceForSpecialUsers - (pro.priceForSpecialUsers * off.percentage) / 100) * item.quantity);
+
+                    }
+                    else
+                    {
+                        sum += Convert.ToInt64((pro.price - (pro.price * off.percentage) / 100) * item.quantity);
+
+                    }
+                }
+                else
+                {
+                    if (prime)
+                    {
+                        sum += Convert.ToInt64((pro.priceForSpecialUsers) * item.quantity);
+
+                    }
+                    else
+                    {
+                        sum += Convert.ToInt64((pro.price) * item.quantity);
+
+                    }
+                }
+            }
+            else
+            {
+                sum += Convert.ToInt64((sellerPro.price) * item.quantity);
+            }
+        }
+    }
+
+    int discountPercentage = 0;
+
+    if (Session["Discount"] != null)
+    {
+        var discount = Session["Discount"] as DiscountCode;
+        if (discount.Amont != null && discount.Amont != 0)
+        {
+            totalDiscount = Convert.ToInt64(discount.Amont);
+        }
+        else
+        {
+            if (discount.Percentage != null && discount.Percentage != 0)
+            {
+                discountPercentage = Convert.ToInt32(discount.Percentage);
+                var disPercentage = sum * discountPercentage / 100;
+                if (discount.maxPercentage != null && discount.maxPercentage != 0)
+                {
+                    if (disPercentage > discount.maxPercentage)
+                    {
+                        totalDiscount = Convert.ToInt64(discount.maxPercentage);
+                    }
+                    else
+                    {
+                        totalDiscount = disPercentage;
+                    }
+                }
+                else
+                {
+                    totalDiscount = disPercentage;
+                }
+            }
+        }
+    }
+}
+<div class="checkout-aside">
+    <div class="checkout-summary">
+        <div class="checkout-summary-main">
+            <ul class="checkout-summary-summary">
+                <li>
+                    <span>مبلغ کل (@orders.Count کالا)</span><span class="fixPrice">@sum تومان</span>
+                </li>
+                <li>
+                    <span>هزینه ارسال</span>
+                    <span>
+                        @{
+                            var shipping = Session["Shipping"] as Shipping;
+                            if (shipping==null || shipping.ShippingPrice == 0)
+                            {
+                                @:رایگان
+                            }
+                            else
+                            {
+                                <span class="fixPrice">@shipping.ShippingPrice تومان</span>
+                            }
+
+                        }
+
+
+
+                    </span>
+                </li>
+                @{
+                    if (totalDiscount != null && totalDiscount != 0)
+                    {
+                        <li>
+                            <span>کد تخفیف</span>
+                            <span>
+                                <span class="fixPrice">@totalDiscount تومان</span>
+                            </span>
+                        </li>
+                    }
+                }
+
+            </ul>
+            <div class="checkout-summary-devider">
+                <div></div>
+            </div>
+            <div class="checkout-summary-content">
+                <div class="checkout-summary-price-title">مبلغ قابل پرداخت:</div>
+                <div class="checkout-summary-price-value">
+                    @{
+                        if (totalDiscount != null && totalDiscount != 0)
+                        {
+                            <span class="checkout-summary-price-value-amount fixPrice">@(sum+shipping.ShippingPrice- totalDiscount)</span>@:تومان
+
+                        }
+                        else
+                        {
+                            <span class="checkout-summary-price-value-amount fixPrice">@(sum+shipping.ShippingPrice)</span>@:تومان
+                        }
+                    }
+                </div>
+
+                <a onclick="payment();" class="selenium-next-step-shipping">
+                    <div class="parent-btn">
+                        <button class="dk-btn dk-btn-info" style="font-size: 12pt">
+                            پرداخت و ثبت سفارش
+                            <i class="now-ui-icons shopping_basket"></i>
+                        </button>
+                    </div>
+                </a>
+                <div>
+                    <span>
+                        کالاهای موجود در سبد شما ثبت و رزرو نشده‌اند، برای ثبت سفارش مراحل بعدی
+                        را تکمیل
+                        کنید.
+                    </span>
+                    <span class="wiki wiki-holder">
+                        <span class="wiki-sign"></span>
+                        <div class="wiki-container is-right">
+                            <div class="wiki-arrow"></div>
+                            <p class="wiki-text">
+                                محصولات موجود در سبد خرید شما تنها در صورت ثبت و پرداخت سفارش
+                                برای شما رزرو
+                                می‌شوند. در
+                                صورت عدم ثبت سفارش، تاپ کالا هیچگونه مسئولیتی در قبال تغییر
+                                قیمت یا موجودی
+                                این کالاها
+                                ندارد.
+                            </p>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="checkout-feature-aside">
+        <ul>
+            <li class="checkout-feature-aside-item checkout-feature-aside-item-guarantee">
+                هفت روز
+                ضمانت تعویض
+            </li>
+            <li class="checkout-feature-aside-item checkout-feature-aside-item-cash">
+                پرداخت در محل با
+                کارت بانکی
+            </li>
+            <li class="checkout-feature-aside-item checkout-feature-aside-item-express">
+                تحویل اکسپرس
+            </li>
+        </ul>
+    </div>
+</div>
+<script>
+    fixprice();
+</script>

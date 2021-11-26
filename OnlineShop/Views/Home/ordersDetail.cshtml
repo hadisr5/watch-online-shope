@@ -1,0 +1,192 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    int userid = Convert.ToInt16(Session["userLogin"]);
+    int id = Convert.ToInt16(ViewBag.id);
+    Layout = "/views/shared/_Layout.cshtml";
+    var basket = db.Baskets.Where(r => r.id == id).FirstOrDefault();
+    if (basket.userId != userid)
+    {
+        Response.Redirect("notFound");
+        return;
+    }
+    var orders = db.Orders.Where(r => r.basketId == basket.id).ToList();
+}
+
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Breadcrumb Tow Start-->
+    <div class="breadcrumb-tow mb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-title">
+                        <h1>سفارش شناسه @basket.id</h1>
+                    </div>
+                    <div class="breadcrumb-content breadcrumb-content-tow">
+                        <ul>
+                            <li><a href="/">خانه</a></li>
+                            <li><a href="/home/orders">سفارش ها</a></li>
+                            <li class="active">سفارش @basket.id</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Breadcrumb Tow End-->
+    <!--Login Register Area Strat-->
+    <div class="login-register-area mb-80">
+        <div class="container">
+            <div class="row">
+                <!--Login Form Start-->
+                <div class="col-md-12 col-sm-12 col-md-offset-3 offset-3 mx-auto">
+                    <div class="customer-login-register">
+                        <div class="form-login-title">
+                            <h2>سفارش شناسه @basket.id</h2>
+                            <br />
+                            <table class="table table-hover frontTb">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            محصول
+                                        </td>
+                                        <td>
+                                            تعداد
+                                        </td>
+                                        <td>
+                                            قیمت واحد
+                                        </td>
+                                        <td>
+                                            قیمت کل
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (orders.Count != 0)
+                                        {
+                                            Int64 sum = 0;
+
+                                            foreach (var item in orders)
+                                            {
+                                                var product = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+                                                var sellerProduct = db.SellersProducts.Where(r => r.productId == product.id && r.sellerId == item.SellerId).FirstOrDefault();
+                                                var off = db.Discounts.Where(r => r.percentage != null && r.status == 1 && r.productId == item.productId && r.expire > item.creationDate).FirstOrDefault();
+                                                if (item.SellerId == null)
+                                                {
+                                                    if (off != null)
+                                                    {
+                                                        sum += Convert.ToInt64((product.price - (product.price * off.percentage) / 100) * item.quantity);
+
+                                                    }
+                                                    else
+                                                    {
+                                                        sum += Convert.ToInt64(product.price * item.quantity);
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (sellerProduct != null)
+                                                    {
+                                                        sum += Convert.ToInt64(sellerProduct.price * item.quantity);
+
+                                                    }
+
+                                                }
+                                                var pics = db.ProductGalleries.Where(r => r.product_id == product.id).FirstOrDefault();
+                                                string gl = "";
+                                                if (pics != null)
+                                                {
+                                                    gl = pics.big;
+                                                }
+
+                                                string tlt = product.title;
+                                                while (tlt.Contains(" "))
+                                                {
+                                                    tlt = tlt.Replace(" ", "_");
+                                                }
+                                                <tr>
+                                                    <td>
+                                                        <a href="/home/product/@item.productId/@tlt">
+                                                            @product.title
+                                                            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@gl" alt="" style="float:right ; width:70px" />
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        @item.quantity
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            if (item.SellerId == null)
+                                                            {
+                                                                @:@item.singleProductPrice تومان
+                                                            }
+                                                            else
+                                                            {
+                                                                @:@sellerProduct.price تومان
+
+
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            if (item.SellerId == null)
+                                                            {
+                                                                @:@(item.singleProductPrice * item.quantity) تومان
+
+                                                            }
+                                                            else
+                                                            {
+                                                                @:@(sellerProduct.price * item.quantity) تومان
+
+                                                            }
+                                                        }
+                                                    </td>
+
+                                                </tr>
+                                                            }
+                                                            <tr>
+                                                                <td colspan="4" style="text-align:left; padding-left:70px">
+                                                                    جمع کل :
+                                                                    <strong>
+                                                                        @sum تومان
+                                                                    </strong>
+                                                                </td>
+                                                            </tr>
+                                                            }
+                                                            else
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="4">
+                                                                        هیچ محصولی برای نمایش وجود ندارد
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                <!--Login Form End-->
+            </div>
+        </div>
+    </div>
+    <!--Login Register Area End-->
+
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+</div>

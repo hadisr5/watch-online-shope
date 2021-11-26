@@ -1,0 +1,2988 @@
+﻿`@using OnlineShop.Models
+@using System.Globalization
+@using System.Data.Entity
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc
+@using System.Configuration
+
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+    int id = Convert.ToInt16(ViewBag.id);
+    var product = db.Products.Find(id);
+    if (product.Active != true)
+    {
+        Response.Redirect("/");
+        return;
+    }
+    var questions = db.ProductQuestions.Where(p => p.ProductId == product.id && p.IsValidate == true).Include(p => p.ProductQAnswers).ToList();
+    var setting = db.Settings.FirstOrDefault();
+    ViewBag.title = setting.WebsiteName + " | " + product.title;
+    var comments = db.Comments.Where(r => r.productId == product.id && r.show == true).ToList();
+
+    var off = db.Discounts.Where(r => r.productId == product.id && r.status == 1 && r.expire > DateTime.Now).FirstOrDefault();
+    string wd = "";
+    try
+    {
+        if (off != null)
+        {
+            DateTime d = Convert.ToDateTime(off.expire);
+            PersianCalendar pc = new PersianCalendar();
+            wd = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+
+        }
+    }
+    catch (Exception er)
+    {
+    }
+    bool specialUser = false;
+    if (Session["userLogin"] != null)
+    {
+        int loginUserid = Convert.ToInt16(Session["userLogin"]);
+        var user = db.Users.Where(r => r.id == loginUserid).FirstOrDefault();
+        if (user.Special != null && user.Special == true)
+        {
+            specialUser = true;
+        }
+
+
+
+        var userViews = db.UserViews.ToList();
+        if (userViews.Count > 20)
+        {
+            while (userViews.Count > 20)
+            {
+                var forDelete = userViews.OrderBy(r => r.id).FirstOrDefault();
+                db.UserViews.Remove(forDelete);
+                db.SaveChanges();
+                userViews = db.UserViews.ToList();
+            }
+
+        }
+        var newView = new UserView();
+        newView.creationDate = DateTime.Now;
+        newView.productId = product.id;
+        newView.userId = loginUserid;
+        db.UserViews.Add(newView);
+        db.SaveChanges();
+    }
+    var gallery = db.ProductGalleries.Where(r => r.product_id == product.id).ToList();
+    var banner = db.Banners.Where(r => r.active == true).FirstOrDefault();
+}
+
+<!-- main -->
+<main class="single-product default">
+    <div class="container">
+        <div class="row">
+            <div class="col-12" style="padding: 0 68px;">
+                <div class="breadcrumb" style=" background-color: #fbfbfb; padding: 10px 0;">
+                    <nav>
+                        <a href="/" style="color: #F69400;">
+                            فروشگاه
+                            اینترنتی @setting.WebsiteName
+                        </a>
+                        @{
+                            if (true)
+                            {
+                                var categories = db.CatProes.Where(r => r.product_id == product.id).FirstOrDefault();
+                                if (categories != null)
+                                {
+                                    var cat = db.Categories.Where(r => r.id == categories.categoryId).FirstOrDefault();
+                                    if (cat != null)
+                                    {
+                                        string tlt = cat.title.Trim();
+                                        tlt = tlt.Replace(" ", "-");
+                                        <a href="/home/category/@cat.id/@tlt" style="color: #F69400;">
+                                            @cat.title
+                                        </a>
+
+                                    }
+
+                                }
+                            }
+                        }
+
+                        <a>@product.title</a>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-12">
+                <article class="product" style=" background-color: #fbfbfb;">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 section-product-gallery">
+                            <div class="product-gallery text-center default">
+                                @{
+                                    if (gallery.Count != 0)
+                                    {
+                                        var first = gallery.FirstOrDefault();
+                                        if (first != null)
+                                        {
+                                            <img class="zoom-img lazyload" id="img-product-zoom" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@first.big" data-zoom-image="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@first.big" data-src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@first.big" width="411">
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <img class="zoom-img lazyload" id="img-product-zoom" src="/Template/images/loading.png" data-zoom-image="/Template/images/loading.png" data-src="/Template/images/loading.png" width="411">
+                                    }
+                                }
+
+                                <div id="gallery_01f" style="width:500px;float:left;">
+                                    <ul class="gallery-items hidden-sm">
+                                        @{
+                                            if (gallery.Count != 0)
+                                            {
+                                                foreach (var item in gallery)
+                                                {
+                                                    <li class="item" data-toggle="modal" data-target="#galleryModal">
+                                                        <img class="lazyload" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.big" data-src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.big" width="100">
+                                                    </li>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <li class="item" data-toggle="modal" data-target="#galleryModal">
+                                                    <img class="lazyload" src="/Template/images/loading.png" data-src="/Template/images/loading.png" width="100">
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                    <ul class="gallery-items swiper-container d-none show-sm" id="gallery-slider">
+                                        <div class="swiper-wrapper">
+                                            @{
+                                                if (gallery.Count != 0)
+                                                {
+                                                    foreach (var item in gallery)
+                                                    {
+                                                    <li class="swiper-slide">
+                                                        <a data-toggle="modal" data-target="#galleryModal" class="elevatezoom-gallery  active " data-update="" data-image="@item.big" data-zoom-image="@item.big">
+                                                            <img class="lazyload" src="/template/images/11loading.png" data-src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.big" width="100">
+                                                        </a>
+                                                    </li>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <li class="swiper-slide">
+                                                    <a data-toggle="modal" data-target="#galleryModal" class="elevatezoom-gallery  active " data-update="" data-image="/Template/images/loading.png" data-zoom-image="/Template/images/loading.png">
+                                                        <img class="lazyload" src="/Template/images/loading.png" data-src="/Template/images/loading.png" width="100">
+                                                    </a>
+                                                </li>
+
+                                            }
+                                            }
+                                    </div>
+                                    <div class="swiper-button-next gallery-button-next-id">
+                                        <i class="now-ui-icons arrows-1_minimal-left"></i>
+                                    </div>
+                                    <div class="swiper-button-prev gallery-button-prev-id">
+                                        <i class="now-ui-icons arrows-1_minimal-right"></i>
+                                    </div>
+                                    </ul>
+
+                                </div>
+                                <!-- Modal -->
+                                <div class="modal gallery-modal fade" id="galleryModal" tabindex="-1"
+                                     role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered in-responsive-full-width"
+                                         role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="remodal-wrapper">
+                                                    <div class="remodal remodal-gallery"
+                                                         data-remodal-id="product-gallery"
+                                                         data-remodal-options="hashTracking: false"
+                                                         role="dialog" aria-labelledby="modal1Title"
+                                                         aria-describedby="modal1Desc" tabindex="-1">
+                                                        <div class="remodal-gallery-main">
+                                                            <div class="remodal-gallery-content">
+                                                                <div class="swiper-container remodal-gallery-main-id">
+                                                                    <div class="swiper-wrapper">
+                                                                        @{
+                                                                            if (gallery.Count != 0)
+                                                                            {
+                                                                                foreach (var item in gallery)
+                                                                                {
+                                                                                    <div class="swiper-slide">
+                                                                                        <div class="swiper-zoom-container">
+                                                                                            <img data-src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.big"
+                                                                                                 src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.big">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="remodal-gallery-side">
+                                                                <div class="swiper-button-next modal-button-next-id">
+                                                                </div>
+                                                                <div class="swiper-button-prev modal-button-prev-id">
+                                                                </div>
+                                                                <div class="swiper-container modal-gallery-thumbs-id">
+                                                                    <div class="swiper-wrapper">
+                                                                        @{
+                                                                            if (gallery.Count != 0)
+                                                                            {
+                                                                                foreach (var item in gallery)
+                                                                                {
+                                                                                    <div class="swiper-slide">
+                                                                                        <img data-src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.big"
+                                                                                             src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.big">
+                                                                                    </div>
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*<ul class="gallery-options">
+                                <li>
+                                    @{
+                                        if (Session["userlogin"] == null)
+                                        {
+                                            <button class="add-favorites" data-toggle="modal" data-target="#modalLogin"><i class="fa fa-heart-o"></i></button>
+                                        }
+                                        else
+                                        {
+                                            int userid = Convert.ToInt16(Session["userLogin"]);
+                                            var wishList = db.WishLists.Where(r => r.productId == product.id && r.userid == userid).FirstOrDefault();
+                                            if (wishList != null)
+                                            {
+                                                <button class="add-favorites favorites" onclick="favorites('@product.id');">
+                                                    <i class="fa fa-heart-o"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button class="add-favorites" onclick="favorites('@product.id');"><i class="fa fa-heart-o"></i></button>
+                                            }
+                                        }
+
+                                    }
+                                    <span class="tooltip-option">افزودن به علاقمندی</span>
+                                </li>
+                                <li>
+                                    <button data-toggle="modal" data-target="#myModal"><img src="/template/images/share.svg"></button>
+                                    <span class="tooltip-option">اشتراک گذاری</span>
+                                </li>
+                                <li>
+                                        <button data-toggle="modal" data-target="#PriceModal"><img src="/template/images/chart.svg"></button>
+                                        <span class="tooltip-option">نمودار قیمت</span>
+                                    </li>
+                                <li class="hidden-sm">
+                                        <a href="#"><img src="/template/images/comparison.svg"></a>
+                                        <span class="tooltip-option">مقایسه</span>
+                                    </li>
+                            </ul>*@
+                            <!-- Modal Core -->
+                            <div class="modal-share modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                &times;
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form class="form-share">
+                                                <div class="form-share-title">
+                                                    اشتراک گذاری در شبکه های اجتماعی
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <ul class="btn-group-share">
+                                                            <li>
+                                                                <a href="https://t.me/share/url?url=" class="btn-share btn-share-twitter" target="_blank"><i class="fa fa-paper-plane"></i></a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="https://wa.me/?text=" class="btn-share btn-share-whatsapp" target="_blank"><img src="/template/images/whatsapp.png" alt=""></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form class="form-share-url default">
+                                                <div class="form-share-url-title">آدرس صفحه</div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <label class="ui-url">
+                                                            <input type="text" readonly="" class="ui-url-field" id="inputUrl" value="#">
+                                                            <button type="button" id="buttonCopyUrl" onclick="copyUrl()">
+                                                                <img src="/template/images/copy.png">
+                                                            </button>
+                                                        </label>
+                                                        <!-- Trigger -->
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal Core -->
+                            <!-- Modal Core -->
+                            <div class="modal-share modal fade" id="PriceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                &times;
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            نمودار قیمت
+                                        </div>
+                                        <div class="modal-footer">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal Core -->
+                        </div>
+                        <div class="col-xl-8 col-lg-6 col-md-6 col-sm-12">
+                            <div class="product-title default justify-content-between product-header">
+                                <div>
+                                    <h1>
+                                        <i class="fa fa-chevron-left" style="color: #f0495a;"></i>
+                                        @product.title
+                                        @*<span>
+            @product.subTitle
+        </span>*@
+                                    </h1>
+                                </div>
+                                
+                                <div class="d-flex product-price">
+                                    @{
+                                        if (product.price != null)
+                                        {
+                                            <div class="product-params default greentext" data-id="3">
+                                                <div class="price-value text-left pl-3 mt-2">
+                                                    
+                                                    @{
+                                                        if (off != null)
+                                                        {
+                                                            var price = product.price - (product.price * off.percentage / 100);
+                                                            <span class="disCountInProduct">
+                                                                <span class="discountRoundInPro">@off.percentage%</span>
+                                                                <del class="discountInCats">
+                                                                    <span class="fixPrice">@product.price تومان</span>
+                                                                </del>
+                                                            </span>
+                                                            <br />
+                                                            <span class="fixPrice"> @price </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (specialUser && product.price != null)
+                                                            {
+                                                                <span class="fixPrice"> @product.priceForSpecialUsers </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="fixPrice"> @product.price </span>
+                                                            }
+                                                        }
+                                                    }
+                                                    <span class="price-currency">تومان</span>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                <div>
+                                    @{
+                                        if (product.price != null)
+                                        {
+                                            <form class="add-quantity" method="post" action="/cart/AddToCard">
+                                                @Html.AntiForgeryToken()
+                                                <input type="text" name="productId" style="display:none !important" value="@product.id" />
+                                                <input value="1" type="number" class="quantityInput" name="quantity" style="display:none !important" id="qnt">
+                                                <input type="hidden" id="colorInput" value="0" name="colorId" />
+                                                <input type="hidden" id="sizeInput" value="0" name="sizeId" />
+                                                <div class="bottom-seller-info text-right">
+                                                    <div class="product-add default btnautowidth">
+                                                        <div class="parent-btn">
+
+                                                            @*<div class="number-input float-lg-right float-md-right" style="margin-top: 15px; margin-left: 3px;">
+                                    <span>
+                                        <button onclick="var num = +$('#quantity').val() - 1; $('#quantity').val(num);$('#qnt').val(num); return false;" class="minus"></button>
+                                    </span>
+                                    <input class="quantity" min="1" value="1" type="number" id="quantity" name="quantity2" disabled>
+                                    <span>
+                                        <button onclick="var num = +$('#quantity').val() + 1;$('#quantity').val(num);$('#qnt').val(num); return false;" class="plus"></button>
+                                    </span>
+                                </div>*@
+                                                            <button type="submit"  class="dk-btn dk-btn-info btn-primary">
+                                                                افزودن به سبد خرید
+                                                                @*<i class="now-ui-icons shopping_cart-simple"></i>*@
+                                                            </button>
+                                                            @*<div class="c-product__seller-digiclub">
+                                                                <img src="~/Template/images/coin.png" class="poinCoin">
+                                                                <div class="poinCoinText">
+                                                                    <span>@product.point</span>
+                                                                    امتیاز پس از فعال&zwnj;سازی حساب کاربری و خرید این کالا
+                                                                </div>
+                                                            </div>*@
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <strong class="noPriceLabel">
+                                                برای استعلام قیمت تماس بگیرید
+                                            </strong>
+                                        }
+
+                                    }
+                                </div>
+                                    
+                                </div>
+                               
+                            </div>
+                            <div class="product-directory default">
+                                <ul>
+                                    <li class="stack-menu__item" style="display: block; line-height: 2.5em;">
+                                        <img width="15" height="15" src="~/template/images/security.png" alt="">
+                                        <span>برند</span> :
+                                        <span class="greentext">
+                                            @{
+                                                if (product.brandId == null)
+                                                {
+                                                    @:ندارد
+                                                }
+                                                else
+                                                {
+                                                    var brand = db.ProductsBrands.Where(r => r.id == product.brandId).FirstOrDefault();
+                                                    @brand.title
+                                                }
+                                            }
+                                        </span>
+                                    </li>
+                                    <li class="stack-menu__item" style="display: block; line-height: 2.5em;">
+                                        <img width="15" height="15" src="~/template/images/security.png" alt="">
+                                        <span>برند</span> :
+                                        <span class="greentext">
+                                            @{
+                                                if (product.brandId == null)
+                                                {
+                                                    @:ندارد
+                                                }
+                                                else
+                                                {
+                                                    var brand = db.ProductsBrands.Where(r => r.id == product.brandId).FirstOrDefault();
+                                                    @brand.title
+                                                }
+                                            }
+                                        </span>
+                                    </li>
+                                    <li class="stack-menu__item" style="display: block; line-height: 2.5em;">
+                                        <img width="15" height="15" src="~/template/images/security.png" alt="">
+                                        <span>دسته‌بندی</span> :
+                                        @{
+                                            var productCategories = db.CatProes.Where(r => r.product_id == product.id).ToList();
+                                            if (productCategories.Count != 0)
+                                            {
+
+                                                foreach (var item in productCategories)
+                                                {
+                                                    var cat = db.Categories.Where(r => r.id == item.categoryId).FirstOrDefault();
+                                                    if (cat != null)
+                                                    {
+                                                        string tlt = cat.title.Trim();
+
+                                                        tlt = tlt.Replace(" ", "-");
+                                                        <a href="/home/category/@cat.id/@tlt" class="greentext">
+                                                            @cat.title
+                                                        </a>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a href="#" class="btn-link-border">
+                                                    ندارد
+                                                </a>
+                                            }
+                                        }
+                                    </li>
+                                    <li class="stack-menu__item" style="display: block; line-height: 2.5em;">
+                                        <img width="15" height="15" src="~/template/images/card.png" alt="">
+                                        <span>برچسب</span> : @*change it to tags process later*@
+                                        @{
+                                            var productCategories2 = db.CatProes.Where(r => r.product_id == product.id).ToList();
+                                            if (productCategories.Count != 0)
+                                            {
+
+                                                foreach (var item in productCategories)
+                                                {
+                                                    var cat = db.Categories.Where(r => r.id == item.categoryId).FirstOrDefault();
+                                                    if (cat != null)
+                                                    {
+                                                        string tlt = cat.title.Trim();
+
+                                                        tlt = tlt.Replace(" ", "-");
+                                                        <a href="/home/category/@cat.id/@tlt" class="greentext">
+                                                            @cat.title
+                                                        </a>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a href="#" class="btn-link-border">
+                                                    ندارد
+                                                </a>
+                                            }
+                                        }
+                                    </li>
+                                </ul>
+                                <br />
+
+                                @{
+                                    var sizes = db.SizeProducts.Where(r => r.productId == id).ToList();
+                                    if (sizes.Count != 0)
+                                    {
+                                        <div class="SizeSelectorContainer">
+                                            <label>سایز : </label>
+                                            <select class="input-field sizeSelector">
+                                                @foreach (var item in sizes)
+                                                {
+                                                    var sz = db.Sizes.Where(r => r.id == item.SizeId).FirstOrDefault();
+                                                    if (sz != null)
+                                                    {
+                                                        <option value="@sz.id">@sz.Size1</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    }
+                                }
+                                <div class="colorSelectorContainer hidden">
+                                    <label class="colorLabel">رنگ : </label>
+                                    <div class="singleColorContainer">
+                                    </div>
+                                    <div style="clear:both"></div>
+
+                                </div>
+
+                            </div>
+                            <div class="product-params default">
+                                <ul data-title="ویژگی‌های محصول">
+                                    @{
+                                        if (productCategories.Count != 0)
+                                        {
+                                            int ctId = 0;
+                                            ctId = Convert.ToInt16(productCategories.FirstOrDefault().categoryId);
+                                            var ct = db.Categories.Where(r => r.id == ctId).FirstOrDefault();
+                                            if (ct != null)
+                                            {
+                                                var properties = db.CatProperties.Where(r => r.catId == ct.id).ToList();
+                                                if (properties.Count != 0)
+                                                {
+                                                    foreach (var item in properties)
+                                                    {
+                                                        var val = db.ProductPropertiesValues.Where(r => r.proId == product.id && r.propertiesid == item.id).FirstOrDefault();
+                                                        if (val != null)
+                                                        {
+                                                            <li>
+                                                                <span>@item.title: </span>
+                                                                <span>@val.value </span>
+                                                            </li>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                    <li>
+                                        رنگ بندی
+                                    </li>
+                                </ul>
+                               
+                                    
+                                
+                                <div class="d-flex">
+                                    <div class="m-3 rounded-circle coloring" style="background: #5A3125;"></div>
+                                    <div class="m-3 rounded-circle coloring" style="background: #000000;"></div>
+                                    <div class="m-3 rounded-circle coloring" style="background: #C1C1C1;"></div>
+                                </div>
+                            </div>
+                           
+
+                            </ul>
+                           
+                            @*<div class="product-feature-box">
+                                    <div class="row">
+                                        <div class="product-feature-col">
+                                            <a href="#" target="_blank" class="product-feature-item product-feature-item--1">
+                                                <img src="/template/images/1576430010.svg" alt="">
+                                                تحویل اکسپرس
+                                            </a>
+                                        </div>
+                                        <div class="product-feature-col">
+                                            <a href="#" target="_blank" class="product-feature-item product-feature-item--1">
+                                                <img src="/template/images/1576430089.svg" alt="">
+                                                پشتیبانی 24 ساعته
+                                            </a>
+                                        </div>
+                                        <div class="product-feature-col">
+                                            <a href="#" target="_blank" class="product-feature-item product-feature-item--1">
+                                                <img src="/template/images/1576430219.svg" alt="">
+                                                پرداخت در محل
+                                            </a>
+                                        </div>
+                                        <div class="product-feature-col">
+                                            <a href="#" target="_blank" class="product-feature-item product-feature-item--1">
+                                                <img src="/template/images/1576430255.svg" alt="">
+                                                7 روز ضمانت بازگشت
+                                            </a>
+                                        </div>
+                                        <div class="product-feature-col">
+                                            <a href="#" target="_blank" class="product-feature-item product-feature-item--1">
+                                                <img src="/template/images/1576430284.svg" alt="">
+                                                ضمانت اصل بودن کالا
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>*@
+
+                        </div>
+
+                        @*<div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 center-breakpoint pr-0" id="price_box">
+                            @{
+                                if (product.isAvailable == true)
+                                {
+                                    <div class="drilldown-menu default mt-2">
+                                        <div id="product-seller-info-box">
+                                            <div class="skeleton-loader" style="display: none;">
+                                                <div class="ph-item">
+                                                    <div class="pr-0">
+                                                        <div class="ph-row">
+                                                            <div class="ph-col-12 big ph-h-40"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ph-col-2">
+                                                        <div class="ph-avatar"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="ph-item">
+                                                    <div class="pr-0">
+                                                        <div class="ph-row">
+                                                            <div class="ph-col-12 big ph-h-40"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ph-col-2">
+                                                        <div class="ph-avatar"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="ph-item">
+                                                    <div class="pr-0">
+                                                        <div class="ph-row">
+                                                            <div class="ph-col-12 big ph-h-40"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ph-col-2">
+                                                        <div class="ph-avatar"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="ph-item">
+                                                    <div>
+                                                        <div class="ph-row">
+                                                            <div class="ph-col-12 big ph-h-60"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="ph-item">
+                                                    <div>
+                                                        <div class="ph-row">
+                                                            <div class="ph-col-12 big ph-h-40"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <nav id="product-seller-info" class="stack-menu" style="display: block;">
+                                                    <ul class="stack-menu__list stack-menu__list--root stack-menu__list--active">
+                                                        <li class="product-seller-row--seller stack-menu__item" data-id="0">
+                                                            <a href="javascript:void(0)" class="stack-menu__link">
+                                                                <i class="now-ui-icons shopping_shop"></i>
+                                                                <div class="c-product-seller-row-main">
+                                                                    <div class="c-product-seller-first-line">
+                                                                        فروشنده:
+                                                                        <span class="c-product-seller-name">@setting.WebsiteName</span>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+
+                                                        </li>
+                                                        <li class="stack-menu__item" data-id="1">
+                                                            <a class="stack-menu__link">
+                                                                <img src="/template/images/security.png">
+                                                                گارانتی اصالت و سلامت فیزیکی کالا
+                                                            </a>
+                                                        </li>
+                                                        <li class="stack-menu__item" data-id="2">
+                                                            <a href="#" class="stack-menu__link ">
+                                                                <img src="/template/images/shopping.svg" alt="">
+                                                                از @product.deliveryDate روز دیگر
+                                                            </a>
+
+                                                        </li>
+                                                        @{
+                                                            if (product.price != null)
+                                                            {
+                                                                <li class="stack-menu__item" data-id="3">
+                                                                    <div class="price-value text-left pl-3">
+                                                                        @{
+                                                                            if (off != null)
+                                                                            {
+                                                                                var price = product.price - (product.price * off.percentage / 100);
+                                                                                <span class="disCountInProduct">
+                                                                                    <span class="discountRoundInPro">@off.percentage%</span>
+                                                                                    <del class="discountInCats">
+                                                                                        <span class="fixPrice">@product.price تومان</span>
+                                                                                    </del>
+                                                                                </span>
+                                                                                <br />
+                                                                                <span class="fixPrice"> @price </span>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                if (specialUser && product.price != null)
+                                                                                {
+                                                                                    <span class="fixPrice"> @product.priceForSpecialUsers </span>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <span class="fixPrice"> @product.price </span>
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        <span class="price-currency">تومان</span>
+                                                                    </div>
+                                                                </li>
+                                                            }
+                                                        }
+
+                                                    </ul>
+                                                    @{
+                                                        if (product.price != null)
+                                                        {
+                                                            <form class="add-quantity" method="post" action="/cart/AddToCard">
+                                                                <input type="text" name="productId" style="display:none !important" value="@product.id" />
+                                                                <input value="1" type="number" class="quantityInput" name="quantity" style="display:none !important" id="qnt">
+                                                                <input type="hidden" id="colorInput" value="0" name="colorId" />
+                                                                <input type="hidden" id="sizeInput" value="0" name="sizeId" />
+                                                                <div class="bottom-seller-info text-left">
+                                                                    <div class="product-add default px-3">
+                                                                        <div class="parent-btn">
+                                                                            <button type="submit" style="width:100%" class="dk-btn dk-btn-info px-0 d-block stack-menu__link">
+                                                                                افزودن به سبد خرید
+                                                                                <i class="now-ui-icons shopping_cart-simple"></i>
+                                                                            </button>
+                                                                            <div class="c-product__seller-digiclub">
+                                                                                <img src="~/Template/images/coin.png" class="poinCoin">
+                                                                                <div class="poinCoinText">
+                                                                                    <span>@product.point</span>
+                                                                                    امتیاز پس از فعال&zwnj;سازی حساب کاربری و خرید این کالا
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        }
+                                                        else
+                                                        {
+                                                            <strong class="noPriceLabel">
+                                                                برای استعلام قیمت تماس بگیرید
+                                                            </strong>
+                                                        }
+
+                                                    }
+                                                    <div class="product-seller-row--other-sellers default d-none">
+                                                        <a href="#product-seller-list" id="btn-product-seller-list" class="stack-menu__link">
+                                                            <div class="product-seller-row-main">
+                                                                <span class="u-text-bold">
+                                                                    <span id="more-suppliers-count">1</span> فروشنده
+                                                                </span>
+                                                                دیگر این کالا
+                                                            </div>
+                                                            <div class="product-seller-row-info">
+                                                                مشاهده
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </nav>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="drilldown-menu default mt-2">
+                                        <div id="product-seller-info-box">
+                                            <nav id="product-seller-info" class="stack-menu" style="display: block;">
+                                                <ul class="stack-menu__list stack-menu__list--root stack-menu__list--active">
+                                                    <div class="content-info px-3 pt-3">
+                                                        <div class="product-stock-title">
+                                                            ناموجود
+                                                        </div>
+                                                        <p style="text-align: justify">
+                                                            متاسفانه این کالا در حال حاضر موجود نیست. می&zwnj;توانید از طریق لیست پایین صفحه، از محصولات مشابه این کالا دیدن نمایید
+                                                        </p>
+                                                    </div>
+                                                </ul>
+                                                <div class="bottom-seller-info text-left default">
+                                                    <div class="product-add default px-3">
+                                                        <div class="parent-btn">
+                                                            <button class="dk-btn dk-btn-grey dk-no-icon" style="width: 100%">
+                                                                موجود نیست
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+
+
+                        </div>*@
+                    </article>
+                </div>
+
+            </div>
+
+            @{
+
+                var sellers = db.SellersProducts.Where(r => r.productId == id && r.isActive == true).ToList();
+
+                if (sellers.Count != 0 && product.isAvailable == true)
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="sellerTitle">
+                                لیست فروشنده / گارانتی‌های این محصول
+                            </h1>
+                            <div class="table-responsive">
+
+
+
+                                @{
+                                    foreach (var item in sellers)
+                                    {
+                                        <form class="add-quantity" method="post" action="/home/AddToCard">
+                                            @Html.AntiForgeryToken()
+                                            <input type="text" name="productId" style="display:none !important" value="@product.id" />
+                                            <input type="text" name="seller" style="display:none !important" value="@item.sellerId" />
+                                            <input value="1" type="number" class="quantityInput" name="quantity" style="display:none !important" id="qnt">
+                                            <table class="table tableSellers">
+
+                                                <tbody>
+                                                    @{
+                                                        var seller = db.Sellers.Where(r => r.id == item.sellerId).FirstOrDefault();
+                                                        if (seller != null)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    <span class="ShopIcon">
+                                                                        <i class="now-ui-icons shopping_shop"></i>
+                                                                    </span>
+                                                                    <h6 class="shopTitle">@seller.name @seller.lastname</h6>
+                                                                </td>
+                                                                <td>
+                                                                    <img src="/template/images/shopping.svg" alt="" />
+                                                                    ارسال از @item.Delivery روز آینده
+                                                                </td>
+                                                                <td>
+                                                                    <img src="~/Template/images/security.png" alt="" />
+                                                                    @item.Warranty
+                                                                </td>
+                                                                <td style="font-size:1rem">
+                                                                    <strong class="fixPrice" style="font-size:1.3rem">@item.price</strong> تومان
+                                                                </td>
+                                                                <td>
+                                                                    <button type="submit" class="btn btn-primary">اضافه کردن به سبد</button>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                        </form>
+                                    }
+                                }
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            }
+
+
+            <div class="row">
+                <div class="container">
+                    <div class="col-12 default no-padding">
+                        <div class="product-details-ac d-none show-mb">
+                            <div class="accordion box-tabs tab-content" id="accordionExample">
+                                <div class="card">
+                                    <div class="card-header" id="headingOne">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                نقد و بررسی
+                                                <span>بیشتر <i class="now-ui-icons arrows-1_minimal-left"></i></span>
+                                            </button>
+                                        </h2>
+                                    </div>
+
+                                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
+                                        <div class="card-body">
+                                            <article>
+                                                <h2 class="param-title">
+                                                    نقد و بررسی تخصصی
+                                                    <span>@product.title</span>
+                                                </h2>
+                                                <div class="parent-expert default">
+                                                    <div class="content-expert">
+                                                        <p style="text-align:justify">@Html.Raw(product.description)</p>
+                                                    </div>
+                                                    <div class="sum-more">
+                                                        <span class="show-more btn-link-border" style="">
+                                                            نمایش بیشتر
+                                                        </span>
+                                                        <span class="show-less btn-link-border" style="display: none;">
+                                                            بستن
+                                                        </span>
+                                                    </div>
+                                                    <div class="shadow-box" style=""></div>
+                                                </div>
+
+                                                <div class="content-expert-stats default">
+                                                    <div class="content-expert-evaluation">
+                                                        <div class="row">
+
+
+
+
+
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="accordion default" id="accordionExample">
+                                                    <div class="card-body">
+
+                                                    </div>
+                                                </div>
+
+                                            </article>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingTwo">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                مشخصات
+                                                <span>بیشتر <i class="now-ui-icons arrows-1_minimal-left"></i></span>
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample" style="">
+                                        <div class="card-body params">
+                                            <article>
+                                                <h2 class="param-title">
+                                                    مشخصات فنی
+                                                    <span></span>
+                                                </h2>
+
+                                                <section>
+                                                    <h3 class="params-title">مشخصات کلی</h3>
+                                                    <ul class="params-list">
+                                                        @{
+                                                            if (productCategories.Count != 0)
+                                                            {
+                                                                int ctId = 0;
+                                                                ctId = Convert.ToInt16(productCategories.FirstOrDefault().categoryId);
+                                                                var ct = db.Categories.Where(r => r.id == ctId).FirstOrDefault();
+                                                                if (ct != null)
+                                                                {
+                                                                    var properties = db.CatProperties.Where(r => r.catId == ct.id).ToList();
+                                                                    if (properties.Count != 0)
+                                                                    {
+                                                                        foreach (var item in properties)
+                                                                        {
+                                                                            var val = db.ProductPropertiesValues.Where(r => r.proId == product.id && r.propertiesid == item.id).FirstOrDefault();
+                                                                            <li>
+                                                                                <div class="params-list-key">
+                                                                                    <span class="d-block">@item.title</span>
+                                                                                </div>
+                                                                                <div class="params-list-value">
+                                                                                    <span class="d-block">
+                                                                                        @{
+                                                                                            if (val != null)
+                                                                                            {
+                                                                                                @val.value
+                                                                                            }
+                                                                                        }
+                                                                                    </span>
+                                                                                </div>
+                                                                            </li>
+
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                        }
+                                                    </ul>
+                                                </section>
+                                                @*<section>
+                                                        <h3 class="params-title">مصرف انرژی</h3>
+                                                        <ul class="params-list">
+                                                            <li>
+                                                                <div class="params-list-key">
+                                                                    <span class="d-block">رتبه انرژی</span>
+                                                                </div>
+                                                                <div class="params-list-value">
+                                                                    <span class="d-block">
+                                                                        A+++
+                                                                    </span>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </section>
+                                                    <section>
+                                                        <h3 class="params-title">گنجایش و ابعاد</h3>
+                                                        <ul class="params-list">
+                                                            <li>
+                                                                <div class="params-list-key">
+                                                                    <span class="d-block">ظرفیت دیگ</span>
+                                                                </div>
+                                                                <div class="params-list-value">
+                                                                    <span class="d-block">
+                                                                        8 کیلوگرم
+                                                                    </span>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="params-list-key">
+                                                                    <span class="d-block">جهت بازشدن در</span>
+                                                                </div>
+                                                                <div class="params-list-value">
+                                                                    <span class="d-block">
+                                                                        به سمت چپ
+                                                                    </span>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </section>*@
+                                            </article>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingThree">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                نظرات کاربران
+                                                <span>بیشتر <i class="now-ui-icons arrows-1_minimal-left"></i></span>
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample" style="">
+                                        <div class="card-body">
+                                            <article>
+                                                <h2 class="comments-headline">
+                                                    امتیاز کاربران به:
+                                                    <span>
+                                                        <span>
+                                                            @product.title
+                                                        </span>
+                                                    </span>
+                                                </h2>
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <ul class="content-expert-rating">
+                                                            @{
+                                                                var productRattingGroup = db.ProductRatings.Where(r => r.productId == product.id).FirstOrDefault();
+                                                                if (productRattingGroup != null)
+                                                                {
+                                                                    var rattings = db.Ratings.Where(r => r.groupName == productRattingGroup.groupId).ToList();
+                                                                    if (rattings.Count != 0)
+                                                                    {
+                                                                        foreach (var item in rattings)
+                                                                        {
+                                                                            int percentage = 50;
+                                                                            int sum = 0;
+                                                                            int count = 0;
+                                                                            if (comments.Count != 0)
+                                                                            {
+                                                                                foreach (var item2 in comments)
+                                                                                {
+                                                                                    var rate = db.RattingComments.Where(r => r.rattingId == item.id && r.commentId == item2.id).FirstOrDefault();
+                                                                                    if (rate != null)
+                                                                                    {
+                                                                                        sum += Convert.ToInt32(rate.rating);
+                                                                                        count++;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            if (count != 0)
+                                                                            {
+                                                                                percentage = (sum / count) * 20;
+                                                                            }
+
+                                                                            <li>
+                                                                                <div class="cell">
+                                                                                    @item.title
+                                                                                </div>
+                                                                                <div class="cell">
+                                                                                    <div class="rating rating--general">
+                                                                                        <div class="rating-rate" data-rate-value="100%" style="width: @(percentage)%;"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                            }
+
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <div class="comments-summary-note">
+                                                            <span>
+                                                                شما هم می&zwnj;توانید در مورد این کالا نظر
+                                                                بدهید.
+                                                            </span>
+                                                            <p>
+                                                                برای ثبت نظر، لازم است ابتدا وارد حساب کاربری خود
+                                                                شوید. اگر این محصول را قبلا
+                                                                از دیجی لارا
+                                                                خریده
+                                                                باشید، نظر
+                                                                شما به عنوان مالک محصول ثبت خواهد شد.
+                                                            </p>
+                                                            <div class="parent-btn">
+                                                                @if (Session["userLogin"] == null)
+                                                                {
+
+                                                                    <a href="#" data-toggle="modal" data-target="#modalLogin" class="dk-btn dk-btn-grey">
+                                                                        افزودن نظر جدید
+                                                                        <i class="now-ui-icons ui-2_chat-round"></i>
+                                                                    </a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="/home/comments/@product.id" class="dk-btn dk-btn-grey">
+                                                                        افزودن نظر جدید
+                                                                        <i class="now-ui-icons ui-2_chat-round"></i>
+                                                                    </a>
+                                                                }
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                @{
+                                                    if (comments.Count != 0)
+                                                    {
+                                                        <h2 class="param-title mt-5">
+                                                            نظرات کاربران
+                                                            <span>@comments.Count نظر</span>
+                                                        </h2>
+                                                        <div class="comments-area default">
+                                                            <ol class="comment-list" id="comment_show">
+
+                                                                @foreach (var item in comments)
+                                                                {
+                                                                    var user = db.Users.Where(r => r.id == item.userid).FirstOrDefault();
+                                                                    string userFullName = "کاربر حذف شده است";
+                                                                    if (user != null)
+                                                                    {
+                                                                        userFullName = user.firstName + " " + user.lastName;
+                                                                    }
+                                                                    string dt = string.Empty;
+                                                                    if (item.creationDate != null)
+                                                                    {
+                                                                        DateTime d = Convert.ToDateTime(item.creationDate);
+                                                                        PersianCalendar pc = new PersianCalendar();
+                                                                        dt = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                                    }
+                                                                    <li>
+                                                                        <div class="comment-body">
+                                                                            <div class="row">
+                                                                                <div class="col-md-12 col-sm-12 comment-content">
+                                                                                    <div class="comment-title">
+                                                                                        @item.title
+                                                                                    </div>
+
+                                                                                    <div class="comment-author">
+                                                                                        توسط @userFullName در
+                                                                                        تاریخ @dt
+                                                                                    </div>
+
+
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-4 col-sm-6 col-12">
+                                                                                            @{
+                                                                                                var advantages = db.CommentAdvantages.Where(r => r.commentId == item.id && r.advantage == true).ToList();
+                                                                                                if (advantages.Count != 0)
+                                                                                                {
+                                                                                                    <div class="content-expert-evaluation-positive">
+                                                                                                        <span>نقاط قوت</span>
+                                                                                                        <ul>
+                                                                                                            @foreach (var item2 in advantages)
+                                                                                                            {
+                                                                                                                <li>@item2.text</li>
+                                                                                                            }
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                }
+                                                                                                var DisAdvantages = db.CommentAdvantages.Where(r => r.commentId == item.id && r.advantage == false).ToList();
+                                                                                                if (DisAdvantages.Count != 0)
+                                                                                                {
+
+                                                                                                    <div class="content-expert-evaluation-negative">
+                                                                                                        <span>نقاط ضعف</span>
+                                                                                                        <ul>
+                                                                                                            @foreach (var item2 in DisAdvantages)
+                                                                                                            {
+                                                                                                                <li>@item2.text</li>
+                                                                                                            }
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                }
+                                                                                            }
+
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                    <p style="text-align: justify"></p><p>@item.text</p><p></p>
+
+                                                                                    <div class="footer">
+                                                                                        <div class="comments-likes">
+                                                                                            <span class="text-comment-like">آیا این نظر برایتان مفید بود؟</span>
+                                                                                            @{
+                                                                                                int likes = db.CommnetsLikes.Where(r => r.CommentId == item.id && r.Like == true).ToList().Count();
+                                                                                                int dislike = db.CommnetsLikes.Where(r => r.CommentId == item.id && r.disLike == true).ToList().Count();
+                                                                                            }
+                                                                                            @if (Session["userLogin"] == null)
+                                                                                            {
+
+
+                                                                                                <button class="btn-like like-@item.id" data-toggle="modal" data-target="#modalLogin" id="like-@item.id" data-counter="@likes">
+                                                                                                    بله
+                                                                                                </button>
+                                                                                                <button class="btn-like like-@item.id" id="desktopDislike-@item.id" data-target="#modalLogin" data-toggle="modal" data-counter="@dislike">
+                                                                                                    خیر
+                                                                                                </button>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <button class="btn-like like-@item.id" id="like-@item.id" data-counter="@likes" onclick="like('@item.id','like')">
+                                                                                                    بله
+                                                                                                </button>
+                                                                                                <button class="btn-like like-@item.id" id="dislike-@item.id" data-counter="@dislike" onclick="like('@item.id','dislike')">
+                                                                                                    خیر
+                                                                                                </button>
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+
+
+
+
+
+
+                                                                }
+
+                                                            </ol>
+                                                        </div>
+                                                    }
+                                                }
+                                            </article>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingFour">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                                پرسش و پاسخ
+                                                <span>بیشتر <i class="now-ui-icons arrows-1_minimal-left"></i></span>
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample" style="">
+                                        <div class="card-body form-comment">
+                                            <article>
+                                                @*<h2 class="param-title">
+                                                        افزودن پرسش
+                                                        <span>پرسش خود را در مورد محصول مطرح نمایید</span>
+                                                    </h2>
+                                                    <form action="" onsubmit="return false;" id="formQuestion" class="comment default">
+                                                        <textarea name="question" class="form-control" rows="5"></textarea>
+                                                        <button onclick="saveQuestion('15');" class="btn btn-default float-right">
+                                                            ثبت پرسش
+                                                        </button>
+                                                        <div class="form-account-agree float-right d-none">
+                                                            <label class="checkbox-form checkbox-primary">
+                                                                <input type="checkbox" name="alert_by_email">
+                                                                <span class="checkbox-check"></span>
+                                                            </label>
+                                                            <label for="agree">
+                                                                اولین پاسخی که به پرسش من داده شد، از طریق ایمیل به
+                                                                من
+                                                                اطلاع دهید.
+                                                            </label>
+                                                        </div>
+                                                    </form>*@
+                                                <div class="row">
+                                                    <div class="col-xl-10">
+                                                        <div class="card-lg">
+
+                                                            <div class="accordion accordion-type-2 accordion-flush" id="accordion_2">
+
+                                                                @if (questions.Count > 0)
+                                                                {
+                                                                    for (var i = 0; i < questions.Count; i++)
+                                                                    {
+
+                                                                        if (i == 0)
+                                                                        {
+                                                                            <div class="card">
+                                                                                <div class="card-header d-flex justify-content-between activestate">
+                                                                                    <a role="button" data-toggle="collapse" class="collapsed" href="#collapse_@(i)i" aria-expanded="false"><i class="fa fa-question-circle"></i> @questions[i].Question</a>
+                                                                                </div>
+                                                                                <div id="collapse_@(i)i" class="collapse" data-parent="#accordion_2" role="tabpanel">
+                                                                                    @foreach (var answer in questions[i].ProductQAnswers)
+                                                                                    {
+                                                                                        <div style="min-height:30px;font-size:12px;color:darkgrey" class="card-body pa-15"><i class="fa fa-reply"></i>@answer.Answer</div>
+                                                                                        <hr style="border-color:rgb(158 214 243 / 10%);margin-top:0.5em;margin-bottom:0.5em;" />
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                        }
+
+
+                                                                        else
+                                                                        {
+                                                                            <div class="card">
+                                                                                <div class="card-header d-flex justify-content-between">
+                                                                                    <a role="button" class="collapsed" data-toggle="collapse" href="#collapse_@(i)i" aria-expanded="false"><i class="fa fa-question-circle"></i>@questions[i].Question</a>
+                                                                                </div>
+                                                                                <div id="collapse_@(i)i" class="collapse" data-parent="#accordion_2" role="tabpanel">
+                                                                                    @foreach (var answer in questions[i].ProductQAnswers)
+                                                                                    {
+                                                                                        <div style="min-height:30px;font-size:12px;color:darkgrey" class="card-body pa-15"><i class="fa fa-reply"></i>@answer.Answer</div>
+                                                                                        <hr style="border-color:rgb(158 214 243 / 10%);margin-top:0.5em;margin-bottom:0.5em;" />
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                        }
+                                                                        <hr />
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div>
+                                                                        <span class="text text-danger">
+                                                                            سوالی در این دسته یافت نشد.
+                                                                        </span>
+                                                                    </div>
+                                                                }
+
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-2">
+
+                                                        @if (Session["userLogin"] == null)
+                                                        {
+
+                                                            <a href="#" data-toggle="modal" data-target="#modalLogin" class="dk-btn dk-btn-info btn-no-icon" style="font-size:12px;padding: 10px 20px;">
+                                                                افزودن پرسش جدید
+
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="#" data-toggle="modal" data-target="#modalquestion" class="dk-btn dk-btn-info btn-no-icon" style="font-size: 12px;padding: 10px 20px;">
+                                                                افزودن پرسش جدید
+
+                                                            </a>
+                                                        }
+
+
+
+                                                    </div>
+                                                </div>
+                                            </article>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="container p-0">
+                    <div class="col-12 default">
+                        <div class="product-tabs default hidden-mb">
+                            <div class="box-tabs default">
+                                <div class="tab-items default">
+                                    <ul class="nav" role="tablist">
+                                        <li class="box-tabs-tab">
+                                            <a class="active" data-toggle="tab" href="#desc" role="tab" aria-expanded="true">
+                                                @*<i class="now-ui-icons education_glasses"></i>*@ نقد و بررسی
+                                            </a>
+                                        </li>
+                                        <li class="box-tabs-tab">
+                                            <a data-toggle="tab" href="#params" role="tab" aria-expanded="false">
+                                                @*<i class="now-ui-icons design_bullet-list-67"></i>*@ مشخصات
+                                            </a>
+                                        </li>
+                                        <li class="box-tabs-tab">
+                                            <a data-toggle="tab" href="#comments" role="tab" aria-expanded="false">
+                                                @*<i class="now-ui-icons ui-2_chat-round"></i>*@ نظرات کاربران
+                                            </a>
+                                        </li>
+                                        <li class="box-tabs-tab">
+                                            <a data-toggle="tab" href="#questions" role="tab" aria-expanded="false">
+                                                @*<i class="now-ui-icons travel_info"></i>*@ پرسش و پاسخ
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body default box-content-product" style="padding: 26px;">
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="desc" role="tabpanel" aria-expanded="true">
+                                            <article>
+                                                <h2 class="param-title">
+                                                    نقد و بررسی تخصصی
+                                                    <span> @product.title </span>
+                                                </h2>
+                                                <div class="parent-expert default">
+                                                    <div class="content-expert">
+                                                        @Html.Raw(product.description)
+                                                    </div>
+                                                    <div class="sum-more">
+                                                        <span class="show-more btn-link-border">
+                                                            نمایش بیشتر
+                                                        </span>
+                                                        <span class="show-less btn-link-border">
+                                                            بستن
+                                                        </span>
+                                                    </div>
+                                                    <div class="shadow-box"></div>
+                                                </div>
+
+                                                <div class="content-expert-stats default">
+                                                    <div class="content-expert-evaluation">
+                                                        <div class="row">
+
+                                                            <div class="col-md-6 col-sm-12">
+                                                                <ul class="content-expert-rating"></ul>
+                                                            </div>
+
+
+
+                                                            @*<div class="col-md-3 col-sm-6 col-12">
+                                                                    <div class="content-expert-evaluation-positive">
+                                                                        <span>نقاط قوت</span>
+                                                                        <ul>
+                                                                            <li>کیفیت صفحه</li>
+                                                                            <li>دوربین </li>
+                                                                            <li>باتری</li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>*@
+
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="accordion default" id="accordionExample">
+                                                    <div class="card-body">
+
+                                                    </div>
+                                                </div>
+
+                                            </article>
+                                        </div>
+                                        <div class="tab-pane params " id="params" role="tabpanel" aria-expanded="false">
+                                            <article>
+                                                <h2 class="param-title">
+                                                    مشخصات فنی
+                                                    <span>@product.title</span>
+                                                </h2>
+
+                                                <section>
+                                                    @*<h3 class="params-title">پردازنده</h3>*@
+                                                    <ul class="params-list">
+                                                        @{
+                                                            if (productCategories.Count != 0)
+                                                            {
+                                                                int ctId = 0;
+                                                                ctId = Convert.ToInt16(productCategories.FirstOrDefault().categoryId);
+                                                                var ct = db.Categories.Where(r => r.id == ctId).FirstOrDefault();
+                                                                if (ct != null)
+                                                                {
+                                                                    var properties = db.CatProperties.Where(r => r.catId == ct.id).ToList();
+                                                                    if (properties.Count != 0)
+                                                                    {
+                                                                        foreach (var item in properties)
+                                                                        {
+                                                                            var val = db.ProductPropertiesValues.Where(r => r.proId == product.id && r.propertiesid == item.id).FirstOrDefault();
+                                                                            <li>
+                                                                                <div class="params-list-key">
+                                                                                    <span class="d-block">@item.title</span>
+                                                                                </div>
+                                                                                <div class="params-list-value">
+                                                                                    <span class="d-block">
+                                                                                        @{
+                                                                                            if (val != null)
+                                                                                            {
+                                                                                                @val.value
+                                                                                            }
+                                                                                        }
+                                                                                    </span>
+                                                                                </div>
+                                                                            </li>
+
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                        }
+                                                    </ul>
+                                                </section>
+
+                                            </article>
+                                        </div>
+                                        <div class="tab-pane fade" id="comments" role="tabpanel" aria-expanded="false">
+                                            <article>
+                                                <h2 class="comments-headline">
+                                                    امتیاز کاربران به:
+                                                    <span>
+                                                        <span>
+                                                            @product.title
+                                                        </span>
+                                                    </span>
+                                                </h2>
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <ul class="content-expert-rating">
+                                                            @{
+                                                                if (productRattingGroup != null)
+                                                                {
+                                                                    var rattings = db.Ratings.Where(r => r.groupName == productRattingGroup.groupId).ToList();
+                                                                    if (rattings.Count != 0)
+                                                                    {
+                                                                        foreach (var item in rattings)
+                                                                        {
+                                                                            int percentage = 50;
+                                                                            int sum = 0;
+                                                                            int count = 0;
+                                                                            if (comments.Count != 0)
+                                                                            {
+                                                                                foreach (var item2 in comments)
+                                                                                {
+                                                                                    var rate = db.RattingComments.Where(r => r.rattingId == item.id && r.commentId == item2.id).FirstOrDefault();
+                                                                                    if (rate != null)
+                                                                                    {
+                                                                                        sum += Convert.ToInt32(rate.rating);
+                                                                                        count++;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            if (count != 0)
+                                                                            {
+                                                                                percentage = (sum / count) * 20;
+                                                                            }
+
+                                                                            <li>
+                                                                                <div class="cell">
+                                                                                    @item.title
+                                                                                </div>
+                                                                                <div class="cell">
+                                                                                    <div class="rating rating--general">
+                                                                                        <div class="rating-rate" data-rate-value="100%" style="width: @(percentage)%;"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                            }
+
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <div class="comments-summary-note">
+                                                            <span>
+                                                                شما هم می‌توانید در مورد این کالا نظر
+                                                                بدهید.
+                                                            </span>
+                                                            <p>
+                                                                برای ثبت نظر، لازم است ابتدا وارد حساب کاربری خود
+                                                                شوید. اگر این محصول را قبلا
+                                                                از @setting.WebsiteName
+                                                                خریده
+                                                                باشید، نظر
+                                                                شما به عنوان مالک محصول ثبت خواهد شد.
+                                                            </p>
+                                                            <div class="parent-btn">
+                                                                @if (Session["userLogin"] == null)
+                                                                {
+
+                                                                    <a href="#" data-toggle="modal" data-target="#modalLogin" class="dk-btn dk-btn-grey">
+                                                                        افزودن نظر جدید
+                                                                        <i class="now-ui-icons ui-2_chat-round"></i>
+                                                                    </a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="/home/comments/@product.id" class="dk-btn dk-btn-grey">
+                                                                        افزودن نظر جدید
+                                                                        <i class="now-ui-icons ui-2_chat-round"></i>
+                                                                    </a>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @{
+                                                    if (comments.Count != 0)
+                                                    {
+                                                        <h2 class="param-title mt-5">
+                                                            نظرات کاربران
+                                                            <span>@comments.Count نظر</span>
+                                                        </h2>
+                                                        <div class="comments-area default">
+                                                            <ol class="comment-list" id="comment_show">
+
+                                                                @foreach (var item in comments)
+                                                                {
+                                                                    var user = db.Users.Where(r => r.id == item.userid).FirstOrDefault();
+                                                                    string userFullName = "کاربر حذف شده است";
+                                                                    if (user != null)
+                                                                    {
+                                                                        userFullName = user.firstName + " " + user.lastName;
+                                                                    }
+                                                                    string dt = string.Empty;
+                                                                    if (item.creationDate != null)
+                                                                    {
+                                                                        DateTime d = Convert.ToDateTime(item.creationDate);
+                                                                        PersianCalendar pc = new PersianCalendar();
+                                                                        dt = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                                    }
+                                                                    <li>
+                                                                        <div class="comment-body">
+                                                                            <div class="row">
+                                                                                <div class="col-md-12 col-sm-12 comment-content">
+                                                                                    <div class="comment-title">
+                                                                                        @item.title
+                                                                                    </div>
+
+                                                                                    <div class="comment-author">
+                                                                                        توسط @userFullName در
+                                                                                        تاریخ @dt
+                                                                                    </div>
+
+
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-4 col-sm-6 col-12">
+                                                                                            @{
+                                                                                                var advantages = db.CommentAdvantages.Where(r => r.commentId == item.id && r.advantage == true).ToList();
+                                                                                                if (advantages.Count != 0)
+                                                                                                {
+                                                                                                    <div class="content-expert-evaluation-positive">
+                                                                                                        <span>نقاط قوت</span>
+                                                                                                        <ul>
+                                                                                                            @foreach (var item2 in advantages)
+                                                                                                            {
+                                                                                                                <li>@item2.text</li>
+                                                                                                            }
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                }
+                                                                                                var DisAdvantages = db.CommentAdvantages.Where(r => r.commentId == item.id && r.advantage == false).ToList();
+                                                                                                if (DisAdvantages.Count != 0)
+                                                                                                {
+
+                                                                                                    <div class="content-expert-evaluation-negative">
+                                                                                                        <span>نقاط ضعف</span>
+                                                                                                        <ul>
+                                                                                                            @foreach (var item2 in DisAdvantages)
+                                                                                                            {
+                                                                                                                <li>@item2.text</li>
+                                                                                                            }
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                }
+                                                                                            }
+
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                    <p style="text-align: justify"></p><p>@item.text</p><p></p>
+
+                                                                                    <div class="footer">
+                                                                                        <div class="comments-likes">
+                                                                                            <span class="text-comment-like">آیا این نظر برایتان مفید بود؟</span>
+                                                                                            @{
+                                                                                                int likes = db.CommnetsLikes.Where(r => r.CommentId == item.id && r.Like == true).ToList().Count();
+                                                                                                int dislike = db.CommnetsLikes.Where(r => r.CommentId == item.id && r.disLike == true).ToList().Count();
+                                                                                            }
+                                                                                            @if (Session["userLogin"] == null)
+                                                                                            {
+
+
+                                                                                                <button class="btn-like like-@item.id" data-toggle="modal" data-target="#modalLogin" id="desktopLike-@item.id" data-counter="@likes">
+                                                                                                    بله
+                                                                                                </button>
+                                                                                                <button class="btn-like like-@item.id" id="desktopDislike-@item.id" data-toggle="modal" data-target="#modalLogin" data-counter="@dislike">
+                                                                                                    خیر
+                                                                                                </button>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <button class="btn-like like-@item.id" id="desktopLike-@item.id" data-counter="@likes" onclick="like('@item.id','like')">
+                                                                                                    بله
+                                                                                                </button>
+                                                                                                <button class="btn-like like-@item.id" id="desktopDislike-@item.id" data-counter="@dislike" onclick="like('@item.id','dislike')">
+                                                                                                    خیر
+                                                                                                </button>
+                                                                                            }
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+
+
+
+
+
+
+                                                                }
+
+                                                            </ol>
+                                                        </div>
+                                                    }
+                                                }
+                                            </article>
+                                        </div>
+                                        <div class="tab-pane fade form-comment" id="questions" role="tabpanel" aria-expanded="false">
+                                            <article>
+                                                @*<h2 class="param-title">
+                                                        افزودن پرسش
+                                                        <span>پرسش خود را در مورد محصول مطرح نمایید</span>
+                                                    </h2>
+                                                    <form action="" onsubmit="return false;" id="formQuestion" class="comment default">
+                                                        <textarea name="question" class="form-control" rows="5"></textarea>
+                                                        <button onclick="saveQuestion('11');" class="btn btn-default float-right">
+                                                            ثبت پرسش
+                                                        </button>
+                                                        <div class="form-account-agree float-right d-none">
+                                                            <label class="checkbox-form checkbox-primary">
+                                                                <input type="checkbox" name="alert_by_email">
+                                                                <span class="checkbox-check"></span>
+                                                            </label>
+                                                            <label for="agree">
+                                                                اولین پاسخی که به پرسش من داده شد، از طریق ایمیل به
+                                                                من
+                                                                اطلاع دهید.
+                                                            </label>
+                                                        </div>
+                                                    </form>*@
+                                                <div class="row">
+                                                    <div class="col-xl-10">
+                                                        <div class="card-lg">
+
+                                                            <div class="accordion accordion-type-2 accordion-flush" id="accordion_2">
+
+                                                                @if (questions.Count > 0)
+                                                                {
+                                                                    for (var i = 0; i < questions.Count; i++)
+                                                                    {
+
+                                                                        if (i == 0)
+                                                                        {
+                                                                            <div class="card">
+                                                                                <div class="card-header d-flex justify-content-between activestate">
+                                                                                    <a role="button" data-toggle="collapse" class="collapsed" href="#collapse_@(i)i" aria-expanded="false"><i class="fa fa-question-circle"></i> @questions[i].Question</a>
+                                                                                </div>
+                                                                                <div id="collapse_@(i)i" class="collapse" data-parent="#accordion_2" role="tabpanel">
+                                                                                    @foreach (var answer in questions[i].ProductQAnswers.Where(a => a.IsValidate == true))
+                                                                                    {
+                                                                                        <div style="min-height:30px;font-size:12px;color:darkgrey" class="card-body pa-15"><i class="fa fa-reply"></i>@answer.Answer</div>
+                                                                                        <hr style="border-color:rgb(158 214 243 / 10%);margin-top:0.5em;margin-bottom:0.5em;" />
+                                                                                    }
+
+                                                                                    @if (Session["userLogin"] == null)
+                                                                                    {
+
+                                                                                        <a href="#" data-toggle="modal" data-target="#modalLogin" onclick="ChangeQuestion('@questions[i].id')" id="btnsubmitanswer" data-qid="@questions[i].id" class="btn btn-success" style="font-size:10px;padding: 5px 10px;">
+                                                                                            ثبت پاسخ جدید
+
+                                                                                        </a>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <a href="#" data-toggle="modal" data-target="#modalanswer" onclick="ChangeQuestion('@questions[i].id')" id="btnsubmitanswer" data-qid="@questions[i].id" class="btn btn-success" style="font-size: 10px;padding: 5px 10px;">
+                                                                                            ثبت پاسخ جدید
+
+                                                                                        </a>
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                        }
+
+
+                                                                        else
+                                                                        {
+                                                                            <div class="card">
+                                                                                <div class="card-header d-flex justify-content-between">
+                                                                                    <a role="button" class="collapsed" data-toggle="collapse" href="#collapse_@(i)i" aria-expanded="false"><i class="fa fa-question-circle"></i>@questions[i].Question</a>
+                                                                                </div>
+                                                                                <div id="collapse_@(i)i" class="collapse" data-parent="#accordion_2" role="tabpanel">
+                                                                                    @foreach (var answer in questions[i].ProductQAnswers.Where(a => a.IsValidate == true))
+                                                                                    {
+                                                                                        <div style="min-height:30px;font-size:12px;color:darkgrey" class="card-body pa-15"><i class="fa fa-reply"></i>@answer.Answer</div>
+                                                                                        <hr style="border-color:rgb(158 214 243 / 10%);margin-top:0.5em;margin-bottom:0.5em;" />
+
+                                                                                    }
+                                                                                    @if (Session["userLogin"] == null)
+                                                                                    {
+
+                                                                                        <a href="#" data-toggle="modal" data-target="#modalLogin" id="btnsubmitanswer" onclick="ChangeQuestion('@questions[i].id')" data-qid="@questions[i].id" class="btn btn-success" style="font-size:10px;padding: 5px 10px;">
+                                                                                            ثبت پاسخ جدید
+
+                                                                                        </a>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <a href="#" data-toggle="modal" data-target="#modalanswer" id="btnsubmitanswer" onclick="ChangeQuestion('@questions[i].id')" data-qid="@questions[i].id" class="btn btn-success" style="font-size: 10px;padding: 5px 10px;">
+                                                                                            ثبت پاسخ جدید
+
+                                                                                        </a>
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                        }
+                                                                        <hr />
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div>
+                                                                        <span class="text text-danger">
+                                                                            سوالی در این دسته یافت نشد.
+                                                                        </span>
+                                                                    </div>
+                                                                }
+
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-2">
+
+                                                        @if (Session["userLogin"] == null)
+                                                        {
+
+                                                            <a href="#" data-toggle="modal" data-target="#modalLogin" class="dk-btn dk-btn-info btn-no-icon" style="font-size:12px;padding: 10px 20px;">
+                                                                افزودن پرسش جدید
+
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="#" data-toggle="modal" data-target="#modalquestion" class="dk-btn dk-btn-info btn-no-icon" style="font-size: 12px;padding: 10px 20px;">
+                                                                افزودن پرسش جدید
+
+                                                            </a>
+                                                        }
+
+
+
+                                                    </div>
+                                                </div>
+                                            </article>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*Related Products*@
+            @{
+                var pl4 = new ProductListModel();
+                pl4.Title = "محصولات مرتبط";
+                pl4.Index = 4;
+                var currentprocats = product.CatProes.Select(c => c.categoryId).ToList();
+                pl4.Products = db.Products.Where(p => p.CatProes.Any(cp => currentprocats.Contains(cp.categoryId))).OrderByDescending(p => p.creationDate).Where(p => p.isValid == true && p.ShowOnMainPage == true).Take(20).ToList();
+
+            }
+            <div class="row mt-5">
+                <div class="col-12 heightFixed">
+                    <div class="widget widget-product widget-slider product-card-container">
+                        <header class="card-header">
+                            <h3 class="card-title">
+                                <a @*href="/home/category/@item.id/@catTlt"*@ href="#">
+                                    <span style="color:#000000;"> @pl4.Title </span>
+                                </a>
+                            </h3>
+                        </header>
+                        <div class="swiper-container swiper-lg-slider" dir="rtl">
+                            <!-- Add Arrows -->
+                            <div class="swiper-button-next">
+                                <i class="now-ui-icons arrows-1_minimal-left"></i>
+                            </div>
+                            <div class="swiper-button-prev">
+                                <i class="now-ui-icons arrows-1_minimal-right"></i>
+                            </div>
+                            <div class="product-carousel swiper-wrapper">
+                                @{
+
+                                    if (pl4.Products.Count != 0)
+                                    {
+                                        var pList = pl4.Products.Distinct().ToList();
+                                        pList = pl4.Products.OrderByDescending(r => r.Priority).ToList();
+                                        foreach (var item2 in pList)
+                                        {
+
+                                            string tlt = item2.title;
+                                            while (tlt.Contains(" "))
+                                            {
+                                                tlt = tlt.Replace(" ", "-");
+                                            }
+                                            <div class="swiper-slide">
+                                                <a href="/home/product/@item2.id/@tlt">
+                                                    @{
+                                                        if (item2.MainImage != null)
+                                                        {
+                                                            <img src="/Template/images/loading.png" data-src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item2.MainImage" class="img-fluid lazyload pslideritem" alt="">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="/Template/images/loading.png" data-src="/Template/images/loading.png" class="img-fluid pslideritem" alt="">
+
+                                                        }
+                                                    }
+                                                </a>
+                                                <h2 class="post-title">
+
+                                                    <a href="/home/product/@item2.id/@tlt"> @item2.title </a>
+
+                                                </h2>
+                                                @{
+                                                    if (item2.isAvailable != true)
+                                                    {
+                                                        <div class="promotion-box-cover promotion-box-cover--out-of-stock">
+
+                                                            <div class="promotion-box-cover-text">
+                                                                ناموجود
+                                                            </div>
+
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="price specialOfferPrice">
+
+                                                            @if (specialUser && item2.priceForSpecialUsers != null)
+                                                            {
+                                                                <ins class="text-left">
+                                                                    <span class="fixPrice specialOfferPriceNumber"> @item2.priceForSpecialUsers </span><span class="specialOfferPriceT"> تومان </span>
+
+                                                                </ins>
+                                                            }
+                                                            else
+                                                            {
+                                                                var off2 = db.Discounts.Where(r => r.productId == item2.id && r.expire > DateTime.Now && r.status == 1).FirstOrDefault();
+                                                                if (item2.price != null)
+                                                                {
+                                                                    if (off2 != null)
+                                                                    {
+                                                                        var price = item2.price - (item2.price * off2.percentage / 100);
+                                                                        <span class="percentageInSpecialOffer">
+                                                                            @(off2.percentage) %
+                                                                        </span>
+                                                                        <del>
+                                                                            <span class="fixPrice"> @item2.price تومان </span>
+
+                                                                        </del>
+
+                                                                        <ins class="text-left">
+
+                                                                            <span class="fixPrice specialOfferPriceNumber"> @price </span><span class="specialOfferPriceT"> تومان </span>
+
+                                                                        </ins>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <ins class="text-left">
+                                                                            <span class="fixPrice specialOfferPriceNumber"> @item2.price </span><span class="specialOfferPriceT"> تومان </span>
+
+                                                                        </ins>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <span class="fixPrice specialOfferNoPriceNumber"> برای استعلام قیمت تماس بگیرید</span>
+                                                                }
+
+                                                            }
+
+
+
+                                                        </div>
+                                                    }
+                                                }
+
+                                            </div>
+                                        }
+                                    }
+
+                                }
+                            </div>
+                            <div class="swiper-scrollbar"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            @*Related Products*@
+            <div class="row banner-ads">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12 col-lg-12">
+                            <div class="widget-banner card">
+                                <a href="@banner.link4" target="_blank">
+                                    <img class="img-fluid" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@banner.banner4" alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </main>
+    <div class="modal-login modal fade" id="modalquestion" role="dialog" aria-labelledby="modalLogin" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title mt-0" id="myModalLabel">ثبت پرسش</h4>
+                </div>
+                <div class="modal-body px-0" id="modalLoginBody">
+                    <div class="wrapper default">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="account-box-content">
+                                        <div class="form-account">
+
+                                            @*<div class="form-account-title">پرسش</div>*@
+                                            <div class="form-account-row">
+                                                <div class="form-fild">
+                                                    <p><label>پرسش خود را در مورد کالا مطرح کنید </label></p>
+                                                    <textarea rows="3" style="width:100%" name="question" id="question"></textarea>
+                                                </div>
+                                                <div class="login-submit">
+                                                    <button id="submitquestion" disabled class="form-button">ثبت پرسش</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-login modal fade" id="modalanswer" role="dialog" aria-labelledby="modalanswer" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title mt-0" id="myModalLabel">ثبت پاسخ</h4>
+                </div>
+                <div class="modal-body px-0" id="modalAnswerBody">
+                    <div class="wrapper default">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="account-box-content">
+                                        <div class="form-account">
+
+                                            @*<div class="form-account-title">پرسش</div>*@
+                                            <div class="form-account-row">
+                                                <div class="form-fild">
+                                                    <p><label>پاسخ خود را در مورد این پرسش وارد کنید </label></p>
+                                                    <textarea rows="3" style="width:100%" name="answer" id="answer"></textarea>
+                                                </div>
+                                                <div class="login-submit">
+                                                    <button id="submitanswer" disabled class="form-button">ثبت پاسخ</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- main -->
+
+    @section JS{
+        <script>
+        var qid = "";
+
+        function ChangeQuestion(questionid) {
+
+            qid = questionid;
+        }
+
+        $('#question').on('input', function () {
+            var textarea_value = $("#question").val();
+
+            if (textarea_value != '') {
+                $('#submitquestion').attr('disabled', false);
+            } else {
+                $('#submitquestion').attr('disabled', true);
+            }
+        });
+        $('#answer').on('input', function () {
+            var textarea_value = $("#answer").val();
+
+            if (textarea_value != '') {
+                $('#submitanswer').attr('disabled', false);
+            } else {
+                $('#submitanswer').attr('disabled', true);
+            }
+        });
+        $(document).on('click', '#submitquestion', function () {
+            var value = $('#question').val();
+            $.ajax({
+                type: 'POST',
+                url: '/Product/AddQuestion/@id',
+                data: "question=" + value,
+                success: function (response) {
+                    if (response.Success == true) {
+                        toastr.success(response.Message);
+                        $('button[data-dismiss="modal"]').click();
+                        //location.reload();
+                    } else {
+                        if (response.Success==false) {
+
+                            toastr.error(response.Message);
+                            $('#question').focus();
+                        }
+                    }
+                }
+            });
+
+        })
+
+         $(document).on('click', '#submitanswer', function (questionid) {
+             var value = $('#answer').val();
+             var questionid = qid;
+
+            $.ajax({
+                type: 'POST',
+                url: '/Product/AddAnswer',
+                data: "answer=" + value + "&questionid=" + questionid,
+                success: function (response) {
+                    if (response.Success == true) {
+                        toastr.success(response.Message);
+                        $('button[data-dismiss="modal"]').click();
+                        //location.reload();
+                    } else {
+                        if (response.Success==false) {
+
+                            toastr.error(response.Message);
+                            $('#question').focus();
+                        }
+                    }
+                }
+            });
+
+        })
+
+
+        $(document).on('click', '.singleColor', function () {
+            $('#colorInput').val($(this).attr('data-colorid'))
+            $('.singleColor.selected').removeClass('selected');
+            $(this).addClass('selected')
+        })
+
+
+        $(document).on('change', '.sizeSelector', function () {
+            var val = ($(this).val());
+            $('#sizeInput').val(val)
+            $.ajax({
+                url: '/home/getProductColors/'+@id+'?sizeId=' + val,
+                method: "POST",
+                success: function (data) {
+                    $('.colorSelectorContainer>.singleColorContainer').empty();
+                    for (var i = 0; i < data.length; i++) {
+                        if (i == 0) {
+                            $('#colorInput').val(data[i].id)
+                            $('.singleColorContainer').append(' <div  class="singleColor selected"  data-colorid="' + data[i].id + '"> <input type="checkbox" style="display:none" /> <div class="colorForSelect" style="background:' + data[i].Code + '"> </div><span>'+data[i].title+'</span> </div>')
+
+                        } else {
+                            $('.singleColorContainer').append(' <div class="singleColor"  data-colorid="' + data[i].id + '"> <input type="checkbox" style="display:none" /> <div class="colorForSelect" style="background:' + data[i].Code + '">  </div><span>' + data[i].title +'</span> </div>')
+
+                        }
+                        //alert(data[i].title);
+                    }
+                    if (data.length!=0) {
+                        $('.colorSelectorContainer').removeClass('hidden');
+                    } else {
+                        $('.colorSelectorContainer').addClass('hidden');
+
+                    }
+                }
+            });
+        })
+
+        </script>
+
+        <script>
+        $(document).ready(function () {
+            $('#sizeInput').val($('select.sizeSelector').val())
+            var val = ($('.sizeSelector').val());
+            $.ajax({
+                url: '/home/getProductColors/'+@id+'?sizeId=' + val,
+                method: "POST",
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        if (i == 0 ) {
+                            $('.singleColorContainer').append(' <div  class="singleColor selected" data-colorid="' + data[i].id + '"> <input type="checkbox" style="display:none" /> <div class="colorForSelect" style="background:' + data[i].Code + '"> </div><span>' + data[i].title + '</span> </div>');
+                            $('#colorInput').val(data[i].id)
+                        } else {
+                            $('.singleColorContainer').append(' <div class="singleColor"  data-colorid="' + data[i].id +'"> <input type="checkbox" style="display:none" /> <div class="colorForSelect" style="background:' + data[i].Code + '">  </div><span>' + data[i].title +'</span> </div>')
+
+                        }
+                    }
+                    if (data.length != 0) {
+                        $('.colorSelectorContainer').removeClass('hidden');
+                    } else {
+                    }
+                }
+            });
+        })
+
+        </script>
+
+
+
+
+
+
+
+
+
+        <script src="/template/js/jquery.ez-plus.js" type="text/javascript"></script>
+
+
+        <script>
+            $("input[name='color']").change(function () {
+                var product_color = $('input[name="color"]:checked').val();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: '#',
+                    type: 'POST',
+                    data: {
+                        'product_color': product_color,
+                    },
+
+                    success: function (data) {
+                        $('#price_box').empty().html(data);
+
+                        $('#btn-product-seller-list').click(function (e) {
+                            e.preventDefault();
+                            var target = $($(this).attr('href'));
+                            if (target.length) {
+                                var scrollTo = target.offset().top;
+                                $('body, html').animate({
+                                    scrollTop: scrollTo + 'px'
+                                }, 800);
+                            }
+                        });
+                        $('.skeleton-loader').hide();
+                        $('#product-seller-info').show();
+                        seller_update(product_color);
+                    }
+                });
+            });
+
+            seller_update = function (product_color) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: '#',
+                    type: 'POST',
+                    data: {
+                        'product_color': product_color,
+                    },
+
+                    success: function (data) {
+                        $('#product-seller-list').html('');
+
+                        $('#product-seller-list').html(data);
+                        $(".seller-list-section .more-seller-list").click(function () {
+                            var sumaryBox = $(this).parents('.seller-list-section');
+                            sumaryBox.find('.table-suppliers').toggleClass('active');
+
+                            $(this).find('.show-more').fadeToggle(0);
+                            $(this).find('.show-less').fadeToggle(0);
+
+                        });
+                    }
+                });
+            }
+        </script>
+
+
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(document).on('click', '.pagination a', function (event) {
+                    event.preventDefault();
+                    $('#loading').show();
+                    $('li').removeClass('active');
+                    $(this).parent('li').addClass('active');
+
+                    var myurl = $(this).attr('href');
+                    var qPage = $(this).attr('href').split('qShow=')[1];
+                    var cPage = $(this).attr('href').split('cShow=')[1];
+
+                    if (typeof cPage !== "undefined") {
+                        getComment(cPage);
+                    }
+
+                    if (typeof qPage !== "undefined") {
+                        getQuestion(qPage);
+                    }
+
+                    return false;
+
+                });
+
+            });
+
+            function copyUrl() {
+                /* Get the text field */
+                var copyText = document.getElementById("inputUrl");
+
+                /* Select the text field */
+                copyText.select();
+                copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+                /* Copy the text inside the text field */
+                document.execCommand("copy");
+                toastr.success('کپی شد');
+            }
+
+            function getQuestion(page) {
+                $.ajax({
+                    url: '?qShow=' + page,
+                    type: "get",
+                    datatype: "html"
+                }).done(function (data) {
+                    $("#question_show").empty().html(data);
+                    location.hash = page;
+                    $('#loading').hide();
+                }).fail(function (jqXHR, ajaxOptions, thrownError) {
+                    $('#loading').hide();
+                    toastr.warning('خطایی در حین انجام عملیات رخ داد', 'اوپس...');
+                });
+            }
+
+            function getComment(page) {
+                $.ajax({
+                    url: '?cShow=' + page,
+                    type: "get",
+                    datatype: "html"
+                }).done(function (data) {
+                    $("#comment_show").empty().html(data);
+                    location.hash = page;
+                    $('#loading').hide();
+                }).fail(function (jqXHR, ajaxOptions, thrownError) {
+                    $('#loading').hide();
+                    toastr.warning('خطایی در حین انجام عملیات رخ داد', 'اوپس...');
+                });
+            }
+        </script>
+
+        <script>
+            favorites = function (product_id) {
+
+                $('#loading').show();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '/home/addProductToWishList',
+                    type: 'POST',
+                    data: {
+                        id: product_id
+                    },
+                    success: function (response) {
+                        $('#loading').hide();
+                    },
+                    error: function (jqXHR) {
+                        $('#loading').hide();
+                        if (jqXHR.status === 401) {
+                            $('#loginModal').modal('show');
+                        } else {
+                            toastr.warning('خطایی در حین انجام عملیات رخ داد', 'اوپس...');
+                        }
+
+                    }
+                });
+            }
+        </script>
+
+        <script>
+            saveQuestion = function (product) {
+                $('#loading').show();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                var data = $('#formQuestion').serialize();
+                $.ajax({
+                    url: '#' + product,
+                    type: 'POST',
+                    data: data,
+                    success: function (response) {
+                        $('#loading').hide();
+                        document.getElementById("formQuestion").reset();
+                        toastr.success(response.message);
+                    },
+                    error: function (xhr) {
+                        $('#loading').hide();
+                        if (xhr.status === 401) {
+                            $('#loginModal').modal('show');
+                        } else if (xhr.status === 422) {
+                            jQuery.each(xhr.responseJSON.errors, function (key, value) {
+                                toastr.error(value);
+                            });
+                        }
+
+                        if (xhr.status !== 422 && xhr.status !== 401) {
+                            toastr.warning('خطایی در سامانه رخ داد!');
+                        }
+                    }
+                });
+            }
+        </script>
+
+        <script>
+            answerQuestion = function (question_id) {
+                $('#loading').show();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                var data = $('#answerForm' + question_id).serialize();
+                $.ajax({
+                    url: '#' + question_id,
+                    type: 'POST',
+                    data: data,
+                    success: function (response) {
+                        $('#loading').hide();
+                        document.getElementById("answerForm" + question_id).reset();
+                        toastr.success(response.message);
+                    },
+                    error: function (xhr) {
+                        $('#loading').hide();
+                        if (xhr.status === 401) {
+                            $('#loginModal').modal('show');
+                        } else if (xhr.status === 422) {
+                            jQuery.each(xhr.responseJSON.errors, function (key, value) {
+                                toastr.error(value);
+                            });
+                        }
+
+                        if (xhr.status !== 422 && xhr.status !== 401) {
+                            toastr.warning('خطایی در سامانه رخ داد!');
+                        }
+                    }
+                });
+            }
+        </script>
+        <script src="/template/js/share.js"></script>
+
+        <!-- For Js Create -->
+
+        <script>
+            $(document).on("click", ".remove-cart-item", function () {
+                var CartId = $(this).data('id');
+                $('#remove-button-card').data('id', CartId);
+                $('#add-button-card').data('id', CartId);
+                $('#remove-cart-item').modal('show');
+            });
+        </script>
+        <script>
+            $(".remove-cart-product").click(function (e) {
+                e.preventDefault();
+                var ID = $('#remove-button-card').data('id');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '#',
+                    method: "DELETE",
+                    data: { id: ID },
+                    success: function (data) {
+                        $('#cart-view').html('');
+                        $('#cart-view').html(data);
+                        $('#remove-cart-item').modal('hide');
+                        update_cart();
+                    }
+                });
+            });
+
+
+            $('.transfer-to-future-purchases').click(function (e) {
+                e.preventDefault();
+                var ID = $('#add-button-card').data('id');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '#',
+                    method: "PATCH",
+                    data: { id: ID },
+                    success: function (data) {
+                        $('#cart-view').html('');
+                        $('#cart-view').html(data);
+                        $('#remove-cart-item').modal('hide');
+                        update_cart();
+                    }
+                });
+            });
+
+            update_cart = function () {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '#',
+                    method: "GET",
+                    data: {},
+                    success: function (data) {
+                        $('#cart_show').html('');
+                        $('#cart_show').html(data);
+                    }
+                });
+            }
+        </script>
+
+        <script>
+            $(document).ready(function () {
+
+                fetch_product_data();
+
+                function fetch_product_data(query = '') {
+                    $.ajax({
+                        url: "#",
+                        method: 'GET',
+                        data: { query: query },
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.status === 200) {
+                                if (data.categorys.length === 0 && data.keywords.length === 0) {
+                                    $('#results').html('');
+                                    $('#results').append('<li class="list-group-item contsearch"><a href="/search?q=' + data.query + '" class="gsearch"><i class="fa fa-search"></i> نمایش همه نتایج برای <span style="color: #5DC0CD;font-weight: bold" >' + data.query + '</span></a></li>');
+                                } else {
+                                    $('#results').html('');
+                                    if (data.categorys.length > 0) {
+                                        jQuery.each(data.categorys, function (key, value) {
+                                            jQuery('#results').append('<li class="list-group-item contsearch"><a href="/search/' + value.url + '?q=' + value.label + '" class="gsearch"><i class="fa fa-search"></i> همه کالا های دسته <span style="color: #5DC0CD;font-weight: bold" >' + value.label + '</span></a></li>');
+                                        });
+                                    }
+
+                                    if (data.keywords.length > 0 && data.categorys.length > 0) {
+                                        $('#results').append('<hr>');
+                                    }
+
+                                    if (data.keywords.length > 0) {
+                                        jQuery.each(data.keywords, function (key, value) {
+                                            jQuery('#results').append('<li class="list-group-item contsearch"><a href="/search?q=' + value.keyword + '" class="gsearch">' + value.keyword + '</a></li>');
+                                        });
+                                    }
+
+                                }
+                            }
+                        }
+                    })
+                }
+
+
+                $(document).on('keyup', '#gsearchsimple', function () {
+                    var query = $('#gsearchsimple').val();
+                    var obj = $('#gsearchsimple');
+                    setTimeout(function () {
+                        var search = obj.val();
+                        if (search == query) {
+                            doSearch(query)
+                        }
+                    }, 1000)
+
+                });
+
+                function doSearch(query) {
+                    var n = query.length;
+                    if (n > 2) {
+                        fetch_product_data(query);
+                    } else {
+                        //$('#results').empty().append('<div class="pr-2"><span>بیشترین جستجوهای اخیر:</span></div>\n' +
+                        //    '<ul class="search-results-trends" id="search-trends">');
+                        //$('#search-trends').append('<li><a href="/search?q=لباسشویی" >لباسشویی</a></li>');
+                        //$('#search-trends').append('<li><a href="/search?q=جارو برقی" >جارو برقی</a></li>');
+                        //$('#search-trends').append('<li><a href="/search?q=الجی" >الجی</a></li>');
+                        //$('#results').append('</ul>');
+                    }
+                }
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+
+                fetch_product_data();
+
+                function fetch_product_data(query = '') {
+                    $.ajax({
+                        url: "#",
+                        method: 'GET',
+                        data: { query: query },
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.status === 200) {
+                                if (data.categorys.length === 0 && data.keywords.length === 0) {
+                                    $('#resultsMobile').html('');
+                                    $('#resultsMobile').append('<li class="list-group-item contsearch"><a href="/search?q=' + data.query + '" class="gsearch"><i class="fa fa-search"></i> نمایش همه نتایج برای <span style="color: #5DC0CD;font-weight: bold" >' + data.query + '</span></a></li>');
+                                } else {
+                                    $('#resultsMobile').html('');
+                                    if (data.categorys.length > 0) {
+                                        jQuery.each(data.categorys, function (key, value) {
+                                            jQuery('#resultsMobile').append('<li class="list-group-item contsearch"><a href="/search/' + value.url + '?q=' + value.label + '" class="gsearch"><i class="fa fa-search"></i> همه کالا های دسته <span style="color: #5DC0CD;font-weight: bold" >' + value.label + '</span></a></li>');
+                                        });
+                                    }
+
+                                    if (data.keywords.length > 0 && data.categorys.length > 0) {
+                                        $('#resultsMobile').append('<hr>');
+                                    }
+
+                                    if (data.keywords.length > 0) {
+                                        jQuery.each(data.keywords, function (key, value) {
+                                            jQuery('#resultsMobile').append('<li class="list-group-item contsearch"><a href="/search?q=' + value.keyword + '" class="gsearch">' + value.keyword + '</a></li>');
+                                        });
+                                    }
+
+                                }
+                            }
+                        }
+                    })
+                }
+
+                $(document).on('keyup', '#gsearchsimpleMobile', function () {
+                    var query = $('#gsearchsimpleMobile').val();
+                    var obj = $('#gsearchsimpleMobile');
+                    setTimeout(function () {
+                        var search = obj.val();
+                        if (search == query) {
+                            doSearchMobile(query)
+                        }
+                    }, 1000)
+
+                });
+
+                function doSearchMobile(query) {
+                    var n = query.length;
+                    if (n > 2) {
+                        fetch_product_data(query);
+                    } else {
+                        $('#resultsMobile').html('');
+                        $('#resultsMobile').append('<div class="pr-2"><span>بیشترین جستجوهای اخیر:</span></div>\n' +
+                            '                            <ul class="search-results-trends" id="search-trends">');
+                        $('#search-trends-mobile').append('<li><a href="/search?q=لباسشویی" >لباسشویی</a></li>');
+                        $('#search-trends-mobile').append('<li><a href="/search?q=جارو برقی" >جارو برقی</a></li>');
+                        $('#search-trends-mobile').append('<li><a href="/search?q=الجی" >الجی</a></li>');
+                        $('#resultsMobile').append('</ul>');
+                    }
+                }
+            });
+        </script>
+
+        <script>
+            saveSubscribe = function () {
+                $('#loading').show();
+                var email = document.getElementById('emailsubscribe').value;
+                ValidateEmail(email);
+            };
+
+            function ValidateEmail(inputText) {
+                var mailformat = /^\w+([\.-]?\w+)*@@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                if (inputText.match(mailformat)) {
+                    var data = $('#subscribeForm').serialize();
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: '/subscribes',
+                        type: "POST",
+                        data: data,
+                        success: function (response) {
+                            $('#loading').hide();
+                            toastr.success(response.message);
+                            document.getElementById("subscribeForm").reset();
+                        },
+                        error: function (xhr) {
+                            $('#loading').hide();
+                            if (xhr.status === 422) {
+                                jQuery.each(xhr.responseJSON.errors, function (key, value) {
+                                    toastr.error(value);
+                                });
+                                document.getElementById("subscribeForm").reset();
+                            }
+                            if (xhr.status !== 422) {
+                                toastr.warning(xhr.responseJSON.errors);
+                            }
+                        }
+                    });
+                } else {
+                    $('#loading').hide();
+                    toastr.warning('ایمیل را به درستی وارد نمایید.');
+                    document.getElementById("subscribeForm").email.focus();
+                    return false;
+                }
+            }
+        </script>
+        <script>
+            $("#product-seller-info").stackMenu();
+        </script>
+        <script>
+            like = function (comment_id, type) {
+                $('#loading').show();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: '/product/ajaxLike',
+                    type: 'POST',
+                    data: { comment_id: comment_id, type: type },
+                    success: function (res) {
+                        $('#loading').hide();
+                        if (res.status === 200) {
+                            var like = document.getElementById("like-" + comment_id);  //   Javascript
+                            var dislike = document.getElementById("dislike-" + comment_id);  //   Javascript
+                            var desktopLike = document.getElementById("desktopLike-" + comment_id);  //   Javascript
+                            var desktopDislike = document.getElementById("desktopDislike-" + comment_id);  //   Javascript
+                            try {
+                                desktopLike.setAttribute('data-counter', res.like);
+                                desktopDislike.setAttribute('data-counter', res.dislike);
+
+                            } catch (e) {
+
+                            }
+                            try {
+
+                            } catch (e) {
+                                like.setAttribute('data-counter', res.like);
+                                dislike.setAttribute('data-counter', res.dislike);
+                            }
+
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $('#loading').hide();
+                        if (jqXHR.status === 401) {
+                            $('#loginModal').modal('show');
+                        }
+                    }
+                });
+            }
+        </script>
+    }
+    @section CSS{
+
+        <style>
+            .tableSellers > tbody > tr > td {
+                background: white;
+            }
+
+            .sizeSelector {
+                width: 100px;
+                text-align: center;
+            }
+
+            .SizeSelectorContainer {
+                margin: 20px 0;
+            }
+
+            .colorForSelect {
+                width: 20px;
+                height: 20px;
+                border-radius: 20px;
+                padding: 3px 5px;
+                color: #d9d9d9;
+                border: 1px solid #d1d1d1;
+                display: inline-block;
+                float: right;
+                margin-left: 7px;
+            }
+
+            .colorSelectorContainer {
+                margin-bottom: 20px
+            }
+
+            .singleColor {
+                float: right;
+                margin-left: 10px;
+                cursor: pointer;
+                min-width: 70px;
+                border: 1px solid #cfcfcf;
+                padding: 5px;
+                border-radius: 7px;
+            }
+
+                .singleColor.selected {
+                    border-color: #7b94fc;
+                    border-width: 1px;
+                }
+
+            .colorLabel {
+                float: right;
+                margin-top: 7px;
+                margin-left: 10px;
+            }
+
+            .singleColorContainer {
+                float: right
+            }
+
+            .noPriceLabel {
+                padding: 25px;
+                display: inline-block;
+                text-align: center;
+                width: 100%;
+                color: #BCBCBC;
+                font-size: 13px;
+            }
+        </style>
+
+    }

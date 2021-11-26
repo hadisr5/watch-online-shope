@@ -1,0 +1,212 @@
+﻿@using System.Configuration
+@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    var Footer = db.Footers.FirstOrDefault();
+    var contact = db.ContactInformations.FirstOrDefault();
+    var setting = db.Settings.FirstOrDefault();
+    Layout = null;
+    var banner = db.Banners.Where(r => r.active == true).FirstOrDefault();
+}
+<footer class="main-footer default" style=" background-color: #FBFBFB;">
+
+    <div class="container">
+
+        @*<div class="back-to-top">
+                <a href="#">
+                    <span class="icon"><i class="now-ui-icons arrows-1_minimal-up"></i></span> <span>
+                        بازگشت به
+                        بالا
+                    </span>
+                </a>
+            </div>*@
+        <div class="footer-widgets">
+            @*<div class="row justify-content-center" style="padding: 30px 20% 10px;">
+                <div class="service-item col-lg-4 col-md-4 col-4 text-center">
+                    <a href="#" target="_blank">
+                        <img src="/Template/product/Group 89.svg" alt="آدرس">
+                    </a>
+                    <p>تهران، بلوار کشاورز</p>
+                </div>
+                <div class="service-item col-lg-4 col-md-4 col-4 text-center">
+                    <a href="#" target="_blank">
+                        <img src="/Template/product/Group 88.svg" alt="ایمیل">
+                    </a>
+                    <p>Admin@gmail.com</p>
+                </div>
+                <div class="service-item col-lg-4 col-md-4 col-4 text-center">
+                    <a href="#" target="_blank">
+                        <img src="~/Template/product/Group 87.svg" alt="تلفن">
+                    </a>
+                    <p>+989123456789</p>
+                </div>
+
+            </div>*@
+            <hr />
+            <div class="row">
+                <div class="col-lg-6 col-md-8 col-sm-12" style="padding:20px 12px;">
+                    <div class="widget-menu widget card">
+                        @*<header class="card-header">
+                            <h3 class="footer-maintitle">سازمان جغرافیایی</h3>
+                        </header>*@
+                        <div class="">
+                            <p class="text-muted aboutUsFooter">ما یک کسب و کار تیمی با بیش از 15 سال تجربه در صنعت ساعت های لوکس هستیم، که همکاری نزدیکی با بعضی از شرکت های وارد کننده معتبر تولید کنندگان متعهد و همینطور ساعت سازان مجرب و متعهد در ایران داریم </p>
+                            <div class="">
+                                <p class="font-weight-bold aboutUsFooterDetails">آدرس: بلوار میرداماد، میدان محسنی، پاساژ آرش، ویکی ساعت</p>
+                                <p class="font-weight-bold aboutUsFooterDetails">کد پستی:1547934419</p>
+                                <p class="font-weight-bold aboutUsFooterDetails">شماره تماس:55144026 021</p>
+                                <p class="font-weight-bold aboutUsFooterDetails">info@wikisaat.com</p>
+                            </div>
+                            
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6 mapAddress">
+                    <iframe class="googleMapAddress" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3237.697621085541!2d51.439555015202295!3d35.75823623335235!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f8e0410609ff221%3A0x97a1ee3a3ddb341f!2sWikisaat!5e0!3m2!1sen!2s!4v1634126637718!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                @*<div class="col-12 col-md-4 col-lg-4">
+                    <div class="row">
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="widget-menu widget card">
+                                <header class="card-header">
+                                    <h3 class="card-title">محصولات</h3>
+                                </header>
+                                <ul class="footer-menu">
+
+                                    <li>
+                                        <a href="#">ماشین لباسشویی</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">ماشین ظرفشویی</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">یخچال</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">گاز</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6 col-lg-6">
+                            <div class="widget-menu widget card">
+                                <header class="card-header">
+                                    <h3 class="card-title">خدمات</h3>
+                                </header>
+                                <ul class="footer-menu">
+
+                                    <li>
+                                        <a href="#">ارسال فوری</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">امکان مرجوعی</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">جغرافیا کتاب</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+
+                <div class="col-lg-4 col-sm-6" style="padding:20px 20px;">
+
+                    <div class="widget-menu widget card">
+                        <header class="card-header">
+                            <h3 class="card-title">مورد اعتماد هزاران مشتری</h3>
+                        </header>
+                        <div></div>
+                    </div>
+
+                    @*<div class="socials">
+                            <p>ما را در شبکه های اجتماعی دنبال کنید.</p>
+                            <div class="footer-social">
+                                @{
+                                    var socialMedia = db.SocialMedias.FirstOrDefault();
+                                    if (socialMedia != null)
+                                    {
+                                        if (socialMedia.Instagram != null)
+                                        {
+                                            <a href="@socialMedia.Instagram" target="_blank"><i class="fa fa-instagram"></i></a>
+                                        }
+                                        if (socialMedia.Facebook != null)
+                                        {
+                                            <a href="@socialMedia.Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                        }
+                                        if (socialMedia.Youtube != null)
+                                        {
+                                            <a href="@socialMedia.Youtube" target="_blank"><i class="fa fa-youtube"></i></a>
+                                        }
+                                        if (socialMedia.Twitter != null)
+                                        {
+                                            <a href="@socialMedia.Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+                                        }
+                                        if (socialMedia.Linkedin != null)
+                                        {
+                                            <a href="@socialMedia.Linkedin" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                        }
+                                        if (socialMedia.Aparat != null)
+                                        {
+                                            <a href="@socialMedia.Aparat" target="_blank">
+                                                <img style=" filter: brightness(0.5);" src="~/Template/images/Aparat.png" />
+                                            </a>
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>*@
+                </div>
+                @*<div class="col-12 col-md-6 col-lg-12">
+                        <br />
+                        <p>
+                            @setting.FooterShortText
+                        </p>
+                        <p class="footerLongText" style="text-align:justify">
+                            @setting.FooterLongText
+                        </p>
+                    </div>*@
+            </div>
+        </div>
+        @*<div class="info">
+                <div class="row">
+                    <div class="col-12 col-lg-4">
+                        <span>هفت روز هفته ، 24 ساعت شبانه‌روز پاسخگوی شما هستیم.</span>
+                    </div>
+                    <div class="col-12 col-lg-2" style="direction: ltr">شماره تماس: @contact.phone</div>
+                    <div class="col-12 col-lg-2">آدرس ایمیل:<a href="@contact.email">@contact.email</a></div>
+                    <div class="col-12 col-lg-4 text-center">
+                        <a href="#" target="_blank"><img src="/Template/images/1576430819.png" width="159" height="48" alt="اپلیکیشن اندروید - بازار"></a>
+                    </div>
+                </div>
+            </div>*@
+    </div>
+
+    @*<div class="description">
+            <div class="container">
+                <div class="row">
+                    <div class="site-description col-12 col-lg-7">
+                        <h1 class="site-title">فروشگاه اینترنتی @setting.WebsiteName، بررسی، انتخاب و خرید آنلاین</h1>
+                        به محض ورود به @setting.WebsiteName با یک سایت پر از کالا رو به رو می‌شوید! هر آنچه که نیاز دارید و به ذهن شما خطور می‌کند در اینجا پیدا خواهید کرد.
+                    </div>
+                    <div class="symbol col-12 col-lg-5">
+                        <a href="#" target="_blank"><img src="/Template/images/logo.jpeg" class="footerLogo" alt=""></a>
+                        <a href="#" target="_blank"><img src="/Template/images/symbol-02.png" alt=""></a>
+                        <a referrerpolicy="origin" target="_blank" href="https://trustseal.enamad.ir/?id=169782&amp;Code=hqZrEFtys7cTTZTwyJaV"><img referrerpolicy="origin" src="https://Trustseal.eNamad.ir/logo.aspx?id=169782&amp;Code=hqZrEFtys7cTTZTwyJaV" alt="" style="cursor:pointer" id="hqZrEFtys7cTTZTwyJaV"></a>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <div class="copyright">
+        <div class="container">
+            <p>
+                کلیه حقوق اطلاعات این وب سایت محفوط و متعلق به فروشگاه اینترنتی @setting.WebsiteName می باشد. طراحی و توسعه توسط <a style="color: #000000" href="http://pulsedesign.ir/">پالس دیزاین</a>.
+            </p>
+        </div>
+    </div>
+</footer>
+
+

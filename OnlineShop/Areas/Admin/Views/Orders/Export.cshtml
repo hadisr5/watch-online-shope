@@ -1,0 +1,109 @@
+﻿@using OnlineShop.Models;
+@{
+    Layout = null;
+    OnlineShopEntities db = new OnlineShopEntities();
+
+    var Model = db.Baskets.ToList();
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Export</title>
+</head>
+<body>
+    <table id="tbl" style="display:none">
+        <thead>
+            <tr>
+                <th>ID</th>
+                
+                <th>
+                    کاربر
+                </th>
+                <th>
+                    قیمت
+                </th>
+                <th>
+                    روش پرداخت
+                </th>
+                <th>
+                    تاریخ
+                </th>
+                <th>
+                    وضعیت
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in Model)
+                {
+
+
+                        <tr>
+                            <td>@item.id</td>
+                            <td>
+                                @{
+                                    var user = db.Users.Where(c => c.id == item.userId).FirstOrDefault();
+                                    if (user != null)
+                                    {
+                                        <span>@user.firstName @user.lastName</span>
+                                    }
+                                }
+                            </td>
+                            <td>@item.Price</td>
+                            <td>@item.payMethod</td>
+                            <td>
+                                @{
+                                    if (item.creationDate != null)
+                                    {
+                                        DateTime dt = Convert.ToDateTime(item.creationDate);
+                                        System.Globalization.PersianCalendar PC = new System.Globalization.PersianCalendar();
+                                        string pcDate = PC.GetYear(dt).ToString() + "/" + PC.GetMonth(dt).ToString() + "/" + PC.GetDayOfMonth(dt).ToString();
+                                        string pcDate1 = PC.GetHour(dt).ToString() + ":" + PC.GetMinute(dt).ToString() + ":" + PC.GetSecond(dt).ToString();
+                                        <span>@pcDate</span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @if (item.wizardStatus == null || item.wizardStatus == "در صف بررسی") {
+                               <span class="label label-inline label-light-danger font-weight-bold">در صف بررسی</span>
+                                } else {
+                               <span class="label label-inline label-light-success font-weight-bold">@item.wizardStatus</span>
+                                }
+
+                            </td>
+                        </tr>
+
+
+
+                }
+            }
+        </tbody>
+    </table>
+
+
+
+    <script type="text/javascript" src="/newScripts/js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/newScripts/js/table2excel.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var d = new Date($.now());
+            var day = d.getDate()
+            var m = d.getUTCMonth() + 1
+            var y = d.getFullYear()
+            $("#tbl").table2excel({
+                filename: "لیست سفارشات -" + y + "-" + m + "-" + day + ".xls"
+            });
+        })
+
+
+    </script>
+
+</body>
+</html>

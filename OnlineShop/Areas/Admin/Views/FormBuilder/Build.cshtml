@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<form class="kt-form myForm" method="post" action="/admin/formBuilder/Design" data-redirect="/Admin/AdminDashboard/Index#/Admin/formBuilder/index">
+    <div id="tabs" class="">
+        @Html.AntiForgeryToken()
+        <!-- begin tab 1 -->
+        <div id="tabs-1">
+            <div id="form-edit-1">
+                <textarea id="fb-template-1" class="form-builder-template">
+                
+                </textarea>
+            </div>
+            <div id="form-render-1">
+            </div>
+        </div>
+        <!-- end tab 1 -->
+
+    </div>
+    <textarea name="inputs"></textarea>
+    <input type="number" name="id" value="@ViewBag.id" style="display:none" />
+    <button type="submit" class="btn btn-primary">تائید فرم</button>
+</form>
+<script src="/newScripts/formBuilder/script.js"></script>
+<style>
+    li.input-control {
+        text-align: right !important
+    }
+
+    div#tabs {
+        width: 95%;
+        padding: 0 25px;
+    }
+
+    .form-wrap.form-builder .frmb .field-actions {
+        left: 0;
+        right: auto;
+    }
+
+    .form-wrap.form-builder .frmb .form-elements .false-label:first-child, .form-wrap.form-builder .frmb .form-elements label:first-child {
+        float: right;
+    }
+
+    .frmb.stage-wrap.pull-left.ui-sortable {
+        border: 3px dashed #c7c7c7;
+    }
+</style>
+
+<script>
+    //$(document).ready(function () {
+    //    $('#fb-template-1').formRender({
+    //        dataType: 'json',
+    //        formData: '[{"type":"text","label":"Full Name","subtype":"text","className":"form-control","name":"text-1476748004559"},{"type":"select","label":"Occupation","className":"form-control","name":"select-1476748006618","values":[{"label":"Street Sweeper","value":"option-1","selected":true},{"label":"Moth Man","value":"option-2"},{"label":"Chemist","value":"option-3"}]},{"type":"textarea","label":"Short Bio","rows":"5","className":"form-control","name":"textarea-1476748007461"}]'
+    //    });
+    //});
+</script>

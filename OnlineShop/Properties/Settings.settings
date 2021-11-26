@@ -1,0 +1,32 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="OnlineShop.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ConnectionString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Data Source=.;initial catalog=ShopDB;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&amp;quot;</Value>
+    </Setting>
+    <Setting Name="emailSender" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">farhadsender1367@gmail.com</Value>
+    </Setting>
+    <Setting Name="emailUsername" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">farhadsender1367</Value>
+    </Setting>
+    <Setting Name="emailPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Fe23565!@#</Value>
+    </Setting>
+    <Setting Name="ServerConnectionString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">data source=37.156.146.197,1496;initial catalog=wikisaat_shop;User ID=wikisaatShopPdUser;Password=S2_3k-3gy8WSxCf;MultipleActiveResultSets=True;App=EntityFramework&amp;quot;</Value>
+    </Setting>
+    <Setting Name="PublicKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">
+&lt;RSAKeyValue&gt;&lt;Modulus&gt;qw2AyhQoa1QsCBjODBy74pySnhXhKFojm520Z+3ozto3HRHvJjdNYwlhjUl7KtzQLoLJ9lHDUszL5BJVpHYV8QXF95M9PN4bQgXdVqrEoyMGjUpRv4K/JE8N5m0lJoTVozwt+C0Icqgidx40MSdCO6QxVuE9DTplELjl8M1a08W2LZf/B+NvbGetUQhOQKT+Vd6cQnpCNi71Gcl+LOYcdr17g2bAB2SStu/ua2o34pdyoF+bmk4oRohfEeTh4ZT7DSVJumNjDGLxzpyLUF8wdjXuvDDky8M2Kka3gOv0rvunxn+EnXgkEi2h5TR0MfeugMkc1gdIRkldhZ642+OEJQ==&lt;/Modulus&gt;&lt;Exponent&gt;AQAB&lt;/Exponent&gt;&lt;/RSAKeyValue&gt;
+
+&lt;RSAKeyValue&gt;&lt;Modulus&gt;qw2AyhQoa1QsCBjODBy74pySnhXhKFojm520Z+3ozto3HRHvJjdNYwlhjUl7KtzQLoLJ9lHDUszL5BJVpHYV8QXF95M9PN4bQgXdVqrEoyMGjUpRv4K/JE8N5m0lJoTVozwt+C0Icqgidx40MSdCO6QxVuE9DTplELjl8M1a08W2LZf/B+NvbGetUQhOQKT+Vd6cQnpCNi71Gcl+LOYcdr17g2bAB2SStu/ua2o34pdyoF+bmk4oRohfEeTh4ZT7DSVJumNjDGLxzpyLUF8wdjXuvDDky8M2Kka3gOv0rvunxn+EnXgkEi2h5TR0MfeugMkc1gdIRkldhZ642+OEJQ==&lt;/Modulus&gt;&lt;Exponent&gt;AQAB&lt;/Exponent&gt;&lt;/RSAKeyValue&gt;
+</Value>
+    </Setting>
+    <Setting Name="PrivateKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">
+&lt;RSAKeyValue&gt;&lt;Modulus&gt;qw2AyhQoa1QsCBjODBy74pySnhXhKFojm520Z+3ozto3HRHvJjdNYwlhjUl7KtzQLoLJ9lHDUszL5BJVpHYV8QXF95M9PN4bQgXdVqrEoyMGjUpRv4K/JE8N5m0lJoTVozwt+C0Icqgidx40MSdCO6QxVuE9DTplELjl8M1a08W2LZf/B+NvbGetUQhOQKT+Vd6cQnpCNi71Gcl+LOYcdr17g2bAB2SStu/ua2o34pdyoF+bmk4oRohfEeTh4ZT7DSVJumNjDGLxzpyLUF8wdjXuvDDky8M2Kka3gOv0rvunxn+EnXgkEi2h5TR0MfeugMkc1gdIRkldhZ642+OEJQ==&lt;/Modulus&gt;&lt;Exponent&gt;AQAB&lt;/Exponent&gt;&lt;P&gt;4Aojh9IQqoQUkv4oWEC1rxeik2IyUiVJf/MIVDsYkG/WScUdaoVaLyWm3DwzidSC6LPkzXBVJFbjI4GCr5IdPfQGdXbbf0k7DrtY8bA9Nh5ca1n73P0o+emyiWEY+Led3kQRr8+BZzzlMl7WUNLAos5TuOF98mEvltJJAX9Elc8=&lt;/P&gt;&lt;Q&gt;w3RMtR/dhjK8Wn2dfmZeiHKgekivDgmzlCxWWMJvtEPfBs0tJIXeDTK39ZNyE/a9EgOu0J3YRXQmW7e/1vPhFkCauS0YCmrbfWKknoD/it+cbvVSBdVKhkvPrNkYzraet+QYCrA0eK4uwyJsSkxFsLqQ85YQ2ty99GM8K9Aq98s=&lt;/Q&gt;&lt;DP&gt;ENfSSgC57gfWACMJZ3Ed95bgSxJD1Dcnam4b/zEeLKWrx4oBJyP1XrwG6mHAQilu2g3EMsmyLPQ3SVEQQSDL//9biPMxl0UrInVlP25Pe8UWj5+JNtj1fqxaFsfs963eOXqGleAUy20hkgLdO+BMSTEXzDtvm4xA5qbShEFMJ7M=&lt;/DP&gt;&lt;DQ&gt;rs0wXTymbgKqGXQGiqkbGoUJqNOgW7mpdXdBshgStvGMYRTWrrdapAscIvE/MUOWTKomikTgyxzZwWVQmPl78N7OgZYmzgpLSpQSDf/oi1b5HPMh7D2ZbQoYLcnrOdRxlpzUM5rrEpMVF0eN+dTE7w2r3W30nQiWih7GDZkbFIk=&lt;/DQ&gt;&lt;InverseQ&gt;NeguRtpJmvS+LxXopqhAv3vdonQJ94oesEgC13t6sFAersxybG/Le2wc8ZnTPH7JpkfsR7WBlhNgkBaBKxRbgQWAigXIrUb2p+My/uSqvzY4kRoesPaf+SDUrHiC00DaV73BopgtIxaKKw9Am6jjdo3eIehz1cg8hKYaHywLeFc=&lt;/InverseQ&gt;&lt;D&gt;aQOaPPYRNotvmOz5mxAM/XwYu3s9R1PHpqM0fdXe5xerXGqFQxYSqam5vU8OkesM2HEtYs8htnTK/FORRq3EnLtppaw8nWDSpT8Ke0nN/UXkoNuuwn+Xr8flBcGeXD6TFms84a9sD1BQEId3jXHHxOvx6p/Ppo5iO9j4OlUo3Pf0bJphGq/89uj9DwWGfb4XfisbaNDQe5BQygzILmdTroYWLv6ayEbEI7y9LpiN7aSilkaee+giaZkj/lD2+4zLFAROyQCUFBSbHcsM6zlt7Ai7wHnB3XjlgccegviMDcMAIxASTSDWTJcDcjypg2qv6Z7Sqf0Xs7MDtG9qcClFhQ==&lt;/D&gt;&lt;/RSAKeyValue&gt;</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

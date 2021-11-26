@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Zarf.cshtml";
+}
+
+@if (Request["newlogin"] != null)
+{
+    @section scripts{
+        <script>
+            $(document).ready(function () {
+                location.replace("/Admin/AdminDashboard/Index#/Admin/chart/Index");
+                hashChange();
+            })
+
+        </script>
+
+    }
+
+}
+

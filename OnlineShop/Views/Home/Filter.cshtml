@@ -1,0 +1,276 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    var Products = (List<Product>)ViewBag.products;
+    Products = Products.Where(r => r.Active == true).ToList();
+    var setting = db.Settings.FirstOrDefault();
+}
+@{
+    if (Products.Count != 0)
+    {
+        foreach (var item in Products)
+        {
+            if (item.Active == true)
+            {
+                <li class="col-xl-3 col-lg-4 col-md-6 col-12 position-relative" style="padding-bottom: 17px;">
+                    <div class="skeleton-loader-product-card">
+                        <div class="ph-item">
+                            <div class="pr-0 pl-0">
+                                <div class="ph-row">
+                                    <div class="ph-col-12 big ph-h-230"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ph-item">
+                            <div class="pr-0 pl-0">
+                                <div class="ph-row mb-0">
+                                    <div class="ph-col-12 big ph-h-20"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ph-item">
+                            <div class="pr-0 pl-0">
+                                <div class="ph-row">
+                                    <div class="ph-col-12 big ph-h-20"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ph-item">
+                            <div class="pr-0 pl-0">
+                                <div class="ph-row">
+                                    <div class="ph-col-8 big ph-h-40"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ph-item direction-rtl">
+                            <div class="pr-0 pl-0">
+                                <div class="ph-row">
+                                    <div class="ph-col-8 big ph-h-40"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        @{
+                            var sizeColor = db.ColorSizes.Where(r => r.ProductId == item.id).ToList();
+                            var colors = new List<Color>();
+
+                            if (sizeColor.Count != 0)
+                            {
+                                foreach (var item2 in sizeColor)
+                                {
+                                    var color = db.Colors.Where(r => r.id == item2.colorId).FirstOrDefault();
+                                    if (color != null)
+                                    {
+                                        colors.Add(color);
+                                    }
+                                }
+                                colors = colors.Distinct().ToList();
+                                if (colors.Count != 0)
+                                {
+                                    <div class="colorsInBox">
+                                        @foreach (var item2 in colors)
+                                        {
+                                            <div class="singleColorInCats" style="background:@item2.Code">
+                                            </div>
+                                            <br>
+                                        }
+                                    </div>
+
+                                }
+                            }
+                        }
+
+                        <div class="product-seller-details product-seller-details-item-grid">
+                            @{
+                                if (item.sellerId != null)
+                                {
+                                    var seller = db.Sellers.Where(r => r.id == item.sellerId).FirstOrDefault();
+                                    if (seller != null)
+                                    {
+                                        <span class="product-main-seller">
+                                            <span class="product-seller-details-label">
+                                                فروشنده:
+                                            </span> @seller.name @seller.lastname
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="product-main-seller">
+                                            <span class="product-seller-details-label">
+                                                فروشنده:
+                                            </span> @setting.WebsiteName
+                                        </span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="product-main-seller">
+                                        <span class="product-seller-details-label">
+                                            فروشنده:
+                                        </span> @setting.WebsiteName
+                                    </span>
+                                }
+                            }
+                            <span class="product-seller-details-badge-container"></span>
+                        </div>
+                        @{
+                            if (item.specialSelling != null || item.specialSelling == true)
+                            {
+                                <div class="d-flex justify-content-between">
+                                    <div class="promotion-badge promotion-badge--special-sale">
+                                        فروش ویژه
+                                    </div>
+                                    <div class="promotion-badge discount-badge--special-sale">20%</div>
+                                </div>
+                            }
+
+                        }
+                        @{
+                            string tlt = item.title.Trim();
+                            while (tlt.Contains(" "))
+                            {
+                                tlt = tlt.Replace(" ", "-");
+                            }
+                        }
+                        <a class="product-box-img"
+                           href="/home/product/@item.id/@tlt">
+                            @{
+                                if (item.MainImage != null)
+                                {
+                                    <img class="lazyload" src="/Template/images/loading.png" data-src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.MainImage" alt="">
+                                }
+                                else
+                                {
+                                    <img class="lazyload" src="/Template/images/loading.png" data-src="/Template/images/loading.png" alt="">
+                                }
+                            }
+                        </a>
+                        <div class="product-box-content">
+                            <div class="product-box-content-row pl-3 pr-3">
+                                <div class="product-box-title">
+                                    <a href="/home/product/@item.id/@tlt">
+                                        @item.title
+                                    </a>
+                                </div>
+                            </div>
+                            @{
+                                string style1 = "display:flex; flex-direction:column-reverse; text-align:right";
+                                string style2 = "display:flex";
+                                if (item.isAvailable == true)
+                                {
+                                    <div class="product-box-row product-box-row-price" style="@(item.price == null ? @style1 : @style2)">
+                                        <div class="price">
+                                            <div class="price-value">
+
+                                                @{
+                                                    var off = db.Discounts.Where(r => r.productId == item.id && r.expire > DateTime.Now && r.status == 1).FirstOrDefault();
+                                                    if (item.price != null)
+                                                    {
+                                                        if (off != null)
+                                                        {
+                                                            var price = item.price - (item.price * off.percentage / 100);
+
+                                                            <del class="discountInCats d-flex justify-content-between">
+                                                                <span class="fixPrice">@item.price تومان</span>
+                                                            </del>
+                                                            <div class="price-value-wrapper fixPric d-flex justify-content-between">
+                                                                @price
+                                                                <span class="price-currency">تومان</span>
+                                                            </div>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="price-value-wrapper fixPrice">
+                                                                @item.price
+                                                                <span class="price-currency">تومان</span>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    else
+                                {
+                                                        <div class="price-value-wrapper">
+                                                            <span class="noPrice">برای استعلام قیمت تماس بگیرید</span>
+                                                        </div>
+                                                    }
+
+                                                }
+
+                                            </div>
+                                        </div>
+                                        <div class="checkbox moghayeseContainer m-0">
+                                            <input id="compare@(item.id)" class="ComparisonInput" type="checkbox" name="123"
+                                                   data-value="@item.id">
+                                            <label for="compare@(item.id)" class="js-box-content-item moghayese">
+                                                مقایسه
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="product-box-row product-box-row-price">
+                                        <div class="price">
+                                            <div class="price-value">
+                                                <div class="price-value-wrapper">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="promotion-box-cover promotion-box-cover--out-of-stock">
+                                            <div class="promotion-box-cover-text">ناموجود</div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </li>
+
+            }
+        }
+    }
+}
+
+
+<script>
+    fixprice()
+</script>
+@{
+    if (Products.Count == 0)
+    {
+        <script>
+            $('#noProduct').removeClass('hidden')
+            $('#withproduct').addClass('hidden')
+        </script>
+    }
+    else
+    {
+        <script>
+            $('#noProduct').addClass('hidden')
+            $('#withproduct').removeClass('hidden')
+        </script>
+    }
+}
+<style>
+    .colorsInBox {
+        position: absolute;
+        right: 4px;
+        top: 30px;
+    }
+
+    .singleColorInCats {
+        width: 15px;
+        height: 15px;
+        border-radius: 20px;
+        float: right;
+        border: 1px solid #e1e1e1;
+    }
+
+    @@media only screen and (max-width: 600px) {
+        .colorsInBox {
+            display: none;
+        }
+    }
+</style>

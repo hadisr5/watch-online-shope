@@ -1,0 +1,171 @@
+﻿@using OnlineShop.Models
+@{
+    OnlineShopEntities db = new OnlineShopEntities();
+    int id = Convert.ToInt32(ViewBag.id);
+    var admin = db.AdminUsers.Find(id);
+    var AdminPermissions = db.Permissions.Where(r => r.AdminId == id).ToList();
+    Layout = null;
+    var permissions = new List<_Access>();
+    var permissionList = ViewBag.listOfPermissions;
+    Boolean hasPrePermissions = false;
+    if (AdminPermissions.Count!=0)
+    {
+        hasPrePermissions = true;
+    }
+
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت دسترسی های ادمین شناسه @id</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/adminusers/index" class="btn btn-light-warning font-weight-bolder btn-sm">بازگشت</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+          
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<div class="card card-custom">
+    <div class="card-header flex-wrap border-0 pt-6 pb-0">
+        <div class="card-title">
+            <h3 class="card-label">
+                لیست دسترسی های کاربر
+            </h3>
+            <label class="checkbox">
+                <input type="checkbox" value="FULL ACCESS" name="FullAccess" class="fullAccess" />
+                <span></span>
+                <h3 class="card-label">دسترسی کلی</h3>
+            </label>
+        </div>
+        <div class="card-toolbar">
+            
+        </div>
+    </div>
+    <div class="card-body">
+        <form class="kt-form myForm" method="post" action="/admin/accessLevel/changeAcessLevel/@id" data-redirect="/Admin/AdminDashboard/Index#/Admin/accessLevel/index/@id">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                @if (permissionList.Count != 0)
+                {
+                    foreach (var item in permissionList)
+                    {
+                        Boolean innerFlag = false; 
+                        <div class="col-md-3">
+                            <div class="ControllerContainer">
+                                <label class="checkbox">
+                                    @foreach (var item2 in item.methods)
+                                    {
+                                        if (!hasPrePermissions || AdminPermissions.Where(r => r.Permition == item2.name).FirstOrDefault() == null)
+                                        {
+                                            innerFlag = true;
+                                        }
+                                    }
+                                    @{
+                                        if (!innerFlag)
+                                        {
+                                            <input type="checkbox" checked class="permissionHeader" />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="permissionHeader" />
+                                        }
+                                    }
+                                    <span></span>
+                                    <h3 class="card-label">@item.name</h3>
+                                </label>
+                                <hr />
+                                @if (item.methods.Count != 0)
+                                {
+
+
+                                    <div class="checkbox-list">
+                                        @foreach (var item2 in item.methods)
+                                        {
+                                        <label class="checkbox">
+                                            @{
+                                                if (hasPrePermissions && AdminPermissions.Where(r => r.Permition == item2.name).FirstOrDefault() != null)
+                                                {
+                                                    <input type="checkbox" checked="checked" class="PermissionBox" data-id="@item2.name" name="Permission" value="@(item2.name)_@(item.Controller)">
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" class="PermissionBox" data-id="@item2.name" name="Permission" value="@(item2.name)_@(item.Controller)">
+                                                }
+                                            }
+                                            <span></span>@item2.name
+                                        </label>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+            <br />
+            <br />
+            <br />
+            <button type="submit" class="btn btn-warning">ویرایش دسترسی های کاربر</button>
+        </form>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@functions {
+    public class _Access
+    {
+        public string name { get; set; }
+        public List<_Method> methods { get; set; }
+        public string Controller { get; set; }
+
+    }
+
+    public class _Method
+    {
+        public string name { get; set; }
+
+    }
+
+}
+<style>
+    .ControllerContainer {
+        margin: 0px;
+        border: 2px dashed #d7d7d7;
+        padding: 10px;
+        margin-bottom:15px;
+    }
+</style>
+
+

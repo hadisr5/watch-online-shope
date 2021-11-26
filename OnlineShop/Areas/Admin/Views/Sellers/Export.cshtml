@@ -1,0 +1,99 @@
+﻿@using OnlineShop.Models;
+@{
+    Layout = null;
+    OnlineShopEntities db = new OnlineShopEntities();
+
+    var Model = db.Sellers.ToList();
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Export</title>
+</head>
+<body>
+    <table id="tbl" style="display:none">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>نام</th>
+                <th>نام خانوادگی</th>
+                <th>کد ملی</th>
+                <th>شماره شبا</th>
+                <th>شماره کارت</th>
+                <th>موبایل</th>
+                <th>ایمیل</th>
+                <th>وضعیت</th>
+                <th>تاریخ ایجاد</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in Model)
+                {
+
+
+                    <tr>
+                        <td>@item.id</td>
+                        <td>@item.name</td>
+                        <td>@item.lastname</td>
+                        <td>@item.codeMeli</td>
+                        <td>@item.sheba</td>
+                        <td>@item.shomareKart</td>
+                        <td>@item.phone</td>
+                        <td>@item.email</td>
+                        <td>
+                            @if (item.isValid == true) {
+                          <span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">تائید شده</span>
+
+                            } else {
+                            <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">در انتظار تائید</span>
+                            }
+
+                        </td>
+                        <td>
+                            @{
+                                if (item.creationDate != null)
+                                {
+                                    DateTime dt = Convert.ToDateTime(item.creationDate);
+                                    System.Globalization.PersianCalendar PC = new System.Globalization.PersianCalendar();
+                                    string pcDate = PC.GetYear(dt).ToString() + "/" + PC.GetMonth(dt).ToString() + "/" + PC.GetDayOfMonth(dt).ToString();
+                                    string pcDate1 = PC.GetHour(dt).ToString() + ":" + PC.GetMinute(dt).ToString() + ":" + PC.GetSecond(dt).ToString();
+                                    <span>@pcDate</span>
+                                }
+                            }
+                        </td>
+                    </tr>
+
+
+
+                }
+            }
+        </tbody>
+    </table>
+
+
+
+    <script type="text/javascript" src="/newScripts/js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/newScripts/js/table2excel.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var d = new Date($.now());
+            var day = d.getDate()
+            var m = d.getUTCMonth() + 1
+            var y = d.getFullYear()
+            $("#tbl").table2excel({
+                filename: "لیست فروشندگان -" + y + "-" + m + "-" + day + ".xls"
+            });
+        })
+
+
+    </script>
+
+</body>
+</html>

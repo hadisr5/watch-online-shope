@@ -1,0 +1,319 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!--begin::Subheader-->
+
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت کاربران</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            @*<a href="#/admin/users/create" class="btn btn-light-warning font-weight-bolder btn-sm">ایجاد صفحه جدید</a>*@
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+
+<div class="card card-custom">
+    <div class="card-header flex-wrap border-0 pt-6 pb-0">
+        <div class="card-title">
+            <h3 class="card-label">
+                لیست صفحه ها
+                @*<span class="text-muted pt-2 font-size-sm d-block">Javascript array as data source</span>*@
+            </h3>
+        </div>
+        <div class="card-toolbar">
+            <a target="_blank" href="@Url.Action( "Export","Users", new { id = "userExport" })" class="btn btn-light-primary font-weight-bolder">خروجی اکسل</a>
+            @*@Html.ActionLink("خروجی اکسل", "Export", new { id = "userExport" }, new AjaxOptions()
+        {
+        HttpMethod = "POST",
+        UpdateTargetId = "partialDiv",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "loader"
+
+        }, new { @class = "btn btn-light-primary font-weight-bolder", id = "11" })*@
+        </div>
+    </div>
+    <div class="card-body">
+        <!--begin: Search Form-->
+        <!--begin::Search Form-->
+        <div class="mb-7">
+            <div class="row align-items-center">
+                <div class="col-lg-9 col-xl-8">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 my-2 my-md-0">
+                            <div class="input-icon">
+                                <input type="text" class="form-control" placeholder="جستجو ..." id="SearchInput">
+                                <span>
+                                    <i class="flaticon2-search-1 text-muted"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 my-2 my-md-0">
+                            <div class="d-flex align-items-center">
+                                <label class="mr-3 mb-0 d-none d-md-block">نمایش</label>
+                                <select class="form-control dropdown pag" id="kt_datatable_search_status">
+                                    <option value="10" selected>10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--begin: Datatable-->
+        <div class="datatable-head-custom datatable-default datatable-primary datatable-loaded" id="kt_datatable" style="">
+
+            <div class="datatable datatable-head-custom datatable-default datatable-primary datatable-loaded" id="kt_datatable" style="">
+                <table class="table  table-condensed datatable-table" id="Table">
+                    <thead>
+                        <tr>
+
+                            <th>
+                                شناسه
+                            </th>
+                            <th>
+                                کاربر ویژه
+                            </th>
+                            <th>
+                                عکس
+                            </th>
+                            <th>
+                                نام
+                            </th>
+                            <th>
+                                نام خانوادگی
+                            </th>
+                            <th>
+                                شماره موبایل
+                            </th>
+                            <th>
+                                ایمیل
+                            </th>
+                            <th>
+                                شماره کارت
+                            </th>
+                            <th>
+                                کدملی
+                            </th>
+                            <th>
+
+                            </th>
+                            <th>اقدامات</th>
+                        </tr>
+                    </thead>
+
+
+                </table>
+
+            </div>
+
+        </div>
+        <!--end: Datatable-->
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var table = $("#Table").DataTable({
+
+            responsive: !0, searchDelay: 500, processing: !0, serverSide: !0, ajax: "/admin/users/List",
+            columns:
+                [
+
+                    {
+                        data: "id"
+                    },
+                    {
+                        data: "Special",
+                        render: function (data, type, row) {
+                            if (data == true) {
+                                return '<img src="/newscripts/images/crown.svg" class="specialUserIcon" />'
+                            } else {
+                                return ''
+                            }
+                        }
+                    },
+                    {
+                        data: "image",
+                        orderable: false,
+
+                        render: function (data, type, row) {
+                            if (data == null) {
+                                return '<img src="/Template/images/user.svg" class="profileImg" alt=""  style="border-radius:4px" />'
+
+                            } else {
+                                return '<img data-src="' + "@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]" + data + '" class="profileImg" src="/Template/images/user.svg" alt=""  style="border-radius:4px" class="lazyload" />'
+
+                            }
+                        }
+                    },
+                    {
+                        data: "firstName",
+                        orderable: false,
+                    },
+                    {
+                        data: "lastName",
+                        orderable: false,
+                    },
+                    {
+                        data: "mobile",
+                        orderable: false,
+
+                    },
+
+                    {
+                        data: "email",
+                        orderable: false,
+
+                    },
+
+
+                    {
+                        data: "card",
+                        orderable: false,
+
+                    },
+                    {
+                        data: "codeMeli",
+                        orderable: false,
+
+                    },
+                    {
+                        data: "Special",
+                        orderable: false,
+                        render: function (data, type, row) {
+                            if (data == true) {
+                                return '<span class="choosePrice" data-id="'+row.id+'" data-val="'+data+'">تبدیل به کاربر معمولی</span>'
+                            } else {
+                                return '<span class="choosePrice" data-id="' + row.id + '" data-val="' + data +'">تبدیل به کاربر ویژه</span>'
+                            }
+                        }
+
+                    },
+                    {
+                        data: "id",
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return '<span style="overflow: visible; position: relative; width: 125px;"> <div class="dropdown dropdown-inline">  <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right"> <ul class="navi flex-column navi-hover py-2"> <li class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2"> Choose an action: </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-print"></i></span> <span class="navi-text">Print</span> </a> </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-copy"></i></span> <span class="navi-text">Copy</span> </a> </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-file-excel-o"></i></span> <span class="navi-text">Excel</span> </a> </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-file-text-o"></i></span> <span class="navi-text">CSV</span> </a> </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-file-pdf-o"></i></span> <span class="navi-text">PDF</span> </a> </li> </ul> </div> </div> <a  href="#/admin/users/details/' + data + '"  class="btn btn-sm btn-clean btn-icon mr-2" title="Edit details"> <span class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <rect x="0" y="0" width="24" height="24"></rect> <path d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) "></path> <rect fill="#000000" opacity="0.3" x="5" y="20" width="15" height="2" rx="1"></rect> </g> </svg> </span> </a> <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="حذف" data-role="remove" data-url="/admin/users/remove/' + data + '"> <span class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <rect x="0" y="0" width="24" height="24"></rect> <path d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z" fill="#000000" fill-rule="nonzero"></path> <path d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"></path> </g> </svg> </span> </a> </span>'
+                        }
+
+                    }
+                ],
+
+
+            language: {
+                url: "/newScripts/Persian.json",
+                processing: "در حال دریافت اطلاعات ...",
+                search: "جستجو : ",
+                info: "نمایش _START_ تا _END_ از _TOTAL_ ",
+                sLengthMenu: "نمایش _MENU_ آیتم در صفحه",
+                emptyTable: "هیچ داده ای وجود ندارد",
+                zeroRecords: "هیچ داده ای وجود ندارد",
+                infoEmpty: "نمایش 0 تا 0 از 0 داده"
+            },
+            ajax: {
+                url: "/admin/users/list",
+                type: "POST"
+            },
+            fnDrawCallback: function (oSettings, json) {
+                lazyload();
+                API();
+            }
+        })
+
+        $('#SearchInput').on('keyup', function () {
+            table.search(this.value).draw();
+        });
+
+        $('.dropdown').selectpicker();
+
+    })
+
+    $('select.pag').on('change', function (e) {
+        $('select[name="Table_length"]').val(this.value).trigger('change');
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    titlePage('مدیریت کاربران')
+</script>
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-menu="User"]').addClass('kt-menu__item--active')
+
+</script>
+<script>
+    $(document).ready(function () {
+        document.title = 'کاربران';
+    });
+    $(document).on('click', '.choosePrice', function () {
+        Prime($(this).attr('data-id') , $(this).attr('data-val'))
+    })
+    function Prime(id, val) {
+        var value = true; 
+        if (val != null && val == "true") {
+            value = false; 
+        }
+        $.ajax({
+            type: "POST",
+            url: '/admin/users/Prime/' + id,
+            data: { check: value },
+            success: function (t) {
+                hashChange();
+            }
+        })
+    }
+</script>
+<style>
+    .choosePrice{
+        cursor:pointer;
+    }
+    .specialUserIcon{
+        width:30px ; 
+    }
+</style>

@@ -1,0 +1,217 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت مدل ها</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+        <a href="#/admin/Model/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست مدل ها</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            اطلاعات مدل جدید
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/Model/Create_Models" data-redirect="/Admin/AdminDashboard/Index#/Admin/Model/index">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label>عنوان مدل</label>
+                            <input type="text" class="form-control" placeholder="عنوان مدل" name="Title">
+                            <span class="form-text text-muted">مدل شما با این عنوان نمایش داده می شود </span>
+                        </div>
+                        <div class="form-group">
+                            <label>توضیحات مدل </label>
+                            <input type="text" class="form-control" placeholder="توضیحات مدل" name="Description">
+                            @*<span class="form-text text-muted"> با کلیک بر روی این مدل به این لینک هدایت می شوید</span>*@
+                        </div>
+
+                        
+
+                        <!--<div class="form-group">
+        <label>تاریخ ایجاد</label>
+        <input type="text" class="form-control" placeholder="تاریخ ایجاد" name="CreationDate">-->
+                        @*<span class="form-text text-muted"> با کلیک بر روی این مدل  به این لینک هدایت می شوید</span>*@
+                        <!--</div>-->
+
+
+                        <label>انتخاب برند</label>
+                        <select class="form-control select2list" name="BrandId" id="BrandId">
+                            <option value="0">انتخاب نشده است</option>
+                            @foreach (var item in db.watchBrands)
+                            {
+                                if (Model == item.Models)
+                                {
+                                    <option value="@item.BrandId" selected>@(item.Title)</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.BrandId">@(item.Title )</option>
+
+                                }
+
+                            }
+                        </select>
+                        <div id="row-service-container" class="row-service-container">
+                            <h1>تعریف سرویس ها</h1>
+                            <div class="row row-service-id" id="1">
+                                <div class="col-md-6">
+                                    <select class="form-control select2list" name="ServicePriceId" id="ServicePriceId">
+                                        <option value="0">انتخاب نشده است</option>
+                                        @foreach (var item in db.ServicePrices)
+                                        {
+                                            if (Model == item.Model)
+                                            {
+                                                <option value="@item.ServicePriceId" selected>@(item.ServicePriceId)</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ServicePriceId">@(item.ServicePriceId )</option>
+
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-5">
+                                    <input class="form-control" placeholder="قیمت" />
+                                </div>
+                            </div>
+                            <div id="other-rows">
+                                
+                            </div>
+                            <div class="add-service-btn" onclick="addService()">
+                                افزودن سرویس
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-3 col-form-label">فعال سازی مدل</label>
+                            <div class="col-3">
+                                <span class="kt-switch">
+                                    <label>
+                                        <input type="checkbox" checked="checked" name="active" value="True" />
+                                        <span></span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ایجاد مدل جدید</button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/Model/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ایجاد مدل جدید')
+</script>
+<script>
+    $('.dropzone').dropzone({
+        success: function(file, response) {
+            $('#img').val(response)
+        }
+    });
+    
+    
+</script>
+
+<script>
+    let sampleDataValue = [1, 2, 3, 4];
+    let sampleDataText = ['dariush','hasti','maryam','ali'];
+
+    function removeService() {
+        let id = this.getAttribute('delete-id');
+        document.getElementById(id).remove();
+    }
+
+    function addService() {
+        debugger;
+        let allElems = Array.from(document.getElementsByClassName('row-service-id'));
+        let maxId = 0;
+        for (let i = 0; i < allElems.length; i++) {
+            if (parseInt(allElems[i].getAttribute('id')) > maxId)
+                maxId = parseInt(allElems[i].getAttribute('id'));
+        }
+        maxId++;
+        let mainDiv = document.createElement('DIV');
+        mainDiv.setAttribute('class', 'row row-service row-service-id');
+        mainDiv.setAttribute('id', maxId.toString());
+
+        let div1 = document.createElement('DIV');
+        div1.setAttribute('class', 'col-md-6');
+
+        let select = document.createElement('select');
+        select.setAttribute('class', 'form-control');
+        for (let i = 0; i < sampleDataValue.length; i++) {
+            let opt = document.createElement('option');
+            opt.setAttribute('value', sampleDataValue[i]);
+            let text = document.createTextNode(sampleDataText[i]);
+            opt.appendChild(text);
+            select.appendChild(opt);
+        }
+        div1.appendChild(select);
+
+        let div2 = document.createElement('DIV');
+        div2.setAttribute('class', 'col-md-5');
+        let input = document.createElement('INPUT');
+        input.setAttribute('class', 'form-control');
+        input.setAttribute('placeholder', 'قیمت');
+
+        div2.appendChild(input);
+
+        let div3 = document.createElement('DIV');
+        div3.setAttribute('class', 'col-md-1');
+        let btn = document.createElement('div');
+        btn.setAttribute('delete-id', maxId);
+        btn.setAttribute('class', 'remove-service');
+        btn.appendChild(document.createTextNode('حذف سرویس'));
+        btn.addEventListener('click', removeService);
+        div3.appendChild(btn);
+
+        mainDiv.appendChild(div1);
+        mainDiv.appendChild(div2);
+        mainDiv.appendChild(div3);
+
+        document.getElementById('other-rows').appendChild(mainDiv);
+    }
+    
+</script>

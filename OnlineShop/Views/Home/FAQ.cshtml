@@ -1,0 +1,370 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using System.Data.Entity
+@using CaptchaMvc
+@using System.Globalization
+@model int?
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+    var faqs = db.Faqs.Where(f => f.IsActive == true && f.CategoryId == Model).OrderBy(f => f.priority).Include(p => p.FaqCategory).ToList();
+    var faccategory = db.FaqCategories.Where(c => c.id == Model).FirstOrDefault();
+}
+@section CSS{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.2.0/css/ionicons.min.css" integrity="sha256-F3Xeb7IIFr1QsWD113kV2JXaEbjhsfpgrKkwZFGIA4E=" crossorigin="anonymous" />
+
+    <style>
+        .list-group-flush .list-group-item {
+            background: #f3f6f9;
+            color: #000;
+        }
+
+        .comments-add-col--content {
+            min-height: 300px;
+        }
+
+        .mainpagepic {
+            width: 100%
+        }
+
+        .comments-add-col--content p {
+            float: none;
+            padding: 5px 0
+        }
+
+        p {
+            color: #000;
+        }
+
+        main.single-product .product {
+            background: #fff !important;
+        }
+
+        .faq-search-wrap {
+            padding: 50px 0 60px;
+        }
+
+            .faq-search-wrap .form-group .form-control,
+            .faq-search-wrap .form-group .dd-handle {
+                border-top-right-radius: .25rem;
+                border-bottom-right-radius: .25rem;
+            }
+
+            .faq-search-wrap .form-group .input-group-append {
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                z-index: 10;
+                pointer-events: none;
+            }
+
+                .faq-search-wrap .form-group .input-group-append .input-group-text {
+                    background: transparent;
+                    border: none;
+                }
+
+                    .faq-search-wrap .form-group .input-group-append .input-group-text .feather-icon > svg {
+                        height: 18px;
+                        width: 18px;
+                    }
+
+        .bg-teal-light-3 {
+            background-color: #7fcdc1 !important;
+        }
+
+        .hk-row {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            margin-right: -10px;
+            margin-left: -10px;
+        }
+
+
+
+
+        .list-group-item.active {
+            background-color: #fbb03b;
+            border-color: #fbb03b;
+        }
+
+        .accordion .card .card-header.activestate {
+            border-width: 1px;
+        }
+
+        .accordion .card .card-header {
+            padding: 0;
+            border-width: 0;
+        }
+
+        .card.card-lg .card-header, .card.card-lg .card-footer {
+            padding: .9rem 1.5rem;
+        }
+
+        .accordion > .card .card-header {
+            margin-bottom: -1px;
+        }
+
+        .card .card-header {
+            background: transparent;
+            border: none;
+        }
+
+        .accordion.accordion-type-2 .card .card-header > a.collapsed {
+            color: #324148;
+        }
+
+        .accordion .card:first-of-type .card-header:first-child > a {
+            border-top-left-radius: calc(.25rem - 1px);
+            border-top-right-radius: calc(.25rem - 1px);
+        }
+
+        .accordion.accordion-type-2 .card .card-header > a {
+            background: transparent;
+            color: #13a89e;
+            padding-right: 0;
+        }
+
+        .accordion .card .card-header > a.collapsed {
+            color: #324148;
+            background: transparent;
+        }
+
+        .accordion .card .card-header > a {
+            background: #00acf0;
+            color: #fff;
+            font-weight: 600;
+            padding: .75rem 1.25rem;
+            display: block;
+            width: 100%;
+            text-align: right;
+            position: relative;
+            -webkit-transition: all 0.2s ease-in-out;
+            -moz-transition: all 0.2s ease-in-out;
+            transition: all 0.2s ease-in-out;
+            font-size: 15px;
+        }
+
+        li.list-group-item.d-flex.align-items-center {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+
+        .badge.badge-pill {
+            border-radius: 50px;
+        }
+
+        .badge.badge-light {
+            background: #eaecec;
+            color: #324148;
+        }
+
+        .badge {
+            font-weight: 500;
+            border-radius: 4px;
+            padding: 5px 7px;
+            font-size: 72%;
+            letter-spacing: 0.3px;
+            vertical-align: middle;
+            display: inline-block;
+            text-align: center;
+            text-transform: capitalize;
+        }
+
+        .ml-15 {
+            margin-left: 15px !important;
+        }
+
+        .accordion.accordion-type-2 .card .card-header > a.collapsed:after {
+            content: "\f158";
+        }
+
+        .accordion.accordion-type-2 .card .card-header > a::after {
+            display: inline-block;
+            font: normal normal normal 14px/1 'Ionicons';
+            speak: none;
+            text-transform: none;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: auto;
+            position: absolute;
+            content: "\f176";
+            font-size: 21px;
+            margin-right: 5px;
+        }
+
+        h6.card-header {
+            color: #13a89e;
+        }
+
+        .accordion .card .card-body {
+            color: #000;
+            font-size: 14px;
+        }
+
+        .card .card-body {
+            min-height: auto;
+        }
+
+        .card {
+            margin-bottom: 5px;
+            box-shadow: none;
+        }
+
+        .col-xl-8 > .card {
+            border: 1px solid #d5dae0 !important;
+        }
+
+        h3.card-header.border-bottom-0 {
+            margin-bottom: 0;
+            color: #13a79e;
+        }
+        .accordion .card {
+            background: #f2f2f2;
+        }
+        span.badge.badge-light.badge-pill.ml-15 {
+            margin-right: 10px;
+            border: none;
+            background: #fff;
+            padding: 5px 9px;
+            text-align: center;
+        }
+    </style>
+}
+    
+
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<main class="single-product default">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <article class="product create-comment-product">
+                    <div class="row comments-add-col--content">
+
+                        <div class="col-md-12 col-sm-12">
+
+                            <!-- Row -->
+                            @*<div class="faq-search-wrap bg-teal-light-3">
+                                    <div class="container">
+                                        <h1 class="display-5 text-white mb-20">Ask a question or browse by category below.</h1>
+                                        <div class="form-group w-100 mb-0">
+                                            <div class="input-group">
+                                                <input class="form-control form-control-lg filled-input bg-white" placeholder="Search by keywords" type="text">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><span class="feather-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                            <div class="container mt-sm-60 mt-30">
+                                @if (Model == null)
+                                {
+                                    <div class="row text-right">
+                                        <span class="text text-danger">
+                                            اطلاعاتی برای نمایش وجود ندارد
+                                        </span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hk-row">
+                                        <div class="col-xl-4">
+                                            <div class="card">
+
+                                                <ul class="list-group list-group-flush">
+                                                    @{
+                                                        var allfaqcats = db.FaqCategories.OrderBy(fc => fc.priority).ToList();
+                                                    }
+                                                    @foreach (var fc in allfaqcats)
+                                                    {
+                                                        var fcount = db.Faqs.Where(f => f.IsActive == true && f.CategoryId == fc.id).Count();
+
+                                                        if (fc.id == Model)
+                                                        {
+                                                            <li class="list-group-item d-flex align-items-center active" style="border:1px solid #868c92 !important">
+                                                                <a href="@Url.Action("Faq","Home",new { id=fc.id})"> @fc.title<span class="badge badge-light badge-pill ml-15">@fcount</span></a>
+                                                            </li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li style="background-color:#cfd6de;border:1px solid #868c92" class="list-group-item d-flex align-items-center">
+                                                                <a href="@Url.Action("Faq","Home",new { id=fc.id})"> @fc.title<span class="badge badge-light badge-pill ml-15">@fcount</span></a>
+                                                            </li>
+                                                        }
+                                                    }
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-8">
+                                            <div class="card card-lg">
+                                                <h3 class="card-header border-bottom-0">
+                                                    سوالات متداول
+                                                </h3>
+                                                <div class="accordion accordion-type-2 accordion-flush" id="accordion_2">
+
+                                                    @if (faqs.Count > 0)
+                                                    {
+                                                        for (var i = 0; i < faqs.Count; i++)
+                                                        {
+
+                                                            if (i == 0)
+                                                            {
+                                                                <div class="card">
+                                                                    <div class="card-header d-flex justify-content-between activestate">
+                                                                        <a role="button" data-toggle="collapse" class="collapsed" href="#collapse_@(i)i" aria-expanded="false">@faqs[i].Question</a>
+                                                                    </div>
+                                                                    <div id="collapse_@(i)i" class="collapse" data-parent="#accordion_2" role="tabpanel">
+                                                                        <div class="card-body pa-15">@faqs[i].Answer</div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+
+
+                                                            else
+                                                            {
+                                                                <div class="card">
+                                                                    <div class="card-header d-flex justify-content-between">
+                                                                        <a role="button" class="collapsed" data-toggle="collapse" href="#collapse_@(i)i" aria-expanded="false">@faqs[i].Question</a>
+                                                                    </div>
+                                                                    <div id="collapse_@(i)i" class="collapse" data-parent="#accordion_2" role="tabpanel">
+                                                                        <div class="card-body pa-15">@faqs[i].Answer</div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <div>
+                                                            <span class="text text-danger">
+                                                                سوالی در این دسته یافت نشد.
+                                                            </span>
+                                                        </div>
+                                                    }
+
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+                            <!-- /Row -->
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</main>

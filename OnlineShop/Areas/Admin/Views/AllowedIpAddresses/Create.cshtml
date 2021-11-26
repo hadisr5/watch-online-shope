@@ -1,0 +1,89 @@
+﻿@using iooc.Models
+@{
+    Layout = null;
+}
+
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت آدرس های IP مجاز</h5>
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            <a href="#/admin/allowedipaddresses/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست آدرس های IP مجاز</a>
+        </div>
+        <div class="d-flex align-items-center">
+        </div>
+    </div>
+</div>
+
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            اطلاعات آدرس IP جدید
+                        </h3>
+                    </div>
+                </div>
+                <form class="kt-form myForm" id="createipform" method="post" action="/admin/allowedipaddresses/Create_ipaddress" data-redirect="/Admin/Dashboard/Index#/Admin/allowedipaddresses/index">
+                    <input type="hidden" value="0" name="Id" />
+                    @Html.AntiForgeryToken()
+                    <div class="kt-portlet__body">
+                       
+                        <div class="form-group col-md-12">
+                            <label>آدرس IP</label>
+                            <input type="text" class="form-control" placeholder="آدرس IP" name="IpAddress" id="IpAddress" required >
+                        </div>
+                        <div class="form-group">
+                            <div class="col-3">
+                                <span class="kt-switch">
+                                    <label>
+                                        <input type="checkbox" class="iCheck" checked="checked" name="IsActive" value="True" />
+                                        <span>فعال</span>
+                                    </label>
+                                </span>
+                            </div>
+
+                        </div>
+                  
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button id="btnsubmitip" onclick="FormSubmited()" class="btn btn-primary">ایجاد آدرس IP</button>
+                            <a href="/Admin/Dashboard/Index#/Admin/allowedipaddresses/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    BindSelects();
+
+    $("#btnsubmitip").on("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        var result = CheckValidation();
+        if (result == true)
+       $("#createipform").submit();
+    });
+
+    function CheckValidation() {
+        var regex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+        var vli = regex.test($("#IpAddress").val());
+        if (vli != true || $("#IpAddress").val() == "") {
+
+            toastr.error("آدرس IP را صحیح وارد کنید");
+            return false;
+        }
+       
+        return true;
+    }
+
+</script>

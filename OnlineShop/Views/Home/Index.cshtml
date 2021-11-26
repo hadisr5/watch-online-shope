@@ -1,0 +1,1516 @@
+﻿@using System.Data.Entity
+@using OnlineShop.Models
+@using System.Globalization
+@using System.Linq
+
+
+
+@{
+    var db = new OnlineShopEntities();
+    var sliders = db.Sliders.Where(r => r.active == true).ToList();
+    var discounts = db.Discounts.Where(r => r.percentage != null && r.status == 1 && r.expire > DateTime.Now).ToList();
+    var productDiscount = new List<Product>();
+    bool specialUser = false;
+    var promotions = db.Promotions.Where(r => r.active == true).Take(2).ToList();
+    var setting = db.Settings.FirstOrDefault();
+    bool InstantOffer = false;
+    var MostDiscounts = db.Discounts.Where(r => r.expire > DateTime.Now && r.status == 1).OrderByDescending(r => r.percentage).Take(20).ToList();
+    var WatchBrands = db.watchBrands.ToList();
+
+
+
+    if (discounts.Count != 0)
+    {
+        foreach (var item in discounts)
+        {
+            var singleProduct = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+            if (singleProduct != null)
+            {
+                productDiscount.Add(singleProduct);
+            }
+        }
+    }
+    var user = new User();
+    if (Session["userLogin"] != null)
+    {
+        int userid = Convert.ToInt16(Session["userLogin"]);
+        user = db.Users.Where(r => r.id == userid).FirstOrDefault();
+        if (user != null && user.Special != null && user.Special == true)
+        {
+            specialUser = true;
+        }
+    }
+    Layout = "~/views/shared/_Layout.cshtml";
+    var banner = db.Banners.Where(r => r.active == true).FirstOrDefault();
+
+}
+<style>
+    main.main section.banner img {
+        box-shadow: 0 0 !important;
+    }
+
+    .card {
+        box-shadow: 0 0;
+    }
+
+    .widget .card-header, .brand-slider .card-header {
+        margin-bottom: 20px;
+    }
+</style>
+<main class="main default">
+
+    <div class="">
+
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-12 order-1 order-lg-1">
+                <section id="main-slider" class="main-slider carousel slide carousel-fade card hidden-mb" data-ride="carousel" style="">
+                    @*<ol class="carousel-indicators">
+                            @{
+                                if (sliders.Count != 0)
+                                {
+                                    int counter = 0;
+                                    foreach (var item in sliders)
+                                    {
+                                        string active = string.Empty;
+                                        if (counter == 0)
+                                        {
+                                            active = "active";
+                                        }
+                                        <li data-target="#main-slider" data-slide-to="@counter" class="@active"></li>
+                                        counter = counter + 1;
+                                    }
+                                }
+                            }
+                        </ol>*@
+                    <div class="carousel-inner">
+                        @{
+                            if (sliders.Count != 0)
+                            {
+                                int counter = 0;
+                                foreach (var item in sliders)
+                                {
+                                    string active = string.Empty;
+                                    if (counter == 0)
+                                    {
+                                        active = "active";
+                                    }
+                                    <div class="carousel-item @active">
+                                        <a class="main-slider-slide" href="@item.btnLink" style="background-image: url('@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.img')">
+                                        </a>
+                                    </div>
+                                    counter += 1;
+                                }
+                            }
+                        }
+                    </div>
+
+                    <div class="swiper-button-next">
+                        <i class="now-ui-icons arrows-1_minimal-right"></i>
+                    </div>
+
+                    <div class="swiper-button-prev">
+                        <i class="now-ui-icons arrows-1_minimal-left"></i>
+                    </div>
+                </section>
+                <section id="main-slider-res" class="main-slider carousel slide carousel-fade card d-none show-mb" data-ride="carousel">
+                    @*<ol class="carousel-indicators">
+                            @{
+                                if (sliders.Count != 0)
+                                {
+                                    int counter = 0;
+
+                                    foreach (var item in sliders)
+                                    {
+                                        string active = string.Empty;
+                                        if (counter == 0)
+                                        {
+                                            active = "active";
+                                        }
+                                        <li data-target="#main-slider-res" data-slide-to="@counter" class="@active"></li>
+
+                                        counter = counter + 1;
+                                    }
+                                }
+                            }
+                        </ol>*@
+                    <div class="carousel-inner">
+                        @{
+                            if (sliders.Count != 0)
+                            {
+                                int counter = 0;
+                                foreach (var item in sliders)
+                                {
+                                    string active = string.Empty;
+                                    if (counter == 0)
+                                    {
+                                        active = "active";
+                                    }
+                                    <div class="carousel-item @active">
+                                        <a class="main-slider-slide" href="@item.btnLink" style="background-image: url('@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.img')">
+                                        </a>
+                                    </div>
+                                    counter += 1;
+                                }
+                            }
+                        }
+                    </div>
+                    <a class="carousel-control-prev" href="#main-slider-res" role="button" data-slide="prev">
+                        <i class="now-ui-icons arrows-1_minimal-right"></i>
+                    </a>
+                    <a class="carousel-control-next" href="#main-slider-res" data-slide="next">
+                        <i class="now-ui-icons arrows-1_minimal-left"></i>
+                    </a>
+                </section>
+            </div>
+            @*Two Banners*@
+            @*<aside class="sidebar col-xl-4 col-lg-5 col-12 order-2 order-lg-2 pr-0 hidden-md">
+                    <div class="sidebar-inner default">
+                        <div class="widget-banner widget card">
+                            <a href="@banner.link1" target="_top">
+                                <img class="img-fluid topBanner" src="@banner.banner1" alt="">
+                            </a>
+                        </div>
+                        <div class="widget-banner widget card">
+                            <a href="@banner.link2" target="_top">
+                                <img class="img-fluid topBanner" src="@banner.banner2" alt="">
+                            </a>
+                        </div>
+                    </div>
+                </aside>*@
+            @*Two Banners*@
+        </div>
+        <section id="clock-repairs-form">
+            <div class="row justify-content-center" style="background: #F9F9F9; height: 499px;">
+                <div class="row">
+                    <img src="~/Theme/img/Group 31.png" style="width: 200px;height: 200px;position: relative;top: 229%;left: -76%;" />
+                    <img src="~/Theme/img/Group 24.png" style="width: 160px;height: 160px;position: relative;left: -88%;top: 50%;" />
+                    <img src="~/Theme/img/Group 26.png" style="position: relative;top: 192%;width: 100px;height: 100px;left: 99%;" />
+                    <img src="~/Theme/img/Group 27.png" style="width: 120px;height: 120px;position: relative;top: 20%;left: 105%;" />
+                    <img src="~/Theme/img/Group 30.png" style=" width: 106px;height: 106px;position: relative;top: 131%; left: 121%;
+" />
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 form-content">
+                    <div class="container">
+                        <div id="clock-repairs" class="clockRp">
+                            <div style="padding: 30px;">
+                                <div class="d-flex">
+                                    <span class="clock-rep-sp">
+                                        <img src="~/Theme/img/caticon.png" class="form-container-title-image" />
+                                    </span>
+                                    <h2 class="watch-title">تعمیرات ساعت</h2>
+                                </div>
+                                <h3 class="inquiry">استعلام قیمت تعمیرات ساعت</h3>
+                                <div class="container mt-3" id="priceInquiry">
+                                    <div class="row">
+                                        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8">
+                                            <div class="price-inquiry-guide-info">
+                                                <h4 class="font-weight-bold">راهنمای استعلام قیمت</h4>
+                                                <p class="text-muted">
+                                                    لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون
+                                                    بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف
+                                                    بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                                            <div class="price-inquiry-guide-num">
+                                                <h6>
+                                                    در صورت بروز مشکل یا نیاز به راهنمایی بیشتر، با شماره زیر تماس بگیرید
+                                                    <br />
+                                                    09123456789
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="container">
+                                    <div class="row">
+                                        <form action="" method="POST" style="width:100%;">
+                                            <div style="margin-top:33px;">
+                                                <div class="row">
+                                                    <div class="col-xl-4">
+                                                        <div class="form-group">
+                                                            <label class="text-dark font-weight-bold" for="brand" style="font-size: 16px; ">برند ساعت</label>
+                                                            <div class="select-form-watch">
+                                                                <select class="form-control-watch">
+                                                                    <option>برند ساعت خود را انتخاب کنید</option>
+
+                                                                    @foreach (var item in WatchBrands)
+                                                                    {
+                                                                        <option value="@item.BrandId">@item.Title</option>
+                                                                    }
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xl-8">
+                                                        <div class="form-group">
+                                                            <label class="text-dark font-weight-bold" for="brand" style="font-size: 16px;">مشکل ساعت</label>
+                                                            <div class="select-form-watch">
+                                                                <select class="form-control-watch">
+                                                                    <option>یکی از خدمات را انتخاب کنید</option>
+                                                                    <option value="">ServiceId</option>
+                                                                   
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xl-4" style="margin-top: 10px;">
+                                                        <div class="row px-3">
+                                                            <div class="form-group">
+                                                                <label class="text-dark font-weight-bold" for="brand" style="font-size: 16px;">مدل ساعت</label>
+                                                                <div class="select-form-watch">
+                                                                    <select class="form-control-watch">
+                                                                        <option>مدل ساعت خود را انتخاب کنید</option>
+                                                                        <option value="AL">Alabama</option>
+                                                                        <option value="NY">NewYork</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" style="padding: 11px 14px;">
+                                                            <div class="form-group">
+                                                                <label class="text-dark font-weight-bold" style="font-size: 15px;" for="brand">
+                                                                    شماره همراه شما
+                                                                </label>
+                                                                <div class="phone-number-form" style="display: flex; float:right">
+                                                                    <input id="telNo" name="telNo" type="tel" required="required" value="" placeholder="شماره همراه خود را بنویسید" />
+                                                                    <div class="idenNumber">09</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-8">
+                                                        <div class="">
+                                                            <div class="form-group">
+                                                                <label class="text-dark font-weight-bold" style="font-size:17px; margin-top: 9px">
+                                                                    توضیحات
+                                                                </label>
+                                                                <textarea id="w3review" name="w3review" rows="6" cols="50" placeholder="مشکل ساعت خود را بنویسید"></textarea>
+                                                                <form action="#type your action here" method="POST" enctype="multipart/form-data">
+                                                                    <div id="fileBtn" onclick="getFile()">
+                                                                        <img src="~/Theme/img/paper-clip.png" />
+                                                                        بارگزاری تصویر
+
+                                                                    </div>
+                                                                    <div style='height: 0px;width:0px; overflow:hidden;'><input id="upfile" type="file" value="upload" /></div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row w-100">
+                                                <div class="col-12 mt-4">
+                                                    <button class="continuebtn">ادامه</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <section id="products">
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-right" style="margin-bottom: 40px;">
+                        <span style="font-size: 1.3em !important; font-weight: bold;"> محصولات</span><br />
+                        @*<span> برای بیش از 2000 محصول </span>*@
+                    </div>
+                    <div class="row">
+
+                        @{
+                            var geocats = db.GeomaticCategories.Where(r => r.active == true).ToList();
+                        }
+                        @foreach (GeomaticCategory gcat in geocats)
+                        {
+                            <div class="service-item col-xl-2 col-lg-4 col-md-4 col-sm-4">
+                                <a href="@gcat.link" target="_blank">
+                                    <img width="100" height="100" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@gcat.logo" alt="@gcat.title">
+                                </a>
+                                <p>@gcat.title</p>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+        @*Product Row Section*@
+        @*Product Row Section*@
+
+        @{
+            var cats = new List<ProductListModel>();
+            var pl1 = new ProductListModel();
+            pl1.Title = "محصولات پر فروش";
+            pl1.Index = 1;
+            var pl2 = new ProductListModel();
+            pl2.Title = "جدیدترین محصولات";
+            pl2.Index = 2;
+            var pl3 = new ProductListModel();
+            pl3.Title = "محصولات پربازدید اخیر";
+            pl3.Index = 3;
+            var pl4 = new ProductListModel();
+            pl4.Title = "محصولات پربازدید اخیر";
+            pl4.Index = 4;
+            var ordergroups = db.Orders.GroupBy(p => p.productId);
+            pl1.Products = ordergroups.OrderByDescending(g => g.Sum(p => p.quantity)).Select(g => g.FirstOrDefault().Product).Where(p => p.Active == true && p.ShowOnMainPage == true).Take(20).ToList();
+            pl3.Products = db.productViews.OrderByDescending(p => p.views).Select(p => p.Product).ToList();
+            pl4.Products = db.productViews.OrderByDescending(p => p.views).Select(p => p.Product).ToList();
+            pl2.Products = db.Products.OrderByDescending(p => p.creationDate).Where(p => p.isValid == true && p.ShowOnMainPage == true).Take(20).ToList();
+            cats.Add(pl1);
+            cats.Add(pl2);
+            cats.Add(pl3);
+            if (cats.Count != 0)
+            {
+
+                foreach (var item in cats)
+                {
+                    var backgroundclass = "";
+                    var color = "";
+                    if (item.Index == 1)
+                    {
+                        backgroundclass = "recentlyviewed";
+                        color = "#F69400";
+                    }
+                    if (item.Index == 2)
+                    {
+                        backgroundclass = "newerproducts";
+                        color = "#FD8700";
+                    }
+
+                    var productList = item.Products;
+
+                    if (productList.Count != 0)
+                    {
+                        if (productList.Count > 20)
+                        {
+                            productList = productList.OrderByDescending(r => r.id).Take(20).ToList();
+                        }
+                        string catTlt = item.Title.Trim();
+                        while (catTlt.Contains(" "))
+                        {
+                            catTlt = catTlt.Replace(" ", "-");
+                        }
+                        <section id="best-selling-products">
+                            <div class="row">
+                                <div class="col-12 heightFixed">
+                                    <div class="widget widget-product widget-slider card @backgroundclass">
+                                        <header class="card-header">
+                                            <h3 class="card-title" style="border-bottom: 0; padding: 0 20px;">
+                                                <a @*href="/home/category/@item.id/@catTlt"*@ href="#">
+                                                    <span style="color: @color;border-bottom:0;"> @item.Title </span>
+                                                </a>
+                                            </h3>
+                                        </header>
+                                        <div class="swiper-container swiper-lg-slider" dir="rtl">
+                                            <!-- Add Arrows -->
+                                            <div class="swiper-button-next">
+                                                <i class="now-ui-icons arrows-1_minimal-left"></i>
+                                            </div>
+                                            <div class="swiper-button-prev">
+                                                <i class="now-ui-icons arrows-1_minimal-right"></i>
+                                            </div>
+                                            <div class="product-carousel swiper-wrapper">
+                                                @{
+
+                                                    if (productList.Count != 0)
+                                                    {
+                                                        productList = productList.Distinct().ToList();
+                                                        productList = productList.OrderByDescending(r => r.Priority).ToList();
+                                                        foreach (var item2 in productList)
+                                                        {
+
+                                                            string tlt = item2.title;
+                                                            while (tlt.Contains(" "))
+                                                            {
+                                                                tlt = tlt.Replace(" ", "-");
+                                                            }
+                                                            <div class="swiper-slide">
+                                                                <a href="/home/product/@item2.id/@tlt">
+                                                                    @{
+                                                                        if (item2.MainImage != null)
+                                                                        {
+                                                                            <img src="/Template/images/loading.png" data-src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item2.MainImage" class="img-fluid lazyload pslideritem" alt="">
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <img src="/Template/images/loading.png" data-src="/Template/images/loading.png" class="img-fluid pslideritem" alt="">
+
+                                                                        }
+                                                                    }
+                                                                </a>
+                                                                <h2 class="post-title">
+
+                                                                    <a href="/home/product/@item2.id/@tlt"> @item2.title </a>
+
+                                                                </h2>
+                                                                @{
+                                                                    if (item2.isAvailable != true)
+                                                                    {
+                                                                        <div class="promotion-box-cover promotion-box-cover--out-of-stock">
+
+                                                                            <div class="promotion-box-cover-text">
+                                                                                ناموجود
+                                                                            </div>
+
+                                                                        </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="price specialOfferPrice">
+
+                                                                            @if (specialUser && item2.priceForSpecialUsers != null)
+                                                                            {
+                                                                                <ins class="text-left">
+                                                                                    <span class="fixPrice specialOfferPriceNumber"> @item2.priceForSpecialUsers </span><span class="specialOfferPriceT"> تومان </span>
+
+                                                                                </ins>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var off = db.Discounts.Where(r => r.productId == item2.id && r.expire > DateTime.Now && r.status == 1).FirstOrDefault();
+                                                                                if (item2.price != null)
+                                                                                {
+                                                                                    if (off != null)
+                                                                                    {
+                                                                                        var price = item2.price - (item2.price * off.percentage / 100);
+                                                                                        <span class="percentageInSpecialOffer">
+                                                                                            @(off.percentage) %
+                                                                                        </span>
+                                                                                        <del>
+                                                                                            <span class="fixPrice"> @item2.price تومان </span>
+
+                                                                                        </del>
+
+                                                                                        <ins class="text-left">
+
+                                                                                            <span class="fixPrice specialOfferPriceNumber"> @price </span><span class="specialOfferPriceT"> تومان </span>
+
+                                                                                        </ins>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <ins class="text-left">
+                                                                                            <span class="fixPrice specialOfferPriceNumber"> @item2.price </span><span class="specialOfferPriceT"> تومان </span>
+
+                                                                                        </ins>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+
+                                                                                    <span class="fixPrice specialOfferNoPriceNumber"> برای استعلام قیمت تماس بگیرید</span>
+                                                                                }
+
+                                                                            }
+
+
+
+                                                                        </div>
+                                                                    }
+                                                                }
+
+                                                            </div>
+                                                        }
+                                                    }
+
+                                                }
+                                            </div>
+                                            <div class="swiper-scrollbar"></div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </section>
+                    }
+
+                }
+            }
+        }
+
+
+        @*Two Banner Row*@
+        @*Two Banner Row*@
+
+        @*<div class="row banner-ads">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="widget-banner card">
+                                <a href="@banner.link1" target="_blank">
+                                    <img class="img-fluid" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@banner.banner1" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="widget-banner card">
+                                <a href="@banner.link2" target="_blank">
+                                    <img class="img-fluid" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@banner.banner2" alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+        @*Two Banner Row*@
+        @*Two Banner Row*@
+
+        @*Third Cat Row*@
+        @*Third Cat Row**@
+        @{
+            <section id="services">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="" style="padding:30px 0">
+                            <div class="text-right" style="margin-bottom: 40px;">
+                                <span style="font-size: 1.3em !important; font-weight: bold;">خدمات</span><br />
+                                @*<span> برای بیش از 2000 محصول </span>*@
+                            </div>
+                            <div class="">
+                                <div class="row row-cols-4" id="servicesfirstrow">
+                                    <div class="col-xl-3 col-md-3 col-sm-6 c-first-row">
+                                        <div class="card c-first-row-products">
+                                            <figure>
+                                                <img class="card-img-top rounded servicesfirstrowimage" src="https://wallpapercave.com/wp/wp3473585.jpg" alt="Card image cap" style="border-radius:10px;">
+                                                <div class="text-center mt-3">
+                                                    <figcaption class="card-text mt-3">تست واترپروف (ضد آب)</figcaption>
+                                                </div>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3 col-md-3 col-sm-6 c-first-row">
+                                        <div class="card c-first-row-products">
+                                            <figure>
+                                                <img class="card-img-top servicesfirstrowimage" src="https://wallpapercave.com/wp/wp3473585.jpg" alt="Card image cap" style="border-radius:10px;">
+                                                <div class="text-center mt-3">
+                                                    <figcaption class="card-text mt-3">باطری</figcaption>
+                                                </div>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3 col-md-3 col-sm-6 c-first-row">
+                                        <div class="card c-first-row-products">
+                                            <figure>
+                                                <img class="card-img-top servicesfirstrowimage" src="https://wallpapercave.com/wp/wp3473585.jpg" alt="Card image cap" style="border-radius:10px;">
+                                                <div class="text-center mt-3">
+                                                    <figcaption class="card-text mt-3">پلیش ساعت</figcaption>
+                                                </div>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3 col-md-3 col-sm-6 c-first-row">
+                                        <div class="card c-first-row-products">
+                                            <figure>
+                                                <img class="card-img-top servicesfirstrowimage" src="https://wallpapercave.com/wp/wp3473585.jpg" alt="Card image cap" style="border-radius:10px;">
+                                                <div class="text-center mt-3">
+                                                    <figcaption class="card-text mt-3">سرویس ساعت</figcaption>
+                                                </div>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-cols-2" id="servicessecrow">
+                                    <div class="col-xl-6 col-md-6 col-sm-6">
+                                        <div class="card c-products">
+                                            <img class="card-img-top servicesimage" src="https://dummyimage.com/600x400/000/fff.jpg" alt="..." style="border-radius:10px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-md-6 col-sm-6">
+                                        <div class="card c-products">
+                                            <img class="card-img-top servicesimage" src="https://dummyimage.com/600x400/000/fff.jpg" alt="..." style="border-radius:10px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+            var backgroundclass3 = "recentlyviewed";
+            var color3 = "#F69400";
+
+            var thirditem = cats.Where(c => c.Index == 3).FirstOrDefault();
+            var productList3 = thirditem.Products;
+
+            if (productList3.Count != 0)
+            {
+                if (productList3.Count > 20)
+                {
+                    productList3 = productList3.OrderByDescending(r => r.id).Take(20).ToList();
+                }
+                string catTlt = thirditem.Title.Trim();
+                while (catTlt.Contains(" "))
+                {
+                    catTlt = catTlt.Replace(" ", "-");
+                }
+            }
+
+            <section id="latest-products">
+                <div class="row">
+                    <div class="col-12 heightFixed">
+                        <div class="widget widget-product widget-slider card @backgroundclass3">
+                            <header class="card-header">
+                                <h3 class="card-title" style="border-bottom: 0; padding: 0 20px;">
+                                    <a @*href="/home/category/@item.id/@catTlt"*@ href="#">
+                                        <span style="color: @color3;border-bottom:0;"> @thirditem.Title </span>
+                                    </a>
+                                </h3>
+                            </header>
+                            <div class="swiper-container swiper-lg-slider" dir="rtl">
+                                <!-- Add Arrows -->
+                                <div class="swiper-button-next">
+                                    <i class="now-ui-icons arrows-1_minimal-left"></i>
+                                </div>
+                                <div class="swiper-button-prev">
+                                    <i class="now-ui-icons arrows-1_minimal-right"></i>
+                                </div>
+                                <div class="product-carousel swiper-wrapper">
+                                    @{
+
+                                        if (productList3.Count != 0)
+                                        {
+                                            productList3 = productList3.Distinct().ToList();
+                                            productList3 = productList3.OrderByDescending(r => r.Priority).ToList();
+                                            foreach (var item2 in productList3)
+                                            {
+
+                                                string tlt = item2.title;
+                                                while (tlt.Contains(" "))
+                                                {
+                                                    tlt = tlt.Replace(" ", "-");
+                                                }
+                                                <div class="swiper-slide">
+                                                    <a href="/home/product/@item2.id/@tlt">
+                                                        @{
+                                                            if (item2.MainImage != null)
+                                                            {
+                                                                <img src="/Template/images/loading.png" data-src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item2.MainImage" class="img-fluid lazyload pslideritem" alt="">
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="/Template/images/loading.png" data-src="/Template/images/loading.png" class="img-fluid pslideritem" alt="">
+
+                                                            }
+                                                        }
+                                                    </a>
+                                                    <h2 class="post-title">
+
+                                                        <a href="/home/product/@item2.id/@tlt"> @item2.title </a>
+
+                                                    </h2>
+                                                    @{
+                                                        if (item2.isAvailable != true)
+                                                        {
+                                                            <div class="promotion-box-cover promotion-box-cover--out-of-stock">
+
+                                                                <div class="promotion-box-cover-text">
+                                                                    ناموجود
+                                                                </div>
+
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="price specialOfferPrice">
+
+                                                                @if (specialUser && item2.priceForSpecialUsers != null)
+                                                                {
+                                                                    <ins class="text-left">
+                                                                        <span class="fixPrice specialOfferPriceNumber"> @item2.priceForSpecialUsers </span><span class="specialOfferPriceT"> تومان </span>
+
+                                                                    </ins>
+                                                                }
+                                                                else
+                                                                {
+                                                                    var off = db.Discounts.Where(r => r.productId == item2.id && r.expire > DateTime.Now && r.status == 1).FirstOrDefault();
+                                                                    if (item2.price != null)
+                                                                    {
+                                                                        if (off != null)
+                                                                        {
+                                                                            var price = item2.price - (item2.price * off.percentage / 100);
+                                                                            <span class="percentageInSpecialOffer">
+                                                                                @(off.percentage) %
+                                                                            </span>
+                                                                            <del>
+                                                                                <span class="fixPrice"> @item2.price تومان </span>
+
+                                                                            </del>
+
+                                                                            <ins class="text-left">
+
+                                                                                <span class="fixPrice specialOfferPriceNumber"> @price </span><span class="specialOfferPriceT"> تومان </span>
+
+                                                                            </ins>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <ins class="text-left">
+                                                                                <span class="fixPrice specialOfferPriceNumber"> @item2.price </span><span class="specialOfferPriceT"> تومان </span>
+
+                                                                            </ins>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+
+                                                                        <span class="fixPrice specialOfferNoPriceNumber"> برای استعلام قیمت تماس بگیرید</span>
+                                                                    }
+
+                                                                }
+
+
+
+                                                            </div>
+                                                        }
+                                                    }
+
+                                                </div>
+                                            }
+                                        }
+
+                                    }
+                                </div>
+                                <div class="swiper-scrollbar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        }
+        @*Third Cat Row**@
+        @*Third Cat Row**@
+
+        @*One Banner Row*@
+        @*One Banner Row*@
+
+        @*One Banner Row*@
+
+        @*<div class="row banner-ads">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12 col-lg-12">
+                            <div class="widget-banner card">
+                                <a href="@banner.link3" target="_blank">
+                                    <img class="img-fluid" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@banner.banner3" alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        @*One Banner Row*@
+
+        @*One Banner Row*@
+        @*One Banner Row*@
+
+        @*Services*@
+        @*Services*@
+
+
+
+        <section id="latest-instagram-posts">
+            <div class="">
+                <div class="row" style="padding:15px;">
+                    <div class="col-12">
+                        <div class="row justify-content-between ">
+                            <div class="">
+                                <p class="font-weight-bold">آخرین پست های ویکی ساعت در اینستاگرام</p>
+                            </div>
+                            <div class="">
+                                <a class="font-weight-bold" href="#" target="_blank">wikisaat</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="row">
+                        <div class="latestigposts">
+                            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4">
+                                <div class="card" style="width: 100%;">
+                                    <img class="card-img-top rounded" src="https://wallpapercave.com/wp/wp3473585.jpg" alt="Card image cap">
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4">
+                                <div class="card" style="width: 100%;">
+                                    <img class="card-img-top rounded" src="https://wallpapercave.com/wp/wp3473585.jpg" alt="Card image cap">
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4">
+                                <div class="card" style="width: 100%;">
+                                    <img class="card-img-top rounded" src="https://wallpapercave.com/wp/wp3473585.jpg" alt="Card image cap">
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4">
+                                <div class="card" style="width: 100%;">
+                                    <img class="card-img-top rounded" src="https://wallpapercave.com/wp/wp3473585.jpg" alt="Card image cap">
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4">
+                                <div class="card" style="width: 100%;">
+                                    <img class="card-img-top rounded" src="https://wallpapercave.com/wp/wp3473585.jpg" alt="Card image cap">
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4">
+                                <div class="card" style="width: 100%;">
+                                    <img class="card-img-top rounded" src="https://wallpapercave.com/wp/wp3473585.jpg" alt="Card image cap">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="articels">
+            <div class="text-center my-3">
+                <div class="row">
+                    <div id="myCarousel" class="carousel slide w-100" data-ride="carousel">
+                        <div class="carousel-inner" role="listbox">
+                            <div class="carousel-item active">
+                                <div class="row">
+                                    <div class="cards-wrapper">
+                                        <div class="col-lg-3 col-md-3 col">
+                                            <div class="card d-none d-md-block" id="card-article">
+                                                <div class="bg-white p-3">
+                                                    <img style="height:240px;" src="https://wallpapercave.com/wp/wp3473585.jpg" class="card-img-top rounded" alt="...">
+                                                </div>
+                                                <div class="card-body" id="card-article-body">
+                                                    <p class="card-text"> لورم ایپوسوم لورم ایپوسوم  لورم ایپوسوم لورم ایپوسوم</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col" style="height:340px">
+                                            <div class="card d-none d-md-block" id="card-article">
+                                                <div class="bg-white p-3">
+                                                    <img style="height:240px;" src="https://wallpapercave.com/wp/wp3473585.jpg" class="card-img-top rounded" alt="...">
+                                                </div>
+                                                <div class="card-body" id="card-article-body">
+                                                    <p class="card-text"> لورم ایپوسوم لورم ایپوسوم  لورم ایپوسوم لورم ایپوسوم</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col">
+                                            <div class="card d-none d-md-block" id="card-article">
+                                                <div class="bg-white p-3">
+                                                    <img style="height:240px;" src="https://wallpapercave.com/wp/wp3473585.jpg" class="card-img-top rounded" alt="...">
+                                                </div>
+                                                <div class="card-body" id="card-article-body">
+                                                    <p class="card-text"> لورم ایپوسوم لورم ایپوسوم  لورم ایپوسوم لورم ایپوسوم</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col">
+                                            <div class="card d-none d-md-block" id="card-article">
+                                                <div class="bg-white p-3">
+                                                    <img style="height:240px;" src="https://wallpapercave.com/wp/wp3473585.jpg" class="card-img-top rounded" alt="...">
+                                                </div>
+                                                <div class="card-body" id="card-article-body">
+                                                    <p class="card-text"> لورم ایپوسوم لورم ایپوسوم  لورم ایپوسوم لورم ایپوسوم</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="carousel-item">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <div class="card d-none d-md-block" id="card-article">
+                                                <div class="bg-white p-3" style="height: 250px;">
+                                                    <img style="height:240px;" src="https://wallpapercave.com/wp/wp3473585.jpg" class="card-img-top rounded" alt="...">
+                                                </div>
+                                                <div class="card-body" id="card-article-body">
+                                                    <p class="card-text"> لورم ایپوسوم لورم ایپوسوم  لورم ایپوسوم لورم ایپوسوم</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="card d-none d-md-block" id="card-article">
+                                                <div class="bg-white p-3" style="height: 250px;">
+                                                    <img style="height:240px;" src="https://wallpapercave.com/wp/wp3473585.jpg" class="card-img-top rounded" alt="...">
+                                                </div>
+                                                <div class="card-body" id="card-article-body">
+                                                    <p class="card-text"> لورم ایپوسوم لورم ایپوسوم  لورم ایپوسوم لورم ایپوسوم</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="card d-none d-md-block" id="card-article">
+                                                <div class="bg-white p-3" style="height: 250px;">
+                                                    <img style="height:240px;" src="https://wallpapercave.com/wp/wp3473585.jpg" class="card-img-top rounded" alt="...">
+                                                </div>
+                                                <div class="card-body" id="card-article-body">
+                                                    <p class="card-text"> لورم ایپوسوم لورم ایپوسوم  لورم ایپوسوم لورم ایپوسوم</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="card d-none d-md-block" id="card-article">
+                                                <div class="bg-white p-3" style="height: 250px;">
+                                                    <img style="height:240px;" src="https://wallpapercave.com/wp/wp3473585.jpg" class="card-img-top rounded" alt="...">
+                                                </div>
+                                                <div class="card-body" id="card-article-body">
+                                                    <p class="card-text"> لورم ایپوسوم لورم ایپوسوم  لورم ایپوسوم لورم ایپوسوم</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+                        <a class="carousel-control-prev text-dark" href="#myCarousel" role="button" data-slide="prev">
+                            <span class="fa fa-chevron-left carousel-artc" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next text-dark" href="#myCarousel" role="button" data-slide="next">
+                            <span class="fa fa-chevron-right carousel-artc" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+
+
+        @*<div class="row justify-content-center" style="padding-top: 30px;">
+                <div class="service-item col-lg-2 col-md-2 col-2 text-center" style="border-left: 1px solid #bbbbbb;">
+                    <a href="#" target="_blank">
+                        <img src="/Template/product/shopping-bag.svg" alt="روش ثبت سفارش">
+                    </a>
+                    <p>روش ثبت سفارش</p>
+                </div>
+                <div class="service-item col-lg-2 col-md-2 col-2 text-center" style="border-left: 1px solid #bbbbbb;">
+                    <a href="#" target="_blank">
+                        <img src="/Template/product/box.svg" alt="ضمانت بازگشت کالا">
+                    </a>
+                    <p>ضمانت بازگشت کالا</p>
+                </div>
+                <div class="service-item col-lg-2 col-md-2 col-2 text-center" style="border-left: 1px solid #bbbbbb;">
+                    <a href="#" target="_blank">
+                        <img src="~/Template/product/headphones.svg" alt="پشتیبانی 24 ساعته">
+                    </a>
+                    <p>پشتیبانی 24 ساعته</p>
+                </div>
+                <div class="service-item col-lg-2 col-md-2 col-2 text-center" style="border-left: 1px solid #bbbbbb;">
+                    <a href="#" target="_blank">
+                        <img src="~/Template/product/credit-cards-payment.svg" alt="روش پرداخت">
+                    </a>
+                    <p>روش پرداخت</p>
+                </div>
+                <div class="service-item col-lg-2 col-md-2 col-2 text-center" style=" border-left:0;">
+                    <a href="#" target="_blank">
+                        <img src="~/Template/product/delivered.svg" alt="ضمانت اصل بودن کالا">
+                    </a>
+                    <p>روش ارسال</p>
+                </div>
+            </div>*@
+
+
+        @*Services*@
+        @*Services*@
+
+
+        @*<div class="row banner-ads">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-6 col-lg-3">
+                            <div class="widget-banner card">
+                                <a href="@banner.link10" target="_blank">
+                                    <img class="img-fluid" src="@banner.banner10" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                            <div class="widget-banner card">
+                                <a href="@banner.link11" target="_blank">
+                                    <img class="img-fluid" src="@banner.banner11" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                            <div class="widget-banner card">
+                                <a href="@banner.link12" target="_blank">
+                                    <img class="img-fluid" src="@banner.banner12" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                            <div class="widget-banner card">
+                                <a href="@banner.link14" target="_blank">
+                                    <img class="img-fluid" src="@banner.banner14" alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+    </div>
+
+</main>
+
+
+
+<style>
+</style>
+
+@section JS{
+    <script>
+
+        $(document).ready(function () {
+            $('.countDownClock').each(function () {
+                var selected = $(this);
+                var countDownDate = new Date($(this).attr('data-date')).getTime();
+                // Update the count down every 1 second
+                var x = setInterval(function () {
+
+                    // Get today's date and time
+                    var now = new Date().getTime();
+
+                    // Find the distance between now and the count down date
+                    var distance = countDownDate - now;
+
+                    // Time calculations for days, hours, minutes and seconds
+                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    if (days != 0) {
+                        hours = hours + (days * 24)
+                    }
+                    if (hours != 0) {
+                        $(selected).html(hours + ":" + minutes + ":" + seconds)
+
+                    } else {
+                        $(selected).html(minutes + ":" + seconds)
+
+                    }
+                    // If the count down is over, write some text
+                    if (distance < 0) {
+                        clearInterval(x);
+                        $(selected).html("تمام شد");
+                    }
+                }, 1000);
+
+            })
+        })
+
+
+
+    </script>
+
+
+
+    <script>
+        var swiper = new Swiper('.swiper-container-CountDown', {
+            pagination: {
+                el: '.swiper-pagination-CountDown',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            allowTouchMove: false,
+            loop: true
+        });
+    </script>
+
+
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.form-control-watch').select2();
+            $('.form-control-watch').on('select2:open', function (e) {
+                $('.select2-search__field').attr('placeholder', 'جستجو کنید');
+            });
+        });
+    </script>
+
+    <script>
+        const prev = document.querySelector('.prev');
+        const next = document.querySelector('.next');
+        const images = document.querySelector('.carouselitem').children;
+        const totalImages = images.length;
+        let index = 0;
+
+        prev.addEventListener('click', () => {
+            nextImage('next');
+        })
+
+        next.addEventListener('click', () => {
+            nextImage('prev');
+        })
+
+        function nextImage(direction) {
+            if (direction == 'next') {
+                index++;
+                if (index == totalImages) {
+                    index = 0;
+                }
+            } else {
+                if (index == 0) {
+                    index = totalImages - 1;
+                } else {
+                    index--;
+                }
+            }
+
+            for (let i = 0; i < images.length; i++) {
+                images[i].classList.remove('main');
+            }
+            images[index].classList.add('main');
+        }
+    </script>
+
+    <script>
+        function getFile() {
+            document.getElementById("upfile").click();
+        }
+    </script>
+}
+
+<style>
+    span.PostDate {
+        position: absolute;
+        left: 15px;
+        bottom: 10px;
+        font-size: 15px;
+        color: #949494;
+        font-weight: 400;
+    }
+
+    h1.blogPostTitle {
+        font-size: 16px;
+        line-height: 30px;
+        margin: 11px;
+        font-weight: 400;
+    }
+
+    .swiper-container-CountDown {
+        width: 100%;
+        /*height: 90%;*/
+    }
+
+    .statisticLink {
+        height: auto !important;
+    }
+
+    .swiper-container-statistics {
+        overflow: hidden;
+    }
+
+    .swiper-container-CountDown {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+        Center: slide text vertically display: -webkit-box;
+        /*     display: -ms-flexbox;
+                display: -webkit-flex;
+                display: flex;*/
+        display: block !important;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+
+    .timerSliderTitle {
+        height: 40px !important;
+        font-size: 13px;
+        display: block;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+        overflow: hidden;
+        max-height: 64px;
+        line-height: 32px;
+        height: 64px;
+    }
+
+    .widget-product .swiper-slide a.BlogPosts {
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+        border-radius: 10px;
+        max-width: 300px !important;
+        height: 335px;
+    }
+
+    .swiper-container-CountDown.swiper-container-initialized.swiper-container-horizontal.swiper-container-rtl {
+        overflow: hidden !important;
+    }
+
+    .BlogPosts > img {
+        height: 190px
+    }
+
+    .timerSliderPrice {
+        color: #979898;
+        font-size: 13px;
+        display: block;
+        width: 100%;
+    }
+
+    .timerSliderImage {
+        height: auto !important
+    }
+
+    .card-header {
+        position: relative;
+    }
+
+    .progress {
+        -webkit-animation: bar-fill 7s cubic-bezier(.17,.67,.71,.99) infinite;
+        animation: bar-fill 7s cubic-bezier(.17,.67,.71,.99) infinite;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: -webkit-gradient(linear,left top,right top,from(#ffd3db),to(#fb3449));
+        background: linear-gradient(90deg,#ffd3db,#fb3449);
+        content: "";
+    }
+
+    .timerSliderMainTitle {
+        border-bottom: none !important;
+    }
+
+    img.img-fluid.lazyload {
+        height: 225px !important
+    }
+
+    .timerSliderMainTitle {
+        font-size: 13px !important
+    }
+
+    .price.specialOfferPrice {
+        padding: 0 23px;
+    }
+
+    h2.post-title.timerSliderTitle {
+        padding: 0 10px;
+    }
+
+    .statisticsHeader {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        color: #656565;
+        margin: 15px;
+        margin-bottom: 40px
+    }
+
+    .statisticsSliderHeader {
+        font-size: 14px;
+        text-align: center;
+        margin: 10px;
+        font-weight: bold;
+    }
+
+    .statisticNumber {
+        color: #01beda;
+    }
+
+    .statisticSlider {
+        text-align: center;
+    }
+
+    .statisticsMainContainer {
+        padding-bottom: 45px;
+        overflow: hidden
+    }
+
+    @@media only screen and (min-width: 600px) {
+        .specialOfferSlider {
+            height: 385px !important;
+        }
+
+        .heightFixed > div {
+            height: 440px
+        }
+    }
+
+    @@media only screen and (max-width: 600px) {
+        .widget-product .swiper-slide a {
+            height: 220px !important;
+            overflow: hidden
+        }
+
+        .swiper-slide.statisticSlider {
+            height: 130px !important;
+        }
+
+        .widget-product .product-carousel .swiper-slide .post-title {
+            height: 45px !important;
+        }
+
+        img.img-fluid.lazyload {
+            height: auto !important;
+            margin-bottom: 10px
+        }
+
+        .statisticsHeader {
+            font-size: 12px !important;
+        }
+
+        .widget-product .swiper-slide img {
+            max-width: 100%;
+        }
+
+
+        h1.blogPostTitle {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .widget-product .swiper-slide a.BlogPosts {
+            max-width: none !important;
+        }
+
+        ins {
+            padding: 5px;
+        }
+
+        .specialOfferPriceNumber {
+            font-size: 19px;
+        }
+
+        .swiper-slide.SpecialOfferSlideContainer {
+            height: 410px;
+        }
+
+        .swiper-slide.BlogPostsContainer > a {
+            height: 300px !important;
+        }
+    }
+
+
+
+    .widget-product .swiper-slide img {
+        max-width: 100%;
+    }
+
+    .widget-product .swiper-slide a.BlogPosts {
+        position: relative;
+    }
+
+    a.BlogPosts {
+        text-align: center;
+    }
+
+    img.img-fluid.lazyload.SpecialOfferMainImage {
+        height: auto !important;
+    }
+
+    @@media only screen and (min-width: 600px) {
+        .specialOfferSlider > a > img {
+            height: auto !important;
+        }
+        /*    .BlogPostsContainer {
+                    margin: 0 10px;
+                }*/
+        .widget-product .swiper-slide a {
+            height: 230px;
+        }
+    }
+</style>
+
+@functions{
+
+    public static string GetMonthName(DateTime date)
+    {
+        PersianCalendar jc = new PersianCalendar();
+        string pdate = string.Format("{0:0000}/{1:00}/{2:00}", jc.GetYear(date), jc.GetMonth(date), jc.GetDayOfMonth(date));
+
+        string[] dates = pdate.Split('/');
+        int month = Convert.ToInt32(dates[1]);
+
+        switch (month)
+        {
+            case 1: return "فررودين";
+            case 2: return "ارديبهشت";
+            case 3: return "خرداد";
+            case 4: return "تير‏";
+            case 5: return "مرداد";
+            case 6: return "شهريور";
+            case 7: return "مهر";
+            case 8: return "آبان";
+            case 9: return "آذر";
+            case 10: return "دي";
+            case 11: return "بهمن";
+            case 12: return "اسفند";
+            default: return "";
+        }
+
+    }
+    public static string GetDayOfMonth(DateTime date)
+    {
+        try
+        {
+            PersianCalendar jc = new PersianCalendar();
+            return jc.GetDayOfMonth(date).ToString();
+        }
+        catch
+        {
+            throw new FormatException("The input string must be in 0000/00/00 format.");
+        }
+    }
+    public static string GetYear(DateTime date)
+    {
+        try
+        {
+            PersianCalendar jc = new PersianCalendar();
+            return jc.GetYear(date).ToString();
+        }
+        catch
+        {
+            throw new FormatException("The input string must be in 0000/00/00 format.");
+        }
+    }
+
+
+}
+
+
+

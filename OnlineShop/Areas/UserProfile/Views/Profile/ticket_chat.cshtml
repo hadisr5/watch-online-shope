@@ -1,0 +1,151 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    Layout = "~/views/shared/_layout.cshtml";
+    int id = Convert.ToInt32(ViewBag.id);
+    var db = new OnlineShopEntities();
+
+}
+<main class="profile-user-page default">
+    <div class="container">
+        <div class="row">
+            <div class="profile-page col-xl-9 col-lg-8 col-md-12 order-2">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-12">
+                            <h1 class="title-tab-content" style="display:inline-block">شماره تیکت #@id</h1>
+                            <a href="/userProfile/profile/tickets">
+                                <span class="header-profile-dropdown-user-profile-link" style="float: left; font-size: 12px;font-weight: bold;">
+                                    مشاهده لیست تیکت ها
+                                </span>
+                            </a>
+                        </div>
+
+                        <div class="content-section default">
+                            @{
+                                if (ViewBag.error != null)
+                                {
+                                    <div class="alert alert-danger profile_alert">
+                                        @ViewBag.error
+                                    </div>
+                                }
+                            }
+
+
+                            <div class="ticketMessageContainer">
+                                @{
+                                    var messages = db.TicketChats.Where(r => r.ticketId == id).OrderByDescending(r => r.id).ToList();
+                                    if (messages.Count != 0)
+                                    {
+                                        foreach (var item in messages)
+                                        {
+                                            if (item.isUser == true)
+                                            {
+                                                <div class="userMessage msg" style="min-width:60%;position:relative">
+                                                    @Html.Raw(item.text.Replace(Environment.NewLine, "<br/>"))
+                                                    <span class="userTime">
+                                                        @{
+                                                            try
+                                                            {
+                                                                DateTime d = Convert.ToDateTime(item.creationDate);
+                                                                PersianCalendar pc = new PersianCalendar();
+                                                                string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), d.Hour, d.Minute));
+                                                                @p
+                                                            }
+                                                            catch (Exception)
+                                                            {
+                                                            }
+                                                        }
+                                                    </span>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="adminMessage" style="min-width: 60%;position: relative">
+                                                    @{
+                                                        if (item.text != null)
+                                                        {
+                                                            @Html.Raw(item.text.Replace(Environment.NewLine, "<br/>"))
+                                                        }
+                                                        else
+                                                        {
+                                                            if (item.voice != null)
+                                                            {
+                                                                <audio controls style="width:100%">
+                                                                    <source src="/voice/@item.voice" type="audio/wav">
+                                                                </audio>
+                                                            }
+                                                        }
+                                                    }
+                                                    <span class="userTime">
+                                                        @{
+                                                            try
+                                                            {
+                                                                DateTime d = Convert.ToDateTime(item.creationDate);
+                                                                PersianCalendar pc = new PersianCalendar();
+                                                                string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), d.Hour, d.Minute));
+                                                                @p
+                                                            }
+                                                            catch (Exception)
+                                                            {
+                                                            }
+                                                        }
+                                                    </span>
+                                                </div>
+                                            }
+                                            <div class="clearfix"></div>
+                                        }
+                                    }
+                                }
+                                <div class="clearfix"></div>
+                            </div>
+                            <hr />
+                            <form action="/UserProfile/Profile/Ticket_Message" method="post">
+                                <input type="hidden" name="id" value="@id" />
+                                <div class="form-group">
+                                    <label>
+                                        متن پیام
+                                    </label>
+                                    <textarea name="text" class="form-control" rows="2" placeholder="متن پیام خود را وارد کنید"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">
+                                        ارسال پیام
+                                        <i class="now-ui-icons arrows-1_minimal-left"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @RenderPage("~/Areas/UserProfile/Views/Shared/_SideBar.cshtml")
+        </div>
+
+        @RenderPage("~/Areas/UserProfile/Views/Shared/_recentViews.cshtml")
+
+
+
+
+    </div>
+</main>
+@section JS{
+    <script>
+        changeMenu('tickets')
+    </script>
+}
+<style>
+    .profile_alert {
+        border-radius: 3px;
+    }
+
+        .profile_alert.alert-danger {
+            background: #ff6868;
+        }
+
+    .ticketMessageContainer {
+        height: 350px;
+        overflow-y: scroll;
+    }
+</style>

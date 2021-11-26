@@ -1,0 +1,107 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var brand = db.Brands.Find(id);
+    ViewBag.Title = "ویرایش همکار";
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت برند ها</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/brands/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست برند ها</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            ویرایش همکار : @brand.title
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/brands/Edit_Post" data-redirect="/Admin/AdminDashboard/Index#/Admin/brands/index">
+                    <!--begin::Form-->
+                    <input type="number" value="@brand.id" style="display:none" name="id" />
+                   
+                    <div class="kt-portlet__body">
+
+                        <div class="form-group">
+                            <label>عنوان همکار</label>
+                            <input type="text" class="form-control" placeholder="عنوان همکار" name="title" value="@brand.title">
+                            <span class="form-text text-muted">همکار شما با این عنوان نمایش داده می شود </span>
+                        </div>
+                        <div class="form-group">
+                            <label>لینک همکار</label>
+                            <input type="text" class="form-control" placeholder="لینک همکار" name="btnLink" value="@brand.link">
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">
+                                عکس همکار
+                            </label>
+                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@brand.logo" id="imgPre" style="width: 337px;
+    border-radius: 10px;
+" />
+                                <div class="m-dropzone dropzone" action="/admin/brands/upload" id="m-dropzone-one">
+                                    <div class="m-dropzone__msg dz-message needsclick">
+                                        <h3 class="m-dropzone__msg-title">
+                                            برای ویرایش عکس ، اینجا کلیک کنید
+                                        </h3>
+                                    </div>
+                                </div>
+                                <input type="text" class="hidden" id="img" name="logo" style="display:none" value="@brand.logo" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ویرایش همکار </button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/brands/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ویرایش همکار')
+</script>
+<script>
+    $('.dropzone').dropzone({
+        success: function (file, response) {
+            $('#img').val(response);
+            $('#imgPre').remove();
+
+        }
+    });
+</script>

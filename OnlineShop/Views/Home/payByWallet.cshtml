@@ -1,0 +1,220 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+}
+
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+<link href="~/Theme/dropzone/basic.css" rel="stylesheet" />
+<link href="~/Theme/dropzone/dropzone.css" rel="stylesheet" />
+<link href="~/Theme/Css/card.css" rel="stylesheet" />
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Breadcrumb Tow Start-->
+    <div class="breadcrumb-tow mb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-title">
+                        <h1>پرداخت با کیف پول</h1>
+                    </div>
+                    <div class="breadcrumb-content breadcrumb-content-tow">
+                        <ul>
+                            <li><a href="/">خانه</a></li>
+                            <li><a href="/home/card">سبد خرید</a></li>
+                            <li><a href="/home/address">انتخاب آدرس و بازه زمانی</a></li>
+                            <li><a href="/home/payWay">روش پرداخت</a></li>
+                            <li class="active">پرداخت با کیف پول</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Breadcrumb Tow End-->
+    <!--Login Register Area Strat-->
+    <div class="login-register-area mb-80">
+        <div class="container">
+            <div class="row">
+                <!--Login Form Start-->
+                <div class="col-md-12 col-sm-12 col-md-offset-3 offset-3 mx-auto">
+                    <div class="customer-login-register">
+                        <div class="form-login-title">
+                            <h2>پرداخت از کیف پول</h2>
+                            <br />
+
+                            <span>
+                                لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.
+                            </span>
+                            <br />
+                            <br />
+               
+                            <br />
+                            @{
+                                var ordersList = Session["orders"] as List<Order>;
+                                Int64 sum = 0;
+                                if (ordersList != null && ordersList.Count != 0)
+                                {
+                                    foreach (var item in ordersList)
+                                    {
+                                        var product = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+                                        var off = db.Discounts.Where(r => r.percentage != null && r.status == 1 && r.productId == item.productId && r.expire > DateTime.Now).FirstOrDefault();
+                                        if (item.SellerId == null)
+                                        {
+                                            if (off != null)
+                                            {
+                                                sum += Convert.ToInt64((product.price - (product.price * off.percentage) / 100) * item.quantity);
+
+                                            }
+                                            else
+                                            {
+                                                sum += Convert.ToInt64(product.price * item.quantity);
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var sellerProduct = db.SellersProducts.Where(r => r.productId == product.id && r.sellerId == item.SellerId).FirstOrDefault();
+                                            if (sellerProduct != null)
+                                            {
+                                                sum += Convert.ToInt64(sellerProduct.price * item.quantity);
+
+                                            }
+
+                                        }
+                                    }
+                                }
+
+                                if (Session["Discount"] != null)
+                                {
+                                    int discountId = Convert.ToInt32(Session["Discount"]);
+                                    var discount = db.DiscountCodes.Where(r => r.id == discountId).FirstOrDefault();
+                                    if (discount != null)
+                                    {
+                                        if (discount.Amont != null)
+                                        {
+                                            sum -= Convert.ToInt32(discount.Amont);
+
+                                        }
+                                        else
+                                        {
+                                            if (discount.Percentage != null)
+                                            {
+                                                if (discount.maxPercentage < sum)
+                                                {
+                                                    sum = Convert.ToInt64(sum - (discount.maxPercentage * discount.Percentage) / 100);
+                                                }
+                                                else
+                                                {
+                                                    sum = Convert.ToInt64(sum - (sum * discount.Percentage) / 100);
+
+                                                }
+                                            }
+                                        }
+                                    }
+
+
+                                }
+
+                                var settings = db.Settings.FirstOrDefault();
+                                if (settings.shippingFree > sum)
+                                {
+                                    sum += Convert.ToInt32(settings.shippingPrice);
+                                }
+                            }
+                            @{
+                                if (Session["Discount"] != null)
+                                {
+                                    int discountId = Convert.ToInt32(Session["Discount"]);
+                                    var discount = db.DiscountCodes.Where(r => r.id == discountId).FirstOrDefault();
+                                    if (discount != null)
+                                    {
+                                        sum -= Convert.ToInt64(discount.Amont);
+                                    }
+
+                                }
+                            }
+                            <h5>
+                                مبلغ قابل پرداخت : @sum تومان
+                            </h5>
+                            <br />
+                            <h5>
+                                @{
+                                    int userid = Convert.ToInt32(Session["userLogin"]);
+                                    long total = 0;
+                                    var payList = db.Wallets.Where(r => r.userId == userid).ToList();
+                                    if (payList.Count != 0)
+                                    {
+                                        foreach (var item in payList)
+                                        {
+                                            total += Convert.ToInt64(item.amount);
+                                        }
+                                    }
+                                    var walletPay = db.WalletPays.Where(r => r.userid == userid).ToList();
+                                    if (walletPay.Count != 0)
+                                    {
+                                        foreach (var item in walletPay)
+                                        {
+                                            total -= Convert.ToInt64(item.amount);
+                                        }
+                                    }
+                                }
+                                موجودی کیف پول : @total
+                            </h5>
+                            <br />
+                            <form action="payByWallet" method="post" style="text-align:center" >
+                                @{
+                                    if (total<sum)
+                                    {
+                                        <span>موجودی کیف پول شما برای پرداخت کافی نمی باشد ، برای شارژ کیف پول <a href="payWallet">اینجا کلیک کنید</a></span>
+                                    }
+                                    else
+                                    {
+                                        <input class="btn btn-warning" type="submit" style="width:200px ; display:inline-block ; text-align:center !important" value="پرداخت با کیف پول" />
+
+                                    }
+                                }
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+                <!--Login Form End-->
+            </div>
+        </div>
+    </div>
+    <!--Login Register Area End-->
+
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+</div>
+<style>
+    input {
+        border: none !important;
+    }
+
+    .dropzone {
+        background: white;
+        border-radius: 5px;
+        border: 2px dashed rgb(255, 132, 44);
+        border-image: none;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+@section js{
+    <script src="/theme/js/dropzone.js"></script>
+    <script>
+        $('.dropzone').dropzone({
+            success: function (file, response) {
+                window.location.href = "/home/successorder?order=" + response;
+            }
+        });
+    </script>
+}

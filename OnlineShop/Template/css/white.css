@@ -1,0 +1,9 @@
+@font-face {
+  font-family: fontIcons;
+  src: url(/template/fonts/iconFonts.woff2);
+}
+a#navbarDropdownMenuLink1 {
+    border: 1px solid #e0e0e2;
+    color: #616161;
+    font-weight: 400;
+}

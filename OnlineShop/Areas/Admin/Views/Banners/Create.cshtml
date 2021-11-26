@@ -1,0 +1,704 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت بنر ها</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+        <a href="#/admin/banners/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست بنر ها</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+            <!--begin::Actions-->
+            @*<a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Today</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Month</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Year</a>*@
+            <!--end::Actions-->
+            <!--begin::Daterange-->
+            @*<a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="" data-placement="left" data-original-title="Select dashboard daterange">
+                    <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
+                    <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Aug 11</span>
+                </a>*@
+            <!--end::Daterange-->
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            اطلاعات بنر جدید
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/banners/Create" data-redirect="/Admin/AdminDashboard/Index#/Admin/banners/index">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <div class="kt-portlet__body">
+                            <div class="example">
+                                <div class="example-preview">
+                                    <ul class="nav nav-tabs nav-tabs-line">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-toggle="tab" href="#kt_tab_pane_1">اطلاعات پایه</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_2">تصویر بنرها</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_3">لینک بنرها</a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="tab-content mt-5" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel" aria-labelledby="kt_tab_pane_1">
+                                            <div class="form-group">
+                                                <label>عنوان بنر</label>
+                                                <input type="text" class="form-control" placeholder="عنوان بنر" name="title">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>فعال سازی بنر</label>
+                                                <div class="col-9 col-form-label">
+                                                    <div class="checkbox-inline">
+                                                        <label class="checkbox checkbox-outline checkbox-outline-2x checkbox-primary">
+                                                            <input type="checkbox" name="Checkboxes16" />
+                                                            <span></span>فعال
+                                                        </label>
+                                                    </div>
+                                                    <span class="form-text text-muted">شما یک بنر فعال می توانید داشته باشید</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel" aria-labelledby="kt_tab_pane_2">
+
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 1
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone1" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues1" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto1" />
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 2
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone2" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues2" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto2" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 3
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone3" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues3" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto3" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 4
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone4" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues4" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto4" />
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 5
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone5" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues5" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto5" />
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 6
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone6" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues6" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto6" />
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 7
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone7" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues7" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto7" />
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 8
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone8" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues8" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto8" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 9
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone9" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues9" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto9" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 10
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone10" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues10" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto10" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 11
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone11" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues11" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto11" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 12
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone12" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues12" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto12" />
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 13
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone13" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues13" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto13" />
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+
+
+
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 14
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone14" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues14" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto14" />
+                                                </div>
+                                            </div>
+
+
+
+
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    بنر شماره 15
+                                                </label>
+                                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                                    <div class="m-dropzone dropzone dropzone15" action="/admin/products/upload" id="m-dropzone-one">
+                                                        <div class="m-dropzone__msg dz-message needsclick">
+                                                            <h3 class="m-dropzone__msg-title">
+                                                                فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group m-form__group row">
+                                                <label for="example-text-input" class="col-2 col-form-label">
+                                                    تصویر بنر
+                                                </label>
+                                                <div id="imgValues15" class="imgValues">
+                                                    <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto15" />
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        </div>
+
+
+                                        <div class="tab-pane fade" id="kt_tab_pane_3" role="tabpanel" aria-labelledby="kt_tab_pane_3">
+                                            <div class="form-group">
+                                                <label> 1لینک بنر</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link1">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک بنر2</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link2">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>3لینک بنر</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link3">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>4لینک بنر</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link4">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک بنر5</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link5">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک بنر6</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link6">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>7لینک بنر</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link7">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک بنر8</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link8">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک بنر9</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link9">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>10لینک بنر</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link10">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک بنر11</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link11">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک بنر12</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link12">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک بنر13</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link13">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک بنر14</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link14">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک بنر15</label>
+                                                <input type="text" class="form-control" placeholder="لینک بنر" name="link15">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ایجاد بنر جدید</button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/banners/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ایجاد منو جدید')
+    $('.dropzone1').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto1').addClass('hidden')
+            $('#imgValues1').html('<span>x</span><input type="text" value="' + response + '" name="banner1" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone2').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto2').addClass('hidden')
+            $('#imgValues2').html('<span>x</span><input type="text" value="' + response + '" name="banner2" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone3').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto3').addClass('hidden')
+            $('#imgValues3').html('<span>x</span><input type="text" value="' + response + '" name="banner3" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone4').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto4').addClass('hidden')
+            $('#imgValues4').html('<span>x</span><input type="text" value="' + response + '" name="banner4" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone5').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto5').addClass('hidden')
+            $('#imgValues5').html('<span>x</span><input type="text" value="' + response + '" name="banner5" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone6').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto6').addClass('hidden')
+            $('#imgValues6').html('<span>x</span><input type="text" value="' + response + '" name="banner6" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone7').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto7').addClass('hidden')
+            $('#imgValues7').html('<span>x</span><input type="text" value="' + response + '" name="banner7" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone8').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto8').addClass('hidden')
+            $('#imgValues8').html('<span>x</span><input type="text" value="' + response + '" name="banner8" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone9').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto9').addClass('hidden')
+            $('#imgValues9').html('<span>x</span><input type="text" value="' + response + '" name="banner9" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone10').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto10').addClass('hidden')
+            $('#imgValues10').html('<span>x</span><input type="text" value="' + response + '" name="banner10" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone11').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto11').addClass('hidden')
+            $('#imgValues11').html('<span>x</span><input type="text" value="' + response + '" name="banner11" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone12').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto12').addClass('hidden')
+            $('#imgValues12').html('<span>x</span><input type="text" value="' + response + '" name="banner12" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone13').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto13').addClass('hidden')
+            $('#imgValues13').html('<span>x</span><input type="text" value="' + response + '" name="banner13" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone14').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto14').addClass('hidden')
+            $('#imgValues14').html('<span>x</span><input type="text" value="' + response + '" name="banner14" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone15').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto15').addClass('hidden')
+            $('#imgValues15').html('<span>x</span><input type="text" value="' + response + '" name="banner15" /><img src="' + response + '" />');
+
+        }
+    });
+</script>
+<style>
+    .imgValues>img{
+        width:100px
+    }
+    .imgValues > input ,.imgValues > span {
+        display: none !important;
+    }
+</style>

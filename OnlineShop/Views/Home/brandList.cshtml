@@ -1,0 +1,80 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var bransList = db.ProductsBrands.ToList();
+
+    Layout = "/views/shared/_Layout.cshtml";
+}
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Shop Area Start-->
+    <div class="shop-area mb-70">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="shop-layout">
+                        <!--Breadcrumb One Start-->
+                        <ul class="catNav">
+                            <li><a href="/">
+                                <i class="fa fa-home" aria-hidden="true"></i>
+                                خانه</a></li>
+                            <li class="active">برند ها</li>
+                        </ul>
+                        <div class="shop-product">
+                            <div id="myTabContent-2" class="tab-content">
+                                <div id="grid" class="tab-pane fade show active">
+                                    <div class="product-grid-view">
+                                        <div class="row" id="productContainer">
+                                            @{
+                                                if (bransList.Count != 0)
+                                                {
+                                                    foreach (var item in bransList)
+                                                    {
+                                                        string tlt = item.title;
+                                                        while (tlt.Contains(" "))
+                                                        {
+                                                            tlt = tlt.Replace(" ", "_");
+                                                        }
+                                                        <div class="col-md-3">
+                                                            <div class="categories-img img-full mb-30">
+                                                                <a href="/home/brands/@item.id/@tlt"><img style="height:230px" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.logo" alt="@item.title"></a>
+                                                                <div class="categories-content">
+                                                                    <h3>@item.title</h3>
+                                                                    <h4>@db.Products.Where(r => r.brandId == item.id).Count() محصول</h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--Shop Area End-->
+    <!--Brand Area Start-->
+    <!--Brand Area End-->
+    <!--Footer Area Start-->
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+
+</div>
+
+@section js{
+
+
+}

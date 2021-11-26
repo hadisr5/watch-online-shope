@@ -1,0 +1,353 @@
+﻿@using OnlineShop.Models
+@{
+    int id = Convert.ToInt16(ViewBag.id);
+
+    var db = new OnlineShopEntities();
+    var product = db.Products.Find(id);
+
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title">AdminDashboard</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <a href="/Admin/AdminDashboard/Index#/Admin/products/index" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
+            لیست محصولات
+        </a>
+        <a href="/Admin/AdminDashboard/Index#/Admin/products/edit/@id" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
+            ویرایش محصول
+        </a>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/admin/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+
+</div>
+
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            پیش نمایش
+                        </h3>
+                        @{
+                                if (product.isValid != true && product.sellerId != null)
+                                {
+                                    <br />
+                                        <div style="margin-right:20px">
+                                            <form class="myForm" action="/admin/sellerproducts/submit/@id" data-redirect="/Admin/AdminDashboard/Index#/Admin/sellerProducts/index">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-success">تائید محصول</button>
+                                            </form>
+                                        </div>
+                                        <div style="margin-right:20px">
+                                            <form class="myForm" action="/admin/sellerproducts/remove/@id" data-redirect="/Admin/AdminDashboard/Index#/Admin/sellerTickets/newTicket?sellerId=@product.sellerId&txt=محصول شناسه @product.id تائید نشد ! ">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-warning">عدم تائید محصول</button>
+                                            </form>
+                                        </div>
+                            }
+                            else
+                            {
+                                if (product.sellerId != null && product.isValid == true)
+                                {
+                                        <br />
+                                        <div style="margin-right:20px">
+                                            <form class="myForm" action="/admin/sellerproducts/submit/@id" data-redirect="/Admin/AdminDashboard/Index#/Admin/sellerProducts/index">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-success">تائید محصول</button>
+                                            </form>
+                                        </div>
+                                        <div style="margin-right:20px">
+                                            <form class="myForm" action="/admin/sellerproducts/remove/@id" data-redirect="/Admin/AdminDashboard/Index#/Admin/sellerTickets/newTicket?sellerId=@product.sellerId&txt=محصول شناسه @product.id تائید نشد ! ">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-warning">عدم تائید محصول</button>
+                                            </form>
+                                        </div>
+                                }
+                            }
+
+
+                        }
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <div class="kt-form" method="post">
+                    <div class="kt-portlet__body">
+                        <div class="form-group">
+                            <label>عنوان محصول</label>
+                            <input type="text" readonly class="form-control" placeholder="عنوان محصول" name="title" value="@product.title">
+                            <span class="form-text text-muted">محصول شما با این عنوان نمایش داده می شود </span>
+                        </div>
+                        <div class="form-group">
+                            <label>توضیحات کوتاه</label>
+                            <textarea readonly name="short_description" style="min-height:230px" class="form-control" placeholder="توضیحات کوتاه محصول در قسمت بالای صفحه محصول نمایش داده خواهد شد">@product.short_description</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>توضیحات</label>
+                            <textarea readonly class="ckeditor form-control" name="desc" rows="6">@product.description</textarea>
+                            <span class="form-text text-muted"> این توضیحات در صفحه محصول قابل مشاهده است.</span>
+                        </div>
+               
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">
+                                گالری محصول
+                            </label>
+                            <div id="imgValues">
+                                @{
+                                    var gallery = db.ProductGalleries.Where(r => r.product_id == product.id).ToList();
+                                    if (gallery.Count == 0)
+                                    {
+                                        <img src="~/Theme/img/noPhoto.png" alt="Alternate Text" id="nophoto" />
+
+                                    }
+                                    else
+                                    {
+                                        foreach (var item in gallery)
+                                        {
+                                            <div><span>x</span><input readonly type="text" value="@item.big" name="image" /><img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.big" /></div>
+                                        }
+                                    }
+                                }
+
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>دسته بندی ها</label>
+                            <div class="form-group">
+                                <div class="kt-checkbox-list">
+                                    @{
+                                        var productscat = db.CatProes.Where(r => r.product_id == product.id).ToList();
+
+                                        var categories = db.Categories.ToList();
+                                        if (categories.Count != 0)
+                                        {
+                                            foreach (var item in categories)
+                                            {
+                                                if (productscat.Count != 0 && productscat.Where(r => r.categoryId == item.id).FirstOrDefault() != null)
+                                                {
+                                                    <label class="kt-checkbox kt-checkbox--tick kt-checkbox--success">
+                                                        <input readonly type="checkbox" class="catBox" checked data-id="@item.id" name="cat" value="@item.id"> @item.title
+                                                        <span></span>
+                                                    </label>
+                                                    <div class="catProperties" data-id="@item.id">
+                                                        @{
+                                                            var catproperties = db.CatProperties.Where(r => r.catId == item.id).ToList();
+                                                            if (catproperties.Count != 0)
+                                                            {
+                                                                <table class="table table-hover">
+
+                                                                    @foreach (var item2 in catproperties)
+                                                                    {
+                                                                        var values = db.ProductPropertiesValues.Where(r => r.propertiesid == item2.id && r.proId == product.id).FirstOrDefault();
+                                                                        string vl = string.Empty;
+                                                                        if (values != null)
+                                                                        {
+                                                                            vl = values.value;
+                                                                        }
+                                                                        <tr><td>@item2.title</td><td><input readonly name="@item2.id" type="text" class="form-control" value="@vl" /></td> </tr>
+
+                                                                    }
+                                                                </table>
+
+
+                                                            }
+                                                        }
+                                                    </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <label class="kt-checkbox kt-checkbox--tick kt-checkbox--success">
+                                                                    <input readonly type="checkbox" class="catBox" data-id="@item.id" name="cat" value="@item.id"> @item.title
+                                                                    <span></span>
+                                                                </label>
+                                                                <div class="catProperties" data-id="@item.id">
+
+                                                                </div>
+                                                                    }
+
+                                                                }
+                                                            }
+                                    }
+
+                                </div>
+                                <span class="form-text text-muted">دسته بندی های محصول را انتخاب کنید</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>قیمت</label>
+                            <input readonly type="number" class="form-control" placeholder="قیمت محصول" name="price" value="@product.price">
+                            <span class="form-text text-muted">قیمت محول به تومان  </span>
+
+                        </div>
+       
+                 
+                        <div class="form-group">
+                            <label>انتخاب برند</label>
+                            <select readonly class="form-control m-bootstrap-select m_selectpicker" data-live-search="true" name="brandId">
+                                @{
+                                    var prebrands = db.ProductsBrands.Where(r => r.id == product.brandId).FirstOrDefault();
+
+                                    var brands = db.ProductsBrands.ToList();
+                                    if (brands.Count != 0)
+                                    {
+                                        <option  data-tokens="" value="">
+                                            برند ندارد
+                                        </option>
+                                        foreach (var item in brands)
+                                        {
+                                            if (prebrands != null && prebrands == item)
+                                            {
+                                                <option data-tokens="@item.title" value="@item.id" selected>
+                                                    @item.title
+                                                </option>
+                                            }
+                                            else
+                                            {
+                                                <option data-tokens="@item.title" value="@item.id">
+                                                    @item.title
+                                                </option>
+                                            }
+
+                                        }
+                                    }
+                                }
+                            </select>
+                            <span class="form-text text-muted">برای ایجاد برند جدید <a href="#/Admin/ProductsBrands/Create">اینجا</a> کلیک کنید</span>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-3 col-form-label">کالای اورجینال</label>
+                            <div class="col-3">
+                                <span class="kt-switch">
+                                    <label>
+                                        @{
+                                            if (product.isOriginal != null && product.isOriginal == true)
+                                            {
+                                                <input readonly type="checkbox" checked="checked" name="isOriginal" value="True" />
+                                            }
+                                            else
+                                            {
+                                                <input readonly type="checkbox" name="isOriginal" value="True" />
+                                            }
+                                        }
+                                        <span></span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-3 col-form-label">موجود در انبار</label>
+                            <div class="col-3">
+                                <span class="kt-switch">
+                                    <label>
+                                        @{
+                                            if (product.isAvailable != null && product.isAvailable == true)
+                                            {
+                                                <input readonly type="checkbox" checked="checked" name="isAvailable" value="True" />
+                                            }
+                                            else
+                                            {
+                                                <input readonly type="checkbox" name="isAvailable" value="True" />
+                                            }
+                                        }
+                                        <span></span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <a href="/Admin/AdminDashboard/Index#/Admin/sellerProducts/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var counter = 0;
+    $(document).ready(function () {
+        CKEDITOR.replace('desc');
+    })
+    titlePage('پیش نمایش محصول');
+
+    var BootstrapSelect = { init: function () { $(".m_selectpicker").selectpicker() } }; jQuery(document).ready(function () { BootstrapSelect.init() });
+
+
+</script>
+<style>
+    #imgValues > div > input {
+        display: none;
+    }
+
+    #imgValues > div > img {
+        display: inline-block;
+        width: 200px;
+        height: 200px;
+        border: 1px solid #e4e4e4;
+        border-radius: 20px;
+        margin: 25px 5px;
+        float: right;
+    }
+
+    #imgValues > div {
+        position: relative;
+        float: right;
+        display: inline-block;
+    }
+
+        #imgValues > div > span {
+            width: 20px;
+            height: 20px;
+            content: check;
+            position: absolute;
+            right: 20px;
+            top: 40px;
+            background: #ff5c5c;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            padding: 1px 7px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+    #nophoto {
+        width: 200px;
+        height: 200px;
+        border-radius: 20px;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+</style>

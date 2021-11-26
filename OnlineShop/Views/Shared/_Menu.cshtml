@@ -1,0 +1,149 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    var setting = db.Settings.FirstOrDefault();
+}
+
+
+<nav class="main-menu">
+    <div class="container">
+        @*<div class="col-lg-1 col-md-1 "></div>
+        <div class="col-lg-2 col-md-2">
+            <div class="default">
+                <a href="/">
+                    <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@setting.WebsiteLogo" alt="">
+                </a>
+            </div>
+        </div>*@
+        <div class="col-lg-12 col-md-12 ">
+            <div class="menu float-right">
+
+                <ul>
+                    <li class="js-nav-list-category-hover">
+                        <div></div>
+                    </li>
+                    <li class="category-products">
+                        <a href="#">
+                            <i class="fa fa-bars"></i>
+
+                            منو محصولات
+                        </a>
+                        <div class="product-category">
+                            <div class="parent-category">
+                                <ul>
+                                    @{
+                                        var MainCats = db.MainCats.OrderByDescending(r => r.priority).ToList();
+                                        if (MainCats.Count != 0)
+                                        {
+                                            foreach (var item in MainCats)
+                                            {
+                                                <li>
+                                                    <a href="#">
+                                                        @item.title
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                            <div class="children-categories">
+                                @{
+                                    if (MainCats.Count != 0)
+                                    {
+                                        foreach (var item in MainCats)
+                                        {
+                                            <div class="children-category">
+                                                <a href="#" class="font-weight-bold">
+                                                    همه دسته بندی های @item.title
+                                                    @*<i class="now-ui-icons arrows-1_minimal-left"></i>*@
+                                                </a>
+                                                <ul>
+                                                    @{
+                                                        var subCatList = new List<Category>();
+                                                        var Cats = db.Categories.Where(r => r.MainCat == item.id && r.parent == null).ToList();
+                                                        if (Cats.Count != 0)
+                                                        {
+                                                            <li class="" style="width:100% !important">
+                                                                <ul class="MegaMenuUl">
+                                                                    @{
+                                                                        foreach (var item2 in Cats)
+                                                                        {
+                                                                            var subcats = db.Categories.Where(r => r.parent == item2.id).ToList();
+                                                                            <li class="parent">
+                                                                                <a href="/home/category/@item2.id/@item2.title.Trim().Replace(" ","-")">@item2.title</a>
+                                                                            </li>
+                                                                            if (subcats.Count != 0)
+                                                                            {
+                                                                                foreach (var item3 in subcats)
+                                                                                {
+                                                                                    <li class="child"><a href="/home/category/@item3.id/@item3.title.Trim().Replace(" ","-")">@item3.title</a></li>
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                </ul>
+                                                            </li>
+                                                        }
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                    </li>
+                    <li class="verlineright" style="height: 24px; margin-top: 2%; margin-left: 20px; "></li>
+                    <li class="category-products">
+                        <a href="#">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            خانه
+                        </a>
+                    </li>
+                    @{
+                        var menus = db.Menus.Where(r => r.Parent == null).OrderByDescending(r => r.priority).ToList();
+                        if (menus.Count != 0)
+                        {
+                            foreach (var item in menus)
+                            {
+                                @*<li>
+                        <a href="@item.link">@item.title</a>
+                    </li>*@
+                                var itemddclass = "";
+                                var itemchilds = db.Menus.Where(p => p.Parent == item.id).OrderBy(p => p.priority).ToList();
+                                if (itemchilds.Count > 0)
+                                {
+                                    itemddclass = "dropdown-toggle";
+                                }
+                                <li class="verlineright" style="height: 24px; margin-top: 2%; margin-left: 20px; "></li>
+                                <li class="category-products" style="margin-left: 20px; ">
+                                    <a class="mainlink @itemddclass" href="@item.link">@item.title</a>
+                                    <div class="product-category" style="visibility: hidden; right: auto; padding: 0 !important;">
+                                        @*<div class="parent-category">*@
+                                        <ul class="dropdownmenu" style=" visibility: hidden; position: relative !important; width: auto ">
+                                            @foreach (var c in itemchilds)
+                                            {
+
+                                                <li>
+                                                    <a style="float:right;z-index:99" class="submainlink" href="@c.link">@c.title</a>
+                                                </li>
+                                            }
+                                        </ul>
+                                        @*</div>*@
+                                    </div>
+
+                                </li>
+
+                            }
+                        }
+
+                    }
+                </ul>
+            </div>
+        </div>
+       
+       
+    </div>
+</nav>

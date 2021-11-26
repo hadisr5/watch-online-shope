@@ -1,0 +1,165 @@
+﻿@using System.Configuration
+@{
+    Layout = null;
+    ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html>
+<!--
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 4 & Angular 7
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Dribbble: www.dribbble.com/keenthemes
+Like: www.facebook.com/keenthemes
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+Renew Support: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
+-->
+<html lang="en" direction="rtl" style="direction: rtl;">
+<!-- begin::Head -->
+<head>
+    <meta charset="utf-8">
+
+    <title>ورود به حساب کاربری</title>
+    <meta name="description" content="Login page example">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!--begin::Fonts -->
+    <script src="/loginTheme/js/webfont.js"></script>
+
+    <!--end::Fonts -->
+    <!--begin::Page Custom Styles(used by this page) -->
+    <link href="/loginTheme/css/login-4.rtl.css" rel="stylesheet" type="text/css">
+    <!--end::Page Custom Styles -->
+    <!--begin::Global Theme Styles(used by all pages) -->
+    <link href="/loginTheme/css/vendors.bundle.rtl.css" rel="stylesheet" type="text/css">
+    <link href="/loginTheme/css/style.bundle.rtl.css" rel="stylesheet" type="text/css">
+    <!--end::Global Theme Styles -->
+    <!--begin::Layout Skins(used by all pages) -->
+
+    <link href="/loginTheme/css/light.rtl.css" rel="stylesheet" type="text/css">
+    <link href="/loginTheme/css/5light.rtl.css" rel="stylesheet" type="text/css">
+    <link href="/loginTheme/css/dark.rtl.css" rel="stylesheet" type="text/css">
+    <link href="/loginTheme/css/7dark.rtl.css" rel="stylesheet" type="text/css">        <!--end::Layout Skins -->
+    <link rel="shortcut icon" href="@(ConfigurationManager.AppSettings["FAVICON"])">
+</head>
+<!-- end::Head -->
+<!-- begin::Body -->
+<body class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--fixed kt-subheader--enabled kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-page--loading">
+
+    <!-- begin:: Page -->
+    <div class="kt-grid kt-grid--ver kt-grid--root">
+        <div class="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v4 kt-login--signin" id="kt_login">
+            <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" style="background-image: url(/loginTheme/files/bg-2.jpg);">
+                <div class="kt-grid__item kt-grid__item--fluid kt-login__wrapper">
+                    <div class="kt-login__container">
+                        <div class="kt-login__logo">
+                            <a href="#">
+                                <img src="@(ConfigurationManager.AppSettings["LOGO_Contrast"])" style="width:250px">
+                            </a>
+                        </div>
+                        <div class="kt-login__signin">
+                            <div class="kt-login__head">
+                                <h3 class="kt-login__title">ورود به پنل فروشندگان</h3>
+                            </div>
+                            <div class="kt-login__head">
+                                <a href="/Sellers/Login/easyLogin">
+                                    <h3 class="kt-login__title">برای ورود سریع اینجا کلیک کنید</h3>
+                                </a>
+                            </div>
+                            @if (ViewBag.error != null)
+                            {
+                                <div class="alert alert-danger">
+                                    @ViewBag.error
+                                </div>
+                            }
+                        <form class="kt-form" action="" method="post">
+                            @Html.AntiForgeryToken()
+                            <div class="input-group">
+                                <input class="form-control" style="direction:ltr !important" type="text" placeholder="ایمیل" name="email" autocomplete="off">
+                            </div>
+                            <div class="input-group" style="margin-bottom: 10px;">
+                                <div class="col-md-12" style="padding:0;">
+                                    <input class="form-control" style="direction:ltr !important" type="password" id="password" placeholder="رمز عبور" name="password">
+                                    <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                                </div>
+                            </div>
+
+                            <div class="row kt-login__extra">
+                                <div class="col">
+                                    <label class="kt-checkbox">
+                                        <input type="checkbox" name="remmember" value="1"> ورود من را به خاطر بسپار
+                                        <span></span>
+                                    </label>
+                                </div>
+
+                            </div>
+                            <div class="kt-login__actions">
+                                <button class="btn btn-brand btn-pill kt-login__btn-primary" type="submit">ورود</button>
+
+                            </div>
+
+                        </form>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .field-icon {
+            float: right;
+            margin-left: -25px;
+            margin-top: -25px;
+            position: relative;
+            z-index: 2;
+        }
+        @@font-face {
+            font-family: myFirstFont;
+            src: url("/themeFiles/Fonts/IRANSansWeb(FaNum).woff") format("woff2");
+        }
+
+        html, body, form, fieldset, table, tr, td, img {
+            font-family: myFirstFont;
+        }
+
+        input, button, select, textarea, optgroup, option {
+            font-family: myFirstFont;
+        }
+
+        /* rest of your styles; like: */
+        body {
+            font-family: myFirstFont;
+        }
+    </style>
+    <!-- end:: Page -->
+    <!-- begin::Global Config(global config for global JS sciprts) -->
+    <script src="/Template/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+    <script>
+        var KTAppOptions = { "colors": { "state": { "brand": "#5d78ff", "dark": "#282a3c", "light": "#ffffff", "primary": "#5867dd", "success": "#34bfa3", "info": "#36a3f7", "warning": "#ffb822", "danger": "#fd3995" }, "base": { "label": ["#c5cbe3", "#a1a8c3", "#3d4465", "#3e4466"], "shape": ["#f0f3ff", "#d9dffa", "#afb4d4", "#646c9a"] } } };
+
+        $(".toggle-password").click(function () {
+
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            var input = $($(this).attr("toggle"));
+            if (input.attr("type") == "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+    </script>
+    <!-- end::Global Config -->
+    <!--begin::Global Theme Bundle(used by all pages) -->
+    <script src="/loginTheme/js/vendors.bundle.js" type="text/javascript"></script>
+    <script src="/loginTheme/js/scripts.bundle.js" type="text/javascript"></script>
+    <!--end::Global Theme Bundle -->
+    <!--begin::Page Scripts(used by this page) -->
+    <script src="/loginTheme/js/login-general.js" type="text/javascript"></script>
+    <!--end::Page Scripts -->
+</body>
+<!-- end::Body -->
+</html>

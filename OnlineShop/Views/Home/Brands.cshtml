@@ -1,0 +1,620 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var products = db.Products.Where(r => r.brandId == id).ToList() ;
+    var brand = db.ProductsBrands.Find(id);
+
+    Layout = "/views/shared/_Layout.cshtml";
+}
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Shop Area Start-->
+    <div class="shop-area mb-70">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shop-layout">
+                        <!--Breadcrumb One Start-->
+                        <ul class="catNav">
+                            <li><a href="/">خانه</a></li>
+                            <li><a href="/home/brandList">برند ها</a></li>
+                            <li class="active">@brand.title</li>
+                        </ul>
+                        <!--Breadcrumb One End-->
+                        <!--Grid & List View Start-->
+                        <div class="shop-topbar-wrapper d-md-flex justify-content-md-between align-items-center">
+                            <div class="toolbar-short-area d-md-flex align-items-center">
+                                <label>مرتب سازی بر اساس : </label>
+                                <div class="toolbar-shorter">
+                                    <select class="wide">
+                                        <option value="idSort">جدیدترین</option>
+                                        @*<option value="Name, Z to A">محبوب ترین</option>*@
+                                        <option value="discountSort">بیشترین تخفیف</option>
+                                        <option value="lowPrice">ارزان ترین</option>
+                                        <option value="highPrice">گران ترین</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid-list-option">
+                                <ul class="nav">
+                                    <li>
+                                        <a class="active" data-toggle="tab" href="#grid"><i class="fa fa-th-large"></i></a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#list"><i class="fa fa-th-list"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--Grid & List View End-->
+                        <!--Shop Product Start-->
+                        <div class="shop-product">
+                            <div id="myTabContent-2" class="tab-content">
+                                <div id="grid" class="tab-pane fade show active">
+                                    <div class="product-grid-view">
+                                        <div class="row" id="productContainer">
+                                            @{
+                                                if (products.Count != 0)
+                                                {
+                                                    foreach (var item in products)
+                                                    {
+                                                        var discount = db.Discounts.Where(r => r.productId == item.id && r.status == 1 && r.percentage != null).FirstOrDefault();
+                                                        int disPercentage = 0;
+                                                        if (discount != null && discount.percentage != null)
+                                                        {
+                                                            disPercentage = Convert.ToInt32(discount.percentage);
+                                                        }
+                                                        Int64 realPrice = Convert.ToInt64(item.price);
+                                                        if (discount != null)
+                                                        {
+                                                            realPrice = Convert.ToInt64(item.price - (item.price * discount.percentage) / 100);
+                                                        }
+                                                        var answers = db.ProductPropertiesValues.Where(r => r.proId == item.id).ToList();
+                                                        string result = "";
+                                                        if (answers.Count != 0)
+                                                        {
+                                                            foreach (var item2 in answers)
+                                                            {
+                                                                result += "," + item2.value + ",";
+
+                                                            }
+                                                        }
+
+
+                                                        <div class="col-md-3 productMainElement" data-properties="@result" data-discount="-@disPercentage" data-id="@item.id" data-lowPrice="@realPrice" data-highPrice="-@realPrice">
+                                                            <!--Single Product Start-->
+                                                            <div class="single-product mb-25">
+                                                                <div class="product-img img-full">
+                                                                    @{
+                                                                        var tlt = item.title;
+                                                                        while (tlt.Contains(" "))
+                                                                        {
+                                                                            tlt = tlt.Replace(" ", "_");
+                                                                        }
+
+                                                                    }
+                                                                    <a href="/home/product/@item.id/@tlt">
+                                                                        @{
+                                                                            var img = db.ProductGalleries.Where(r => r.product_id == item.id).FirstOrDefault();
+
+                                                                        }
+                                                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@img.big" alt="@item.title">
+                                                                    </a>
+                                                                    @{
+                                                                        if (discount != null)
+                                                                        {
+                                                                            <span class="onsale">تخفیف</span>
+                                                                        }
+                                                                    }
+                                                                </div>
+                                                                <div class="product-content">
+
+                                                                    <h2><a href="/home/product/@item.id/@tlt">@item.title</a></h2>
+                                                                    <div class="product-price">
+                                                                        <div class="price-box">
+                                                                            @{
+                                                                                if (discount == null)
+                                                                                {
+                                                                                    <span class="regular-price">@item.price تومان</span>
+
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <span class="regular-price" style="color: #888888;
+    position: absolute;
+    right: 0;
+    font-size: 13px;
+    font-weight: 100;
+    text-decoration: line-through;
+    top: -24px;">@item.price تومان</span>
+
+    <span class="regular-price" style="color:#f74747;font-size:20px;font-weight:bold">@realPrice تومان</span>
+
+                                                                                }
+
+                                                                            }
+                                                                        </div>
+                                                                        <div class="add-to-cart">
+                                                                            @{
+                                                                                if (discount == null)
+                                                                                {
+                                                                                    <span class="regular-price">@item.price تومان</span>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <span class="regular-price" style="color:#f74747">@realPrice تومان</span>
+                                                                                }
+
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!--Single Product End-->
+                                                        </div>
+                                                                                    }
+                                                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="list" class="tab-pane fade">
+                                    <div class="product-list-view" id="productContainer2">
+                                        @{
+                                            if (products.Count != 0)
+                                            {
+                                                foreach (var item in products)
+                                                {
+                                                    var discount = db.Discounts.Where(r => r.productId == item.id && r.status == 1 && r.percentage != null).FirstOrDefault();
+                                                    int disPercentage = 0;
+                                                    if (discount != null && discount.percentage != null)
+                                                    {
+                                                        disPercentage = Convert.ToInt32(discount.percentage);
+                                                    }
+                                                    Int64 realPrice = Convert.ToInt64(item.price);
+                                                    if (discount != null)
+                                                    {
+                                                        realPrice = Convert.ToInt64(item.price - (item.price * discount.percentage) / 100);
+                                                    }
+
+                                                    var tlt = item.title;
+                                                    while (tlt.Contains(" "))
+                                                    {
+                                                        tlt = tlt.Replace(" ", "_");
+                                                    }
+                                                    string result = "";
+                                                    var answers = db.ProductPropertiesValues.Where(r => r.proId == item.id).ToList();
+                                                    if (answers.Count != 0)
+                                                    {
+                                                        foreach (var item2 in answers)
+                                                        {
+                                                            result += "," + item2.value + ",";
+
+                                                        }
+                                                    }
+
+                                                    var gl = db.ProductGalleries.Where(r => r.product_id == item.id).FirstOrDefault();
+                                                    <div class="product-list-item mb-40 productMainElement2" data-properties="@result" data-discount="-@disPercentage" data-id="@item.id" data-lowPrice="@realPrice" data-highPrice="-@realPrice">
+                                                        <div class="row">
+                                                            <!--Single List Product Start-->
+                                                            <div class="col-md-4">
+                                                                <div class="single-product">
+                                                                    <div class="product-img img-full">
+                                                                        <a href="/home/product/@item.id/@tlt">
+                                                                            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@gl.big" alt="@item.title">
+                                                                        </a>
+                                                                        @{
+                                                                            if (discount != null)
+                                                                            {
+                                                                                <span class="onsale">تخفیف</span>
+
+                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <div class="product-content shop-list">
+                                                                    <h2><a href="/home/product/@item.id/@tlt">@item.title</a></h2>
+                                                                    <div class="product-reviews">
+                                                                        @{
+                                                                            int star = 5;
+                                                                            var commnets = db.Comments.Where(r => r.productId == item.id && r.rate != null).ToList();
+                                                                            if (commnets.Count != 0)
+                                                                            {
+                                                                                int allStars = Convert.ToInt16(commnets.Sum(r => r.rate));
+                                                                                star = allStars / commnets.Count;
+                                                                            }
+                                                                            for (int i = 0; i < star; i++)
+                                                                            {
+                                                                                <i class="fa fa-star"></i>
+                                                                            }
+                                                                            for (int i = 0; i < 5 - star; i++)
+                                                                            {
+                                                                                <i class="fa fa-star-o"></i>
+                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                    <div class="product-description">
+                                                                        <p>@item.short_description</p>
+                                                                    </div>
+                                                                    <div class="product-price">
+                                                                        <div class="price-box">
+                                                                            @if (discount == null)
+                                                                            {
+                                                                                <span class="regular-price">@realPrice تومان</span>
+
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <span class="price">@item.price تومان</span>
+                                                                                <span class="regular-price">@realPrice تومان</span>
+                                                                            }
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="product-list-action">
+                                                                        @{
+                                                                            if (Session["userLogin"] == null)
+                                                                            {
+                                                                                <div class="alert alert-dark" role="alert">
+                                                                                    لطفا برای ثبت سفارش ابتدا <a href="/home/register">ثبت نام کنید </a> و یا <a href="/home/login">وارد حساب کاربری خود شوید</a>
+                                                                                </div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <form class="add-quantity" method="post" action="/home/AddToCard">
+                                                                                    <input type="text" name="productId" style="display:none !important" value="@item.id" />
+                                                                                    <input value="1" type="number" name="quantity" style="display:none">
+                                                                                    <div class="add-btn">
+                                                                                        <button class="product-btn" data-text="اضافه کردن به سبد خرید">اضافه کردن به سبد خرید</button>
+                                                                                    </div>
+                                                                                </form>
+                                                                            }
+                                                                        }
+
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!--Single List Product End-->
+                                                        </div>
+                                                    </div>
+                                                                                }
+                                                                            } }
+
+                                    </div>
+                                </div>
+                                <!--Pagination Start-->
+                                @*<div class="product-pagination">
+                                    <ul>
+                                    <li class="active"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li><a href="#"><i class="fa fa-angle-double-right"></i></a></li>
+                                    </ul>
+                                    </div>*@
+                                <!--Pagination End-->
+                            </div>
+                        </div>
+                        <!--Shop Product End-->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--Shop Area End-->
+    <!--Footer Area Start-->
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+    <!-- Modal Area Strat -->
+    <div class="modal fade" id="open-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fa fa-close"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!--Modal Img-->
+                        <div class="col-md-5">
+                            <!--Modal Tab Content Start-->
+                            <div class="tab-content product-details-large" id="myTabContent">
+                                <div class="tab-pane fade show active" id="single-slide1" role="tabpanel" aria-labelledby="single-slide-tab-1">
+                                    <!--Single Product Image Start-->
+                                    <div class="single-product-img img-full">
+                                        <img src="/theme/img/large/single-product1.jpg" alt="">
+                                    </div>
+                                    <!--Single Product Image End-->
+                                </div>
+                                <div class="tab-pane fade" id="single-slide2" role="tabpanel" aria-labelledby="single-slide-tab-2">
+                                    <!--Single Product Image Start-->
+                                    <div class="single-product-img img-full">
+                                        <img src="/theme/img/large/single-product2.jpg" alt="">
+                                    </div>
+                                    <!--Single Product Image End-->
+                                </div>
+                                <div class="tab-pane fade" id="single-slide3" role="tabpanel" aria-labelledby="single-slide-tab-3">
+                                    <!--Single Product Image Start-->
+                                    <div class="single-product-img img-full">
+                                        <img src="/theme/img/large/single-product3.jpg" alt="">
+                                    </div>
+                                    <!--Single Product Image End-->
+                                </div>
+                                <div class="tab-pane fade" id="single-slide4" role="tabpanel" aria-labelledby="single-slide-tab-4">
+                                    <!--Single Product Image Start-->
+                                    <div class="single-product-img img-full">
+                                        <img src="/theme/img/large/single-product4.jpg" alt="">
+                                    </div>
+                                    <!--Single Product Image End-->
+                                </div>
+                                <div class="tab-pane fade" id="single-slide5" role="tabpanel" aria-labelledby="single-slide-tab-4">
+                                    <!--Single Product Image Start-->
+                                    <div class="single-product-img img-full">
+                                        <img src="/theme/img/large/single-product5.jpg" alt="">
+                                    </div>
+                                    <!--Single Product Image End-->
+                                </div>
+                                <div class="tab-pane fade" id="single-slide6" role="tabpanel" aria-labelledby="single-slide-tab-4">
+                                    <!--Single Product Image Start-->
+                                    <div class="single-product-img img-full">
+                                        <img src="/theme/img/large/single-product6.jpg" alt="">
+                                    </div>
+                                    <!--Single Product Image End-->
+                                </div>
+                            </div>
+                            <!--Modal Content End-->
+                            <!--Modal Tab Menu Start-->
+                            <div class="single-product-menu">
+                                <div class="nav single-slide-menu owl-carousel" role="tablist">
+                                    <div class="single-tab-menu img-full">
+                                        <a class="active" data-toggle="tab" id="single-slide-tab-1" href="#single-slide1"><img src="/theme/img/small/single-product1.jpg" alt=""></a>
+                                    </div>
+                                    <div class="single-tab-menu img-full">
+                                        <a data-toggle="tab" id="single-slide-tab-2" href="#single-slide2"><img src="/theme/img/small/single-product2.jpg" alt=""></a>
+                                    </div>
+                                    <div class="single-tab-menu img-full">
+                                        <a data-toggle="tab" id="single-slide-tab-3" href="#single-slide3"><img src="/theme/img/small/single-product3.jpg" alt=""></a>
+                                    </div>
+                                    <div class="single-tab-menu img-full">
+                                        <a data-toggle="tab" id="single-slide-tab-4" href="#single-slide4"><img src="/theme/img/small/single-product4.jpg" alt=""></a>
+                                    </div>
+                                    <div class="single-tab-menu img-full">
+                                        <a data-toggle="tab" id="single-slide-tab-5" href="#single-slide5"><img src="/theme/img/small/single-product5.jpg" alt=""></a>
+                                    </div>
+                                    <div class="single-tab-menu img-full">
+                                        <a data-toggle="tab" id="single-slide-tab-6" href="#single-slide6"><img src="/theme/img/small/single-product6.jpg" alt=""></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Modal Tab Menu End-->
+                        </div>
+                        <!--Modal Img-->
+                        <!--Modal Content-->
+                        <div class="col-md-7">
+                            <div class="modal-product-info">
+                                <h1>Sit voluptatem</h1>
+                                <div class="modal-product-price">
+                                    <span class="old-price">$74.00</span>
+                                    <span class="new-price">$69.00</span>
+                                </div>
+                                <a href="single-product.html" class="see-all">See all features</a>
+                                <div class="add-to-cart quantity">
+                                    <form class="add-quantity" action="#">
+                                        <div class="modal-quantity">
+                                            <input type="number" value="1">
+                                        </div>
+                                        <div class="add-to-link">
+                                            <button class="form-button" data-text="add to cart">add to cart</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="cart-description">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco,Proin lectus ipsum, gravida et mattis vulputate, tristique ut lectus.</p>
+                                </div>
+                                <div class="social-share">
+                                    <h3>Share this product</h3>
+                                    <ul class="socil-icon2">
+                                        <li><a href=""><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href=""><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href=""><i class="fa fa-pinterest"></i></a></li>
+                                        <li><a href=""><i class="fa fa-google-plus"></i></a></li>
+                                        <li><a href=""><i class="fa fa-linkedin"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Modal Content-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Area End -->
+</div>
+
+
+@section js{
+
+    <script>
+        $(document).on('click', '[data-value="discountSort"]', function () {
+            var $wrapper = $('#productContainer');
+            $wrapper.find('.productMainElement').sort(function (a, b) {
+                return +a.dataset.discount - +b.dataset.discount;
+            })
+            .appendTo($wrapper);
+        })
+        $(document).on('click', '[data-value="idSort"]', function () {
+            var $wrapper = $('#productContainer');
+            $wrapper.find('.productMainElement').sort(function (a, b) {
+                return +a.dataset.id - +b.dataset.id;
+            })
+            .appendTo($wrapper);
+        })
+        $(document).on('click', '[data-value="lowPrice"]', function () {
+            var $wrapper = $('#productContainer');
+            $wrapper.find('.productMainElement').sort(function (a, b) {
+                return +a.dataset.lowprice - +b.dataset.lowprice;
+            })
+            .appendTo($wrapper);
+        })
+        $(document).on('click', '[data-value="highPrice"]', function () {
+            var $wrapper = $('#productContainer');
+            $wrapper.find('.productMainElement').sort(function (a, b) {
+                return +a.dataset.highprice - +b.dataset.highprice;
+            })
+            .appendTo($wrapper);
+        })
+    </script>
+    <script>
+        $(document).on('click', '[data-value="discountSort"]', function () {
+            var $wrapper = $('#productContainer2');
+            $wrapper.find('.productMainElement2').sort(function (a, b) {
+                return +a.dataset.discount - +b.dataset.discount;
+            })
+            .appendTo($wrapper);
+        })
+        $(document).on('click', '[data-value="idSort"]', function () {
+            var $wrapper = $('#productContainer2');
+            $wrapper.find('.productMainElement2').sort(function (a, b) {
+                return +a.dataset.id - +b.dataset.id;
+            })
+            .appendTo($wrapper);
+        })
+        $(document).on('click', '[data-value="lowPrice"]', function () {
+            var $wrapper = $('#productContainer2');
+            $wrapper.find('.productMainElement2').sort(function (a, b) {
+                return +a.dataset.lowprice - +b.dataset.lowprice;
+            })
+            .appendTo($wrapper);
+        })
+        $(document).on('click', '[data-value="highPrice"]', function () {
+            var $wrapper = $('#productContainer2');
+            $wrapper.find('.productMainElement2').sort(function (a, b) {
+                return +a.dataset.highprice - +b.dataset.highprice;
+            })
+            .appendTo($wrapper);
+        })
+
+
+
+
+
+        $(document).on('change', '.checkbox__native', function () {
+            var selected = $(this);
+            $('.nothingToShow').remove();
+            if (selected.is(':checked')) {
+                $('.productMainElement').each(function () {
+                    if ($(this).hasClass('dontShow') == false) {
+                        $(this).addClass('dontShow')
+                    }
+                })
+                $('.productMainElement2').each(function () {
+                    if ($(this).hasClass('dontShow') == false) {
+                        $(this).addClass('dontShow')
+                    }
+                })
+                $('.productMainElement').each(function () {
+                    if ($(this).data('properties').indexOf($(selected).val()) != -1) {
+                        $(this).prop('class', $(this).prop('class') + ' show')
+                    }
+                })
+                $('.productMainElement2').each(function () {
+                    if ($(this).data('properties').indexOf($(selected).val()) != -1) {
+                        $(this).prop('class', $(this).prop('class') + ' show')
+                    }
+                })
+            } else {
+                $('.productMainElement').each(function () {
+                    if ($(this).data('properties').indexOf($(selected).val()) != -1) {
+                        $(this).prop('class', $(this).prop('class').replace('show','omid'))
+                    }
+                })
+                $('.productMainElement2').each(function () {
+                    if ($(this).data('properties').indexOf($(selected).val()) != -1) {
+                        $(this).prop('class', $(this).prop('class').replace('show','omid'))
+                    }
+                })
+
+            }
+
+            var flag = false;
+            $('input:checkbox.checkbox__native').each(function () {
+                if ($(this).is(':checked')) {
+                    flag = true;
+                }
+            });
+            if (flag == false) {
+                $('.productMainElement').each(function(){
+                    $(this).removeClass('dontShow')
+                })
+                $('.productMainElement2').each(function(){
+                    $(this).removeClass('dontShow')
+                })
+            }
+            flag = false;
+            $('.productMainElement').each(function () {
+                if ($(this).hasClass('show') || $(this).hasClass('dontShow')==false) {
+                    flag = true;
+                }
+            })
+            if (flag == false) {
+                $('#productContainer').html($('#productContainer').html()+'<div class="nothingToShow">هیچ محصولی با فیلتر های انتخاب شده وجود ندارد</div>')
+                $('#productContainer2').html($('#productContainer2').html()+'<div class="nothingToShow">هیچ محصولی با فیلتر های انتخاب شده وجود ندارد</div>')
+            }
+
+
+        })
+    </script>
+    @{
+        if (products.Count != 0)
+        {
+            Int64 min = Convert.ToInt64(products.OrderBy(r => r.price).FirstOrDefault().price);
+            Int64 max = Convert.ToInt64(products.OrderByDescending(r => r.price).FirstOrDefault().price);
+            <script>
+                var sliderrange = $('#slider-range');
+                var amountprice = $('#amount');
+                $(function () {
+                    sliderrange.slider({
+                        range: true,
+                        min: @min,
+                        max: @max,
+                        values: [@min, @max],
+                        slide: function (event, ui) {
+                            amountprice.val(ui.values[0] + 'تومان' + " - " + ui.values[1] + 'تومان');
+                        }
+                    });
+                    amountprice.val(sliderrange.slider("values", 0) + ' تومان' +
+                        " - " + sliderrange.slider("values", 1) + ' تومان');
+                });
+            </script>
+        }
+
+    }
+
+    <script>
+        $(document).on('click' , '#priceFilter',function(){
+            $('.productMainElement').each(function(){
+                if ($(this).data('lowprice')>sliderrange.slider("values")[1] || $(this).data('lowprice')<sliderrange.slider("values")[0]) {
+                    $(this).addClass('hidden')
+                }else{
+                    $(this).removeClass('hidden')
+                }
+            })
+            $('.productMainElement2').each(function(){
+                if ($(this).data('lowprice')>sliderrange.slider("values")[1] || $(this).data('lowprice')<sliderrange.slider("values")[0]) {
+                    $(this).addClass('hidden')
+                }else{
+                    $(this).removeClass('hidden')
+                }
+            })
+
+        })
+    </script>
+}

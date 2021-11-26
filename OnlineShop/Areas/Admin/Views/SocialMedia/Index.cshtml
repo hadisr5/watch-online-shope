@@ -1,0 +1,84 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    Layout = null;
+    var SocialMedia = db.SocialMedias.FirstOrDefault();
+}
+
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            ویرایش شبکه های اجتماعی
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/SocialMedia/index" data-redirect="/Admin/AdminDashboard/Index#/Admin/SocialMedia/index">
+                    <input type="hidden" value="@SocialMedia.id" name="id" />
+                    @Html.AntiForgeryToken()
+                    <div class="kt-portlet__body">
+                        <div class="example">
+                            <div class="example-preview">
+
+                                <div class="form-group">
+                                    <label>لینک Facebook</label>
+                                    <input style="text-align:left" type="text" value="@SocialMedia.Facebook" class="form-control" placeholder="Facebook" name="Facebook">
+                                </div>
+                                <div class="form-group">
+                                    <label>لینک Instagram</label>
+                                    <input style="text-align:left" type="text" value="@SocialMedia.Instagram" class="form-control" placeholder="Instagram" name="Instagram">
+                                </div>
+                                <div class="form-group">
+                                    <label>لینک Twitter</label>
+                                    <input style="text-align:left" type="text" value="@SocialMedia.Twitter" class="form-control" placeholder="Twitter" name="Twitter">
+                                </div>
+                                <div class="form-group">
+                                    <label>لینک Youtube</label>
+                                    <input style="text-align:left" type="text" value="@SocialMedia.Youtube" class="form-control" placeholder="Youtube" name="Youtube">
+                                </div>
+                                <div class="form-group">
+                                    <label>لینک Aparat</label>
+                                    <input style="text-align:left" type="text" value="@SocialMedia.Aparat" class="form-control" placeholder="Aparat" name="Aparat">
+                                </div>
+                                <div class="form-group">
+                                    <label>لینک Linkedin</label>
+                                    <input style="text-align:left" type="text" value="@SocialMedia.Linkedin" class="form-control" placeholder="Linkedin" name="Linkedin">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ویرایش شبکه های اجتماعی</button>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ویرایش شبکه های اجتماعی')
+</script>
+
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-menu="Settings"]').addClass('kt-menu__item--active')
+
+</script>

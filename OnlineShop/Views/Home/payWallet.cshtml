@@ -1,0 +1,92 @@
+﻿@using OnlineShop.Models
+
+@{
+    if (Session["userLogin"]== null)
+    {
+        Response.Redirect("/home");
+        return;
+    }
+    int useird = Convert.ToInt16(Session["userLogin"]);
+
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+}
+<link href="~/Theme/Css/login.css" rel="stylesheet" />
+<link href="~/Theme/dt/kamadatepicker.min.css" rel="stylesheet" />
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Breadcrumb Tow Start-->
+    <div class="breadcrumb-tow mb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-title">
+                        <h1>شارژ کیف پول</h1>
+                    </div>
+                    <div class="breadcrumb-content breadcrumb-content-tow">
+                        <ul>
+                            <li><a href="/">خانه</a></li>
+                            <li><a href="/home/wallet">کیف پول</a></li>
+                            <li class="active">شارژ کیف پول</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Breadcrumb Tow End-->
+    <!--Login Register Area Strat-->
+    <div class="login-register-area mb-80">
+        <div class="container">
+            <div class="row">
+                <!--Login Form Start-->
+                <div class="col-md-6 col-sm-6 col-md-offset-3 offset-3 mx-auto">
+                    <div class="customer-login-register">
+                        <div class="form-login-title">
+                            <h2>فرم پرداخت</h2>
+                        </div>
+                        <div class="login-form">
+                         
+                            <form action="/home/payWallet" method="post">
+                                <div class="form-fild">
+                                    <p><label>مقدار به تومان <span class="required">*</span></label></p>
+                                    <input autocomplete="off" name="amount" placeholder="مقدار به تومان" value="" type="number">
+                                </div>
+                                <br />
+                                <div class="login-submit">
+                                    <button type="submit" class="form-button">پرداخت</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--Login Form End-->
+            </div>
+        </div>
+    </div>
+    <!--Login Register Area End-->
+    <!--Brand Area Start-->
+    <!--Footer Area Start-->
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+    @section js{
+
+    }
+    <style>
+        input {
+            direction: ltr;
+            text-align: right !important;
+            padding: 0 7px;
+            height: 40px;
+            border-radius: 5px;
+            background: #ffecd3;
+        }
+    </style>
+
+</div>

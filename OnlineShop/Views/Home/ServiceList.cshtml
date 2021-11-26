@@ -1,0 +1,220 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc
+@{
+    var db = new OnlineShopEntities();
+    var setting = db.Settings.FirstOrDefault();
+    var contact = db.ContactInformations.FirstOrDefault();
+    Layout = "/views/shared/_Layout.cshtml";
+    int userid = 0;
+    var user = new User();
+    if (Session["userLogin"] != null)
+    {
+        userid = Convert.ToInt16(Session["userLogin"]);
+        user = db.Users.Where(r => r.id == userid).FirstOrDefault();
+    }
+    var Contact = db.ContactInformations.FirstOrDefault();
+}
+
+<main class="single-product default">
+    <div class="container">
+        <div class="row">
+            <div class="col-12" style="padding: 82px 41px;">
+                <article>
+                    <div class="container">
+                        <div class="row">
+                            <div class="s-info-page-content px-0 text-center">
+                                <h1 class="s-info-page-title">تعمیرات تخصصی ساعت</h1>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6 col-sm-8">
+                                <p class="mb-5 text-right">
+                                    ویکی ساعت با همکاری تکنسین های با تجربه و آموزش دیده در کشور سوئیس و همچنین مراکز
+                                    تخصصی در زمینه تعمیرات ساعت اقدام به ارائه خدمات و ضمانت ساعت های کارکرده خود میکند. این بدان معنی
+                                    است که تعمیر کاران حرفه ای هستند که مشتاقانه پذیرای ساعت های معیوب شما هستند.
+                                    مدیر مجموعه آقای قربانی و مسئول خدمات آقای صادقی که از تکنسین های دوره دیده با بیش از 12 سال تجربه ترمیم و تعمیر ساعت های
+                                    ارزنده سوئیسی ،آماده مشاوره در نحوه و نوع تعمیر مورد نیاز و نگهداری صحیح ساعتهای مراجعین در مجموعه ویکی ساعت هستند.
+                                </p>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <img class="card-img-top servicesfirstrowimage" src="https://dummyimage.com/600x400/000/fff.jpg" alt="Card image cap" style="border-radius:10px;">
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <section id="troubleshootingandcheckup">
+                        <div class="container">
+                            <div class="row">
+                                <div class="s-info-page-content">
+                                    <h2>خدمات عیب یابی و چک آپ</h2>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4">
+                                        <figure class="servicelist-link">
+                                            <img class="card-img-top servicesfirstrowimage" src="https://dummyimage.com/600x400/000/fff.jpg" alt="Card image cap" style="border-radius:10px;">
+                                            <div class="text-center mt-3">
+                                                <a href="#" class="card-text mt-3">تعویض باطری ساعت</a>
+                                            </div>
+                                        </figure>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4">
+                                        <figure class="servicelist-link">
+                                            <img class="card-img-top servicesfirstrowimage" src="https://dummyimage.com/600x400/000/fff.jpg" alt="Card image cap" style="border-radius:10px;">
+                                            <div class="text-center mt-3">
+                                                <a href="#" class="card-text mt-3">آنتی مگنت</a>
+                                            </div>
+                                        </figure>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <figure class="servicelist-link">
+                                            <img class="card-img-top servicesfirstrowimage" src="https://dummyimage.com/600x400/000/fff.jpg" alt="Card image cap" style="border-radius:10px;">
+                                            <div class="text-center mt-3">
+                                                <a href="#" class="card-text mt-3">کارشناسی سلامت</a>
+                                            </div>
+                                        </figure>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4">
+                                        <figure class="servicelist-link">
+                                            <img class="card-img-top servicesfirstrowimage" src="https://dummyimage.com/600x400/000/fff.jpg" alt="Card image cap" style="border-radius:10px;">
+                                            <div class="text-center mt-3">
+                                                <a href="#" class="card-text mt-3">مقاومت در برابر آب</a>
+                                            </div>
+                                        </figure>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <figure class="servicelist-link">
+                                            <img class="card-img-top servicesfirstrowimage" src="https://dummyimage.com/600x400/000/fff.jpg" alt="Card image cap" style="border-radius:10px;">
+                                            <div class="text-center mt-3">
+                                                <a href="#" class="card-text mt-3">تنظیم کارکرد ساعت</a>
+                                            </div>
+                                        </figure>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4">
+                                        <figure class="servicelist-link">
+                                            <img class="card-img-top servicesfirstrowimage" src="https://dummyimage.com/600x400/000/fff.jpg" alt="Card image cap" style="border-radius:10px;">
+                                            <div class="text-center mt-3">
+                                                <a href="#" class="card-text mt-3">سرویس کامل ساعت</a>
+                                            </div>
+                                        </figure>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section id="watchappearancerepair">
+                        <div class="container">
+                            <div class="row">
+                                <div class="s-info-page-content">
+                                    <h2>خدمات ترمیم ظاهری ساعت</h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3">
+                                    <figure class="servicelist-link">
+                                        <img class="card-img-top servicesfirstrowimage" src="https://dummyimage.com/600x400/000/fff.jpg" alt="Card image cap" style="border-radius:10px;">
+                                        <div class="text-center mt-3">
+                                            <a href="#" class="card-text mt-3">شستشو</a>
+                                        </div>
+                                    </figure>
+                                </div>
+                                <div class="col-lg-3 col-md-3">
+                                    <figure class="servicelist-link">
+                                        <img class="card-img-top servicesfirstrowimage" src="https://dummyimage.com/600x400/000/fff.jpg" alt="Card image cap" style="border-radius:10px;">
+                                        <div class="text-center mt-3">
+                                            <a href="#" class="card-text mt-3">پلیش قاب و بند</a>
+                                        </div>
+                                    </figure>
+                                </div>
+                                <div class="col-lg-3 col-md-3">
+                                    <figure class="servicelist-link">
+                                        <img class="card-img-top servicesfirstrowimage" src="https://dummyimage.com/600x400/000/fff.jpg" alt="Card image cap" style="border-radius:10px;">
+                                        <div class="text-center mt-3">
+                                            <a href="#" class="card-text mt-3 font-weight-boldest">تعویض شیشه</a>
+                                        </div>
+                                    </figure>
+                                </div>
+                                <div class="col-lg-3 col-md-3">
+                                    <figure class="servicelist-link">
+                                        <img class="card-img-top servicesfirstrowimage" src="https://dummyimage.com/600x400/000/fff.jpg" alt="Card image cap" style="border-radius:10px;">
+                                        <div class="text-center mt-3">
+                                            <a href="#" class="card-text mt-3">ترمیم صفحه</a>
+                                        </div>
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <br />
+                </article>
+            </div>
+        </div>
+
+    </div>
+</main>
+@section CSS{
+    <link href="/template/css/select2-bootstrap4.min.css" rel="stylesheet" />
+    <link href="/template/css/select2.min.css" rel="stylesheet" />
+}
+@section JS{
+
+}
+
+<style>
+
+    .s-info-page {
+        -webkit-box-shadow: 0 12px 12px 0 hsla(0, 0%, 71%, .11);
+        box-shadow: 0 12px 12px 0 hsla(0, 0%, 71%, .11);
+        background-color: #fff;
+        border: 1px solid #dedede;
+        margin: 14px auto;
+        padding-bottom: 60px;
+        line-height: 22px;
+        margin-top:6%;
+    }
+
+    /*.s-info-page-content {
+        padding: 5px 100px;
+    }*/
+
+        .s-info-page-content h1 {
+            color: #F69400;
+            font-size: 30px;
+            margin: 17px 0;
+            font-weight: 900;
+        }
+
+    .s-info-page-content h2 {
+        color: #F69400;
+        font-size: 22px;
+        font-weight: 900;
+    }
+
+    #troubleshootingandcheckup, #watchappearancerepair {
+        padding: 8% 5% 0 4%;
+    }
+
+    .appearancetroubleshooting, .appearancetitle {
+        font-size: 20px;
+        line-height: 24px;
+        font-weight: 700;
+        letter-spacing: 0px;
+    }
+
+    .servicelist-link a {
+        font-weight: 900;
+        font-size: 15px;
+    }
+
+        .servicelist-link a:hover {
+            color: #e36811;
+            font-size: 17px;
+        }
+</style>

@@ -1,0 +1,184 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    int sellerId = Convert.ToInt16(Session["seller"]);
+    var db = new OnlineShopEntities();
+    var comment = db.SellerComments.Where(r=>r.sellerId == sellerId).ToList();
+    comment = comment.OrderByDescending(r => r.id).ToList();
+
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title"></h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/sellers/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+</div>
+<!-- end:: Content Head -->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                        لیست کامنت های فروشنده ها
+                    </h3>
+                </div>
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            @{
+                int total = 0;
+            }
+            <!--begin: Datatable -->
+            <table class="table table-hover" width="100%">
+                <thead>
+                    <tr>
+                        <th>
+                            شناسه
+                        </th>
+                        <th>
+                            فروشنده
+                        </th>
+                        <th>
+                            وضعیت
+                        </th>
+
+                        <th>
+                            تاریخ
+                        </th>
+
+                        <th>
+
+                        </th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (comment.Count != 0)
+                        {
+                            foreach (var item in comment)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.id
+                                    </td>
+                                    <td>
+                                        @{
+                                            var seller = db.Sellers.Where(r => r.id == item.sellerId).FirstOrDefault();
+                                            if (seller != null)
+                                            {
+                                                string tlt = seller.name + seller.lastname;
+                                                while (tlt.Contains(" "))
+                                                {
+                                                    tlt = tlt.Replace(" ", "-");
+                                                }
+                                                @:<a href="/home/sellers/@seller.id/@tlt">@seller.name @seller.lastname</a>
+                                            }
+                                            else
+                                            {
+                                                @:فروشنده حذف شده است
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.show == true)
+                                            {
+                                                <span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">تائید شده</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">تائید نشده</span>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            try
+                                            {
+                                                DateTime d = Convert.ToDateTime(item.creationDate);
+                                                PersianCalendar pc = new PersianCalendar();
+                                                string p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                @p
+                                            }
+                                            catch (Exception)
+                                            {
+                                            }
+                                        }
+                                    </td>
+
+                                    <td>
+                                        <a class="actionIcon" href="/sellers/sellerDashboard/Index#/sellers/sellerComments/detail/@item.id">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon editIcon">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect id="bound" x="0" y="0" width="24" height="24" />
+                                                    <circle id="Oval-67" fill="#000000" cx="5" cy="12" r="2" />
+                                                    <circle id="Oval-67-Copy" fill="#000000" cx="12" cy="12" r="2" />
+                                                    <circle id="Oval-67-Copy-2" fill="#000000" cx="19" cy="12" r="2" />
+                                                </g>
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="5" class="noEntry">
+                                                        <span style="padding:50px 0 ; display:inline-block">
+                                                            <i class="flaticon-exclamation" style="font-size:20px"></i> هیچ اطلاعاتی برای نمایش وجود ندارد
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            }
+                    }
+
+                </tbody>
+            </table>
+            <!--end: Datatable -->
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    titlePage('مدیریت کامنت های فروشندگان')
+</script>
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-Menu="SellerComments"]').addClass('kt-menu__item--active')
+
+</script>

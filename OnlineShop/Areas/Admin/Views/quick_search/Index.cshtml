@@ -1,0 +1,150 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    string Query = ViewBag.query;
+    Layout = null;
+}
+@{
+    if (!string.IsNullOrEmpty(Query))
+    {
+        Boolean flg = false;
+    <div class="quick-search-result">
+
+        @{
+            var users = db.Users.Where(r => r.firstName == Query || r.lastName == Query || r.mobile.Contains(Query)).ToList();
+            if (users.Count != 0)
+            {
+                flg = true;
+
+                <!--begin::Users-->
+                <div class="font-size-sm text-primary font-weight-bolder text-uppercase mb-2">
+                    کاربران
+                </div>
+                <div class="mb-10">
+                    @{
+                        foreach (var item in users)
+                        {
+                            <div class="d-flex align-items-center flex-grow-1 mb-2">
+                                <div class="symbol symbol-30 bg-transparent flex-shrink-0">
+                                    <img src="/Template/images/user.svg" alt="">
+                                </div>
+                                <div class="d-flex flex-column ml-3 mt-2 mb-2">
+                                    <a href="#/Admin/Users/details/@item.id" class="font-weight-bold text-dark text-hover-primary">
+                                        @{
+                                            if (item.firstName != null || item.lastName != null)
+                                            {
+                                                @item.firstName@: @item.lastName
+
+                                            }
+                                            else
+                                            {
+                                                @:نام ثبت نشده است
+                                            }
+                                        }
+                                    </a>
+                                    <span class="font-size-sm font-weight-bold text-muted">
+                                        @item.mobile
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <!--end::Section-->
+            }
+
+            var products = db.Products.Where(r => r.title.Contains(Query) || r.subTitle.Contains(Query)).ToList();
+            if (products.Count != 0)
+            {
+                flg = true;
+                <!--begin::Section-->
+                <div class="font-size-sm text-primary font-weight-bolder text-uppercase mb-2">
+                    محصولات
+                </div>
+                <div class="mb-10">
+                    @{
+                        foreach (var item in products)
+                        {
+                            <div class="d-flex align-items-center flex-grow-1 mb-2">
+                                <div class="symbol symbol-30 bg-transparent flex-shrink-0">
+                                    @{
+
+                                    }
+                                    <img src="/Template/images/loading.png" data-src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.MainImage" alt="" class="lazyload">
+                                </div>
+                                <div class="d-flex flex-column ml-3 mt-2 mb-2">
+                                    <a href="#/Admin/products/edit/@item.id" class="font-weight-bold text-dark text-hover-primary">
+                                        @{
+                                            if (item.title == null)
+                                            {
+                                                @:نام محصول ثبت نشده
+                                            }
+                                            else
+                                            {
+                                                @item.title
+                                            }
+                                        }
+                                    </a>
+                                    <span class="font-size-sm font-weight-bold text-muted">
+                                        @item.subTitle
+                                    </span>
+                                </div>
+                            </div>
+
+                        }
+                    }
+                </div>
+                <!--end::Section-->
+            }
+
+            var baskets = db.Baskets.Where(r => r.id.ToString() == Query).ToList();
+            if (baskets.Count != 0)
+            {
+                flg = true;
+                <!--begin::Section-->
+                <div class="font-size-sm text-primary font-weight-bolder text-uppercase mb-2">
+                    سفارش ها
+                </div>
+                <div class="mb-10">
+                    @{
+                        foreach (var item in baskets)
+                        {
+                            <div class="d-flex align-items-center flex-grow-1 mb-2">
+                                <div class="symbol symbol-30 bg-transparent flex-shrink-0">
+                                    <img src="/template/images/buy.svg">
+                                </div>
+                                <div class="d-flex flex-column ml-3 mt-2 mb-2">
+                                    <a href="#/Orders/Details/@item.id" class="font-weight-bold text-dark text-hover-primary">
+                                        سفارش شناسه @item.id
+
+                                    </a>
+                                    @*<span class="font-size-sm font-weight-bold text-muted">
+                                        @item.subTitle
+                                    </span>*@
+                                </div>
+                            </div>
+
+                        }
+                    }
+                </div>
+                <!--end::Section-->
+            }
+        }
+        @{
+            if (!flg)
+            {
+                <!--begin::Message-->
+                <div class="">
+                    هیچ اطلاعاتی یافت نشد.
+                </div>
+                <!--end::Message-->
+            }
+        }
+    </div>
+    }
+}
+
+
+<script>
+    lazyload();
+</script>

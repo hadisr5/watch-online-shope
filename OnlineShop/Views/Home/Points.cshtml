@@ -1,0 +1,206 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+    int id = Convert.ToInt16(Session["userLogin"]);
+    var points = db.UserPoints.Where(r => r.userId == id).OrderByDescending(r => r.id).ToList();
+
+
+}
+
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Breadcrumb Tow Start-->
+    <div class="breadcrumb-tow mb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-title">
+                        <h1>لیست امتیازات دریافتی</h1>
+                    </div>
+                    <div class="breadcrumb-content breadcrumb-content-tow">
+                        <ul>
+                            <li><a href="/">خانه</a></li>
+                            <li class="active">لیست امتیازات دریافتی</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Breadcrumb Tow End-->
+    <!--Login Register Area Strat-->
+    <div class="login-register-area mb-80">
+        <div class="container">
+            <div class="row">
+                <!--Login Form Start-->
+                <div class="col-md-12 col-sm-12 col-md-offset-3 offset-3 mx-auto">
+                    <div class="customer-login-register">
+                        <div class="form-login-title">
+                            <div class="clearfix"></div>
+                            <h2>امتیاز ها</h2>
+                            <br />
+                            <table class="table table-hover frontTb">
+                                <thead>
+                                    <tr>
+                                        
+                                        <td>
+                                            محصول
+                                        </td>
+                                        <td>
+                                            امتیاز
+                                        </td>
+                                        <td>
+                                            تاریخ
+                                        </td>
+                                        <td>
+                                            شناسه سفارش
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (points.Count != 0)
+                                        {
+                                            int sum = 0;
+                                            foreach (var item in points)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @{
+                                                    var product = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+                                                    if (product!=null)
+                                                    {
+                                                        @product.title
+                                                            }
+                                                    else
+                                                    {
+                                                                @:محصول حذف شده است
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            sum +=Convert.ToInt16( item.point); 
+                                                        }
+                                                        @item.point
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            try
+                                                            {
+                                                                DateTime d = Convert.ToDateTime(item.CreationDate);
+                                                                PersianCalendar pc = new PersianCalendar();
+                                                                string p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                                @p
+                                                            }
+                                                            catch (Exception)
+                                                            {
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            var order = db.Orders.Where(r => r.id == item.orderId).FirstOrDefault();
+                                                            if (order != null)
+                                                            {
+                                                                var basket = db.Baskets.Where(r => r.id == order.basketId).FirstOrDefault();
+
+                                                                if (basket != null)
+                                                                {
+                                                                    @basket.id
+                                                                }
+                                                            }
+
+                                                        }
+                                                    </td>
+                                                    
+                                                </tr>
+
+                                                            }
+                                                            var LostPoints = db.GiftOrders.Where(r => r.userid == id).ToList();
+                                                            if (LostPoints.Count != 0)
+                                                            {
+                                                                <tr><td colspan="5" style="text-align:center">امتیازات کسر شده</td></tr>
+
+                                                                foreach (var item in LostPoints)
+                                                                {
+                                                                    <tr>
+                                                                        <td>
+                                                                            @{
+                                                                                var Gift = db.Gifts.Where(r => r.id == item.GiftId).FirstOrDefault();
+                                                                                if (Gift != null)
+                                                                                {
+                                                                                    @Gift.title
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    @:جایزه حذف شده است
+                                                            }
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @{
+                                                                                sum -= Convert.ToInt16(item.pointRecived);
+                                                                            }
+                                                                            @item.pointRecived
+                                                                        </td>
+                                                                        <td>
+                                                                            @{
+                                                                                try
+                                                                                {
+                                                                                    DateTime d = Convert.ToDateTime(item.creationDate);
+                                                                                    PersianCalendar pc = new PersianCalendar();
+                                                                                    string p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                                                    @p
+                                                                                }
+                                                                                catch (Exception)
+                                                                                {
+                                                                                }
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @{
+                                                                                @item.id
+                                                                            }
+                                                                        </td>
+
+                                                                    </tr>
+                                                                                }
+                                                                <tr>
+                                                                    <td colspan="4">جمع کل : @sum</td>
+                                                                </tr>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td colspan="4">جمع کل : @sum</td>
+                                                                                    </tr>
+                                                                                    }
+
+                                                                                }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                <!--Login Form End-->
+            </div>
+        </div>
+    </div>
+    <!--Login Register Area End-->
+
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+</div>

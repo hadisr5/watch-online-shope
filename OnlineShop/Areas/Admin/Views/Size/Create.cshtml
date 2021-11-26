@@ -1,0 +1,80 @@
+﻿@using OnlineShop.Models
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت سایز ها</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/Size/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست سایز ها</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            اطلاعات سایز جدید
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/Size/Create_Size" data-redirect="/Admin/AdminDashboard/Index#/Admin/Size/index">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label>عنوان سایز</label>
+                            <input type="text" class="form-control" placeholder="عنوان سایز" name="title">
+                            <span class="form-text text-muted">سایز شما با این عنوان نمایش داده می شود </span>
+                        </div>
+                        <div class="form-group">
+                            <label>سایز</label>
+                            <input type="text" class="form-control" placeholder="سایز" name="Size1">
+                        </div>
+
+                        <div class="form-group">
+                            <label>اولویت سایز</label>
+                            <input type="number" class="form-control" placeholder="اولویت" name="Priority" value="0">
+                            <span class="form-text text-muted">سایز ها به ترتیب اولویت نمایش داده می شوند </span>
+                        </div>
+
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ایجاد سایز</button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/Size/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ایجاد سایز')
+</script>

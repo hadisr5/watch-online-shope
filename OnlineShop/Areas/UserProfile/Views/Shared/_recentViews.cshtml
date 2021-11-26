@@ -1,0 +1,111 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    int userid = Convert.ToInt16(Session["userLogin"]);
+    var recentViews = db.UserViews.Where(r => r.userId == userid).ToList();
+    var products = new List<Product>();
+    if (recentViews.Count != 0)
+    {
+        foreach (var item in recentViews)
+        {
+            var pro = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+            if (pro != null)
+            {
+                products.Add(pro);
+            }
+        }
+    }
+    if (products.Count != 0)
+    {
+        products = products.Distinct().ToList();
+    }
+    Layout = null;
+}
+<div class="row">
+    <div class="col-12">
+        <div class="widget widget-product widget-slider card">
+            <header class="card-header">
+                <h3 class="card-title">
+                    <span>محصولات پیشنهادی برای شما</span>
+                </h3>
+                <a href="#" class="view-all">مشاهده همه</a>
+            </header>
+            <div class="swiper-container swiper-lg-slider" dir="rtl">
+                <!-- Add Arrows -->
+                <div class="swiper-button-next">
+                    <i class="now-ui-icons arrows-1_minimal-left"></i>
+                </div>
+                <div class="swiper-button-prev">
+                    <i class="now-ui-icons arrows-1_minimal-right"></i>
+                </div>
+                <div class="product-carousel swiper-wrapper">
+                    @{
+                        if (products.Count != 0)
+                        {
+                            foreach (var item in products)
+                            {
+                                string img = "/Template/images/loading.png";
+                                if (item.MainImage != null)
+                                {
+                                    img = item.MainImage;
+                                }
+                                if (item.isAvailable != true)
+                                {
+                                    string tlt = item.title;
+                                    while (tlt.Contains(" "))
+                                    {
+                                        tlt = tlt.Replace(" ", "-");
+                                    }
+                                    <div class="swiper-slide">
+                                        <a href="/home/product/@item.id/@tlt">
+                                            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@img" class="img-fluid" alt="">
+                                        </a>
+                                        <div class="price">
+                                            <div class="price-value">
+                                                <div class="price-value-wrapper">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="promotion-box-cover promotion-box-cover--out-of-stock">
+                                            <div class="promotion-box-cover-text">ناموجود</div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    string tlt = item.title;
+                                    while (tlt.Contains(" "))
+                                    {
+                                        tlt = tlt.Replace(" ", "-");
+                                    }
+                                    <div class="swiper-slide">
+                                        <a href="/home/product/@item.id/@tlt">
+                                            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@img" class="img-fluid" alt="">
+                                        </a>
+                                        <h2 class="post-title">
+                                            <a href="/home/product/@item.id/@tlt">@item.title</a>
+                                        </h2>
+                                        <div class="price">
+                                            <ins>
+                                                <span class="fixPrice">
+                                                    @item.price
+                                                    <span>
+                                                        تومان
+                                                    </span>
+                                                </span>
+                                            </ins>
+                                        </div>
+                                    </div>
+
+                                }
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

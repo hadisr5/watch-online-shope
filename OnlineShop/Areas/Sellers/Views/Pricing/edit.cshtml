@@ -1,0 +1,206 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Index";
+    Layout = null;
+    int id = ViewBag.id;
+    int sellerId = Convert.ToInt16(Session["seller"]);
+    var product = db.Products.Find(id);
+    var sellerPrice = db.SellersProducts.Where(r => r.sellerId == sellerId && r.productId == id).FirstOrDefault();
+
+
+
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title">AdminDashboard</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <a href="/sellers/sellerDashboard/Index#/sellers/Pricing/index" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
+            لیست محصولات
+        </a>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/sellers/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+</div>
+<!-- end:: Content Head -->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                        قیمت دهی به محصول @product.title
+                    </h3>
+                </div>
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            <form class="kt-form myForm" method="post" action="/sellers/pricing/edit" data-redirect="/sellers/sellerDashboard/Index#/sellers/pricing/index">
+                <input type="number" name="id" style="display:none " value="@id" />
+                @Html.AntiForgeryToken()
+                <!--begin: Datatable -->
+                <table class="table table-hover" width="100%">
+                    <tbody>
+                        <tr>
+                            <td colspan="3">
+                                <div style="width:50% ; float:right ; display:inline-block">
+                                    @{
+                                        var gl = db.ProductGalleries.Where(r => r.product_id == id).FirstOrDefault();
+                                        if (gl != null)
+                                        {
+                                            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@gl.big" style="width:100%; max-width:300px" />
+                                            <br />
+                                        }
+                                        <h1 style="font-size: 20px;color: #646c9a;">@product.title</h1>
+
+
+                                    }
+                                </div>
+                                <div style="text-align: justify;
+    line-height: 27px;
+    font-size: 13px;width:50% ; display:inline-block ; float:right">
+                                    @product.short_description
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:33%">
+                                <div class="form-group">
+                                    <label>قیمت محصول</label>
+                                    @{
+                                        if (sellerPrice != null)
+                                        {
+                                            <input type="text" class="form-control" placeholder="قیمت محصول" name="price" value="@sellerPrice.price">
+
+                                        }
+                                        else
+                                        {
+                                            <input type="number" class="form-control" placeholder="قیمت محصول" name="price">
+
+                                        }
+                                    }
+                                </div>
+                            </td>
+                            <td style="width:33%">
+                                <div class="form-group">
+                                    <label>تحویل در چند روز</label>
+                                    @{
+                                        if (sellerPrice != null)
+                                        {
+                                            <input type="number" class="form-control" placeholder="تحویل در چند روز" name="Delivery" value="@sellerPrice.Delivery">
+
+                                        }
+                                        else
+                                        {
+                                            <input type="number" class="form-control" placeholder="تحویل در چند روز" name="Delivery">
+
+                                        }
+                                    }
+                                </div>
+                            </td>
+                            <td style="width:33%">
+                                <div class="form-group">
+                                    <label>گارانتی محصول</label>
+                                    @{
+                                        if (sellerPrice != null)
+                                        {
+                                            <input type="text" class="form-control" placeholder="گارانتی محصول" name="Warranty" value="@sellerPrice.Warranty">
+
+                                        }
+                                        else
+                                        {
+                                            <input type="text" class="form-control" placeholder="گارانتی محصول" name="Warranty">
+
+                                        }
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div class="form-group">
+                                    <label class="col-3 col-form-label">موجودی محصول</label>
+                                    <div class="col-3">
+                                        <span class="kt-switch">
+                                            <label>
+                                                @{
+                                                    if (sellerPrice != null)
+                                                    {
+                                                        if (sellerPrice.isActive != null && sellerPrice.isActive == true)
+                                                        {
+                                                            <input type="checkbox" checked="checked" name="isActive" value="True" />
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="checkbox" name="isActive" value="True" />
+
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" name="isActive" value="True" />
+
+                                                    }
+
+                                                }
+                                                <span></span>
+                                            </label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div class="kt-form__actions">
+                                    <button type="submit" class="btn btn-primary">قیمت دهی به محصول</button>
+                                    <a href="/sellers/sellerDashboard/Index#/sellers/pricing/index" class="btn btn-secondary">انصراف</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!--end: Datatable -->
+            </form>
+
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+<style>
+   
+</style>
+<script>
+    titlePage('مدیریت محصولات ')
+</script>
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-Menu="Products"]').addClass('kt-menu__item--active')
+
+</script>

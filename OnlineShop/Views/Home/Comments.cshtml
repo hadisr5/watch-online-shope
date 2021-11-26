@@ -1,0 +1,635 @@
+﻿@using OnlineShop.Models;
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var product = db.Products.Find(id);
+    Layout = "~/views/shared/_Layout.cshtml";
+    //var catPro = db.CatProes.Where(r => r.product_id == id && db.Categories.Where(t => t.id == r.categoryId).FirstOrDefault() != null).FirstOrDefault();
+    //var cat = db.Categories.Where(r => r.id == catPro.categoryId).FirstOrDefault();
+    var gl = db.ProductGalleries.Where(r => r.product_id == product.id).FirstOrDefault();
+    //var mainCat = db.MainCats.Where(r => r.id == cat.MainCat).FirstOrDefault();
+    string img = product.MainImage;
+    var setting = db.Settings.FirstOrDefault();
+    
+}
+<link href="/template/css/bootstrap-slider.min.css" rel="stylesheet">
+<main class="single-product default">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav>
+                    @*<ul class="breadcrumb-list">
+                            <li>
+                                <a href="/">
+                                    <span>فروشگاه اینترنتی  @setting.name</span>
+                                </a>
+                            </li>
+                            @{
+                                if (mainCat != null)
+                                {
+                                    <li>
+                                        <a href="/home/parentCategory/@mainCat.id">
+                                            <span>@mainCat.title</span>
+                                        </a>
+                                    </li>
+                                }
+                                if (cat != null)
+                                {
+                                    <li>
+                                        <a href="/home/parentCategory/@cat.id">
+                                            <span>@cat.title</span>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                            <li>
+                                <span>@product.title</span>
+                            </li>
+                        </ul>*@
+                </nav>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <article class="product create-comment-product">
+                    <div class="row mb-5">
+                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 section-product-gallery">
+                            <div class="product-gallery default">
+                                <a href="/home/product/@product.id">
+                                    <img class="zoom-img" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@img" width="411">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-xl-8 col-lg-6 col-md-6 col-sm-12">
+                            <div class="product-title default">
+                                <h1>
+                                    @product.title
+                                    <span>
+                                        @{
+                                            if (product.subTitle != null && !string.IsNullOrEmpty(product.subTitle))
+                                            {
+                                                @product.subTitle
+                                            }
+
+                                        }
+                                    </span>
+                                </h1>
+                            </div>
+                            <div class="comments-product-attributes px-3 default">
+                                <form onsubmit="return false;" id="markForm">
+                                    @*<input type="hidden" value="asp-47821" name="code">*@
+                                    @{
+                                        var productRatting = db.ProductRatings.Where(r => r.productId == id).FirstOrDefault();
+                                        if (productRatting != null)
+                                        {
+
+
+                                            var group = db.RatingGroups.Where(r => r.id == productRatting.groupId).FirstOrDefault();
+                                            if (group != null)
+                                            {
+                                                var RattingNames = db.Ratings.Where(r => r.groupName == group.id).ToList();
+                                                if (RattingNames.Count != 0)
+                                                {
+                                                    <div class="row">
+                                                        @{
+                                                            int i = 0;
+                                                            foreach (var item in RattingNames)
+                                                            {
+                                                                <div class="col-sm-6 col-12 mb-3">
+                                                                    <div class="comments-product-attributes-title">@item.title</div>
+                                                                    <input id="ex@(i)" name="rating_@item.id"
+                                                                           type="text" data-provide="slider"
+                                                                           data-slider-ticks="[1, 2, 3, 4, 5]"
+                                                                           data-slider-ticks-labels='["خیلی بد", "بد", "معمولی","خوب","عالی"]'
+                                                                           data-slider-min="1" data-slider-max="5"
+                                                                           data-slider-step="1"
+                                                                           data-slider-value="3" data-slider-tooltip="hide" />
+                                                                </div>
+                                                                i++;
+                                                            }
+                                                        }
+                                                    </div>
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                    @*<div class="row">
+
+                                            <div class="col-sm-6 col-12 mb-3">
+                                                <div class="comments-product-attributes-title">ارزش خرید به نسبت قیمت</div>
+                                                <input id="ex8" name="rating_8"
+                                                       type="text" data-provide="slider"
+                                                       data-slider-ticks="[1, 2, 3, 4, 5]"
+                                                       data-slider-ticks-labels='["خیلی بد", "بد", "معمولی","خوب","عالی"]'
+                                                       data-slider-min="1" data-slider-max="5"
+                                                       data-slider-step="1"
+                                                       data-slider-value="3" data-slider-tooltip="hide" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6 col-12 mb-3">
+                                                <div class="comments-product-attributes-title">نوآوری</div>
+                                                <input id="ex9" name="rating_9"
+                                                       type="text" data-provide="slider"
+                                                       data-slider-ticks="[1, 2, 3, 4, 5]"
+                                                       data-slider-ticks-labels='["خیلی بد", "بد", "معمولی","خوب","عالی"]'
+                                                       data-slider-min="1" data-slider-max="5"
+                                                       data-slider-step="1"
+                                                       data-slider-value="3" data-slider-tooltip="hide" />
+                                            </div>
+                                            <div class="col-sm-6 col-12 mb-3">
+                                                <div class="comments-product-attributes-title">امکانات و قابلیت ها</div>
+                                                <input id="ex10" name="rating_10"
+                                                       type="text" data-provide="slider"
+                                                       data-slider-ticks="[1, 2, 3, 4, 5]"
+                                                       data-slider-ticks-labels='["خیلی بد", "بد", "معمولی","خوب","عالی"]'
+                                                       data-slider-min="1" data-slider-max="5"
+                                                       data-slider-step="1"
+                                                       data-slider-value="3" data-slider-tooltip="hide" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6 col-12 mb-3">
+                                                <div class="comments-product-attributes-title">سهولت استفاده</div>
+                                                <input id="ex11" name="rating_11"
+                                                       type="text" data-provide="slider"
+                                                       data-slider-ticks="[1, 2, 3, 4, 5]"
+                                                       data-slider-ticks-labels='["خیلی بد", "بد", "معمولی","خوب","عالی"]'
+                                                       data-slider-min="1" data-slider-max="5"
+                                                       data-slider-step="1"
+                                                       data-slider-value="3" data-slider-tooltip="hide" />
+                                            </div>
+                                            <div class="col-sm-6 col-12 mb-3">
+                                                <div class="comments-product-attributes-title">طراحی و ظاهر</div>
+                                                <input id="ex12" name="rating_12"
+                                                       type="text" data-provide="slider"
+                                                       data-slider-ticks="[1, 2, 3, 4, 5]"
+                                                       data-slider-ticks-labels='["خیلی بد", "بد", "معمولی","خوب","عالی"]'
+                                                       data-slider-min="1" data-slider-max="5"
+                                                       data-slider-step="1"
+                                                       data-slider-value="3" data-slider-tooltip="hide" />
+                                            </div>
+                                        </div>*@
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row comments-add-col--content">
+
+                        <div class="col-md-6 col-sm-12">
+
+                            <form class="px-5" id="commentForm" method="post" action="">
+                                <input type="hidden" value="asp-60872" name="code">
+                                <div class="row">
+                                    <div class="alert alert-danger" style="display:none" id="alert_show"></div>
+                                    <div class="alert alert-success" style="display:none" id="alert_show_success"></div>
+                                    <div class="col-12">
+                                        <div class="form-account-title">عنوان نظر شما (اجباری)</div>
+                                        <div class="form-account-row">
+                                            <input name="title" id="title" class="input-field text-right" oninvalid="this.setCustomValidity('عنوان را وارد کنید')" oninput="this.setCustomValidity('')" required type="text" placeholder="عنوان نظر خود را بنویسید">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 form-comment-title--positive mt-2">
+                                        <div class="form-row-title mb-2 pr-2">
+                                            نقاط قوت
+                                        </div>
+                                        <div id="advantages" class="form-row">
+                                            <div class="ui-input--add-point">
+                                                <input class="input-ui pr-2 ui-input-field" type="text" id="advantage-input" autocomplete="off" value="">
+                                                <button class="ui-input-point js-icon-form-add" type="button" style="display: none;"></button>
+                                            </div>
+                                            <div class="form-comment-dynamic-labels js-advantages-list"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 form-comment-title--negative mt-2">
+                                        <div class="form-row-title mb-2 pr-2">
+                                            نقاط ضعف
+                                        </div>
+                                        <div id="disadvantages" class="form-row">
+                                            <div class="ui-input--add-point">
+                                                <input class="input-ui pr-2 ui-input-field" type="text" id="disadvantage-input" autocomplete="off" value="">
+                                                <button class="ui-input-point js-icon-form-add" type="button" style="display: none;"></button>
+                                            </div>
+                                            <div class="form-comment-dynamic-labels js-disadvantages-list"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-5">
+                                        <div class="form-account-title">متن نظر شما (اجباری)</div>
+                                        <div class="form-account-row">
+                                            <textarea name="body" id="body" class="input-field text-right" oninvalid="this.setCustomValidity('متن نظر خود را وارد کنید')" oninput="this.setCustomValidity('')" required rows="5" placeholder="متن خود را بنویسید"></textarea>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-12">
+                                        <button onclick="save_comment();" class="btn btn-primary btn-no-icon">
+                                            ثبت نظر
+                                        </button>
+                                        <p>
+                                            با “ثبت نظر” موافقت خود را با <a href="#" class="btn-link-spoiler" target="_blank">
+                                                قوانین
+                                                انتشار محتوا
+                                            </a>
+                                            در @setting.WebsiteName اعلام می&zwnj;کنم.
+                                        </p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <h3>دیگران را با نوشتن نظرات خود، برای انتخاب این محصول راهنمایی کنید.</h3>
+                            <div>
+                                <p>لطفا پیش از ارسال نظر، خلاصه قوانین زیر را مطالعه کنید:</p>
+                                <p>
+                                    فارسی بنویسید و از کیبورد فارسی استفاده کنید. بهتر است از فضای خالی (Space)
+                                    بیش&zwnj;از&zwnj;حدِ معمول، شکلک یا ایموجی استفاده نکنید و از کشیدن حروف یا کلمات با
+                                    صفحه&zwnj;کلید بپرهیزید.
+                                </p>
+                                <p>
+                                    نظرات خود را براساس تجربه و استفاده&zwnj;ی عملی و با دقت به نکات فنی ارسال کنید؛
+                                    بدون
+                                    تعصب به محصول خاص، مزایا و معایب را بازگو کنید و بهتر است از ارسال نظرات
+                                    چندکلمه&zwnj;&zwnj;ای خودداری کنید.
+                                </p>
+                                <p>بهتر است در نظرات خود از تمرکز روی عناصر متغیر مثل قیمت، پرهیز کنید.</p>
+                                <p>
+                                    به کاربران و سایر اشخاص احترام بگذارید. پیام&zwnj;هایی که شامل محتوای توهین&zwnj;آمیز و
+                                    کلمات نامناسب باشند، حذف می&zwnj;شوند.
+                                </p>
+                                <p>
+                                    از ارسال لینک&zwnj;های سایت&zwnj;های دیگر و ارایه&zwnj;ی اطلاعات شخصی خودتان مثل شماره تماس،
+                                    ایمیل و آی&zwnj;دی شبکه&zwnj;های اجتماعی پرهیز کنید.
+                                </p>
+                                <p>
+                                    با توجه به ساختار بخش نظرات، از پرسیدن سوال یا درخواست راهنمایی در این بخش
+                                    خودداری کرده و سوالات خود را در بخش «پرسش و پاسخ» مطرح کنید.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+
+
+@section JS{
+    <script>
+        window.addEventListener("load", function (event) {
+            lazyload();
+        });
+    </script>
+
+    <script type="text/javascript" src="/template/js/toastr.min.js"></script>
+    <script type="text/javascript">toastr.options = { "positionClass": "toast-bottom-left" };</script>
+    <script>
+        $(document).ready(function () {
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+
+            $('html, body').animate({
+                scrollTop: $("#commentForm").offset().top
+            }, 500);
+        });
+        save_comment = function () {
+            var validationresult = true;
+            if ($("#title").val() == "" || $("#title").val() == undefined) {
+                validationresult = false;
+            }
+            if ($("#body").val() == "" || $("#body").val() == undefined) {
+                validationresult = false;
+            }
+            if (validationresult == true) {
+                $("#loading").show();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            var data = $("#commentForm").serializeArray();
+
+            $.ajax({
+                url: '/product/Comment/@id',
+                type: 'POST',
+                data: data,
+                success: function (response) {
+                    $("#loading").hide();
+                    save_mark(response);
+                }, error: function (xhr) {
+                    $('#loading').hide();
+                    if (xhr.status === 422) {
+                        jQuery.each(xhr.responseJSON.errors, function (key, value) {
+                            toastr.error(value);
+                        });
+                    }
+                    if (xhr.status !== 422) {
+                        toastr.warning(xhr.responseJSON.errors);
+                    }
+                }
+            });
+            }
+
+        };
+
+        save_mark = function (response) {
+            var mark = $('#markForm').serialize();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/product/Ratting/'+response,
+                type: 'POST',
+                data: mark,
+                success: function (res) {
+                    toastr.success('نظر شما با موفقیت ثبت شد', 'موفق');
+                    setTimeout(function () {
+                        window.location.replace('#');
+                    }, 1000);
+                }, error: function (xhr) {
+                    $('#loading').hide();
+                    toastr.warning('خطایی در حین انجام عملیات رخ داد', 'اوپس...');
+                }
+            });
+        }
+    </script>
+    <!--  Bootstrap-slider -->
+    <script src="~/Template/js/bootstrap-slider.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var inputs = $('#advantage-input, #disadvantage-input');
+            var inputChangeCallback = function () {
+                var self = $(this);
+                if (self.val().trim().length > 0) {
+                    self.siblings('.js-icon-form-add').show();
+                } else {
+                    self.siblings('.js-icon-form-add').hide();
+                }
+            };
+            inputs.each(function () {
+                inputChangeCallback.bind(this)();
+                $(this).on('change keyup', inputChangeCallback.bind(this));
+            });
+            $("#advantages").delegate(".js-icon-form-add", 'click', function (e) {
+
+                var parent = $('.js-advantages-list');
+                if (parent.find(".js-advantage-item").length >= 5) {
+                    return;
+                }
+
+                var advantageInput = $('#advantage-input');
+
+                if (advantageInput.val().trim().length > 0) {
+                    parent.append(
+                        '<div class="ui-dynamic-label ui-dynamic-label--positive js-advantage-item">\n' +
+                        advantageInput.val() +
+                        '<button type="button" class="ui-dynamic-label-remove js-icon-form-remove"></button>\n' +
+                        '<input type="hidden" name="comment[advantages][]" value="' + advantageInput
+                            .val() + '">\n' +
+                        '</div>');
+
+                    advantageInput.val('').change();
+                    advantageInput.focus();
+                }
+
+            }).delegate(".js-icon-form-remove", 'click', function (e) {
+                $(this).parent('.js-advantage-item').remove();
+            });
+
+            $("#disadvantages").delegate(".js-icon-form-add", 'click', function (e) {
+
+                var parent = $('.js-disadvantages-list');
+                if (parent.find(".js-disadvantage-item").length >= 5) {
+                    return;
+                }
+
+                var disadvantageInput = $('#disadvantage-input');
+
+                if (disadvantageInput.val().trim().length > 0) {
+                    parent.append(
+                        '<div class="ui-dynamic-label ui-dynamic-label--negative js-disadvantage-item">\n' +
+                        disadvantageInput.val() +
+                        '<button type="button" class="ui-dynamic-label-remove js-icon-form-remove"></button>\n' +
+                        '<input type="hidden" name="comment[disadvantages][]" value="' +
+                        disadvantageInput.val() + '">\n' +
+                        '</div>');
+
+                    disadvantageInput.val('').change();
+                    disadvantageInput.focus();
+                }
+
+            }).delegate(".js-icon-form-remove", 'click', function (e) {
+                $(this).parent('.js-disadvantage-item').remove();
+            });
+        });
+    </script>
+
+    <!-- For Js Create -->
+
+    <script>
+        $(document).on("click", ".remove-cart-item", function () {
+            var CartId = $(this).data('id');
+            $('#remove-button-card').data('id', CartId);
+            $('#add-button-card').data('id', CartId);
+            $('#remove-cart-item').modal('show');
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+
+            fetch_product_data();
+
+            function fetch_product_data(query = '') {
+                $.ajax({
+                    url: "#",
+                    method: 'GET',
+                    data: { query: query },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.status === 200) {
+                            if (data.categorys.length === 0 && data.keywords.length === 0) {
+                                $('#results').html('');
+                                $('#results').append('<li class="list-group-item contsearch"><a href="/search?q=' + data.query + '" class="gsearch"><i class="fa fa-search"></i> نمایش همه نتایج برای <span style="color: #5DC0CD;font-weight: bold" >' + data.query + '</span></a></li>');
+                            } else {
+                                $('#results').html('');
+                                if (data.categorys.length > 0) {
+                                    jQuery.each(data.categorys, function (key, value) {
+                                        jQuery('#results').append('<li class="list-group-item contsearch"><a href="/search/' + value.url + '?q=' + value.label + '" class="gsearch"><i class="fa fa-search"></i> همه کالا های دسته <span style="color: #5DC0CD;font-weight: bold" >' + value.label + '</span></a></li>');
+                                    });
+                                }
+
+                                if (data.keywords.length > 0 && data.categorys.length > 0) {
+                                    $('#results').append('<hr>');
+                                }
+
+                                if (data.keywords.length > 0) {
+                                    jQuery.each(data.keywords, function (key, value) {
+                                        jQuery('#results').append('<li class="list-group-item contsearch"><a href="/search?q=' + value.keyword + '" class="gsearch">' + value.keyword + '</a></li>');
+                                    });
+                                }
+
+                            }
+                        }
+                    }
+                })
+            }
+
+
+            $(document).on('keyup', '#gsearchsimple', function () {
+                var query = $('#gsearchsimple').val();
+                var obj = $('#gsearchsimple');
+                setTimeout(function () {
+                    var search = obj.val();
+                    if (search == query) {
+                        doSearch(query)
+                    }
+                }, 1000)
+
+            });
+
+            function doSearch(query) {
+                var n = query.length;
+                if (n > 2) {
+                    fetch_product_data(query);
+                } else {
+                    $('#results').empty().append('<div class="pr-2"><span>بیشترین جستجوهای اخیر:</span></div>\n' +
+                        '<ul class="search-results-trends" id="search-trends">');
+                    $('#search-trends').append('<li><a href="/search?q=لباسشویی" >لباسشویی</a></li>');
+                    $('#search-trends').append('<li><a href="/search?q=الجی" >الجی</a></li>');
+                    $('#search-trends').append('<li><a href="/search?q=جارو برقی" >جارو برقی</a></li>');
+                    $('#results').append('</ul>');
+                }
+            }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            fetch_product_data();
+
+            function fetch_product_data(query = '') {
+                $.ajax({
+                    url: "#",
+                    method: 'GET',
+                    data: { query: query },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.status === 200) {
+                            if (data.categorys.length === 0 && data.keywords.length === 0) {
+                                $('#resultsMobile').html('');
+                                $('#resultsMobile').append('<li class="list-group-item contsearch"><a href="/search?q=' + data.query + '" class="gsearch"><i class="fa fa-search"></i> نمایش همه نتایج برای <span style="color: #5DC0CD;font-weight: bold" >' + data.query + '</span></a></li>');
+                            } else {
+                                $('#resultsMobile').html('');
+                                if (data.categorys.length > 0) {
+                                    jQuery.each(data.categorys, function (key, value) {
+                                        jQuery('#resultsMobile').append('<li class="list-group-item contsearch"><a href="/search/' + value.url + '?q=' + value.label + '" class="gsearch"><i class="fa fa-search"></i> همه کالا های دسته <span style="color: #5DC0CD;font-weight: bold" >' + value.label + '</span></a></li>');
+                                    });
+                                }
+
+                                if (data.keywords.length > 0 && data.categorys.length > 0) {
+                                    $('#resultsMobile').append('<hr>');
+                                }
+
+                                if (data.keywords.length > 0) {
+                                    jQuery.each(data.keywords, function (key, value) {
+                                        jQuery('#resultsMobile').append('<li class="list-group-item contsearch"><a href="/search?q=' + value.keyword + '" class="gsearch">' + value.keyword + '</a></li>');
+                                    });
+                                }
+
+                            }
+                        }
+                    }
+                })
+            }
+
+            $(document).on('keyup', '#gsearchsimpleMobile', function () {
+                var query = $('#gsearchsimpleMobile').val();
+                var obj = $('#gsearchsimpleMobile');
+                setTimeout(function () {
+                    var search = obj.val();
+                    if (search == query) {
+                        doSearchMobile(query)
+                    }
+                }, 1000)
+
+            });
+
+            function doSearchMobile(query) {
+                var n = query.length;
+                if (n > 2) {
+                    fetch_product_data(query);
+                } else {
+                    $('#resultsMobile').html('');
+                    $('#resultsMobile').append('<div class="pr-2"><span>بیشترین جستجوهای اخیر:</span></div>\n' +
+                        '                            <ul class="search-results-trends" id="search-trends">');
+                    $('#search-trends-mobile').append('<li><a href="/search?q=لباسشویی" >لباسشویی</a></li>');
+                    $('#search-trends-mobile').append('<li><a href="/search?q=الجی" >الجی</a></li>');
+                    $('#search-trends-mobile').append('<li><a href="/search?q=جارو برقی" >جارو برقی</a></li>');
+                    $('#resultsMobile').append('</ul>');
+                }
+            }
+        });
+    </script>
+
+    <script>
+        saveSubscribe = function () {
+            $('#loading').show();
+            var email = document.getElementById('emailsubscribe').value;
+            ValidateEmail(email);
+        };
+
+        function ValidateEmail(inputText) {
+            var mailformat = /^\w+([\.-]?\w+)*@@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if (inputText.match(mailformat)) {
+                var data = $('#subscribeForm').serialize();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '/subscribes',
+                    type: "POST",
+                    data: data,
+                    success: function (response) {
+                        $('#loading').hide();
+                        toastr.success(response.message);
+                        document.getElementById("subscribeForm").reset();
+                    },
+                    error: function (xhr) {
+                        $('#loading').hide();
+                        if (xhr.status === 422) {
+                            jQuery.each(xhr.responseJSON.errors, function (key, value) {
+                                toastr.error(value);
+                            });
+                            document.getElementById("subscribeForm").reset();
+                        }
+                        if (xhr.status !== 422) {
+                            toastr.warning(xhr.responseJSON.errors);
+                        }
+                    }
+                });
+            } else {
+                $('#loading').hide();
+                toastr.warning('ایمیل را به درستی وارد نمایید.');
+                document.getElementById("subscribeForm").email.focus();
+                return false;
+            }
+        }
+    </script>
+
+}

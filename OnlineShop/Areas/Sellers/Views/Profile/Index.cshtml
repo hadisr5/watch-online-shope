@@ -1,0 +1,196 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Create";
+    Layout = null;
+    var sellerId = Convert.ToInt16(Session["seller"]);
+    var seller = db.Sellers.Where(r => r.id == sellerId).FirstOrDefault();
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title"></h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/sellers/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+
+</div>
+
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            اطلاعات کاربری
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/sellers/profile/edit" data-redirect="/sellers/sellerDashboard/Index#/sellers/profile/index">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label>نام</label>
+                            <input type="text" class="form-control" placeholder="نام" name="name" value="@seller.name">
+                        </div>
+                        <div class="form-group">
+                            <label>نام خانوادگی</label>
+                            <input type="text" class="form-control" placeholder="نام خانوادگی" name="lastname" value="@seller.lastname">
+                        </div>
+                        <div class="form-group">
+                            <label>کدملی</label>
+                            <input type="text" class="form-control" placeholder="کدملی" name="codeMeli" value="@seller.codeMeli">
+                        </div>
+                        <div class="form-group">
+                            <label>شماره شبا</label>
+                            <input type="text" class="form-control" placeholder="شماره شبا" name="sheba" value="@seller.sheba">
+                        </div>
+                        <div class="form-group">
+                            <label>شماره کارت</label>
+                            <input type="text" class="form-control" placeholder="شماره کارت" name="shomareKart" value="@seller.shomareKart">
+                        </div>
+                        <div class="form-group">
+                            <label>ایمیل</label>
+                            <input type="text" class="form-control" placeholder="ایمیل" name="email" value="@seller.email">
+                        </div>
+                        <div class="form-group">
+                            <label>شماره تماس</label>
+                            <input type="text" class="form-control" placeholder="شماره تماس" name="phone" value="@seller.phone">
+                        </div>
+
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">
+                                عکس
+                            </label>
+                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                <div class="m-dropzone dropzone" action="/sellers/products/upload" id="m-dropzone-one">
+                                    <div class="m-dropzone__msg dz-message needsclick">
+                                        <h3 class="m-dropzone__msg-title">
+                                            فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">
+                                گالری محصول
+                            </label>
+                            @{
+
+                                string img = "/Theme/img/noPhoto.png";
+                                if (seller.img != null)
+                                {
+                                    img = seller.img;
+                                }
+                            }
+                            <div id="imgValues">
+                                <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@img" alt="Alternate Text" id="nophoto" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ویرایش حساب کاربری</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-Menu="Profile"]').addClass('kt-menu__item--active')
+    var counter = 0;
+    $(document).ready(function () {
+        CKEDITOR.replace('desc');
+    })
+    titlePage('ایجاد محصول جدید');
+    $('.dropzone').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto').addClass('hidden')
+            $('#imgValues').html($('#imgValues').html() + '<div data-id="' + counter + '"><span>x</span><input type="text" value="' + response + '" name="img" /><img src="' + response + '" /></div>');
+        }
+    });
+    var BootstrapSelect = { init: function () { $(".m_selectpicker").selectpicker() } }; jQuery(document).ready(function () { BootstrapSelect.init() });
+
+
+
+</script>
+<style>
+    #imgValues > div > input {
+        display: none;
+    }
+
+    #imgValues > div > img {
+        display: inline-block;
+        width: 200px;
+        height: 200px;
+        border: 1px solid #e4e4e4;
+        border-radius: 20px;
+        margin: 25px 5px;
+        float: right;
+    }
+
+    #imgValues > div {
+        position: relative;
+        float: right;
+        display: inline-block;
+    }
+
+        #imgValues > div > span {
+            width: 20px;
+            height: 20px;
+            content: check;
+            position: absolute;
+            right: 20px;
+            top: 40px;
+            background: #ff5c5c;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            padding: 1px 7px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+    #nophoto {
+        width: 200px;
+        height: 200px;
+        border-radius: 20px;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+</style>

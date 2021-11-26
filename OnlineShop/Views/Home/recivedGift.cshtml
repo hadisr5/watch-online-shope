@@ -1,0 +1,145 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+    int id = Convert.ToInt16(Session["userLogin"]);
+    var gifts = db.GiftOrders.Where(r => r.userid == id).ToList();
+}
+
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Breadcrumb Tow Start-->
+    <div class="breadcrumb-tow mb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-title">
+                        <h1>لیست امتیازات دریافتی</h1>
+                    </div>
+                    <div class="breadcrumb-content breadcrumb-content-tow">
+                        <ul>
+                            <li><a href="/">خانه</a></li>
+                            <li class="active">لیست امتیازات دریافتی</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Breadcrumb Tow End-->
+    <!--Login Register Area Strat-->
+    <div class="login-register-area mb-80">
+        <div class="container">
+            <div class="row">
+                <!--Login Form Start-->
+                <div class="col-md-12 col-sm-12 col-md-offset-3 offset-3 mx-auto">
+                    <div class="customer-login-register">
+                        <div class="form-login-title">
+                            <div class="clearfix"></div>
+                            <h2>لیست محصولات خریداری شده</h2>
+                            <br />
+                            <table class="table table-hover frontTb">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            جایزه
+                                        </td>
+                                        <td>
+                                            امتیاز
+                                        </td>
+                                        <td>
+                                            تاریخ
+                                        </td>
+                                        <td>
+                                            وضعیت
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (gifts.Count != 0)
+                                        {
+                                            foreach (var item in gifts)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @{
+                                                            var gift = db.Gifts.Where(r => r.id == item.GiftId).FirstOrDefault();
+                                                            if (gift != null)
+                                                            {
+                                                                @gift.title
+                                                            }
+                                                            else
+                                                            {
+                                                                @:محصول حذف شده است
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @item.pointRecived
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            try
+                                                            {
+                                                                DateTime d = Convert.ToDateTime(item.creationDate);
+                                                                PersianCalendar pc = new PersianCalendar();
+                                                                string p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                                @p
+                                                            }
+                                                            catch (Exception)
+                                                            {
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            if (item.isSent == true)
+                                                            {
+                                                                @:ارسال شده
+                                                            }
+                                                            else
+                                                            {
+                                                                @:درانتظار تائید
+                                                            }
+
+                                                        }
+                                                    </td>
+
+                                                </tr>
+                                                            }
+                                                           
+                                                            }
+                                                            else
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="4">
+                                                                        هیچ امتیازی دریافت نشده است
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                <!--Login Form End-->
+            </div>
+        </div>
+    </div>
+    <!--Login Register Area End-->
+
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+</div>

@@ -1,0 +1,662 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    Layout = null;
+    int id = Convert.ToInt16(ViewBag.id);
+    var ticket = db.Tickets.Find(id);
+    var ticketsCat = db.TicketChats.Where(r => r.ticketId == id).ToList();
+    ticketsCat = ticketsCat.OrderByDescending(r => r.id).ToList();
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title">AdminDashboard</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <a href="/Admin/AdminDashboard/Index#/Admin/tickets/index" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
+            لیست تیکت ها
+        </a>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/admin/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+</div>
+<!-- end:: Content Head -->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="m-portlet">
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                        تیکت شناسه @ticket.id
+                    </h3>
+                </div>
+            </div>
+            <div id="controls" style="display:none">
+                <button id="recordButton">
+                    record
+                </button>
+                <button id="pauseButton" disabled>Pause</button>
+                <button id="stopButton" disabled>توقف</button>
+            </div>
+
+            <div id="formats" style="display:none">Format: start recording to see sample rate</div>
+            <ol id="recordingsList"></ol>
+            <br />
+            <br />
+            <div id="app-cover">
+
+            </div>
+            <div id="app-box">
+                <div id="toggle-button" class="clickable" data-url="/admin/sellerTickets/voice/@ticket.id"></div>
+                <div id="recorder-data">
+                    <div id="active-text" class="clickable rec-text"></div>
+                    <div id="stop-text" class="clickable rec-text active"></div>
+                </div>
+            </div>
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            <form class="myForm" id="form" method="post" action="/admin/sellerTickets/reply" data-redirect="/Admin/AdminDashboard/Index#/admin/sellerTickets/chat/@id">
+                <!--begin: Datatable -->
+                @Html.AntiForgeryToken()
+                <input type="text" style="display:none" value="@id" name="ticketId" />
+                <textarea class="form-control" id="msg" style="width:100% ; min-height:100px" placeholder="پاسخ خود را اینجا تایپ کنید ..." name="text"></textarea>
+                <button type="submit" class="btn btn-info" style="margin-top:10px" id="sendTicket">ارسال</button>
+                <!--end: Datatable -->
+            </form>
+            <div id="tbody" style="margin-top:30px">
+                @{
+                    if (ticketsCat.Count != 0)
+                    {
+                        foreach (var item in ticketsCat)
+                        {
+                            if (item.isSeller == null || item.isSeller == false)
+                            {
+                                if (item.voice != null)
+                                {
+                                    <div class="alert alert-info m--margin-top-10 serverMsg ticketMSG">
+                                        <span class="sender">ادمین</span>
+                                        <br />
+                                        <audio controls>
+                                            <source src="/voice/@item.voice" type="audio/wav">
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                        <br />
+                                        <span class="sentDate">
+                                            @{
+                                                try
+                                                {
+                                                    DateTime d = Convert.ToDateTime(item.creationDate);
+                                                    PersianCalendar pc = new PersianCalendar();
+                                                    string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+                                                    @p
+                                                }
+                                                catch (Exception)
+                                                {
+                                                }
+                                            }
+                                        </span>
+                                    </div>
+
+                                                }
+                                                else
+                                                {
+                                                    <div class="alert alert-info m--margin-top-10 serverMsg ticketMSG">
+                                                        <span class="sender">ادمین</span>
+                                                        <br />
+                                                        @item.text
+                                                        <br />
+                                                        <span class="sentDate">
+                                                            @{
+                                                                try
+                                                                {
+                                                                    DateTime d = Convert.ToDateTime(item.creationDate);
+                                                                    PersianCalendar pc = new PersianCalendar();
+                                                                    string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+                                                                    @p
+                                                                }
+                                                                catch (Exception)
+                                                                {
+                                                                }
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                                    }
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="alert alert-success m--margin-top-10 myMsg ticketMSG">
+                                                                        @{
+                                                                            string userName = "فروشنده حذف شده است";
+                                                                            var seller = db.Sellers.Where(r => r.id == ticket.sellerid).FirstOrDefault();
+                                                                            if (seller != null)
+                                                                            {
+                                                                                userName = seller.name + " " + seller.lastname ;
+                                                                            }
+                                                                        }
+                                                                        <span class="sender">@userName</span>
+                                                                        <br />
+                                                                        @item.text
+                                                                        <br />
+                                                                        <span class="sentDate">
+                                                                            @{
+                                                                                try
+                                                                                {
+                                                                                    DateTime d = Convert.ToDateTime(item.creationDate);
+                                                                                    PersianCalendar pc = new PersianCalendar();
+                                                                                    string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+                                                                                    @p
+                                                                                }
+                                                                                catch (Exception)
+                                                                                {
+                                                                                }
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+                                                                                        }
+                                                                                    }
+                                                                                }
+                }
+
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <!--end::Form-->
+    </div>
+</div>
+<script>
+    titlePage("پاسخ به تیکت");
+</script>
+<style>
+    .alert.ticketMSG {
+        display: inline-block !important;
+    }
+
+        .alert.ticketMSG > .sender {
+            color: #e8e8e8;
+            margin-bottom: 16px;
+            display: inline-block;
+            font-style: italic;
+            font-size: 13px;
+        }
+
+    .myMsg {
+        width: 80%;
+        float: left;
+    }
+
+    .serverMsg {
+        width: 80%;
+        float: right;
+    }
+
+    span.sentDate {
+        margin-top: 20px;
+        display: inline-block;
+        font-size: 12px;
+        color: #fbfbfb;
+    }
+</style>
+<style>
+    app-cover {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        overflow-y: auto;
+    }
+
+    #app-box {
+        position: relative;
+        width: auto;
+        margin: -70px auto 0 auto;
+        margin-top: -40px;
+    }
+
+    #toggle-button {
+        width: 50px;
+        height: 100px;
+        background-color: #fff;
+        border-radius: 100px;
+        cursor: pointer;
+    }
+
+        #toggle-button:before {
+            content: '';
+            position: absolute;
+            top: 56px;
+            bottom: 6px;
+            right: 6px;
+            width: 38px;
+            opacity: 1;
+            background-color: #bcbcbc;
+            border-radius: 100px;
+            transition: 0.3s linear all;
+        }
+
+    div#active-text {
+        color: #6b6b6b;
+    }
+
+    #toggle-button.moveup:before {
+        top: 56px;
+        bottom: 6px;
+        background-color: #ff4f4f;
+        animation: moveup-1 0.3s linear forwards, moveup-2 0.3s linear 0.6s forwards, blink 1s ease-in-out 0.9s infinite;
+    }
+
+    #toggle-button.movedown:before {
+        top: 6px;
+        bottom: 56px;
+        background-color: #bcbcbc;
+        animation: movedown-1 0.3s linear 0s forwards,movedown-2 0.3s linear 0.6s forwards;
+    }
+
+    @@keyframes moveup-1 {
+        0% {
+            top: 56px;
+        }
+
+        100% {
+            top: 6px;
+        }
+    }
+
+    @@keyframes moveup-2 {
+        0% {
+            bottom: 6px;
+        }
+
+        100% {
+            bottom: 56px;
+        }
+    }
+
+    @@keyframes movedown-1 {
+        0% {
+            bottom: 56px;
+        }
+
+        100% {
+            bottom: 6px;
+        }
+    }
+
+    @@keyframes movedown-2 {
+        0% {
+            top: 6px;
+        }
+
+        100% {
+            top: 56px;
+        }
+    }
+
+    @@keyframes blink {
+        0% {
+            opacity: 1;
+        }
+
+        75% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    ol {
+        list-style: none;
+        padding: 0;
+    }
+
+    #recorder-data {
+        position: absolute;
+        top: 50%;
+        right: 60px;
+        width: 93px;
+        margin-top: -42px;
+    }
+
+    audio {
+        display: block;
+    }
+
+    .rec-text {
+        color: #656565;
+        font-size: 30px;
+        line-height: 1;
+        transition: 0.3s ease color;
+        cursor: pointer;
+    }
+
+        .rec-text.active {
+            color: #fff;
+        }
+
+    #active-text {
+        margin-bottom: 16px;
+    }
+
+        #active-text.lspace {
+            letter-spacing: 2px;
+        }
+
+    #hint {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        color: #fff;
+        text-align: center;
+        padding: 10px;
+        background-color: #272727;
+    }
+</style>
+<script>
+    /*
+Some part of JavaScript taken from: https://gist.github.com/SleepWalker/da5636b1abcbaff48c4d#gistcomment-1910566
+*/
+
+    let touchstartX = 0;
+    let touchstartY = 0;
+    let touchendX = 0;
+    let touchendY = 0;
+
+    const gestureZone = document.getElementById('app-cover');
+    const toggleButton = document.getElementById('toggle-button');
+    const recText = document.getElementsByClassName('rec-text');
+    const activeText = document.getElementById('active-text');
+    const clickaBleElements = document.getElementsByClassName('clickable');
+    var timerInterval = null, swipeDir = -1, toggle = false, cElms = clickaBleElements.length;
+
+    gestureZone.addEventListener('touchstart', function (event) {
+        touchstartX = event.changedTouches[0].screenX;
+        touchstartY = event.changedTouches[0].screenY;
+    }, false);
+
+    gestureZone.addEventListener('touchend', function (event) {
+        touchendX = event.changedTouches[0].screenX;
+        touchendY = event.changedTouches[0].screenY;
+        handleGesture();
+    }, false);
+
+    function startRecorder() {
+        var sec = '00', min = 0;
+        activeText.classList.add('lspace');
+        activeText.innerText = min + ':' + sec;
+        timerInterval = setInterval(function () {
+            sec = parseInt(sec);
+            ++sec;
+            if (sec == 60) {
+                sec = '00';
+                ++min;
+            }
+            else {
+                if (sec < 10)
+                    sec = '0' + sec;
+            }
+
+            activeText.innerText = min + ':' + sec;
+        }, 1000);
+    }
+
+    function swipeUp() {
+        if (swipeDir == 2)
+            return;
+        else
+            swipeDir = 2;
+        $('#recordButton').click();
+        toggleButton.classList.remove('movedown');
+        toggleButton.classList.add('moveup');
+        setTimeout(function () {
+            recText[1].classList.remove('active');
+            activeText.classList.add('active');
+            startRecorder();
+        }, 600);
+    }
+
+    function swipeDown() {
+        if (swipeDir == -1 || swipeDir == 1)
+            return;
+        else
+            swipeDir = 1;
+        $('#stopButton').click();
+
+        toggleButton.classList.remove('moveup');
+        toggleButton.classList.add('movedown');
+        clearInterval(timerInterval);
+        setTimeout(function () {
+            recText[0].classList.remove('active');
+            document.getElementById('stop-text').classList.add('active');
+        }, 600);
+
+        setTimeout(function () {
+            activeText.classList.remove('lspace')
+            activeText.innerText = '';
+        }, 900);
+    }
+
+    function handleGesture() {
+        if (touchendY <= touchstartY)
+            swipeUp();
+
+        if (touchendY >= touchstartY)
+            swipeDown();
+    }
+
+    function toggleRecorder() {
+        if ((this.id == 'toggle-button') || (this.id == 'stop-text' && toggle == true) || (this.id == 'active-text' && toggle == false))
+            _toggleRecorder();
+        else
+            return;
+    }
+
+    function _toggleRecorder() {
+        if (toggle) {
+            swipeDown();
+            toggle = false;
+        }
+        else {
+            swipeUp();
+            toggle = true;
+        }
+    }
+
+    for (i = 0; i < cElms; i++) {
+        clickaBleElements[i].addEventListener("click", toggleRecorder, false);
+    }
+</script>
+<script src="/theme/js/recorder1.js"></script>
+<script>
+    $(document).ready(function () {
+        //webkitURL is deprecated but nevertheless
+        URL = window.URL || window.webkitURL;
+
+        var gumStream; 						//stream from getUserMedia()
+        var rec; 							//Recorder.js object
+        var input; 							//MediaStreamAudioSourceNode we'll be recording
+
+        // shim for AudioContext when it's not avb.
+        var AudioContext = window.AudioContext || window.webkitAudioContext;
+        var audioContext //audio context to help us record
+
+        var recordButton = document.getElementById("recordButton");
+        var stopButton = document.getElementById("stopButton");
+        var pauseButton = document.getElementById("pauseButton");
+
+        //add events to those 2 buttons
+        recordButton.addEventListener("click", startRecording);
+        stopButton.addEventListener("click", stopRecording);
+        pauseButton.addEventListener("click", pauseRecording);
+
+        function startRecording() {
+            console.log("recordButton clicked");
+
+            /*
+                Simple constraints object, for more advanced audio features see
+                https://addpipe.com/blog/audio-constraints-getusermedia/
+            */
+
+            var constraints = { audio: true, video: false }
+
+            /*
+                Disable the record button until we get a success or fail from getUserMedia()
+            */
+
+            recordButton.disabled = true;
+            stopButton.disabled = false;
+            pauseButton.disabled = false
+
+            /*
+                We're using the standard promise based getUserMedia()
+                https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+            */
+
+            navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+                console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
+
+                /*
+                    create an audio context after getUserMedia is called
+                    sampleRate might change after getUserMedia is called, like it does on macOS when recording through AirPods
+                    the sampleRate defaults to the one set in your OS for your playback device
+
+                */
+                audioContext = new AudioContext();
+
+                //update the format
+                document.getElementById("formats").innerHTML = "Format: 1 channel pcm @@ " + audioContext.sampleRate / 1000 + "kHz"
+
+                /*  assign to gumStream for later use  */
+                gumStream = stream;
+
+                /* use the stream */
+                input = audioContext.createMediaStreamSource(stream);
+
+                /*
+                    Create the Recorder object and configure to record mono sound (1 channel)
+                    Recording 2 channels  will double the file size
+                */
+                rec = new Recorder(input, { numChannels: 1 })
+
+                //start the recording process
+                rec.record()
+
+                console.log("Recording started");
+
+            }).catch(function (err) {
+                //enable the record button if getUserMedia() fails
+                recordButton.disabled = false;
+                stopButton.disabled = true;
+                pauseButton.disabled = true
+            });
+        }
+
+        function pauseRecording() {
+            console.log("pauseButton clicked rec.recording=", rec.recording);
+            if (rec.recording) {
+                //pause
+                rec.stop();
+                pauseButton.innerHTML = "Resume";
+            } else {
+                //resume
+                rec.record()
+                pauseButton.innerHTML = "Pause";
+
+            }
+        }
+
+        function stopRecording() {
+            console.log("stopButton clicked");
+
+            //disable the stop button, enable the record too allow for new recordings
+            stopButton.disabled = true;
+            recordButton.disabled = false;
+            pauseButton.disabled = true;
+
+            //reset button just in case the recording is stopped while paused
+            pauseButton.innerHTML = "Pause";
+
+            //tell the recorder to stop the recording
+            rec.stop();
+
+            //stop microphone access
+            gumStream.getAudioTracks()[0].stop();
+
+            //create the wav blob and pass it on to createDownloadLink
+            rec.exportWAV(createDownloadLink);
+        }
+
+        function createDownloadLink(blob) {
+
+            var url = URL.createObjectURL(blob);
+            var au = document.createElement('audio');
+            var li = document.createElement('li');
+            var link = document.createElement('a');
+
+            //name of .wav file to use during upload and download (without extendion)
+            var filename = new Date().toISOString();
+
+            //add controls to the <audio> element
+            au.controls = true;
+            au.src = url;
+
+            //دانلود صدا  link
+            link.href = url;
+            link.download = filename + ".wav"; //download forces the browser to donwload the file using the  filename
+            link.innerHTML = "دانلود صدا ";
+            $(link).addClass('btn btn-brand')
+            //add the new audio element to li
+            li.appendChild(au);
+
+            //add the filename to the li
+            //li.appendChild(document.createTextNode('<span>'+filename+".wav </span>"))
+
+            //add the دانلود صدا  link to li
+            li.appendChild(link);
+
+            //upload link
+            var upload = document.createElement('span');
+            var voiceUpload = $('#toggle-button').attr('data-url');
+            $(upload).addClass('btn btn-brand');
+            upload.innerHTML = 'آپلود';
+            upload.addEventListener("click", function (event) {
+                var xhr = new XMLHttpRequest();
+                xhr.onload = function (e) {
+                    if (this.readyState === 4) {
+                        console.log("Server returned: ", e.target.responseText);
+                        hashChange();
+                    }
+                };
+                var fd = new FormData();
+                fd.append("audio_data", blob, filename);
+                xhr.open("POST", voiceUpload, true);
+                xhr.send(fd);
+            })
+            li.appendChild(document.createTextNode(" "))//add a space in between
+            li.appendChild(upload)//add the upload link to li
+
+            //add the li element to the ol
+            recordingsList.appendChild(li);
+        }
+
+    })
+
+</script>

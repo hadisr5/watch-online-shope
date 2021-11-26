@@ -1,0 +1,412 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    Layout = null;
+    int id = Convert.ToInt32(ViewBag.id);
+    var address = db.UsersAdresses.Find(id);
+}
+
+<div class="modal fade" id="modal-edit-location" role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg send-info modal-dialog-centered"
+         role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">
+                    <i class="now-ui-icons location_pin"></i>
+                    ویرایش آدرس
+                </h5>
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger print-error-msg" style="display:none">
+                    <ul></ul>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-12">
+                        <form class="form-account" id="form-edit-address"
+                              onsubmit="save_address('@id');return false">
+                            @Html.AntiForgeryToken()
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-account-title">
+                                        تحویل گیرنده
+                                    </div>
+                                    <div class="form-account-row">
+                                        <input class="input-field text-right" name="Reciver"
+                                               value="@address.Reciver"
+                                               type="text"
+                                               placeholder="نام خود را وارد نمایید">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-account-title">
+                                        شماره موبایل
+                                    </div>
+                                    <div class="form-account-row">
+                                        <input class="input-field" type="text" name="ReciverPhone"
+                                               value="@address.ReciverPhone"
+                                               placeholder="09xxxxxxxxx">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-account-title">استان</div>
+                                    <div class="form-account-row">
+                                        <div class="form-element">
+                                            <select name="State" id="state"
+                                                    class="selectpicker select"
+                                                    placeholder="استان مورد نظر خود را انتخاب کنید">
+                                                <option></option>
+                                                @{
+                                                    var states = db.States.ToList();
+                                                    if (states.Count != 0)
+                                                    {
+                                                        foreach (var item in states)
+                                                        {
+                                                            if (item.id == address.State)
+                                                            {
+                                                                <option value="@item.id" selected>
+                                                                    @item.name
+                                                                </option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item.id">
+                                                                    @item.name
+                                                                </option>
+                                                            }
+
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-account-title">شهر</div>
+                                    <div class="form-account-row">
+                                        <div class="form-element">
+                                            <select class="selectpicker select" name="City" id="city"
+                                                    placeholder="شهر مورد نظر خود را انتخاب کنید" data-allow-clear="1">
+                                                <option value=""></option>
+                                                @{
+                                                    var cities = db.Cities.Where(r => r.StateId == address.State).ToList();
+                                                    if (cities.Count != 0)
+                                                    {
+                                                        foreach (var item in cities)
+                                                        {
+                                                            if (item.id == address.City)
+                                                            {
+                                                                <option value="@item.id" selected>
+                                                                    @item.name
+                                                                </option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item.id">
+                                                                    @item.name
+                                                                </option>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-12" id="parish-display"
+                                     style="display: none">
+                                    <div class="form-account-title">منطقه</div>
+                                    <div class="form-account-row">
+                                        <div class="form-element">
+                                            <select class="selectpicker select" name="parish_id" id="parish"
+                                                    placeholder="منطقه مورد نظر خود را انتخاب کنید"
+                                                    data-allow-clear="1">
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-account-title">آدرس پستی</div>
+                                    <div class="form-account-row">
+                                        <textarea class="input-field text-right"
+                                                  rows="5" name="Address"
+                                                  placeholder=" آدرس تحویل گیرنده را وارد نمایید">@address.Address</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-account-title">کد پستی</div>
+                                    <div class="form-account-row">
+                                        <input class="input-field" name="postalCode" value="@address.postalCode"
+                                               type="text"
+                                               placeholder=" کد پستی را بدون خط تیره بنویسید">
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="Location" id="lng_lat_box_Edit"
+                                       value="@address.Location" />
+
+                                <div class="col-12 pad-5">
+                                    <button onclick="save_address('@id');return false"
+                                            class="btn btn-sm btn-primary btn-submit-form">
+                                        ثبت
+                                        و
+                                        ارسال به این آدرس
+                                    </button>
+                                    <button type="button"
+                                            class="btn-link-border form-account-link float-left" data-dismiss="modal"
+                                            aria-label="Close">
+                                        انصراف
+                                        و بازگشت
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <div class="text-justify label-desc-map">
+                            برای ثبت موقعیت خود بر روی نقشه کافی است بر روی محل مورد نظر
+                            کلیک نمایید.
+                        </div>
+                        @*<div class="search-in-map mt-3">
+                            <div class="input-group">
+                                <form id="searchMapForm2">
+                                    <input type="text" placeholder="جستجو کنید"
+                                           id="inputSearchMap2">
+                                    <button type="button" onclick="clearSearch2()"
+                                            class="close-result-search2">
+                                        ×
+                                    </button>
+                                    <button type="button" onclick="searchMap2()">
+                                        موقعیت یابی
+                                    </button>
+                                    <ul class="result-search-map2">
+                                    </ul>
+                                </form>
+                            </div>
+                        </div>*@
+                        @{ 
+                            string lat = "51.41";
+                            string lon = "35.7575";
+                            if (address.Location!=null)
+                            {
+                                lat = address.Location.Substring(0, address.Location.IndexOf(",")).Replace("{\"lat\":","");
+                                lon = address.Location.Substring(address.Location.IndexOf(","), address.Location.Length - address.Location.IndexOf(",")).Replace(",\"lng\":","").Replace("}","").Replace(",",""); 
+
+                            }
+                        }
+                        <div id="mapedit" style='height: 400px;' data-lat="@lat" data-lon="@lon"></div>
+                        @*<div class="text-center">
+                            <button type="button"
+                                    class="btn btn-sm block full-width btn-danger btn-submit-form"
+                                    id="seLocation2"
+                                    style="width:100%"
+                                    onclick="setLocation2()">
+                                ثبت
+                                موقعیت
+                                <i class="fa fa-location-arrow" aria-hidden="true"></i>
+                            </button>
+                            <button type="button"
+                                    style="width:100%"
+                                    class="btn btn-sm block  full-width btn-info btn-submit-form"
+                                    id="unsetLocation2" onclick="unsetLocation2()">
+                                انتخاب
+                                مجدد
+                                <i class="fa fa-compass" aria-hidden="true"></i>
+                            </button>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // edit.blade.php
+    $(document).ready(function () {
+        try {
+            save_address = function (id) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                var data = $('#form-edit-address').serialize();
+                $.ajax({
+                    url: '/address/update/' + id,
+                    method: "post",
+                    data: data,
+                    success: function (data) {
+                        $('#modal-edit-location').modal('hide');
+                        location.reload();
+                    },
+                    error: function (xhr) {
+                        if (xhr.status === 422) {
+                            jQuery.each(xhr.responseJSON.errors, function (key, value) {
+                                toastr.error(value);
+                            });
+                        }
+                        if (xhr.status !== 422) {
+                            toastr.warning(xhr.responseJSON.errors);
+                        }
+                    }
+                });
+
+
+                function printErrorMsg(msg) {
+                    $(".print-error-msg").find("ul").html('');
+                    $(".print-error-msg").css('display', 'block');
+                    $.each(msg, function (key, value) {
+                        $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
+                    });
+                }
+            }
+
+
+            $('#state').change(function () {
+                var stateID = $(this).val();
+                if (stateID) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/address/cities/" + stateID,
+                        success: function (res) {
+                            if (res) {
+                                $("#city").empty();
+                                $("#city").append('<option value="">انتخاب کنید</option>');
+                                for (var i = 0; i < res.length; i++) {
+                                    $("#city").append('<option value="' + res[i].id + '">' + res[i].name + '</option>');
+
+                                }
+
+
+                            } else {
+                                $("#city").empty();
+                            }
+                        }
+                    });
+                } else {
+                    $("#city").empty();
+                    $("#parish").empty();
+                }
+            });
+            $('#city').on('change', function () {
+                var cityID = $(this).val();
+                if (cityID) {
+                    $.ajax({
+                        type: "GET",
+                        url: "#" + cityID,
+                        success: function (res) {
+                            if (Object.keys(res).length) {
+                                $('#parish-display').show();
+                                $("#parish").empty();
+                                $("#parish").append('<option value="">انتخاب کنید</option>');
+                                $.each(res, function (key, value) {
+                                    $("#parish").append('<option value="' + key + '">' + value + '</option>');
+                                });
+
+                            } else {
+                                $("#parish").empty();
+                                $('#parish-display').hide();
+                            }
+                        }
+                    });
+                } else {
+                    $("#parish").empty();
+                }
+
+            });
+
+
+            $(".remove-address-user").click(function (e) {
+                e.preventDefault();
+                var ID = $('#remove-button-address').data('id');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: 'https://demo.digilara.ir/addresses/destroy',
+                    method: "POST",
+                    data: { id: ID },
+                    success: function (data) {
+                        if (data.status === 200) {
+                            $('#remove-location').modal('hide');
+                            $('#divAddress' + ID).remove();
+                            location.reload();
+                        }
+                        $('#remove-location').modal('hide');
+                    }
+                });
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+            //var container = document.getElementById('map');
+            //var mapOptions = { center: [51.41, 35.7575], zoom: 17 };
+            //var map = new parsimap.Map(container, mapOptions);
+
+            //map.on('load', function () {
+              
+            //    var symbolLayerOptions = map.getDefaultSymbol();
+
+            //    var pointer = new parsimap.Pointer(map, {
+            //        type: 'center',
+            //        layerOptions: symbolLayerOptions,
+            //    });
+            //    pointer.enable();
+
+            //    //pointer.on('select', function (event) {
+            //    //    var stringLngLat =
+            //    //        'lng: ' + event.lngLat.lng + ' - lat: ' + event.lngLat.lat;
+            //    //    document.getElementById('lng_lat_box').value = stringLngLat;
+            //    //});
+            //});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        } catch
+        (e) {
+            console.log({ e })
+        }
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
+        setTimeout(function () {
+            initiate2()
+        }, 1000);
+    })
+</script>

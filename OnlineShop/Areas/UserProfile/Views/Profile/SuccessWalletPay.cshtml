@@ -1,0 +1,71 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+    int useird = Convert.ToInt16(Session["userLogin"]);
+    int id = Convert.ToInt32(ViewBag.id);
+    var walletPay = db.Wallets.Where(r => r.id == id).FirstOrDefault();
+}
+<main class="profile-user-page default">
+    <div class="container">
+        <div class="row">
+            <div class="profile-page col-xl-9 col-lg-8 col-md-12 order-2">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-12 profile-navbar">
+                            <div class="profile-navbar" style="margin:0">
+                                <h4>
+                                    کیف پول
+                                    <span class="mojoodi">
+
+                                    </span>
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="content-section default">
+                            <div class="content-section text-center" style="width:300px ; text-align:center;margin:0 auto ; float:none">
+                                @{
+                                    if (walletPay.Success != null && walletPay.Success == true)
+                                    {
+                                        <img src="~/Template/images/success.png" alt="" class="successIcon" />
+                                        <h1 class="successTitle" style="font-size: 18px; font-weight: bold;">پرداخت با موفقیت انجام شد</h1>
+                                        <div class="col-sm-12 col-md-12 successMainBox">
+                                            <p>
+                                                <span>شناسه پرداخت:</span>
+                                                <span>@walletPay.Token</span>
+                                            </p>
+                                            <br />
+                                            <a class="btn btn-default" href="/UserProfile/profile/wallet">لیست پرداخت ها</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Template/images/cross.png" alt="" class="successIcon" />
+                                        <h1 class="successTitle" style="font-size: 18px; font-weight: bold;">پرداخت ناموفق</h1>
+                                        <div class="col-sm-12 col-md-12 successMainBox">
+                                            <p>
+                                                <span>پرداخت شما ناموفق بود</span>
+                                                <span>درصورت کسر وجه تا 72 ساعت به حساب شما برگشت داده میشود</span>
+                                            </p>
+                                            <br />
+                                            <a class="btn btn-default" href="/UserProfile/profile/wallet">لیست پرداخت ها</a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @RenderPage("~/Areas/UserProfile/Views/Shared/_SideBar.cshtml")
+        </div>
+
+        @RenderPage("~/Areas/UserProfile/Views/Shared/_recentViews.cshtml")
+
+
+
+
+    </div>
+</main>
+

@@ -1,0 +1,371 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var ci = db.Footers.Find(id);
+    Layout = null;
+}
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            ویرایش اطلاعات فوتر
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/Footer/Edit_Post" data-redirect="/Admin/AdminDashboard/Index#/Admin/Footer/edit">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <input type="number" value="@ci.id" name="id" style="display:none" />
+                        <div class="kt-portlet__body">
+                            <!--begin::Accordion-->
+                            <div class="accordion accordion-light  accordion-toggle-arrow" id="accordionExample2">
+                                <div class="card">
+                                    <div class="card-header" id="headingOne2">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne2" aria-expanded="true" aria-controls="collapseOne2">
+                                            ستون اول
+                                        </div>
+                                    </div>
+                                    <div id="collapseOne2" class="collapse" aria-labelledby="headingOne2" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label>عنوان ستون 1</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1Header" value="@ci.f1Header">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 1 سطر 1</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r1" value="@ci.f1r1">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 1 سطر 1</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r1_Link" value="@ci.f1r1_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 1 سطر 2</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r2" value="@ci.f1r2">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 1 سطر 2</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r2_Link" value="@ci.f1r2_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 1 سطر 3</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r3" value="@ci.f1r3">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 1 سطر 3</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r3_Link" value="@ci.f1r3_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 1 سطر 4</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r4" value="@ci.f1r4">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 1 سطر 4</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r4_Link" value="@ci.f1r4_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 1 سطر 5</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r5" value="@ci.f1r5">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 1 سطر 5</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r5_Link" value="@ci.f1r5_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 1 سطر 6</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r6" value="@ci.f1r6">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 1 سطر 6</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r6_Link" value="@ci.f1r6_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 1 سطر 7</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r7" value="@ci.f1r7">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 1 سطر 7</label>
+                                                <input type="text" class="form-control" placeholder="" name="f1r7_Link" value="@ci.f1r7_Link">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingTwo2">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo2" aria-expanded="false" aria-controls="collapseTwo2">
+                                            ستون دوم
+                                        </div>
+                                    </div>
+                                    <div id="collapseTwo2" class="collapse" aria-labelledby="headingTwo2" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label>عنوان ستون 2</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2Header" value="@ci.f2Header">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 2 سطر 1</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r1" value="@ci.f2r1">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 2 سطر 1</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r1_Link" value="@ci.f2r1_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 2 سطر 2</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r2" value="@ci.f2r2">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 2 سطر 2</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r2_Link" value="@ci.f2r2_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 2 سطر 3</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r3" value="@ci.f2r3">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 2 سطر 3</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r3_Link" value="@ci.f2r3_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 2 سطر 4</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r4" value="@ci.f2r4">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 2 سطر 4</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r4_Link" value="@ci.f2r4_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 2 سطر 5</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r5" value="@ci.f2r5">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 2 سطر 5</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r5_Link" value="@ci.f2r5_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 2 سطر 6</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r6" value="@ci.f2r6">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 2 سطر 6</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r6_Link" value="@ci.f2r6_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 2 سطر 7</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r7" value="@ci.f2r7">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 2 سطر 7</label>
+                                                <input type="text" class="form-control" placeholder="" name="f2r7_Link" value="@ci.f2r7_Link">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingThree2">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree2" aria-expanded="false" aria-controls="collapseThree2">
+                                            ستون سوم
+                                        </div>
+                                    </div>
+                                    <div id="collapseThree2" class="collapse" aria-labelledby="headingThree2" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label>عنوان ستون 3</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3Header" value="@ci.f3Header">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 3 سطر 1</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r1" value="@ci.f3r1">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 3 سطر 1</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r1_Link" value="@ci.f3r1_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 3 سطر 2</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r2" value="@ci.f3r2">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 3 سطر 2</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r2_Link" value="@ci.f3r2_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 3 سطر 3</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r3" value="@ci.f3r3">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 3 سطر 3</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r3_Link" value="@ci.f3r3_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 3 سطر 4</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r4" value="@ci.f3r4">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 3 سطر 4</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r4_Link" value="@ci.f3r4_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 3 سطر 5</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r5" value="@ci.f3r5">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 3 سطر 5</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r5_Link" value="@ci.f3r5_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 3 سطر 6</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r6" value="@ci.f3r6">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 3 سطر 6</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r6_Link" value="@ci.f3r6_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 3 سطر 7</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r7" value="@ci.f3r7">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 3 سطر 7</label>
+                                                <input type="text" class="form-control" placeholder="" name="f3r7_Link" value="@ci.f3r7_Link">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingThree4">
+                                        <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree5" aria-expanded="false" aria-controls="collapseThree2">
+                                            ستون چهارم
+                                        </div>
+                                    </div>
+                                    <div id="collapseThree5" class="collapse" aria-labelledby="headingThree4" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label>عنوان ستون 4</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4Header" value="@ci.f4Header">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 4 سطر 1</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r1" value="@ci.f4r1">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 4 سطر 1</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r1_Link" value="@ci.f4r1_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 4 سطر 2</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r2" value="@ci.f4r2">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 4 سطر 2</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r2_Link" value="@ci.f4r2_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 4 سطر 3</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r3" value="@ci.f4r3">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 4 سطر 3</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r3_Link" value="@ci.f4r3_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 4 سطر 4</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r4" value="@ci.f4r4">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 4 سطر 4</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r4_Link" value="@ci.f4r4_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 4 سطر 5</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r5" value="@ci.f4r5">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 4 سطر 5</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r5_Link" value="@ci.f4r5_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 4 سطر 6</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r6" value="@ci.f4r6">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 4 سطر 6</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r6_Link" value="@ci.f4r6_Link">
+                                            </div>
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>عنوان ستون 4 سطر 7</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r7" value="@ci.f4r7">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>لینک ستون 4 سطر 7</label>
+                                                <input type="text" class="form-control" placeholder="" name="f4r7_Link" value="@ci.f4r7_Link">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="kt-portlet__foot">
+                                        <div class="kt-form__actions">
+                                            <button type="submit" class="btn btn-primary">ویرایش فوتر</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Accordion-->
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ویرایش اطلاعات کاربری')
+</script>
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-menu="Footer"]').addClass('kt-menu__item--active')
+
+</script>

@@ -1,0 +1,178 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    int userid = Convert.ToInt16(Session["userLogin"]);
+    var user = db.Users.Where(r => r.id == userid).FirstOrDefault();
+    Layout = "/views/shared/_Layout.cshtml";
+    var baskets = db.Baskets.Where(r => r.userId == userid).ToList();
+}
+
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Breadcrumb Tow Start-->
+    <div class="breadcrumb-tow mb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-title">
+                        <h1>لیست سفارش ها</h1>
+                    </div>
+                    <div class="breadcrumb-content breadcrumb-content-tow">
+                        <ul>
+                            <li><a href="/">خانه</a></li>
+                            <li class="active">سفارش ها</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Breadcrumb Tow End-->
+    <!--Login Register Area Strat-->
+    <div class="login-register-area mb-80">
+        <div class="container">
+            <div class="row">
+                <!--Login Form Start-->
+                <div class="col-md-12 col-sm-12 col-md-offset-3 offset-3 mx-auto">
+                    <div class="customer-login-register">
+                        <div class="form-login-title">
+                            <h2>سفارش ها</h2>
+                            <br />
+                            <table class="table table-hover frontTb">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            شناسه
+                                        </td>
+                                        <td>
+                                            قیمت
+                                        </td>
+                                        <td>
+                                            کد تخفیف
+                                        </td>
+                                        <td>
+                                            هزینه ارسال
+                                        </td>
+                                        <td>
+                                            مبلغ پرداخت شده
+                                        </td>
+                                        <td>
+                                            وضعیت
+                                        </td>
+                                        <td>
+                                            تاریخ
+                                        </td>
+
+                                        <td>
+                                            جزئیات
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (baskets.Count != 0)
+                                        {
+                                            baskets = baskets.OrderByDescending(r => r.id).ToList();
+
+                                            foreach (var item in baskets)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.id
+                                                    </td>
+                                                    <td>
+                                                        @item.Price تومان
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            if (item.DiscountAmount == null)
+                                                            {
+                                                                @:ندارد
+                                                            }
+                                                            else
+                                                            {
+                                                                @item.DiscountAmount @:تومان
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            if (item.shippingPrice == null)
+                                                            {
+                                                                @:ندارد
+                                                            }
+                                                            else
+                                                            {
+                                                                @item.shippingPrice @:تومان
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @(item.Price+Convert.ToInt64( item.shippingPrice)-Convert.ToInt64( item.DiscountAmount)) تومان
+                                                    </td>
+                                                    <td>
+                                                        @item.status
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            try
+                                                            {
+                                                                DateTime d = Convert.ToDateTime(item.creationDate);
+                                                                PersianCalendar pc = new PersianCalendar();
+                                                                string p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                                @p
+                                                            }
+                                                            catch (Exception)
+                                                            {
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <a href="/home/ordersDetail/@item.id">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                                    <rect x="0" y="0" width="24" height="24" />
+                                                                    <circle fill="#fb8a06" cx="12" cy="5" r="2" />
+                                                                    <circle fill="#fb8a06" cx="12" cy="12" r="2" />
+                                                                    <circle fill="#fb8a06" cx="12" cy="19" r="2" />
+                                                                </g>
+                                                            </svg>
+
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="5">
+                                                                        هیچ سفارشی برای نمایش وجود ندارد
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                <!--Login Form End-->
+            </div>
+        </div>
+    </div>
+    <!--Login Register Area End-->
+
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+</div>

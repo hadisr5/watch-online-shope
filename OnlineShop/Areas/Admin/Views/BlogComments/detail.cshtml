@@ -1,0 +1,169 @@
+﻿@using OnlineShop.Models
+@using System.Globalization;
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var comments = db.Blog_Comments.Find(id);
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت کامنت های وبلاگ</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/BlogComments/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست کامنت های وبلاگ</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        @{
+            string p = "";
+            try
+            {
+                DateTime d = Convert.ToDateTime(comments.creationDate);
+                PersianCalendar pc = new PersianCalendar();
+                p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+            }
+            catch (Exception)
+            {
+            }
+        }
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+
+                <br />
+                @if (comments.Submitted == null || comments.Submitted == false)
+                {
+            <form class="myForm" action="/admin/BlogComments/submitComment/@comments.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/BlogComments/index">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-success">تائید کامنت</button>
+                @*<a href="/Admin/AdminDashboard/Index#/Admin/BlogComments/remove/@comments.id" class="btn btn-danger">حدف کامنت</a>*@
+            </form>
+                }
+                else
+                {
+            <form class="myForm" action="/admin/BlogComments/deactiveComment/@comments.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/BlogComments/index">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-warning">غیرفعال کردن کامنت</button>
+                @*<a href="/Admin/AdminDashboard/Index#/Admin/BlogComments/remove/@comments.id" class="btn btn-danger">حدف کامنت</a>*@
+            </form>
+                }
+
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            <div class="m-portlet__head-title">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td colspan="2">
+                                اطلاعات کامنت
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                شناسه کامنت
+                            </td>
+                            <td>
+                                #@comments.id
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                تاریخ ارسال کامنت
+                            </td>
+                            <td>
+                                @p
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ارسال کننده
+                            </td>
+                            <td>
+                                @if (comments.userid == null)
+                                {
+                                  <span>ناشناس</span>
+                                }
+                                else
+                                {
+                                    var user = db.Users.Where(r => r.id == comments.userid).FirstOrDefault();
+                                    if (user != null)
+                                    {
+                                        <span><a href="#/admin/users/detail/@user.id">@user.firstName @user.lastName</a></span>
+                                    }
+                                    else
+                                    {
+                                        <span> کاربر حدف شده است</span>
+                                    }
+
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>مطلب</td>
+                            <td>
+                                @{
+                                    var product = db.Blog_post.Where(r => r.id == comments.PostId).FirstOrDefault();
+                                    if (product != null)
+                                    {
+                                        <span>محصول : <a href="/admin/blogPost/edit/@comments.PostId" target="_blank" class="btn btn-info">@product.title</a></span>
+
+                                    }
+                                    else
+                                    {
+                                        <span>مطلب : مطلب حذف شده است</span>
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:justify">
+                                @comments.comment
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+<script>
+    titlePage('#@comments.id')
+</script>
+<style>
+    .kt-svg-icon.fillStar g [fill] {
+        fill: #f59b3e;
+    }
+    .kt-svg-icon.emptyStar g [fill] {
+        fill: #9b9b9b;
+    }
+</style>

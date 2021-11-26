@@ -1,0 +1,255 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    Layout = null;
+    int id = Convert.ToInt32(ViewBag.id);
+    var template = db.Templates.Find(id);
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت template ها</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/template/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست template ها</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            ویرایش template شناسه #@(id)
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" id="mainform" method="post" action="/admin/template/edit" data-redirect="/Admin/AdminDashboard/Index#/Admin/template/index">
+                    <input type="hidden" name="id" value="@id" />
+                    @Html.AntiForgeryToken()
+                    <div class="kt-portlet__body">
+                        <div class="example">
+                            <div class="example-preview">
+                                <ul class="nav nav-tabs nav-tabs-line">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#kt_tab_pane_1">اطلاعات پایه</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_2">دکمه</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_3">لینک ها</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_4">لیبل ها</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_5">منو بالا صفحه</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_6">سبد خرید</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_7">اسلایدر تخفیف</a>
+                                    </li>
+                                    @*
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_3">گالری تصاویر</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_4">دسته بندی ها</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_5">فروش</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_6">نمایش</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_7">عکس اصلی</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_8">ویژگی های امتیاز دهی</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_9">سایز</a>
+                        </li>*@
+                                </ul>
+                                <div class="tab-content mt-5" id="myTabContent">
+
+
+                                    <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel" aria-labelledby="kt_tab_pane_1">
+                                        <div class="form-group">
+                                            <label>عنوان template</label>
+                                            <input type="text" value="@template.Title" class="form-control" placeholder="عنوان template" name="Title" id="title">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>فعال</label>
+                                            <span class="switch">
+                                                <label>
+                                                    @{
+                                                        if (template.Active == null || template.Active != true)
+                                                        {
+                                                            <input type="checkbox" value="true" name="Active" /><span></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="checkbox" value="true" checked="checked" name="Active" /><span></span>
+                                                        }
+                                                    }
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel" aria-labelledby="kt_tab_pane_2">
+
+                                        <div class="form-group">
+                                            <label>رنگ پس زمینه دکمه ها</label>
+                                            <br />
+                                            <input class="form-control" name="BtnColor" type="color" value="@template.BtnColor" id="example-color-input" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>رنگ hover دکمه ها</label>
+                                            <br />
+                                            <input class="form-control" name="btnHoverColor" type="color" value="@template.btnHoverColor" id="example-color-input" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>رنگ text های دکمه ها</label>
+                                            <br />
+                                            <input class="form-control" name="BtnTextColor" type="color" value="@template.BtnTextColor" id="example-color-input" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>دکمه های اسلایدر</label>
+                                            <br />
+                                            <input class="form-control" name="sliderButtonColor" type="color" value="@template.sliderButtonColor" id="example-color-input" />
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="kt_tab_pane_3" role="tabpanel" aria-labelledby="kt_tab_pane_3">
+
+                                        <div class="form-group">
+                                            <label>پس زمینه لینک در صفحه ورود</label>
+                                            <br />
+                                            <input class="form-control" name="backgroundShadowInLogin" type="color" value="@template.backgroundShadowInLogin" id="example-color-input" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>رنگ لینک ها</label>
+                                            <br />
+                                            <input class="form-control" name="LinkColor" type="color" value="@template.LinkColor" id="example-color-input" />
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_4" role="tabpanel" aria-labelledby="kt_tab_pane_4">
+
+                                        <div class="form-group">
+                                            <label>لیبل ورود بالا صفحه</label>
+                                            <br />
+                                            <input class="form-control" name="topLabelColor" type="color" value="@template.topLabelColor" id="example-color-input" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>لیبل در قسمت محصولات</label>
+                                            <br />
+                                            <input class="form-control" name="labelInProduct" type="color" value="@template.labelInProduct" id="example-color-input" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>لیبل زیر دسته بندی</label>
+                                            <br />
+                                            <input class="form-control" name="labelUnderCategory" type="color" value="@template.labelUnderCategory" id="example-color-input" />
+                                        </div>
+
+
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_5" role="tabpanel" aria-labelledby="kt_tab_pane_5">
+
+                                        <div class="form-group">
+                                            <label>لیبل زیر منو فعال</label>
+                                            <br />
+                                            <input class="form-control" name="labelUnderMenu" type="color" value="@template.labelUnderMenu" id="example-color-input" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>رنگ منو فعال </label>
+                                            <br />
+                                            <input class="form-control" name="ActiveMenuColor" type="color" value="@template.ActiveMenuColor" id="example-color-input" />
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_6" role="tabpanel" aria-labelledby="kt_tab_pane_6">
+
+                                        <div class="form-group">
+                                            <label>رنگ سبد خرید در موبایل</label>
+                                            <br />
+                                            <input class="form-control" name="BasketColorOnMobileMode" type="color" value="@template.BasketColorOnMobileMode" id="example-color-input" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>لیبل سبد خرید</label>
+                                            <br />
+                                            <input class="form-control" name="BasketLabelColor" type="color" value="@template.BasketLabelColor" id="example-color-input" />
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_7" role="tabpanel" aria-labelledby="kt_tab_pane_7">
+                                        <div class="form-group">
+                                            <label>رنگ تخفیف های اسلایدر صفحه اول</label>
+                                            <br />
+                                            <input class="form-control" name="AmazingSliderColor" type="color" value="@template.AmazingSliderColor" id="example-color-input" />
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button class="btn btn-primary">ویرایش template</button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/template/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ویرایش template')
+    $(document).on("submit", "#mainform", function (e) {
+        var result = CheckValidation();
+        return result;
+    })
+
+    function CheckValidation() {
+        if ($("#title").val() == "" || $("#title").val() == undefined) {
+            toastr.error("عنوان قالب را وارد کنید.")
+            return false;
+        }
+
+        return true;
+    }
+</script>

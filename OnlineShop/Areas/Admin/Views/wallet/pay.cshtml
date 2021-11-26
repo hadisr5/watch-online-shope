@@ -1,0 +1,82 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Create";
+    Layout = null;
+    int id = Convert.ToInt16(ViewBag.id);
+    var user = db.Users.Where(r => r.id == id).FirstOrDefault();
+
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title">AdminDashboard</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <a href="/Admin/AdminDashboard/Index#/Admin/users/details/@user.id" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
+            بازگشت به اطلاعات کاربری @user.firstName @user.lastName 
+        </a>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/admin/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+
+</div>
+
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            شارژ کیف پول
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/wallet/pay" data-redirect="/Admin/AdminDashboard/Index#/Admin/wallet/PayList/@user.id">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <input type="number" style="display:none" value="@user.id" name="id" />
+                        <div class="form-group">
+                            <label>مقدار (تومان)</label>
+                            <input type="number" class="form-control" placeholder="مقدار (تومان)" name="amount">
+                        </div>
+                        <div class="form-group">
+                            <label>توضیحات</label>
+                            <textarea name="desc" style="min-height:230px" class="form-control" placeholder="توضیحات"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">شارژ کیف پول</button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/users/details/@user.id" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+ 
+    titlePage('شارژ کیف پول @user.firstName @user.lastName');
+</script>

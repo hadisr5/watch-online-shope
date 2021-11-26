@@ -1,0 +1,724 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Index";
+    ViewBag.header = false;
+    int userid = Convert.ToInt32(Session["userLogin"]);
+    var basket = new Basket();
+    var setting = db.Settings.FirstOrDefault();
+    if (Session["basket"] != null)
+    {
+        basket = (Session["basket"]) as Basket;
+    }
+    else
+    {
+        Session["basket"] = basket;
+    }
+    Int64 sum = 0;
+    var user = db.Users.Where(r => r.id == userid).FirstOrDefault();
+    var prime = false;
+    if (user.Special == true)
+    {
+        prime = true;
+    }
+
+
+
+    var shipping = Session["Shipping"] as Shipping;
+
+    var orders = Session["orders"] as List<Order>;
+    if (orders == null || orders.Count == 0)
+    {
+        Response.Redirect("/");
+        return;
+    }
+    foreach (var item in orders)
+    {
+        var pro = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+        var off = db.Discounts.Where(r => r.percentage != null && r.status == 1 && r.productId == item.productId && r.expire > DateTime.Now).FirstOrDefault();
+        if (true)
+        {
+            var sellerPro = db.SellersProducts.Where(r => r.sellerId == item.SellerId && r.productId == item.productId).FirstOrDefault();
+            if (sellerPro == null || item.SellerId == null)
+            {
+                if (off != null)
+                {
+                    if (prime)
+                    {
+                        sum += Convert.ToInt64((pro.priceForSpecialUsers - ((pro.priceForSpecialUsers * off.percentage) / 100)) * item.quantity);
+
+                    }
+                    else
+                    {
+                        sum += Convert.ToInt64((pro.price - (pro.price * off.percentage) / 100) * item.quantity);
+
+                    }
+                }
+                else
+                {
+                    if (prime)
+                    {
+                        sum += Convert.ToInt64((pro.priceForSpecialUsers) * item.quantity);
+
+                    }
+                    else
+                    {
+                        sum += Convert.ToInt64((pro.price) * item.quantity);
+
+                    }
+                }
+            }
+            else
+            {
+                sum += Convert.ToInt64((sellerPro.price) * item.quantity);
+            }
+        }
+    }
+    Int64 totalPrice = 0;
+    if (shipping != null && shipping.ShippingPrice != null)
+    {
+        totalPrice = sum + Convert.ToInt64(shipping.ShippingPrice);
+    }
+    else
+    {
+        totalPrice = sum;
+    }
+}
+
+<link href="/template/css/select2.min.css" rel="stylesheet" />
+<link href="/template/css/select2-bootstrap4.min.css" rel="stylesheet" />
+
+<div class="wrapper default shopping-page">
+
+
+    <!-- header-shopping -->
+    <header class="header-shopping default">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center pt-2">
+                    <div class="header-shopping-logo default">
+                        <a href="/">
+                            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@setting.WebsiteLogo" style="width:100px" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <ul class="checkout-steps">
+                        <li>
+                            <a href="/shipping" class="active">
+                                <span>اطلاعات ارسال</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a class="active">
+                                <span>پرداخت</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <span>اتمام خرید و ارسال</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header-shopping -->
+    <!-- main-shopping -->
+    <main class="cart-page default">
+        <div class="container">
+            <div class="row">
+                <div class="cart-page-content col-xl-9 col-lg-8 col-md-12 order-1">
+                    <div class="cart-page-title">
+                        <h1>انتخاب شیوه پرداخت</h1>
+                    </div>
+                    <section class="page-content default">
+                        <form id="paymentForm" onsubmit="return false;">
+                            <ul class="checkout-paymethod">
+
+                                <li>
+                                    <div class="checkout-paymethod-item checkout-paymethod-item-cc has-options">
+                                        <div class="checkout-paymethod-item checkout-paymethod-item--cc has-options  is-select-mode">
+                                            <h4 class="checkout-paymethod-title">
+                                                پرداخت اینترنتی ( آنلاین با تمامی کارت‌های بانکی )
+                                                <span>سرعت بیشتر در ارسال و پردازش سفارش</span>
+                                            </h4>
+                                        </div>
+                                        <div class="checkout-paymethod-options">
+                                            <div class="checkout-paymethod-providers">
+                                                <div class="checkout-paymethod-providers-arrow"></div>
+                                                <label class="">
+                                                    <span class="ui-radio">
+                                                        <input type="radio" name="Gateway" value="Zarinpal"
+                                                               checked>
+                                                        <span class="ui-radio-check"></span>
+                                                    </span>
+                                                    <span class="checkout-paymethod-source-title">درگاه زرین پال</span>
+                                                    <img src="~/Template/images/zarinpal.png"
+                                                         alt="">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkout-paymethod-item checkout-paymethod-item-cc has-options">
+                                        <div class="checkout-paymethod-item checkout-paymethod-item--cc has-options is-selected is-select-mode">
+                                            <h4 class="checkout-paymethod-title">
+                                                پرداخت درب منزل
+                                                <span>با انتخاب این مورد مبلغ سفارش پس از دریافت کالا درب منزل پرداخت می شود </span>
+                                            </h4>
+                                        </div>
+                                        <div class="checkout-paymethod-options">
+                                            <div class="checkout-paymethod-providers">
+                                                <div class="checkout-paymethod-providers-arrow"></div>
+                                                <label class="">
+                                                    <span class="ui-radio">
+                                                        <input type="radio" name="Gateway" value="DoorToDoor" />
+                                                        <span class="ui-radio-check"></span>
+                                                    </span>
+                                                    <span class="checkout-paymethod-source-title">پرداخت درب منزل</span>
+                                                    <img src="/template/images/delivery.png"
+                                                         alt="">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+
+                                    @{ 
+                                        var wallet = db.Wallets.Where(r => r.payByAdmin == true || r.Success == true).ToList();
+                                        long Total = 0;
+                                        if (wallet.Count!=0)
+                                        {
+                                            foreach (var item in wallet)
+                                            {
+                                                Total +=Convert.ToInt64( item.amount); 
+                                            }
+                                        }
+                                    }
+
+                                    <div class="checkout-paymethod-item checkout-paymethod-item-cc has-options">
+                                        <div class="checkout-paymethod-item checkout-paymethod-item--cc has-options is-selected is-select-mode">
+                                            <h4 class="checkout-paymethod-title">
+                                                پرداخت با کیف پول
+                                                @{
+                                                    bool walletFlag = false;
+                                                    if (WalletMoney() == 0 || WalletMoney() < totalPrice)
+                                                    {
+                                                        <span>
+                                                            موجودی کیف پول برای پرداخت کافی نیست ، برای شارژ کیف پول <a href="/userProfile/profile/wallet">اینجا</a> کلیک کنید .
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        walletFlag = true; 
+                                                        <span>
+                                                            سرعت بیشتر در ارسال و پردازش سفارش
+                                                        </span>
+                                                    }
+                                                }
+
+                                            </h4>
+                                        </div>
+                                        <div class="checkout-paymethod-options">
+                                            <div class="checkout-paymethod-providers">
+                                                <div class="checkout-paymethod-providers-arrow"></div>
+                                                <label class="">
+                                                    <span class="ui-radio">
+                                                        @{
+                                                            if (walletFlag)
+                                                            {
+                                                                <input type="radio" name="Gateway" value="WalletPay" />
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <input type="radio" disabled="disabled" name="Gateway" value="" />
+                                                            }
+                                                        }
+                                                        <span class="ui-radio-check"></span>
+                                                    </span>
+                                                    <span class="checkout-paymethod-source-title">پرداخت با کیف پول</span>
+                                                    <img src="/template/images/purse.svg"
+                                                         alt="">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </form>
+
+                        @*<div class="headline">
+                                <span>خلاصه سفارش</span>
+                            </div>
+                            <div class="checkout-order-summary">
+
+                                <div class="accordion checkout-order-summary-item" id="accordionExample">
+                                    <div class="card">
+                                        <div class="card-header checkout-order-summary-header" id="headingOne">
+                                            <h2 class="mb-0">
+                                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                        data-target="#collapse1" aria-expanded="false"
+                                                        aria-controls="collapse1">
+                                                    <div class="checkout-order-summary-row">
+                                                        <div class="checkout-order-summary-col checkout-order-summary-col-post-time">
+                                                            1 از 2
+                                                            <span class="fs-sm">(2 کالا)</span>
+                                                        </div>
+                                                        <div class="checkout-order-summary-col checkout-order-summary-col-how-to-send">
+                                                            <span class="dl-none-sm">نحوه ارسال</span>
+                                                            <span class="dl-none-sm">
+                                                                پست پیشتاز
+                                                            </span>
+                                                        </div>
+                                                        <div class="checkout-order-summary-col checkout-order-summary-col-how-to-send">
+                                                            <span>ارسال از</span>
+                                                            <span class="fs-sm">
+                                                                2 روز کاری
+
+                                                            </span>
+                                                        </div>
+                                                        <div class="checkout-order-summary-col checkout-order-summary-col-shipping-cost">
+                                                            <span>هزینه ارسال</span>
+                                                            <span class="fs-sm">
+                                                                رایگان
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <i class="now-ui-icons arrows-1_minimal-down icon-down"></i>
+                                                </button>
+                                            </h2>
+                                        </div>
+
+                                        <div id="collapse1" class="collapse" aria-labelledby="headingOne"
+                                             data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <div class="box">
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                                            <div class="product-box-container">
+                                                                <div class="product-box product-box-compact">
+                                                                    <a class="product-box-img">
+                                                                        <img src="https://demo.digilara.ir/assets/product/thumbnail/1577190970.jpg">
+                                                                    </a>
+                                                                    <div class="product-box-title">
+                                                                        گوشی موبایل آنر مدل 8X JSN-L22 دو سیم کارت ظرفیت 128 گیگابایت
+
+                                                                    </div>
+                                                                    <p style="text-align: center; color: silver">
+                                                                        1
+                                                                        عدد
+                                                                        |
+                                                                        رنگ سفید
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                                            <div class="product-box-container">
+                                                                <div class="product-box product-box-compact">
+                                                                    <a class="product-box-img">
+                                                                        <img src="https://demo.digilara.ir/assets/product/thumbnail/1565879392.jpg">
+                                                                    </a>
+                                                                    <div class="product-box-title">
+                                                                        لپ تاپ 15 اینچی ایسوس مدل VivoBook K540UB - Z
+
+                                                                    </div>
+                                                                    <p style="text-align: center; color: silver">
+                                                                        1
+                                                                        عدد
+                                                                        |
+                                                                        رنگ مشکی
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+                        <div class="row">
+                            <div class="col-sm-12 col-12">
+                                <div class="checkout-price-options">
+                                    <div class="checkout-price-options-form">
+                                        <section class="checkout-price-options-container">
+                                            <div class="checkout-price-options-header">
+                                                <span>استفاده از کد تخفیف @setting.WebsiteName</span>
+                                            </div>
+                                            <div class="checkout-price-options-content">
+                                                <p class="checkout-price-options-description">
+                                                    با ثبت کد تخفیف، مبلغ کد تخفیف از “مبلغ قابل پرداخت” کسر می‌شود.
+                                                </p>
+                                                <div class="checkout-price-options-row">
+                                                    <div class="checkout-price-options-form-field">
+                                                        <label class="ui-input">
+                                                            <input class="ui-input-field" name="code"
+                                                                   type="text"
+                                                                   placeholder="کد تخفیف را اینجا بنویسید"
+                                                                   id="discount-code">
+                                                        </label>
+                                                    </div>
+                                                    <div class="checkout-price-options-form-button">
+                                                        <a id="button-discount" onclick="discount();"
+                                                           data-type="create" class="btn-primary">ثبت کد تخفیف</a>
+                                                    </div>
+
+                                                </div>
+                                                <div class="message-light discountResponse" style="display: none"></div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="col-sm-6 col-12">
+                                    <div class="checkout-price-options">
+                                        <div class="checkout-price-options-form">
+                                            <section class="checkout-price-options-container">
+                                                <div class="checkout-price-options-header">
+                                                    <span>استفاده از کارت هدیه @setting.WebsiteName</span>
+                                                </div>
+                                                <form action="" onsubmit="return false" id="giftcardForm">
+                                                    <div class="checkout-price-options-content">
+                                                        <p class="checkout-price-options-description">
+                                                            با ثبت کد کارت هدیه، مبلغ کارت هدیه  از “مبلغ قابل پرداخت” کسر می‌شود.
+                                                        </p>
+                                                        <div class="checkout-price-options-row">
+                                                            <div class="checkout-price-options-form-field">
+                                                                <label class="ui-input">
+                                                                    <input class="ui-input-field" value="" name="code"
+                                                                           type="text" id="giftcard-code"
+                                                                           placeholder="کد کارت هدیه را اینجا بنویسید ">
+                                                                </label>
+                                                            </div>
+                                                            <div class="checkout-price-options-form-button">
+                                                                <button onclick="checkGiftcard();" type="button"
+                                                                        class="btn-primary">
+                                                                    ثبت کارت هدیه
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="message-light giftcardResponse"
+                                                             style="display: none"></div>
+                                                    </div>
+                                                </form>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+                    </section>
+                </div>
+
+                <aside class="cart-page-aside col-xl-3 col-lg-4 col-md-6 center-section order-2"
+                       id="box-price-total">
+                    <div class="checkout-aside">
+                        <div class="checkout-summary">
+                            <div class="checkout-summary-main">
+                                <ul class="checkout-summary-summary">
+                                    <li>
+                                        <span>مبلغ کل (@orders.Count کالا)</span><span class="fixPrice">@sum تومان</span>
+                                    </li>
+                                    <li>
+                                        <span>هزینه ارسال</span>
+                                        <span>
+                                            @{
+                                                //var shipping = Session["Shipping"] as Shipping;
+                                                if (shipping == null || shipping.ShippingPrice == 0 || shipping.ShippingPrice == null)
+                                                {
+                                                    @:رایگان
+                                                }
+                                                else
+                                                {
+                                                    <span class="fixPrice">@shipping.ShippingPrice تومان</span>
+                                                }
+
+                                            }
+
+
+
+                                        </span>
+                                    </li>
+                                </ul>
+                                <div class="checkout-summary-devider">
+                                    <div></div>
+                                </div>
+                                <div class="checkout-summary-content">
+                                    <div class="checkout-summary-price-title">مبلغ قابل پرداخت:</div>
+                                    <div class="checkout-summary-price-value">
+                                        @{ 
+                                
+
+                                        }
+                                        <span class="checkout-summary-price-value-amount fixPrice">@(totalPrice)</span>تومان
+                                    </div>
+                                    @*<ul class="checkout-summary-summary px-0">
+                                            <li>
+                                                <span>موجودی کیف پول</span><span>0 تومان</span>
+                                            </li>
+                                        </ul>*@
+                                    <a onclick="payment();" class="selenium-next-step-shipping">
+                                        <div class="parent-btn">
+                                            <button class="dk-btn dk-btn-info" style="font-size: 12pt">
+                                                پرداخت و ثبت سفارش
+                                                <i class="now-ui-icons shopping_basket"></i>
+                                            </button>
+                                        </div>
+                                    </a>
+                                    <div>
+                                        <span>
+                                            کالاهای موجود در سبد شما ثبت و رزرو نشده‌اند، برای ثبت سفارش مراحل بعدی
+                                            را تکمیل
+                                            کنید.
+                                        </span>
+                                        <span class="wiki wiki-holder">
+                                            <span class="wiki-sign"></span>
+                                            <div class="wiki-container is-right">
+                                                <div class="wiki-arrow"></div>
+                                                <p class="wiki-text">
+                                                    محصولات موجود در سبد خرید شما تنها در صورت ثبت و پرداخت سفارش
+                                                    برای شما رزرو
+                                                    می‌شوند. در
+                                                    صورت عدم ثبت سفارش، تاپ کالا هیچگونه مسئولیتی در قبال تغییر
+                                                    قیمت یا موجودی
+                                                    این کالاها
+                                                    ندارد.
+                                                </p>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout-feature-aside">
+                            <ul>
+                                <li class="checkout-feature-aside-item checkout-feature-aside-item-guarantee">
+                                    هفت روز
+                                    ضمانت تعویض
+                                </li>
+                                <li class="checkout-feature-aside-item checkout-feature-aside-item-cash">
+                                    پرداخت در محل با
+                                    کارت بانکی
+                                </li>
+                                <li class="checkout-feature-aside-item checkout-feature-aside-item-express">
+                                    تحویل اکسپرس
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <script>
+                        function wallet() {
+                            if (document.getElementById('switcher-1').checked) {
+                                walletPay('yes');
+                            } else {
+                                walletPay('no');
+                            }
+                        }
+                    </script>
+                </aside>
+            </div>
+        </div>
+    </main>
+    <!-- main-shopping -->
+
+    <div id="loading" style="display: none">
+        <div class="snippet">
+            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@setting.WebsiteLogo" alt="">
+            <div class="stage">
+                <div class="dot-floating"></div>
+            </div>
+        </div>
+        <div class="overlay-loading"></div>
+    </div>
+</div>
+@section JS{
+
+    <script type="text/javascript">toastr.options = { "positionClass": "toast-bottom-left" };</script>
+    <script>
+        discount = function () {
+            var el = this;
+            $('#loading').show();
+            var code = document.getElementById('discount-code').value;
+            var type = $('#button-discount').data('type'); //getter
+
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/pay/discount',
+                type: 'POST',
+                data: { code: code, type: type },
+                success: function (response) {
+                    if (response.status === 400) {
+                        $('.discountResponse').html('');
+                        jQuery('.discountResponse').show();
+                        jQuery('.discountResponse').append('<p>' + response.error + '</p>');
+                        updatePayment();
+                        $('#loading').hide();
+                        $('#button-discount').data("type", "delete"); //setter
+                        document.getElementById("button-discount").innerHTML = "حذف کد تخفیف";
+                        document.getElementById("button-discount").classList.remove('btn-primary');
+                        document.getElementById("button-discount").classList.add('btn-outline-danger-cs');
+                        $('.discountResponse').html('');
+                        jQuery('.discountResponse').show();
+                        jQuery('.discountResponse').append('<p>کد تخفیف با موفقیت اعمال گردید.</p>');
+                        jQuery('.discountResponse').append('<p>مبلغ <span  class="fixPrice">' + response.amount + '</span> تومان از سفارش شما به وسیله کد تخفیف پرداخت خواهد شد.</p>');
+                        jQuery('.discountResponse').append('<p>مبلغ سفارش شما از <span  class="fixPrice">' + response.total + '</span> تومان به <span  class="fixPrice">' + response.pay + '</span> تومان کاهش یافت.</p>');
+                        updatePayment();
+                        fixprice();
+
+                    } else if (response.status === 201) {
+                        $('#button-discount').data("type", "create"); //setter
+                        $('.discountResponse').html('');
+                        document.getElementById("button-discount").innerHTML = "ثبت کد تخفیف";
+                        document.getElementById("button-discount").classList.remove('btn-outline-danger-cs');
+                        document.getElementById("button-discount").classList.add('btn-primary');
+                        jQuery('.discountResponse').show();
+                        jQuery('.discountResponse').append('<p>' + response.error + '</p>');
+                        updatePayment();
+                    } else {
+                        $('#loading').hide();
+                    }
+                },
+            });
+        };
+
+        function updatePayment() {
+            $.ajax({
+                url: '/pay/updatePayment',
+
+            }).done(function (response) {
+                $('#box-price-total').html(response);
+                $('#loading').hide();
+            }).fail(function () {
+                swal.fire({
+                    title: 'اوپس...',
+                    type: 'warning',
+                    text: 'خطایی رخ داد'
+                });
+            });
+        }
+    </script>
+
+    @*<script>
+            checkGiftcard = function () {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                $('#loading').show();
+                var code = document.getElementById('giftcard-code').value;
+                $.ajax({
+                    url: 'https://demo.digilara.ir/giftcard',
+                    type: 'POST',
+                    data: { code: code },
+                    success: function (response) {
+                        updatePayment();
+                        $('#loading').hide();
+                        $('.giftcardResponse').html('');
+                        jQuery('.giftcardResponse').show();
+                        jQuery('.giftcardResponse').append('<p>کیف پول شما به مبلغ ' + response.amount + ' تومان شارژ گردید.</p>');
+                        jQuery('.giftcardResponse').append('<p>موجودی فعلی کیف پول شما' + response.balance + ' تومان می باشد.</p>');
+                        document.getElementById("giftcardForm").reset();
+                    },
+                    error: function (xhr) {
+                        $('#loading').hide();
+                        document.getElementById("giftcardForm").reset();
+                        if (xhr.status === 422) {
+                            jQuery.each(xhr.responseJSON.errors, function (key, value) {
+                                toastr.error(value);
+                            });
+                        } else if (xhr.status === 429) {
+                            $('.giftcardResponse').html('');
+                            jQuery('.giftcardResponse').show();
+                            jQuery('.giftcardResponse').append('<p>دفعات سعی شما از حد مجاز بیشتر است. برای چند دقیقه اجازه ارسال درخواست ندارید.</p>');
+                        } else {
+                            $('.giftcardResponse').html('');
+                            jQuery('.giftcardResponse').show();
+                            jQuery('.giftcardResponse').append('<p>' + xhr.responseJSON.error + '</p>');
+                        }
+                    }
+                });
+            }
+        </script>*@
+
+
+    <script>
+        payment = function () {
+
+            $('#loading').show();
+            var Form = $('#paymentForm').serialize();
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/pay/PaymentSubmition',
+                type: 'POST',
+                data: Form,
+                success: function (response) {
+                    window.location.replace(response.url);
+                    $('#loading').hide();
+                },
+                error: function (xhr) {
+                    $("#loading").hide();
+                    if (xhr.status === 422) {
+                        jQuery.each(xhr.responseJSON.errors, function (key, value) {
+                            toastr.error(value);
+                        });
+                    }
+                    if (xhr.status !== 422) {
+                        toastr.warning(xhr.responseJSON.errors);
+                    }
+                }
+            });
+        }
+    </script>
+
+
+}
+
+<style>
+    .checkout-paymethod-item.is-select-mode, h4.checkout-paymethod-title, .checkout-paymethod {
+        background-color: white;
+    }
+</style>
+
+
+@functions{
+    OnlineShopEntities db = new OnlineShopEntities();
+    private Int64 WalletMoney()
+    {
+        long Total = 0;
+        int userid = Convert.ToInt32(Session["userLogin"]);
+        var allPays = db.Wallets.Where(r => r.userId == userid && (r.payByAdmin == true || r.Success == true)).ToList();
+        try
+        {
+            Total += Convert.ToInt64(allPays.Sum(r => r.amount));
+        }
+        catch (Exception er)
+        {
+        }
+        var allMinus = db.WalletPays.Where(r => r.userid == userid).ToList();
+        if (allMinus.Count != 0)
+        {
+            Total -= Convert.ToInt64(allMinus.Sum(r => r.amount));
+        }
+        return Total;
+    }
+}

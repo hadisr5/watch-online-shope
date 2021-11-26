@@ -1,0 +1,84 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت گروه های امتیاز دهی</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/rattingGroups/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست گروه های امتیاز دهی</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            اطلاعات گروه امتیاز دهی جدید
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" id="mainform" method="post" action="/admin/rattingGroups/Create" data-redirect="/Admin/AdminDashboard/Index#/Admin/rattingGroups/index">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label>عنوان گروه امتیاز دهی</label>
+                            <input type="text" class="form-control" placeholder="عنوان گروه امتیاز دهی" name="title" id="title">
+                        </div>
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button  class="btn btn-primary">ایجاد گروه امتیاز دهی</button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/rattingGroups/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+              
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ایجاد گروه امتیاز دهی جدید')
+
+     $(document).on("submit", "#mainform", function (e) {
+        var result = CheckValidation();
+        return result;
+    })
+
+    function CheckValidation() {
+        if ($("#title").val() == "" || $("#title").val() == undefined) {
+            toastr.error("عنوان گروه امتیاز دهی را وارد کنید.")
+            return false;
+        }
+       
+        return true;
+    }
+</script>

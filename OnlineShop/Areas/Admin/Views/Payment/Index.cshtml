@@ -1,0 +1,92 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Index";
+    int id = Convert.ToInt32(ViewBag.id);
+    var settings = db.Settings.Find(id);
+    Layout = null; 
+
+}
+
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            ویرایش تنظیمات درگاه بانکی
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/Payment/update" data-redirect="/Admin/AdminDashboard/Index#/Admin/Payment/index">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <div class="example">
+                            <div class="example-preview">
+                                <ul class="nav nav-tabs nav-tabs-line">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#kt_tab_pane_1">درگاه زرین پال</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content mt-5" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel" aria-labelledby="kt_tab_pane_1">
+                                        <div class="form-group">
+                                            <img src="~/newScripts/zarinpal.png" alt="Alternate Text" class="zarinpalLogo" />
+                                            <label>کد مرجنت درگاه</label>
+                                            <input type="text" value="@settings.zarinpal_merchant_id" class="form-control" placeholder="کد مرجنت درگاه" name="zarinpal_merchant_id">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="number" value="@settings.id" style="display:none" name="id" />
+
+
+                        </div>
+                        <div class="kt-portlet__foot">
+                            <div class="kt-form__actions">
+                                <button type="submit" class="btn btn-primary">ویرایش تنظیمات</button>
+                            </div>
+                        </div>
+</form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ویرایش تنظیمات')
+</script>
+
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-menu="Settings"]').addClass('kt-menu__item--active')
+    $('.dropzone1').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto').attr('src', response)
+            $('#logoInputContainer').html('<input type="text" value="' + response + '" name="WebsiteLogo" />');
+
+        }
+    });
+    $('.dropzone2').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto2').attr('src', response)
+            $('#logoInputContainer2').html('<input type="text" value="' + response + '" name="WebsiteLogo2" />');
+
+        }
+    });
+</script>
+

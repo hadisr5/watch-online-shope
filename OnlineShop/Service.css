@@ -1,0 +1,327 @@
+@font-face {
+    font-family: myFirstFont;
+    src: url("/template/Fonts/IRANSansWeb(FaNum).woff") format("woff2");
+}
+img.zarinpalLogo {
+    width: 120px;
+    /* margin: 0 auto; */
+    display: block;
+    margin-bottom: 20px;
+    /* position: absolute; */
+    /* top: -46px; */
+}
+html, body, form, fieldset, table, tr, td, img {
+    font-family: myFirstFont;
+}
+
+input, button, select, textarea, optgroup, option {
+    font-family: myFirstFont;
+}
+i.fas.fa-star.active {
+    color: #79a7ff;
+}
+/* rest of your styles; like: */
+body {
+    font-family: myFirstFont;
+}
+
+a.navi-link {
+    cursor: pointer;
+}
+
+.dataTables_filter {
+    display: none
+}
+
+.datatable-table > thead > tr > th {
+    color: #B5B5C3 !important;
+    font-size: 16px !important;
+}
+
+.dataTables_length {
+    display: none
+}
+
+.fileName {
+    text-align: center;
+    margin-top: 5px;
+    margin-top: 5px;
+    overflow-wrap: break-word;
+    font-size: 12px;
+    direction: ltr !important;
+}
+
+.FileIcon {
+    width: 100%;
+}
+
+.fileName {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+
+.fileContainer {
+    width: 70px;
+    float: right;
+    display: inline-block;
+    margin: 20px;
+    overflow: hidden;
+    direction: ltr;
+    padding: 5px;
+    border-radius: 3px;
+    height: 105px;
+    position: relative;
+}
+
+    .fileContainer.active {
+        background: #a4c9ff;
+    }
+
+img.FileIcon.lazyload {
+    width: 60px;
+    height: 60px;
+}
+
+.hidden {
+    display: none !important
+}
+
+.dropzone {
+    border: 2px dashed #ebedf2;
+}
+
+    .dropzone.dz-clickable .dz-message, .dropzone.dz-clickable .dz-message * {
+        cursor: pointer;
+    }
+
+    .dropzone .dz-preview .dz-details .dz-filename:not(:hover) span {
+        border: 1px solid transparent;
+        margin-top: 30px;
+        display: inline-block;
+    }
+
+.fileContainer > input[type=checkbox] {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+
+.fileContainer:hover > input[type=checkbox] {
+    display: inline-block;
+}
+
+.fileContainer.active > input[type=checkbox] {
+    display: block;
+}
+
+label.checkbox > span {
+    margin-left: 10px;
+}
+
+.renameInput {
+    border: none;
+    background: transparent;
+    color: #565659;
+    width: 100%;
+    text-align: center;
+}
+
+p.API {
+    margin: 0 1px;
+    display: inline-block;
+}
+
+div#Content {
+    background: white
+}
+
+.kt-hidden {
+    display: none;
+}
+
+.m-portlet {
+    padding: 30px;
+}
+
+td.noEntry {
+    text-align: center;
+}
+
+div#Content {
+    padding: 0;
+}
+
+body {
+    background: white
+}
+/*div#Content {
+    padding: 30px;
+}*/
+.kt-portlet {
+    padding: 30px;
+}
+
+.example .example-preview {
+    border: 0;
+    padding: 0;
+}
+
+img.minus {
+    width: 20px;
+    margin: 5px;
+    display: inline-block;
+}
+
+img.profileImg {
+    width: 45px;
+    height: 40px;
+}
+
+a.btn.btn-default {
+    margin-left: 4px;
+}
+
+@media (min-width: 992px) {
+    /*    .header-fixed.subheader-fixed.subheader-enabled .wrapper {
+        padding-top: 66px;
+    }*/
+}
+
+div#kt_content {
+    overflow-x: hidden;
+}
+
+.moreProp {
+    margin-top: 10px;
+}
+
+.mloader.loader--style3 {
+    margin-top: 25vh !important;
+}
+
+.imgValues > div > input {
+    display: none;
+}
+
+.imgValues > div > img {
+    display: inline-block;
+    width: 110px;
+    height: 110px;
+    border: 1px solid #e4e4e4;
+    border-radius: 20px;
+    margin: 25px 5px;
+    float: right;
+}
+
+.imgValues > div {
+    position: relative;
+    float: right;
+    display: inline-block;
+}
+
+    .imgValues > div > span {
+        width: 20px;
+        height: 20px;
+        content: check;
+        position: absolute;
+        right: 20px;
+        top: 40px;
+        background: #ff5c5c;
+        border-radius: 30px;
+        color: white;
+        font-weight: bold;
+        padding: 1px 7px;
+        font-size: 13px;
+        cursor: pointer;
+    }
+
+#nophoto {
+    width: 110px;
+    height: 110px;
+    border-radius: 20px;
+}
+
+.nophoto {
+    width: 110px;
+    height: 110px;
+    border-radius: 20px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+img#nophoto2 {
+    width: 100px;
+}
+.noPadding{
+    padding: 0 !important ; 
+}
+.d-flex.align-items-center.justify-content-between.mb-5 {
+    cursor: pointer;
+}
+
+.d-flex.align-items-center.justify-content-between.mb-5 {
+    cursor: pointer;
+    /* background: red; */
+    padding: 10px;
+    border-radius: 10px;
+}
+.d-flex.align-items-center.justify-content-between.mb-5.active {
+    background: #fff4e3;
+}
+img#nophoto2 {
+    width: 200px !important;
+    height: auto !important;
+}
+#imgValues > div > img {
+    width: 200px !important;
+    height: auto !important;
+}
+
+.row-service-container {
+    border: 1px solid #e6e8f0;
+    margin-top: 30px;
+    padding: 15px;
+    padding-top: 5px;
+}
+.row-service-container h1 {
+    font-size: 15px;
+    position: relative;
+    /* margin-top: -10px; */
+    top: -15px;
+    background: white;
+    display: inline-block;
+    width: 124px;
+    text-align: center;
+}
+.add-service-btn {
+    color: white;
+    width: 122px;
+    height: 35px;
+    background: #3699ff;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    cursor:pointer;
+}
+.row-service{
+    margin-top:10px;
+}
+.remove-service {
+    font-size: 10px;
+    background: red;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+}

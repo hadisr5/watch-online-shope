@@ -1,0 +1,232 @@
+﻿@using OnlineShop.Models
+@using System.Globalization;
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var order = db.Orders.Find(id);
+    var basket = db.Baskets.Where(r => r.id == order.basketId).FirstOrDefault();
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title">AdminDashboard</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <a href="/sellers/sellerDashboard/Index#/sellers/orders/index" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
+            لیست سفارش ها
+        </a>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/admin/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+</div>
+<!-- end:: Content Head -->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        @{
+            string p = "";
+            try
+            {
+                DateTime d = Convert.ToDateTime(order.creationDate);
+                PersianCalendar pc = new PersianCalendar();
+                p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+            }
+            catch (Exception)
+            {
+            }
+        }
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <h1>
+                    سفارش شناسه @order.id
+                </h1>
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            <div class="m-portlet__head-title">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td colspan="2">
+                                اطلاعات سفارش
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                شناسه
+                            </td>
+                            <td>
+                                @order.id
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                تاریخ سفارش
+                            </td>
+                            <td>
+                                @p
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                بازه زمانی ارسال
+                            </td>
+                            <td>
+                                @basket.periodString
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                وضعیت سفارش
+                            </td>
+                            <td>
+                                @basket.status
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                قیمت
+                            </td>
+                            <td>
+                                @order.SellerPrice تومان
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>روش پرداخت</td>
+                            <td>
+                                @basket.payMethod
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+                <h4>جزئیات سفارش</h4>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td>
+                                محصول
+                            </td>
+                            <td>
+                                تعداد
+                            </td>
+                            <td>
+                                قیمت واحد
+                            </td>
+                            <td>
+                                قیمت کل
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @{
+                                    var product = db.Products.Where(r => r.id == order.productId).FirstOrDefault();
+                                    @product.title 
+                                }
+                            </td>
+                            <td>
+                                @order.quantity
+                            </td>
+                            <td>
+                                @order.SellerPrice تومان
+                            </td>
+                            <td>
+                                @(order.SellerPrice* order.quantity) تومان
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4>وضعیت پرداخت</h4>
+                <form class="kt-form myForm" method="post" action="/sellers/orders/supply/@basket.id" data-redirect="/sellers/sellerDashboard/Index#/sellers/orders/details/@basket.id">
+                    <input type="number" value="@order.id" name="id" style="display:none" />
+                    @Html.AntiForgeryToken()
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    وضعیت تامین
+                                </td>
+                                <td>
+                                    <select class="form-control" name="status" id="statusOrder">
+                                        @{
+                                            if (order.supply == true)
+                                            {
+                                                <option value="True" selected>
+                                                    تامین شده
+                                                </option>
+                                                <option value="False">
+                                                    در انتظار تامین
+                                                </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="True">
+                                                    تامین شده
+                                                </option>
+                                                <option value="False" selected>
+                                                    در انتظار تامین
+                                                </option>
+                                            }
+
+                                        }
+
+                                    </select>
+                                    <input type="submit" style="display:none" id="submit" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+
+
+            </div>
+
+
+
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    titlePage('سفارش #@basket.id')
+</script>
+<style>
+    .kt-svg-icon.fillStar g [fill] {
+        fill: #f59b3e;
+    }
+
+    .kt-svg-icon.emptyStar g [fill] {
+        fill: #9b9b9b;
+    }
+
+    a.btn.btn-bold.btn-sm.btn-font-sm.btn-label-brand {
+        margin-bottom: 4px;
+    }
+</style>
+

@@ -1,0 +1,718 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+    var ordersList = Session["orders"] as List<Order>;
+    ViewBag.shippingClass = "shopping-page";
+    int dely = 0;
+    foreach (var order in ordersList)
+    {
+        var product = db.Products.Where(r => r.id == order.productId).FirstOrDefault();
+
+        if (order.SellerId == null)
+        {
+            if (product != null && product.deliveryDate != null)
+            {
+                if (dely < product.deliveryDate)
+                {
+                    dely = Convert.ToInt16(product.deliveryDate);
+                }
+            }
+
+        }
+        else
+        {
+            var sellerProduct = db.SellersProducts.Where(r => r.sellerId == order.SellerId && r.productId == product.id).FirstOrDefault();
+
+            if (sellerProduct.Delivery != null && sellerProduct.Delivery > dely)
+            {
+                dely = Convert.ToInt16(sellerProduct.Delivery);
+            }
+        }
+    }
+}
+<!-- CSS Files -->
+@section CSS{
+    <link rel="stylesheet" type="text/css" href="/template/css/toastr.min.css">
+    <link href="/template/css/select2.min.css" rel="stylesheet" />
+    <link href="/template/css/select2-bootstrap4.min.css" rel="stylesheet" />
+    <link href="/template/map/cedarmaps.css" rel='stylesheet' />
+    <style>
+        .shopping-page .cart-page .container {
+            max-width: 1440px;
+        }
+
+        .content-box {
+            margin-right: 20px;
+        }
+
+        .shopping-page .checkout-time-table {
+            padding: 10px;
+        }
+    </style>
+}
+<div class="continer">
+    <div class="">
+        <!-- main-shopping -->
+        <main class="cart-page default">
+            <div class="container">
+                <div class="mt-4 mb-4">
+                    <div class="send-info send-info-page default">
+                        <div class="send-info-content default">
+                            <div class="modal-header">
+                                <h5 class="send-info-title">
+                                    <i class="now-ui-icons location_pin"></i>
+                                    افزودن آدرس جدید
+                                </h5>
+                            </div>
+                            <div class="send-info-body default">
+                                <div class="alert alert-danger print-error-msg-new" style="display:none">
+                                    <ul></ul>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12">
+                                        <form class="form-account" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <div class="row">
+
+                                                @{
+                                                    if (true)
+                                                    {
+                                                        var delyDate = DateTime.Now.AddDays(dely);
+                                                        string persianDayOfWeek1 = "";
+                                                        int persianDayInMonth1 = 0;
+                                                        string monthName1 = "";
+
+
+                                                        try
+                                                        {
+                                                            DateTime d = Convert.ToDateTime(delyDate);
+                                                            PersianCalendar pc = new PersianCalendar();
+                                                            var dayOfWeek = pc.GetDayOfWeek(d);
+                                                            persianDayInMonth1 = pc.GetDayOfMonth(d);
+                                                            int mnthName1 = pc.GetMonth(d);
+                                                            switch (mnthName1)
+                                                            {
+                                                                case 1:
+                                                                    {
+                                                                        monthName1 = "فروردین";
+                                                                        break;
+                                                                    }
+                                                                case 2:
+                                                                    {
+                                                                        monthName1 = "اردیبهشت";
+                                                                        break;
+                                                                    }
+                                                                case 3:
+                                                                    {
+                                                                        monthName1 = "خرداد";
+                                                                        break;
+                                                                    }
+                                                                case 4:
+                                                                    {
+                                                                        monthName1 = "تیر";
+                                                                        break;
+                                                                    }
+                                                                case 5:
+                                                                    {
+                                                                        monthName1 = "مرداد";
+                                                                        break;
+                                                                    }
+                                                                case 6:
+                                                                    {
+                                                                        monthName1 = "شهریور";
+                                                                        break;
+                                                                    }
+                                                                case 7:
+                                                                    {
+                                                                        monthName1 = "مهر";
+                                                                        break;
+                                                                    }
+                                                                case 8:
+                                                                    {
+                                                                        monthName1 = "آبان";
+                                                                        break;
+                                                                    }
+                                                                case 9:
+                                                                    {
+                                                                        monthName1 = "آذر";
+                                                                        break;
+                                                                    }
+                                                                case 10:
+                                                                    {
+                                                                        monthName1 = "دی";
+                                                                        break;
+                                                                    }
+                                                                case 11:
+                                                                    {
+                                                                        monthName1 = "بهمن";
+                                                                        break;
+                                                                    }
+                                                                case 12:
+                                                                    {
+                                                                        monthName1 = "اسفند";
+                                                                        break;
+                                                                    }
+                                                                default:
+                                                                    break;
+                                                            }
+
+                                                            switch (dayOfWeek.ToString())
+                                                            {
+                                                                case "Saturday":
+                                                                    {
+                                                                        persianDayOfWeek1 = "شنبه";
+                                                                        break;
+                                                                    }
+                                                                case "Sunday":
+                                                                    {
+                                                                        persianDayOfWeek1 = "یکشنبه";
+                                                                        break;
+                                                                    }
+                                                                case "Monday":
+                                                                    {
+                                                                        persianDayOfWeek1 = "دوشنبه";
+                                                                        break;
+                                                                    }
+                                                                case "Tuesday":
+                                                                    {
+                                                                        persianDayOfWeek1 = "سه‌شنبه";
+                                                                        break;
+                                                                    }
+                                                                case "Wednesday":
+                                                                    {
+                                                                        persianDayOfWeek1 = "چهارشنبه";
+                                                                        break;
+                                                                    }
+                                                                case "Thursday":
+                                                                    {
+                                                                        persianDayOfWeek1 = "پنجشنبه";
+                                                                        break;
+                                                                    }
+                                                                case "Friday":
+                                                                    {
+                                                                        persianDayOfWeek1 = "جمعه";
+                                                                        break;
+                                                                    }
+                                                                default:
+                                                                    break;
+                                                            }
+                                                        }
+                                                        catch (Exception)
+                                                        {
+                                                        }
+                                                        <div class="checkout-time-table checkout-time-table-time">
+                                                            <div class="col-12">
+                                                                <div class="radio-box">
+                                                                    <input type="radio" name="period" id="radio1" value="@persianDayOfWeek1 @persianDayInMonth1 @monthName1 بازه زمانی 9 تا 12" checked="">
+                                                                    <label for="radio1">
+                                                                        <div class="content-box">
+                                                                            <div class="checkout-time-table-title-bar checkout-time-table-title-bar-city">
+                                                                                @persianDayOfWeek1 @persianDayInMonth1  @monthName1
+                                                                            </div>
+                                                                            <ul class="checkout-time-table-subtitle-bar">
+                                                                                <li>
+                                                                                    بازه زمانی 9 تا 12
+                                                                                </li>
+                                                                                <li>
+                                                                                    هزینه ارسال:
+                                                                                    <span class="">
+                                                                                        رایگان
+                                                                                    </span>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="checkout-time-table checkout-time-table-time">
+                                                            <div class="col-12">
+                                                                <div class="radio-box">
+                                                                    <input type="radio" name="period" id="radio2" value="@persianDayOfWeek1 @persianDayInMonth1 @monthName1 بازه زمانی 12 تا 15" checked="">
+                                                                    <label for="radio2">
+                                                                        <div class="content-box">
+                                                                            <div class="checkout-time-table-title-bar checkout-time-table-title-bar-city">
+                                                                                @persianDayOfWeek1 @persianDayInMonth1  @monthName1
+                                                                            </div>
+                                                                            <ul class="checkout-time-table-subtitle-bar">
+                                                                                <li>
+                                                                                    بازه زمانی 12 تا 15
+                                                                                </li>
+                                                                                <li>
+                                                                                    هزینه ارسال:
+                                                                                    <span class="">
+                                                                                        رایگان
+                                                                                    </span>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="checkout-time-table checkout-time-table-time">
+                                                            <div class="col-12">
+                                                                <div class="radio-box">
+                                                                    <input type="radio" name="period" id="radio3" value="@persianDayOfWeek1 @persianDayInMonth1 @monthName1 بازه زمانی 15 تا 18" checked="">
+                                                                    <label for="radio3">
+                                                                        <div class="content-box">
+                                                                            <div class="checkout-time-table-title-bar checkout-time-table-title-bar-city">
+                                                                                @persianDayOfWeek1 @persianDayInMonth1  @monthName1
+                                                                            </div>
+                                                                            <ul class="checkout-time-table-subtitle-bar">
+                                                                                <li>
+                                                                                    بازه زمانی 15 تا 18
+                                                                                </li>
+                                                                                <li>
+                                                                                    هزینه ارسال:
+                                                                                    <span class="">
+                                                                                        رایگان
+                                                                                    </span>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                            <input type="text" name="location" class="hidden" value="" />
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-account-title">
+                                                        نام و نام
+                                                        خانوادگی تحویل گیرنده
+                                                    </div>
+                                                    <div class="form-account-row">
+                                                        <input class="input-field text-right" name="Reciver"
+                                                               type="text"
+                                                               placeholder="نام و نام خانوادگی شخص تحویل گیرنده را وارد نمایید">
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-account-title">
+                                                        شماره موبایل
+                                                    </div>
+                                                    <div class="form-account-row">
+                                                        <input class="input-field" type="text" name="ReciverPhone"
+                                                               placeholder="09xxxxxxxxx">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-account-title">استان</div>
+                                                    <div class="form-account-row">
+                                                        <div class="form-element">
+                                                            <select name="State" id="state-new"
+                                                                    class="selectpicker select"
+                                                                    placeholder="استان مورد نظر خود را انتخاب کنید">
+                                                                <option></option>
+                                                                <option value="7">بوشهر</option>
+                                                                <option value="8">تهران</option>
+                                                                <option value="9">چهارمحال وبختیاری</option>
+                                                                <option value="12">خراسان شمالی</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-account-title">شهر</div>
+                                                    <div class="form-account-row">
+                                                        <div class="form-element">
+                                                            <select class="selectpicker select" name="City" id="city-new"
+                                                                    placeholder="شهر مورد نظر خود را انتخاب کنید"
+                                                                    data-allow-clear="1"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12" id="parish-display-new" style="display: none">
+                                                    <div class="form-account-title">منطقه</div>
+                                                    <div class="form-account-row">
+                                                        <div class="form-element">
+                                                            <select class="selectpicker select" name="parish_id"
+                                                                    id="parish-new"
+                                                                    placeholder="منطقه مورد نظر خود را انتخاب کنید"
+                                                                    data-allow-clear="1">
+                                                                <option value=""></option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <div class="form-account-title">آدرس پستی</div>
+                                                    <div class="form-account-row">
+                                                        <textarea class="input-field text-right"
+                                                                  rows="5" name="address"
+                                                                  placeholder="آدرس تحویل گیرنده را وارد نمایید"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-account-title">کد پستی</div>
+                                                    <div class="form-account-row">
+                                                        <input class="input-field" name="post"
+                                                               type="text"
+                                                               placeholder="کد پستی را بدون خط تیره بنویسید">
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="lat_long" id="billing_map_lat_long" value="" />
+                                                <div class="col-12 pad-5">
+                                                    <button type="submit" class="btn btn-sm btn-primary btn-submit-form">
+                                                        ثبت
+                                                        و
+                                                        ارسال به این آدرس
+                                                    </button>
+
+                                                    <a href="/"
+                                                       class="btn-link-border form-account-link float-left">
+                                                        انصراف
+                                                        و بازگشت
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12">
+                                        <div class="text-justify">
+                                            برای ثبت موقعیت خود بر روی نقشه کافی است بر روی محل مورد نظر کلیک نمایید.
+                                        </div>
+                                        <div class="search-in-map mt-3">
+                                            <div class="input-group">
+                                                <form id="searchMapForm">
+                                                    <input type="text" placeholder="جستجو کنید" autocomplete="off" id="inputSearchMap">
+                                                    <button type="button" onclick="clearSearch()"
+                                                            class="close-result-search">
+                                                        ×
+                                                    </button>
+                                                    <button type="button" onclick="searchMap">
+                                                        موقعیت یابی
+                                                    </button>
+                                                    <ul class="result-search-map"></ul>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div id='map' style='width: 100%; height: 400px;'></div>
+                                        <div class="text-center">
+                                            <button type="button"
+                                                    class="btn btn-sm block full-width btn-danger btn-submit-form"
+                                                    id="seLocation"
+                                                    style="width:100%"
+                                                    onclick="setLocation()">
+                                                ثبت
+                                                موقعیت
+                                                <i class="fa fa-location-arrow" aria-hidden="true"></i>
+                                            </button>
+                                            <button type="button"
+                                                    style="width:100%"
+                                                    class="btn btn-sm block  full-width btn-info btn-submit-form"
+                                                    id="unsetLocation" onclick="unsetLocation()">
+                                                انتخاب
+                                                مجدد
+                                                <i class="fa fa-compass" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- main-shopping -->
+    </div>
+</div>
+@section JS{
+    <script src="/template/js/cedarmaps.js"></script>
+    <script src="/template/js/vue.min.js"></script>
+    <script src="/template/js/L.Control.Locate.min.js"></script>
+    <!--  Select2 -->
+    <script src="/template/js/select2.min.js" type="text/javascript"></script>
+    <script>
+        // address.blade
+        L.cedarmaps.accessToken = "9ed787ebc87b8c555f50aa51a16b7a6815f296ba";
+        var tileJSONUrl =
+            "https://api.cedarmaps.com/v1/tiles/cedarmaps.streets.json?access_token=" +
+            L.cedarmaps.accessToken,
+            marker,
+            mapPositionContainer = document.getElementById("billing_map_lat_long");
+
+        defaultMarkerPosition = [35.703219, 51.373055];
+
+
+        var map = L.cedarmaps
+            .map("map", tileJSONUrl, {
+                scrollWheelZoom: true,
+                zoomControl: false,
+                minZoom: 7,
+                maxZoom: 17,
+                maxBounds: [[25.064, 44.039], [39.771, 63.322]]
+            })
+            .setView(defaultMarkerPosition, 11);
+        try {
+            map.locate();
+        } catch (e) {
+            console.log(e);
+            toastr.warning('لطفا مکان یاب مرورگر خود را فعال کنید.');
+        }
+        map.on("locationerror ", locationerror);
+
+        function locationerror() {
+            toastr.error('لطفا مکان یاب مرورگر خود را فعال کنید.');
+        }
+
+        var setMarker = function (latLng = null) {
+            if (!latLng) latLng = map.getCenter();
+            if (marker) map.removeLayer(marker);
+            let LeafIcon = L.Icon.extend({
+                options: {
+                    iconSize: [37, 55],
+                    iconAnchor: [18, 55],
+                    popupAnchor: [0, -24]
+                }
+            });
+            let icon = new LeafIcon({iconUrl: '/template/map/pin.svg'});
+            marker = new L.marker(latLng, {
+                icon: icon
+            }).addTo(map);
+        };
+
+            var myIcon = L.icon({
+                iconUrl: "https://demo.digilara.ir/assets/map/img/icon.png",
+                iconRetinaUrl:
+                    "https://demo.digilara.ir/assets/map/img/map-pin-1.png",
+                iconSize: [34, 46],
+                iconAnchor: [17, 41],
+                popupAnchor: [-3, -46],
+                shadowUrl:
+                    "https://api.cedarmaps.com/cedarmaps.js/v1.8.0/images/pin-shadow.png",
+                shadowRetinaUrl:
+                    "https://api.cedarmaps.com/cedarmaps.js/v1.8.0/images/pin-shadow@2x.png",
+                shadowSize: [26, 6],
+                shadowAnchor: [13, 3]
+            });
+
+            var user_location_exsist = '';
+            if (user_location_exsist == false) {
+                mapPositionContainer.value = defaultMarkerPosition[0] + "," + defaultMarkerPosition[1];
+
+                // map.locate();
+            } else {
+                var userLatLng = {"lat": '36.985618', "lng": parseFloat('56.288744')};
+                mapPositionContainer.value = '36.985618' + "," + '56.288744';
+                setMarker(userLatLng);
+                map.flyTo(userLatLng, 16);
+            }
+
+            //     L.control.locate({flyTo: true}).addTo(map);
+
+            var zoomControl = new L.Control.Zoom({position: "topleft"});
+            zoomControl.addTo(map);
+
+            $("#unsetLocation").hide();
+
+            setMarker();
+
+            $("#seLocation").show();
+
+            map.on("click", function (e) {
+                if (map.dragging._enabled) {
+                    mapPositionContainer.value = e.latlng.lat + "," + e.latlng.lng;
+                    map.flyTo(e.latlng);
+                }
+            });
+
+            map.on('moveend', function () {
+                if (map.dragging._enabled) marker.setLatLng(map.getCenter());
+                //console.log(map.getCenter());
+            });
+            map.on('move', function () {
+                if (map.dragging._enabled) marker.setLatLng(map.getCenter());
+                //console.log(map.getCenter());
+            });
+            //Dragend event of map for update marker position
+            map.on('dragend', function () {
+                var cnt = map.getCenter();
+                if (map.dragging._enabled) var position = marker.setLatLng(cnt);
+            });
+
+            var onLocationFound = function (location) {
+                setMarker(location.latlng);
+                mapPositionContainer.value =
+                    location.latlng.lat + "," + location.latlng.lng;
+                map.flyTo(location.latlng, 16);
+            };
+
+
+            save_new_address = function () {
+                $('#loading').show();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                var data = $('#new-address-user').serialize();
+                $.ajax({
+                    url: '#',
+                    method: "POST",
+                    data: data,
+                    success: function (response) {
+                        setTimeout(function () {
+                            window.location.replace('#');
+                        }, 1000);
+                    },
+                    error: function (xhr) {
+                        $('#loading').hide();
+                        if (xhr.status === 422) {
+                            jQuery.each(xhr.responseJSON.errors, function (key, value) {
+                                toastr.error(value);
+                            });
+                        }
+                        if (xhr.status !== 422) {
+                            toastr.warning('خطایی در سامانه رخ داد!');
+                        }
+                    }
+                });
+
+
+                function printErrorMsgNew(msg) {
+                    $(".print-error-msg-new").find("ul").html('');
+                    $(".print-error-msg-new").css('display', 'block');
+                    $.each(msg, function (key, value) {
+                        $(".print-error-msg-new").find("ul").append('<li>' + value + '</li>');
+                    });
+                }
+            }
+
+            $('#state-new').change(function () {
+                var stateID = $(this).val();
+                if (stateID) {
+                    $.ajax({
+                        type: "GET",
+                        url: "#" + stateID,
+                        success: function (res) {
+                            if (res) {
+                                $("#city-new").empty();
+                                $("#city-new").append('<option value="">انتخاب کنید</option>');
+                                $.each(res, function (key, value) {
+                                    $("#city-new").append('<option value="' + key + '">' + value + '</option>');
+                                });
+
+                            } else {
+                                $("#city-new").empty();
+                            }
+                        }
+                    });
+                } else {
+                    $("#city-new").empty();
+                    $("#parish-new").empty();
+                }
+            });
+            $('#city-new').on('change', function () {
+                var cityID = $(this).val();
+                if (cityID) {
+                    $.ajax({
+                        type: "GET",
+                        url: "#" + cityID,
+                        success: function (res) {
+                            if (Object.keys(res).length) {
+                                $('#parish-display-new').show();
+                                $("#parish-new").empty();
+                                $("#parish-new").append('<option value="">انتخاب کنید</option>');
+                                $.each(res, function (key, value) {
+                                    $("#parish-new").append('<option value="' + key + '">' + value + '</option>');
+                                });
+
+                            } else {
+                                $("#parish-new").empty();
+                                $('#parish-display-new').hide();
+                            }
+                        }
+                    });
+                } else {
+                    $("#parish-new").empty();
+                }
+
+            });
+
+            function setCenter(location, name, map) {
+                console.log(location, name, location.split(','))
+                $(".result-search-map").hide();
+                $("#inputSearchMap").val(name);
+                map.flyTo(location.split(','), 14);
+            }
+
+
+            function setLocation() {
+                $("#searchMapForm").hide();
+                var latlng = marker.getLatLng();
+                map.dragging.disable();
+                $("#seLocation").hide();
+                $("#unsetLocation").show();
+                $("input[name='location']").val(JSON.stringify(latlng));
+            }
+
+            function unsetLocation() {
+                $("#searchMapForm").show();
+                map.dragging.enable();
+                $("#seLocation").show();
+                $("#unsetLocation").hide();
+                var latlng = ''; // map.getLatLng();
+                $("input[name='location']").val('');
+            }
+
+
+            function clearSearch() {
+                $("#inputSearchMap").val("");
+                $(".result-search-map").css("display", "none");
+                $(".close-result-search").css("display", "none");
+                $(".close-result-search").html("");
+            };
+
+            function searchMap() {
+                $(".result-search-map").css("display", "none");
+                $(".close-result-search").css("display", "none");
+
+                if (!map.dragging._enabled) return null;
+
+                var search = $("#inputSearchMap").val();
+                var obj = $("#inputSearchMap");
+                setTimeout(function () {
+                    var newSearch = obj.val();
+                    if (newSearch == search && search.length > 2) {
+                        $(".result-search-map").html('');
+                        var geocoder = L.cedarmaps.geocoder('cedarmaps.streets');
+
+                        $(".result-search-map").css("display", "block");
+                        $(".close-result-search").css("display", "block");
+
+                        geocoder.query(search, function (err, res) {
+                            if (res && res.results) {
+                                res.results.forEach(function (item, index) {
+                                    var title = item.name + ' (' + item.components.city + ') ';
+                                    var block = `<li><a onclick="setCenter('${item.location.center}','${item.name}',map)" href="#map">${title}</a></li>`;
+                                    //console.log({item, index, block});
+                                    $(".result-search-map").append(block);
+                                })
+                            } else {
+                            }
+                        });
+                    } else {
+                        $(".result-search-map").css("display", "none");
+                        $(".close-result-search").css("display", "none");
+                        //console.log({newSearch, search})
+                    }
+                }, 1000);
+            }
+
+            $("#inputSearchMap").on("keyup", function () {
+                searchMap();
+            });
+
+    </script>
+}
+

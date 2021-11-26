@@ -1,0 +1,262 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    var upload = db.Uploads.ToList();
+    upload = upload.OrderByDescending(r => r.id).ToList();
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت آپلود ها</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            @*<a href="#/admin/upload/create" class="btn btn-light-warning font-weight-bolder btn-sm">بارگذاری فایل جدید</a>*@
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+
+
+<div class="form-group m-form__group row">
+
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="m-dropzone dropzone" action="/admin/upload/upload" id="m-dropzone-one">
+            <div class="m-dropzone__msg dz-message needsclick">
+                <h3 class="m-dropzone__msg-title">
+                    فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                </h3>
+                @*<span class="m-dropzone__msg-desc">
+                        عکس آپلود شده به عنوان عکس پروفایل کاربر نمایش داده می شود
+                    </span>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card card-custom">
+    <div class="card-header flex-wrap border-0 pt-6 pb-0">
+        <div class="card-title">
+            <h3 class="card-label">
+                لیست صفحه ها
+                @*<span class="text-muted pt-2 font-size-sm d-block">Javascript array as data source</span>*@
+            </h3>
+        </div>
+        <div class="card-toolbar">
+            <!--begin::Button-->
+            @*<a href="#/admin/upload/create" class="btn btn-primary font-weight-bolder">
+                <span class="svg-icon svg-icon-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"></rect>
+                            <circle fill="#000000" cx="9" cy="15" r="6"></circle>
+                            <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3"></path>
+                        </g>
+                    </svg>
+                </span>ایجاد مورد جدید
+            </a>*@
+            <!--end::Button-->
+        </div>
+    </div>
+    <div class="card-body">
+        <!--begin: Search Form-->
+        <!--begin::Search Form-->
+        <div class="mb-7">
+            <div class="row align-items-center">
+                <div class="col-lg-9 col-xl-8">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 my-2 my-md-0">
+                            <div class="input-icon">
+                                <input type="text" class="form-control" placeholder="جستجو ..." id="SearchInput">
+                                <span>
+                                    <i class="flaticon2-search-1 text-muted"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 my-2 my-md-0">
+                            <div class="d-flex align-items-center">
+                                <label class="mr-3 mb-0 d-none d-md-block">نمایش</label>
+                                <select class="form-control dropdown pag" id="kt_datatable_search_status">
+                                    <option value="10" selected>10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--begin: Datatable-->
+        <div class="datatable-head-custom datatable-default datatable-primary datatable-loaded" id="kt_datatable" style="">
+
+            <div class="datatable datatable-head-custom datatable-default datatable-primary datatable-loaded" id="kt_datatable" style="">
+                <table class="table  table-condensed datatable-table" id="Table">
+                    <thead>
+                        <tr>
+                            <th>
+                                شناسه
+                            </th>
+                            <th>
+                                لینک
+                            </th>
+                            <th>
+                                پیش نمایش
+                            </th>
+                            <th>اقدامات</th>
+                        </tr>
+                    </thead>
+
+
+                </table>
+
+            </div>
+
+        </div>
+        <!--end: Datatable-->
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var table = $("#Table").DataTable({
+
+            responsive: !0, searchDelay: 500, processing: !0, serverSide: !0, ajax: "/admin/upload/List",
+            columns:
+                [
+                    {
+                        data: "id"
+                    },
+                    {
+                        data: "url",
+                        orderable: false,
+                        render: function (data, type, row) {
+                            if (data != null) {
+                                return '<a class="btn btn-default" href="/uploads/' + data + '" target="_blank">پیش نمایش</a>'
+
+                            } else {
+                                return ''
+                            }
+
+                        }
+
+                    },
+                    {
+                        data: "url",
+                        orderable: false,
+
+                        render: function (data, type, row) {
+                            if (data == null) {
+                                return '<img src="/Template/images/loading.png" alt=""  style="width:70px;border-radius:4px;height: 70px;" />'
+
+                            } else {
+                                return '<img data-src="' + "@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]" + data + '" src="/Template/images/loading.png" alt=""  style="width:70px;border-radius:4px;height: 70px;" class="lazyload" />'
+
+                            }
+                        }
+                    }
+                    ,
+                    {
+                        data: "id",
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return '<span style="overflow: visible; position: relative; width: 125px;"> <div class="dropdown dropdown-inline">  <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right"> <ul class="navi flex-column navi-hover py-2"> <li class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2"> Choose an action: </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-print"></i></span> <span class="navi-text">Print</span> </a> </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-copy"></i></span> <span class="navi-text">Copy</span> </a> </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-file-excel-o"></i></span> <span class="navi-text">Excel</span> </a> </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-file-text-o"></i></span> <span class="navi-text">CSV</span> </a> </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-file-pdf-o"></i></span> <span class="navi-text">PDF</span> </a> </li> </ul> </div> </div> <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="حذف" data-role="remove" data-url="/admin/upload/remove/' + data + '"> <span class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <rect x="0" y="0" width="24" height="24"></rect> <path d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z" fill="#000000" fill-rule="nonzero"></path> <path d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"></path> </g> </svg> </span> </a> </span>'
+                        }
+
+                    }
+                ],
+
+
+            language: {
+                url: "/newScripts/Persian.json",
+                processing: "در حال دریافت اطلاعات ...",
+                search: "جستجو : ",
+                info: "نمایش _START_ تا _END_ از _TOTAL_ ",
+                sLengthMenu: "نمایش _MENU_ آیتم در صفحه",
+                emptyTable: "هیچ داده ای وجود ندارد",
+                zeroRecords: "هیچ داده ای وجود ندارد",
+                infoEmpty: "نمایش 0 تا 0 از 0 داده"
+            },
+            ajax: {
+                url: "/admin/upload/list",
+                type: "POST"
+            },
+            fnDrawCallback: function (oSettings, json) {
+                lazyload();
+                API();
+            }
+        })
+
+        $('#SearchInput').on('keyup', function () {
+            table.search(this.value).draw();
+        });
+
+        $('.dropdown').selectpicker();
+
+    })
+
+    $('select.pag').on('change', function (e) {
+        $('select[name="Table_length"]').val(this.value).trigger('change');
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    titlePage('مدیریت آپلود ها')
+</script>
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-menu="Upload"]').addClass('kt-menu__item--active')
+    $('.dropzone').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            hashChange()
+        }
+    });
+</script>

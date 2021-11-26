@@ -1,0 +1,206 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    var Ticket = db.Tickets.Where(r=>r.sellerid!=null).ToList();
+    Ticket = Ticket.OrderByDescending(r => r.id).ToList();
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title">AdminDashboard</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/admin/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+</div>
+<!-- end:: Content Head -->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                        لیست تیکت فروشندگان
+                    </h3>
+                </div>
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            @{
+                int total = 0;
+            }
+            <!--begin: Datatable -->
+            <table class="table table-hover" width="100%">
+                <thead>
+                    <tr>
+                        <th>
+                            شناسه
+                        </th>
+                        <th>
+                            عنوان
+                        </th>
+                        <th>
+                            قسمت
+                        </th>
+                        <th>
+                            تاریخ ارسال
+                        </th>
+                        <th>
+                            فروشنده
+                        </th>
+                        <th>
+                            وضعیت
+                        </th>
+                        <th>
+
+                        </th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Ticket.Count != 0)
+                        {
+                            foreach (var item in Ticket)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.id
+                                    </td>
+                                    <td>
+                                        @item.title
+                                    </td>
+                                    <td>
+                                        @{
+                                            string f = item.@for;
+
+                                        }
+                                        @f
+                                    </td>
+                                    <td>
+                                        @{
+                                            try
+                                            {
+                                                DateTime d = Convert.ToDateTime(item.creationDate);
+                                                PersianCalendar pc = new PersianCalendar();
+                                                string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+                                                @p
+                                            }
+                                            catch (Exception)
+                                            {
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            var seller = db.Sellers.Where(r => r.id == item.sellerid).FirstOrDefault();
+                                            if (seller != null)
+                                            {
+                                                @:@(seller.name) @(seller.lastname)
+                                            }
+                                            else
+                                            {
+                                                <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">فروشنده حذف شده است</span>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.status == "پاسخ داده شده")
+                                            {
+                                                <span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">
+                                                    @item.status
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                if (item.status == "در انتظار پاسخ")
+                                                {
+                                                    <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">
+                                                        @item.status
+                                                    </span>
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="actionIcon" data-url="/admin/SellerTickets/remove/@item.id" data-role="remove">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50px" height="50px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect id="bound" x="0" y="0" width="24" height="24" />
+                                                    <path d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" />
+                                                    <path d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" id="Shape" fill="#000000" opacity="0.3" />
+                                                </g>
+                                            </svg>
+                                        </div>
+                                        <a href="/Admin/AdminDashboard/Index#/Admin/SellerTickets/Chat/@item.id" class="editIcon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24" height="24" />
+                                                    <path d="M16,15.6315789 L16,12 C16,10.3431458 14.6568542,9 13,9 L6.16183229,9 L6.16183229,5.52631579 C6.16183229,4.13107011 7.29290239,3 8.68814808,3 L20.4776218,3 C21.8728674,3 23.0039375,4.13107011 23.0039375,5.52631579 L23.0039375,13.1052632 L23.0206157,17.786793 C23.0215995,18.0629336 22.7985408,18.2875874 22.5224001,18.2885711 C22.3891754,18.2890457 22.2612702,18.2363324 22.1670655,18.1421277 L19.6565168,15.6315789 L16,15.6315789 Z" fill="#000000" />
+                                                    <path d="M1.98505595,18 L1.98505595,13 C1.98505595,11.8954305 2.88048645,11 3.98505595,11 L11.9850559,11 C13.0896254,11 13.9850559,11.8954305 13.9850559,13 L13.9850559,18 C13.9850559,19.1045695 13.0896254,20 11.9850559,20 L4.10078614,20 L2.85693427,21.1905292 C2.65744295,21.3814685 2.34093638,21.3745358 2.14999706,21.1750444 C2.06092565,21.0819836 2.01120804,20.958136 2.01120804,20.8293182 L2.01120804,18.32426 C1.99400175,18.2187196 1.98505595,18.1104045 1.98505595,18 Z M6.5,14 C6.22385763,14 6,14.2238576 6,14.5 C6,14.7761424 6.22385763,15 6.5,15 L11.5,15 C11.7761424,15 12,14.7761424 12,14.5 C12,14.2238576 11.7761424,14 11.5,14 L6.5,14 Z M9.5,16 C9.22385763,16 9,16.2238576 9,16.5 C9,16.7761424 9.22385763,17 9.5,17 L11.5,17 C11.7761424,17 12,16.7761424 12,16.5 C12,16.2238576 11.7761424,16 11.5,16 L9.5,16 Z" fill="#000000" opacity="0.3" />
+                                                </g>
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="7" class="noEntry">
+                                                        <span style="padding:50px 0 ; display:inline-block">
+                                                            <i class="flaticon-exclamation" style="font-size:20px"></i> هیچ اطلاعاتی برای نمایش وجود ندارد
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            }
+                    }
+
+                </tbody>
+            </table>
+            <!--end: Datatable -->
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    titlePage('مدیریت تیکت های فروشندگان')
+</script>
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-menu="sellerTickets"]').addClass('kt-menu__item--active')
+
+</script>

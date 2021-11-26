@@ -1,0 +1,341 @@
+﻿@{
+    Layout = null;
+    string path = Server.MapPath("~");
+
+    if (Request.Params["path"] != null)
+    {
+        string subPath = Request.Params["path"] + "\\";
+        path = subPath;
+    }
+    var filePaths = new List<string>();
+    var directories = new List<string>();
+
+    filePaths = Directory.GetFiles(path).ToList();
+    directories = Directory.GetDirectories(path).ToList();
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت فایل ها</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            <span class="text-muted font-weight-bold mr-4" style="direction:ltr !important">Root:@(path.Replace(Server.MapPath("~"), "\\"))</span>
+            @{
+                if (path == Server.MapPath("~"))
+                {
+                    <button disabled id="BackInFileManager" onclick="history.back();" class="btn btn-default font-weight-bolder btn-sm">
+                        <i class="flaticon2-fast-back" aria-hidden="true"></i>
+                        بازگشت
+                    </button>
+
+                }
+                else
+                {
+                    <button id="BackInFileManager" onclick="history.back();" class="btn btn-default font-weight-bolder btn-sm">
+                        <i class="flaticon2-fast-back" aria-hidden="true"></i>
+                        بازگشت
+                    </button>
+                }
+            }
+
+
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+
+            <button data-toggle="modal" data-target="#myModal" onclick="modalInfo()" class="btn btn-light-success font-weight-bolder btn-sm">
+                <i class="flaticon2-information" aria-hidden="true"></i>
+                اطلاعات فایل
+            </button>
+            <button onclick="removeModal()" class="btn btn-light-danger font-weight-bolder btn-sm">
+                <i class="flaticon2-trash" aria-hidden="true"></i>
+                حذف
+            </button>
+            <button data-toggle="modal" data-target="#uploadModal" onclick="UploadModal()" class="btn btn-light-info font-weight-bolder btn-sm">
+                <i class="flaticon-upload" aria-hidden="true"></i>
+                بارگذاری فایل
+            </button>
+            <button onclick="CreateFolder()" class="btn btn-light-info font-weight-bolder btn-sm">
+                <i class="flaticon2-plus" aria-hidden="true"></i>
+                ایجاد فولدر جدید
+            </button>
+            <!--begin::Actions-->
+            @*<a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Today</a>
+        <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Month</a>
+        <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Year</a>*@
+            <!--end::Actions-->
+            <!--begin::Daterange-->
+            @*<a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="" data-placement="left" data-original-title="Select dashboard daterange">
+            <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
+            <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Aug 11</span>
+        </a>*@
+            <!--end::Daterange-->
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="col-md-12">
+    @{
+        if (directories != null && directories.Count != 0)
+        {
+            foreach (var item in directories)
+            {
+                <div class="fileContainer folderType" data-type="folder">
+                    <input type="checkbox" data-url="@item" data-type="folder" class="selectCheck" name="name" value="" />
+                    <a>
+                        <img class="FileIcon" src="~/newScripts/images/folder.svg" alt="Alternate Text" />
+                        <br />
+                        <span class="fileName changeable" data-txt="@item.Replace(path , "")">
+                            @item.Replace(path, "")
+                        </span>
+                        <input type="text" data-isFile="false" data-isFolder="true" name="name" value="" class="renameInput hidden" />
+
+                    </a>
+                </div>
+
+            }
+        }
+        if (filePaths.Count != 0)
+        {
+            foreach (var item in filePaths)
+            {
+
+                string ext = Path.GetExtension(item).Replace(".", "");
+
+                <div class="fileContainer">
+                    <input type="checkbox" data-url="@item" data-type="file" class="selectCheck" name="name" value="" />
+                    <a>
+                        @{
+                            string fileIcon = "/newScripts/images/ex/unknown.svg";
+                            if (File.Exists(Server.MapPath("~") + @"newScripts\images\ex\" + ext + ".svg"))
+
+                            {
+                                fileIcon = "/newScripts/images/ex/" + ext + ".svg";
+                            }
+
+
+                        }
+                        @{
+                            if (ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "svg")
+                            {
+                                <img src="/Template/images/loading.png" data-src="/@item.Replace(Server.MapPath("~") ,"").Replace("\\","/")" class="FileIcon lazyload" alt="">
+
+                            }
+                            else
+                            {
+                                <img class="FileIcon" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@fileIcon" alt="Alternate Text" />
+                            }
+                        }
+                        <br />
+                        <span class="fileName changeable">
+                            @item.Replace(path, "")
+                        </span>
+                        <input type="text" data-isFile="true" data-isFolder="false" name="name" value="" class="renameInput hidden" />
+                    </a>
+                </div>
+            }
+        }
+    }
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    $(document).on('click', '.changeable', function () {
+        $(this).addClass('hidden');
+        $(this).parent().find('input[type="text"]').removeClass('hidden');
+        $(this).parent().find('input[type="text"]').val($(this).text().trim());
+        $(this).parent().find('input[type="text"]').attr('name', '@(path.Replace("\\","\\\\"))')
+        if ($(this).parent().find('input[type="text"]').attr('data-isFolder') == 'true') {
+            $(this).parent().find('input[type="text"]').attr('data-folderName', $(this).text().trim())
+        } else {
+            $(this).parent().find('input[type="text"]').attr('data-fileName', $(this).text().trim())
+        }
+        $(this).parent().find('input[type="text"]').focus();
+      })
+    $(document).on('focusout', '.renameInput', function () {
+        $(this).parent().find('span').removeClass('hidden');
+        $(this).addClass('hidden');
+    })
+    $('.renameInput').keypress(function (e) {
+        var selected = $(this);
+        if (e.which == 13) {
+            $.ajax({
+                type: "POST",
+                data: { path: $(this).attr('name'), val: $(this).val(), isFolder: $(this).attr('data-isFolder'), isFile: $(this).attr('data-isFile'), folderName: $(this).attr('data-foldername'), fileName: $(this).attr('data-fileName') },
+                url: '/admin/fileManager/Rename',
+                success: function (t) {
+                    if (t.title != null && t.title == 'error') {
+                        swal.fire("خطا !", t.desc, "error")
+                    } else {
+                        $(selected).parent().find('span').text($(selected).val());
+                        $(selected).parent().parent().find('input[type="checkbox"]').attr('data-url', '@path.Replace("\\","\\\\")' + $(selected).val());
+                        
+                        $(selected).focusout();
+                    }
+
+                }
+            })
+
+        }
+    });
+    function CreateFolder() {
+        $.ajax({
+            type: "POST",
+            data: { path: '@path.Replace("\\","\\\\")' },
+            url: '/admin/fileManager/CreateNewFolder',
+            success: function (t) {
+                hashChange();
+            }
+        })
+
+    }
+    $(document).on('change', '.selectCheck', function () {
+        if ($(this).is(":checked") == false) {
+            $(this).parent().removeClass('active');
+
+        } else {
+            $(this).parent().addClass('active');
+        }
+
+    })
+    $(document).on('dblclick', '.folderType', function () {
+        window.location.href = '/Admin/AdminDashboard/Index#/admin/fileManager/index?path=' + $(this).find('input[type="checkbox"]').attr('data-url')
+    })
+    function modalInfo() {
+        var fileName = $('.fileContainer.active').find('input[type="checkbox"]').attr('data-url');
+        var isFolder = false;
+        if (fileName != null) {
+            if ($('.fileContainer.active').hasClass('folderType')) {
+                isFolder = true;
+            }
+            $.ajax({
+                type: "POST",
+                data: { FileName: fileName, isFolder: isFolder },
+                url: '/admin/fileManager/FileInfo',
+                success: function (t) {
+                    $('#modalBody').html(t);
+                }
+            })
+        }
+
+
+    }
+    function UploadModal() {
+        var pth = '@path.Replace("\\","\\\\")';
+            $.ajax({
+                type: "POST",
+                data: { path: pth},
+                url: '/admin/fileManager/Upload',
+                success: function (t) {
+                    $('#UploadmodalBody').html(t);
+                }
+            })
+
+
+    }
+    function removeModal() {
+        var fileName = [];;
+        $('.fileContainer.active').find('input[type="checkbox"]').each(function () {
+            fileName.push($(this).attr('data-url'));
+        })
+        var isFolder = false;
+        if ($('.fileContainer.active').hasClass('folderType')) {
+            isFolder = true;
+        }
+
+
+
+        Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: !1
+        }).fire({
+            title: "آیا مطمئن هستید؟",
+            text: "پس از حذف این آیتم نمیتوانید آن را بازیابی کنید !",
+            type: "warning",
+            showCancelButton: !0,
+            confirmButtonText: "بله, مطمئنم!",
+            cancelButtonText: "خیر , منصرف شدم",
+            reverseButtons: !0
+        }).then(t => {
+            if (t.value) {
+                var e = "/admin/fileManager/removeFiles";
+                $.ajax({
+                    data: { FileName: fileName },
+                    type: "POST",
+                    url: e,
+                    success: function (t) {
+                        swal.fire("انجام شد", "آیتم مورد نظر با موفقیت حذف شد", "success");
+                        hashChange()
+                    }
+                })
+            } else t.dismiss, Swal.DismissReason.cancel
+        })
+    }
+</script>
+
+
+
+
+
+
+<style>
+    .btn {
+        margin-left: 5px;
+    }
+</style>

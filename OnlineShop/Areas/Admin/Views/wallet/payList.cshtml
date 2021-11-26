@@ -1,0 +1,180 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var user = db.Users.Find(id);
+    var wallet = db.Wallets.Where(r=>r.userId == id).OrderByDescending(r=>r.id).ToList();
+    long total = 0;
+    if (wallet.Count!=0)
+    {
+        foreach (var item in wallet)
+        {
+            total +=Convert.ToInt32( item.amount); 
+        }
+    }
+    Layout = null;
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title">AdminDashboard</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <a href="/Admin/AdminDashboard/Index#/Admin/users/details/@user.id" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
+            بازگشت به اطلاعات کاربری @user.firstName @user.lastName
+        </a>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/admin/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+</div>
+<!-- end:: Content Head -->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+
+                    <h3 class="m-portlet__head-text">
+                        لیست پرداخت های کیف پول کاربر #@user.id @user.firstName @user.lastName
+                    </h3>
+                </div>
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+         
+            <!--begin: Datatable -->
+            <table class="table table-hover" width="100%">
+                <thead>
+                    <tr>
+                        <th>
+                            شناسه
+                        </th>
+                        <th>
+                            مبلغ
+                        </th>
+                        <th>
+                            پرداخت شده توسط
+                        </th>
+                        <th>
+                            تاریخ پرداخت
+                        </th>
+                        <th>
+                            توضیحات
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (wallet.Count != 0)
+                        {
+                            foreach (var item in wallet)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.id
+                                    </td>
+                                    <td>
+                                        @item.amount تومان
+                                    </td>
+                                    <td>
+                                        @if (item.payByAdmin == true)
+                                        {
+@:پرداخت شده توسط ادمین
+                                        }
+                                        else
+                                        {
+                                            @:کاربر
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            try
+                                            {
+                                                DateTime d = Convert.ToDateTime(item.creationDate);
+                                                PersianCalendar pc = new PersianCalendar();
+                                                string p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                @p
+                                            }
+                                            catch (Exception)
+                                            {
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.desc
+                                    </td>
+
+                                    <td>
+                                        
+                                        <div class="actionIcon" data-url="/admin/wallet/remove/@item.id" data-role="remove">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50px" height="50px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect id="bound" x="0" y="0" width="24" height="24" />
+                                                    <path d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" />
+                                                    <path d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" id="Shape" fill="#000000" opacity="0.3" />
+                                                </g>
+                                            </svg>
+                                        </div>
+
+                                    </td>
+                                </tr>
+
+                                                }
+                                                <tr>
+                                                    <td colspan="6">کل مبلغ شارژ شده کیف پول : @total تومان</td>
+                                                </tr>
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="6" class="noEntry">
+                                                        <span style="padding:50px 0 ; display:inline-block">
+                                                            <i class="flaticon-exclamation" style="font-size:20px"></i> هیچ اطلاعاتی برای نمایش وجود ندارد
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            }
+                    }
+
+                </tbody>
+            </table>
+            <!--end: Datatable -->
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    titlePage('پرداخت های کیف پول')
+</script>
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-menu="wallet"]').addClass('kt-menu__item--active')
+
+</script>

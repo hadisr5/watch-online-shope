@@ -1,0 +1,103 @@
+﻿@using OnlineShop.Models
+@model OnlineShop.Models.watchBrand
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var watchBrand = db.watchBrands.Find(id);
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت یرند ساعت ها</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+        <a href="#/admin/watchBrand/index" class="btn btn-light-warning font-weight-bolder btn-sm">  لیست یرند ساعت ها</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+            <!--begin::Actions-->
+            @*<a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Today</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Month</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Year</a>*@
+            <!--end::Actions-->
+            <!--begin::Daterange-->
+            @*<a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="" data-placement="left" data-original-title="Select dashboard daterange">
+                    <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
+                    <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Aug 11</span>
+                </a>*@
+            <!--end::Daterange-->
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            ویرایش منو @watchBrand.Title
+                                            
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/watchBrand/Edit_Post" data-redirect="/Admin/AdminDashboard/Index#/Admin/WatchBrand/index">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" value="@watchBrand.BrandId" name="BrandId" />
+                        <input type="hidden" name="AdminId" value="@watchBrand.AdminId">
+                        <input type="hidden" name="CreationDate" value="@watchBrand.CreationDate">
+
+                        <div class="form-group">
+                            <label>عنوان یرند ساعت</label>
+                            <input type="text" class="form-control" placeholder="عنوان یرند ساعت" name="Title" value="@watchBrand.Title">
+                            <span class="form-text text-muted">مدل شما با این عنوان نمایش داده می شود </span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>توضیحات</label>
+                            <textarea id="mytextarea" class="form-control" name="Description">@watchBrand.Description</textarea>
+                            <span class="form-text text-muted"> این توضیحات در صفحه محصول قابل مشاهده است.</span>
+                        </div>
+
+                        @*<div class="form-group">
+                <label> زمان ایجاد </label>
+                <input type="text" class="form-control" placeholder=" زمان ایجاد" name="CreationDate" value="@watchBrand.CreationDate">
+                <span class="form-text text-muted">مدل شما با این عنوان نمایش داده می شود </span>
+            </div>*@
+
+
+
+                    </div>
+
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ویرایش برند </button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/watchbrand/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>

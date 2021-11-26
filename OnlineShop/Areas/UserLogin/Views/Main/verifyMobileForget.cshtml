@@ -1,0 +1,167 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    var setting = db.Settings.FirstOrDefault();
+}
+<div class="main-content col-12 col-md-7 col-lg-5 mx-auto">
+    <div class="account-box">
+        <a href="/" class="logo">
+            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@setting.WebsiteLogo" alt="">
+        </a>
+        @{
+            if (ViewBag.success == 1)
+            {
+                <div class="account-box-title text-right">
+                    رمزعبور با موفقیت تغییر کرد
+                </div>
+            }
+            else
+            {
+                <div class="account-box-title text-right">
+                    وارد کردن رمزعبور جدید
+                </div>
+            }
+        }
+        <div class="account-box-content">
+            @{
+                if (ViewBag.error != null)
+                {
+                    <div class="result">
+
+                        <div class="alert alert-danger">
+                            <strong>خطا !</strong> @ViewBag.error
+                        </div>
+                    </div>
+
+                }
+                else
+                {
+                    if (ViewBag.success == 1)
+                    {
+                        <div class="alert alert-success" style="margin:35px 0 ">
+                            رمز عبور شما با موفقیت تغییر کرد . برای ورود به پنل کاربری از لینک زیر استفاده کنید.
+                            <br />
+                            <br />
+                            <a href="/userlogin/main/login" class="btn btn-success">ورود به پنل کاربری</a>
+                        </div>
+                    }
+                }
+
+            }
+            @{
+                if (ViewBag.success == null)
+                {
+                        <form class="form-account" method="post" action="/userlogin/main/verifyMobileForget" enctype="multipart/form-data">
+                            <input type="text" name="mobile" value="@ViewBag.mobile" style="display:none" />
+                            @Html.AntiForgeryToken()
+                            <input type="text" name="sms" value="@ViewBag.sms" style="display:none" />
+                            <div class="form-account-title">رمزعبور</div>
+                            <div class="form-account-row">
+                                <div class="validationError hidden lenth">
+                                    طول کلمه عبور باید بیشتر از 5 کاراکتر باشد.
+                                </div>
+                                <label class="input-label">
+                                    <i class="now-ui-icons ui-1_lock-circle-open"></i>
+                                </label>
+                                <input class="input-field" data-validator="password" type="password" placeholder="رمزعبور" name="password" value="" required="" autocomplete="mobile" autofocus="" tabindex="1">
+
+                            </div>
+
+                            <div class="form-account-title">
+                                تکرار رمزعبور
+                            </div>
+
+                            <div class="form-account-row">
+                                <div class="validationError hidden missMatch">
+                                    رمزعبور با تکرار آن همخوانی ندارد.
+                                </div>
+                                <label class="input-label">
+                                    <i class="now-ui-icons ui-1_lock-circle-open"></i>
+                                </label>
+                                <input class="input-field" data-validator="rePassword" type="password" placeholder="رمز عبور خود را وارد نمایید" name="repassword" required="" autocomplete="current-password" tabindex="2">
+                            </div>
+                            <div class="form-account-row form-account-submit">
+
+                                <div class="parent-btn">
+                                    <button class="dk-btn dk-btn-info submitBtn">
+                                        تغییر رمزعبور
+                                        <i class="fa fa-sign-in"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            @{
+                                if (ViewBag.error != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        اطلاعات کاربری نادرست است .
+                                    </div>
+                                }
+                            }
+                        </form>
+                }
+            }
+
+        </div>
+        <div class="account-box-footer">
+            <span>کاربر جدید هستید؟</span>
+            <a href="/userlogin/main/register" class="btn-link-border">
+                ثبت‌نام در
+                @setting.WebsiteName
+            </a>
+        </div>
+    </div>
+</div>
+@section JS{
+    <script>
+        $(document).on('submit', '.form-account', function (event) {
+            validatepassword();
+            validaterePassword();
+            if ($('.WrongFormatInput').length != 0) {
+                event.preventDefault();
+            }
+        })
+        $(document).on('keyup', 'input[data-validator="password"]', function () {
+            validatepassword();
+        })
+        $(document).on('keyup', 'input[data-validator="rePassword"]', function () {
+            validaterePassword();
+        })
+        $(document).on('focusout', 'input[data-validator="password"]', function () {
+            validatepassword();
+        })
+        $(document).on('focusout', 'input[data-validator="rePassword"]', function () {
+            validaterePassword();
+        })
+        function validatepassword() {
+            $('input[data-validator="password"]').each(function () {
+                if ($(this).val().length > 5) {
+                    $(this).removeClass('WrongFormatInput');
+                    $(this).parent().find('label').find('i').removeClass('WrongFormatInput');
+                    $(this).parent().find('.validationError').addClass('hidden')
+
+                } else {
+                    $(this).addClass('WrongFormatInput');
+                    $(this).parent().find('.validationError').removeClass('hidden')
+                    $(this).parent().find('label').find('i').addClass('WrongFormatInput');
+                }
+
+            })
+
+        }
+        function validaterePassword() {
+            if ($('input[data-validator="password"]').val() == $('input[data-validator="rePassword"]').val()) {
+                $('input[data-validator="rePassword"]').removeClass('WrongFormatInput');
+                $('input[data-validator="rePassword"]').parent().find('label').find('i').removeClass('WrongFormatInput');
+                $('input[data-validator="rePassword"]').parent().find('.validationError').addClass('hidden')
+
+            } else {
+                $('input[data-validator="rePassword"]').addClass('WrongFormatInput');
+                $('input[data-validator="rePassword"]').parent().find('.validationError').removeClass('hidden')
+                $('input[data-validator="rePassword"]').parent().find('label').find('i').addClass('WrongFormatInput');
+                console.log('password:' + $('input[data-validator="password"]').val() + '/' + 'repassword:' + $('input[data-validator="rePassword"]').val())
+            }
+        }
+    </script>
+}
+
+

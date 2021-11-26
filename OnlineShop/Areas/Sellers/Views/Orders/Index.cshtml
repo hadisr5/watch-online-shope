@@ -1,0 +1,266 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    int sellerId = Convert.ToInt16(Session["seller"]);
+
+    var orders = db.Orders.Where(r=>r.SellerId ==sellerId ).ToList();
+    orders = orders.OrderByDescending(r => r.id).ToList();
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title"></h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/sellers/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+</div>
+<!-- end:: Content Head -->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                        لیست سفارش ها
+                    </h3>
+                    <div class="col-md-3">
+                        <select class="form-control" id="filterOrders">
+                            <option selected value="noFilter">بدون فیلتر</option>
+                            <option value="در انتظار تائید پرداخت">
+                                در انتظار تائید پرداخت
+                            </option>
+                            <option value="تائید پرداخت">
+                                تائید پرداخت
+                            </option>
+                            <option value="در حال بسته بندی">
+                                در حال بسته بندی
+                            </option>
+                            <option value="ارسال شده">
+                                ارسال شده
+                            </option>
+                            <option value="دریافت شده">
+                                دریافت شده
+                            </option>
+                            <option value="مرجوعی">
+                                مرجوعی
+                            </option>
+                            <option value="پرداخت درب منزل تائید شده">
+                                پرداخت درب منزل تائید شده
+                            </option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            @{
+                int total = 0;
+            }
+            <!--begin: Datatable -->
+            <table class="table table-hover" width="100%" id="OrdersTable"  data-order='[[ 0, "desc" ]]'>
+                <thead>
+                    <tr>
+                        <th>
+                            شناسه
+                        </th>
+                        <td>
+                            محصول
+                        </td>
+                        <th>
+                            قیمت واحد
+                        </th>
+                        <th>
+                            تعداد
+                        </th>
+                        <th>
+                            قیمت کل
+                        </th>
+                        <th>
+                            تاریخ
+                        </th>
+                        <th>
+                            وضعیت
+                        </th>
+                        <th>
+                            وضعیت تامین
+                        </th>
+                        <th>
+
+                        </th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (orders.Count != 0)
+                        {
+                            foreach (var item in orders)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.id
+                                    </td>
+                                    <td>
+                                        @{
+                                            var product = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+                                            if (product!=null)
+                                            {
+                                                @product.title 
+                                            }
+                                            else
+                                            {
+                                                @:محصول حذف شده است
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.SellerPrice تومان
+                                    </td>
+                                    <td>
+                                        @item.quantity
+                                    </td>
+                                    <td>
+                                        @(item.quantity * item.SellerPrice)
+                                    </td>
+                                    <td>
+                                        @{
+                                            try
+                                            {
+                                                DateTime d = Convert.ToDateTime(item.creationDate);
+                                                PersianCalendar pc = new PersianCalendar();
+                                                string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+                                                @p
+                                            }
+                                            catch (Exception)
+                                            {
+                                            }
+                                        }
+
+                                    </td>
+                                    <td class="statusFilter">
+                                        @{
+                                            var basket = db.Baskets.Where(r => r.id == item.basketId).FirstOrDefault();
+                                            if (basket != null)
+                                            {
+                                                @basket.status
+
+                                            }
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.supply != true)
+                                            {
+                                                <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">تامین نشده</span>
+
+                                            }
+                                            else
+                                            {
+                                                <span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">تامین شده</span>
+
+                                              
+                                               
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                         
+                                        <a href="/sellers/sellerDashboard/Index#/sellers/orders/details/@item.id" class="editIcon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon editIcon">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect id="bound" x="0" y="0" width="24" height="24"></rect>
+                                                    <circle id="Oval-67" fill="#000000" cx="5" cy="12" r="2"></circle>
+                                                    <circle id="Oval-67-Copy" fill="#000000" cx="12" cy="12" r="2"></circle>
+                                                    <circle id="Oval-67-Copy-2" fill="#000000" cx="19" cy="12" r="2"></circle>
+                                                </g>
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="8" class="noEntry">
+                                                        <span style="padding:50px 0 ; display:inline-block">
+                                                            <i class="flaticon-exclamation" style="font-size:20px"></i> هیچ اطلاعاتی برای نمایش وجود ندارد
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            }
+                    }
+
+                </tbody>
+            </table>
+            <!--end: Datatable -->
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    titlePage('مدیریت سفارش ها')
+</script>
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-menu="Orders"]').addClass('kt-menu__item--active')
+
+</script>
+<script>
+    $(document).ready(function () {
+        document.title = 'سفارش ها';
+
+        $('#OrdersTable').DataTable({
+            "language": {
+                "search": ""
+            },
+            "bPaginate": false,
+            dom: 'Bfrtip',
+            buttons: [
+                'excelHtml5'
+            ]
+        });
+        $('button.dt-button.buttons-excel.buttons-html5').addClass('btn btn-success');
+        $('[type="search"]').addClass('form-control')
+        $('[type="search"]').attr('placeholder', 'جستجو ...')
+    });
+</script>
+
+<style>
+    .hidden {
+        display: none !important;
+    }
+</style>

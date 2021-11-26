@@ -1,0 +1,397 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    var ids = new List<int>();
+    ids = ViewBag.id;
+    var products = new List<Product>();
+
+    if (ids.Count != 0)
+    {
+        foreach (var item in ids)
+        {
+            var singlePro = db.Products.Where(r => r.id == item).FirstOrDefault();
+            if (singlePro != null)
+            {
+                products.Add(singlePro);
+            }
+
+        }
+
+    }
+
+
+    Layout = "/views/shared/_Layout.cshtml";
+}
+<main class="search-page default">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <a class="btn btn-light btn-search d-none show-sm" data-toggle="modal" data-target="#searchModal">جستجوی پیشرفته <img src="/template/images/setting-lines.svg" width="18"></a>
+            </div>
+            <div class="col-lg-12 ">
+                <div class="shop-layout">
+                    <!--Breadcrumb One Start-->
+                    <ul class="catNav">
+                        <li class="active">مقایسه محصولات</li>
+                    </ul>
+                    <div class="shop-product listing default">
+                        <div id="myTabContent-2" class="tab-content">
+                            <div id="grid" class="tab-pane fade show active">
+                                <div class="product-grid-view">
+                                    <div class="row" id="productContainer">
+                                        @{
+                                            if (products.Count != 0)
+                                            {
+                                                foreach (var item in products)
+                                                {
+                                                    <div class="col-md-3 ComparisonProduct" data-id="@item.id">
+                                                        <span class="close removeFromComparation">×</span>
+                                                        <div class="productInComparison product-box">
+                                                            <div style="text-align:center">
+                                                                @{
+                                                                    if (item.MainImage != null)
+                                                                    {
+                                                                        <img class="product-box-img" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.MainImage" alt="@item.MainImage" style="width:70% ; height:auto !important ; float:none ; margin: 0 auto ">
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <img class="product-box-img" src="/Template/images/loading.png" alt="@item.MainImage" style="width:70% ; height:auto !important ; float:none ; margin: 0 auto ">
+                                                                    }
+                                                                }
+                                                            </div>
+                                                            <div class="product-box-content">
+                                                                <div class="product-box-content-row">
+                                                                    <div class="product-box-title">
+                                                                        <a href="/home/product/@item.id">
+                                                                            @item.title
+                                                                        </a>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                @{
+                                                                    if (item.isAvailable != true)
+                                                                    {
+                                                                        <div class="product-box-row product-box-row-price">
+                                                                            <div class="price">
+                                                                                <div class="price-value">
+                                                                                    <div class="price-value-wrapper">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="promotion-box-cover promotion-box-cover--out-of-stock">
+                                                                                <div class="promotion-box-cover-text">ناموجود</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="product-box-row product-box-row-price">
+                                                                            <div class="price">
+                                                                                <div class="price-value">
+                                                                                    <div class="price-value-wrapper fixPrice adsPrice">
+                                                                                        @if (true)
+                                                                                        {
+                                                                                            var discount = db.Discounts.Where(r => r.productId == item.id && r.status == 1 && r.percentage != null).FirstOrDefault();
+                                                                                            int disPercentage = 0;
+                                                                                            if (discount != null && discount.percentage != null)
+                                                                                            {
+                                                                                                disPercentage = Convert.ToInt32(discount.percentage);
+                                                                                            }
+                                                                                            Int64 realPrice = Convert.ToInt64(item.price);
+                                                                                            if (discount != null)
+                                                                                            {
+                                                                                                realPrice = Convert.ToInt64(item.price - (item.price * discount.percentage) / 100);
+                                                                                            }
+                                                                                            @realPrice @:تومان
+                                                                                        }
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                }
+
+
+
+                                                            </div>
+                                                            @*<a href=""  onclick="showLoginModal()" style="width:100%" class="dk-btn dk-btn-info px-0 d-block stack-menu__link">
+                                                                    مشاهده محصول
+                                                                </a>*@
+                                                            <a class="btn btn-primary btn-no-icon comBtn" href="/home/product/@item.id">
+                                                                مشاهده
+                                                                و خرید محصول
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                                    }
+                                                                    if (products.Count != 4)
+                                                                    {
+                                                                        @*<div class="col-md-3 ComparisonProduct addNewItem" data-toggle="modal" data-target="#myModal">
+                                                                            <span class="plusIcon">+</span>
+                                                                            <br />
+                                                                            <span>
+                                                                                اضافه کردن محصول جدید
+                                                                            </span>
+                                                                        </div>*@
+                                                                        <div class="col-md-3 c-compare-list-value js-add-compare-product">
+                                                                            <div class="c-compare-add">
+                                                                                <button href="#" class="c-compare-placement" data-toggle="modal" data-target="#myModal">
+                                                                                    برای افزودن کالا به لیست مقایسه
+                                                                                    کلیک کنید
+                                                                                </button>
+                                                                                @*<div class="parent-btn">
+                                                                                    <button class="dk-btn dk-btn-grey dk-no-icon" data-toggle="modal" data-target="#add-compare-modal" style="width: 100%;line-height: 22px;padding: 11px;">
+                                                                                        افزودن کالا به مقایسه
+                                                                                    </button>
+                                                                                </div>*@
+                                                                            </div>
+                                                                        </div>
+                                                                        }
+                                                                    }
+                                                                    <div class="container">
+                                                                        <table class="table table-bordered">
+                                                                            @{
+                                                                                int cat = Convert.ToInt16(ViewBag.cat);
+                                                                                var properties = db.CatProperties.Where(r => r.catId == cat).ToList();
+                                                                                if (properties.Count != 0)
+                                                                                {
+                                                                                    foreach (var p in properties)
+                                                                                    {
+                                                                                        <tr>
+                                                                                            <td colspan="4" class="ComparisonHeaderTr" style="background-color: #eaeaea;border: none;font-size: 13px;">
+                                                                                                @p.title
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr class="row ComparisonTr">
+                                                                                            <td class="col-md-3 ComparisonTd">
+                                                                                                @{
+                                                                                                    if (true)
+                                                                                                    {
+                                                                                                        int productid = Convert.ToInt16(products[0].id);
+                                                                                                        var catValue = db.ProductPropertiesValues.Where(r => r.proId == productid && r.propertiesid == p.id).FirstOrDefault();
+                                                                                                        if (catValue != null)
+                                                                                                        {
+                                                                                                            @catValue.value
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                }
+                                                                                            </td>
+                                                                                            <td class="col-md-3 ComparisonTd">
+                                                                                                @{
+                                                                                                    if (true)
+                                                                                                    {
+                                                                                                        int productid = Convert.ToInt16(products[1].id);
+
+                                                                                                        var catValue = db.ProductPropertiesValues.Where(r => r.proId == productid && r.propertiesid == p.id).FirstOrDefault();
+                                                                                                        if (catValue != null)
+                                                                                                        {
+                                                                                                            @catValue.value
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                }
+                                                                                            </td>
+                                                                                            <td class="col-md-3 ComparisonTd">
+                                                                                                @{
+                                                                                                    if (true)
+                                                                                                    {
+
+                                                                                                        if (products.Count > 2)
+                                                                                                        {
+                                                                                                            int productid = Convert.ToInt16(products[2].id);
+
+                                                                                                            var catValue = db.ProductPropertiesValues.Where(r => r.proId == productid && r.propertiesid == p.id).FirstOrDefault();
+                                                                                                            if (catValue != null)
+                                                                                                            {
+                                                                                                                @catValue.value
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                }
+                                                                                            </td>
+                                                                                            <td class="col-md-3 ComparisonTd">
+                                                                                                @{
+                                                                                                    if (true)
+                                                                                                    {
+
+                                                                                                        if (products.Count > 3)
+                                                                                                        {
+                                                                                                            int productid = Convert.ToInt16(products[3].id);
+                                                                                                            var catValue = db.ProductPropertiesValues.Where(r => r.proId == productid && r.propertiesid == p.id).FirstOrDefault();
+                                                                                                            if (catValue != null)
+                                                                                                            {
+                                                                                                                @catValue.value
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                }
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                                        }
+                                                                                                    }
+
+                                                                            }
+
+
+                                                                        </table>
+                                                                    </div>
+                                                                    
+
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</main>
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body row">
+                <form action="/home/comparison" class="hidden" method="post" id="modalForm">
+                    @{
+                        <input name="cat" class="hidden" type="number" value="@cat" />
+
+                        foreach (var item in products)
+                        {
+                            <input name="product" class="hidden inputInModal" type="number" value="@item.id" data-id="@item.id" />
+                        }
+                    }
+                </form>
+                @{
+                    var ProductsListInCat = new List<Product>();
+
+                    var catPro = db.CatProes.Where(r => r.categoryId == cat).ToList();
+                    if (catPro.Count != 0)
+                    {
+                        foreach (var item in catPro)
+                        {
+                            if (products.Where(r => r.id == db.Products.Where(j => j.id == item.product_id).FirstOrDefault().id).FirstOrDefault() == null)
+                            {
+                                var pro = db.Products.Where(r => r.id == item.product_id).FirstOrDefault();
+                                if (pro != null)
+                                {
+                                    ProductsListInCat.Add(pro);
+                                }
+
+                            }
+                        }
+                    }
+                    ProductsListInCat = ProductsListInCat.Distinct().ToList();
+                    if (ProductsListInCat.Count != 0)
+                    {
+                        foreach (var item in ProductsListInCat)
+                        {
+                            <div class="col-md-4 itemInModal" data-id="@item.id">
+                                @{
+                                    <img style="width:100%" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.MainImage" />
+                                    <span class="productNameInModal">@item.title</span>
+                                }
+                            </div>
+                                        }
+                                    }
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+@section js{
+    <script>
+        $(document).on('click', '.removeFromComparation', function () {
+            if ($('.inputInModal').length != 2) {
+                var id = $(this).parent().attr('data-id');
+                $('.inputInModal[data-id="' + id + '"]').remove();
+                $('#modalForm').submit();
+            } else {
+                alert('تنها 2 محصول برای مقایسه وجود دارد ، نمی توانید یکی از آنها را حذف کنید')
+            }
+            setTimeout(showpanel, 1000)
+
+        })
+        $(document).on('click', '.itemInModal', function () {
+
+            $('#modalForm').html($('#modalForm').html() + '<input name="product" value="' + $(this).attr('data-id') + '" />')
+            $('#modalForm').submit();
+
+        })
+    </script>
+}
+<style>
+    .comBtn {
+        display: inline-block;
+        padding: 3px 31px;
+        width: 100%;
+    }
+    .table td, .table th {
+    padding: .25rem;
+}
+    .table-bordered td, .table-bordered th {
+    border: none;
+}
+    .table{
+        margin-bottom:0;
+    }
+    .c-compare-placement {
+    border: 3px dashed #d2d2d2;
+    font-size: 0.71rem;
+
+}
+    .product-box-row.product-box-row-price{
+        min-height:40px
+    }
+    .close.removeFromComparation {
+    position: absolute;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 1;
+    top: 10px;
+    z-index: 99;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: white;
+    padding: 1px 6px;
+    border-radius: 50px;
+    background: #f1f1f1;
+    font-weight: 100;
+    color: black;
+    font-size: 21px;
+    top: 20px;
+    left: 20px;
+}
+    .product-box-row-price{
+        margin-top:0;
+    }
+    .col-md-3.ComparisonProduct {
+    border-left: 1px solid #eaeaea;
+}
+    .product-box {
+    padding: 46px 20px 20px;
+}
+    span.productNameInModal {
+    font-size: 11px;
+}
+    .col-md-4.itemInModal {
+    border: 1px solid #e4e4e4;
+    cursor:pointer ; 
+}
+</style>

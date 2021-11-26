@@ -1,0 +1,257 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var group = db.DiscountGroups.Where(r => r.id == id).FirstOrDefault();
+    var codes = db.DiscountCodes.Where(r => r.GroupId == group.id).ToList();
+
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت کد های تخفیف</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/DiscountGroup/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست کد های تخفیف</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                        لیست کد های تخفیف @group.Name
+                    </h3>
+                </div>
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            <!--begin: Datatable -->
+            <table class="table table-hover" width="100%" id="Codes">
+                <thead>
+                    <tr>
+                        <th>
+                            شناسه
+                        </th>
+                        <th>
+                            کد
+                        </th>
+                        <th>
+                            حداکثر مبلغ تخفیف
+                        </th>
+                        <th>
+                            وضعیت
+                        </th>
+                        <th>
+                            تاریخ ایجاد
+                        </th>
+                        <th>
+                            تاریخ استفاده
+                        </th>
+                        <th>
+                            مبلغ
+                        </th>
+                        <th>
+                            سفارش
+                        </th>
+                        <th>
+                            کاربر
+                        </th>
+
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (codes.Count != 0)
+                        {
+                            foreach (var item in codes)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.id
+                                    </td>
+                                    <td>
+                                        @item.code
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (group.maxPercentage == null)
+                                            {
+                                                @:ندارد
+                                            }
+                                            else
+                                            {
+                                                @group.maxPercentage @:تومان
+                                                                   }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.isUsed == true)
+                                            {
+                                                @:استفاده شده
+                                            }
+                                            else
+                                            {
+                                                @:استفاده نشده
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            try
+                                            {
+                                                DateTime d = Convert.ToDateTime(item.creationDate);
+                                                PersianCalendar pc = new PersianCalendar();
+                                                string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+                                                @p
+                                            }
+                                            catch (Exception)
+                                            {
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            try
+                                            {
+                                                DateTime d = Convert.ToDateTime(item.useDate);
+                                                PersianCalendar pc = new PersianCalendar();
+                                                string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+                                                @p
+                                            }
+                                            catch (Exception)
+                                            {
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.Amont != null)
+                                            {
+                                                @item.Amont @:تومان
+
+                                            }
+                                            else
+                                            {
+                                                if (item.Amont == null && item.Percentage != null)
+                                                {
+                                                    @item.Percentage @:درصد
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.basketId == null)
+                                            {
+                                                @:ندارد
+                                            }
+                                            else
+                                            {
+                                                <a href="#/Admin/orders/details/@item.basketId">سفارش @item.basketId</a>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.basketId == null)
+                                            {
+                                                @:ندارد
+                                            }
+                                            else
+                                            {
+                                                var basket = db.Baskets.Where(r => r.id == item.basketId).FirstOrDefault();
+                                                if (basket != null)
+                                                {
+                                                    var user = db.Users.Where(r => r.id == basket.userId).FirstOrDefault();
+                                                    if (user != null)
+                                                    {
+                                                        <a href="#/Admin/Users/details/@user.id">@user.firstName @user.lastName</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        @:کاربر حذف شده است
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                    </td>
+
+                                </tr>
+
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="noEntry">
+                                    <span style="padding:50px 0 ; display:inline-block">
+                                        <i class="flaticon-exclamation" style="font-size:20px"></i> هیچ اطلاعاتی برای نمایش وجود ندارد
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+            <!--end: Datatable -->
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    titlePage('لیست کد های تخفیف @group.Name')
+</script>
+<script>
+    $(document).ready(function () {
+        document.title = '@group.Name';
+
+        $('#Codes').DataTable({
+            "language": {
+                "search": ""
+            },
+            "bPaginate": false,
+            dom: 'Bfrtip',
+            buttons: [
+                'excelHtml5'
+            ]
+        });
+        $('button.dt-button.buttons-excel.buttons-html5').addClass('btn btn-success');
+        $('[type="search"]').addClass('form-control')
+        $('[type="search"]').attr('placeholder', 'جستجو ...')
+    });
+</script>

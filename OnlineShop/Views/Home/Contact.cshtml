@@ -1,0 +1,268 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc
+@{
+    var db = new OnlineShopEntities();
+    var setting = db.Settings.FirstOrDefault();
+    var contact = db.ContactInformations.FirstOrDefault();
+    Layout = "/views/shared/_Layout.cshtml";
+    int userid = 0;
+    var user = new User();
+    if (Session["userLogin"] != null)
+    {
+        userid = Convert.ToInt16(Session["userLogin"]);
+        user = db.Users.Where(r => r.id == userid).FirstOrDefault();
+    }
+    var Contact = db.ContactInformations.FirstOrDefault();
+}
+
+<main class="single-product default">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <article class="product create-comment-product">
+                    <div class="c-info-page-content px-0">
+                        <h1 class="c-info-page-title">تماس با ما</h1>
+                    </div>
+                    <p class="mb-5">
+                        کاربر گرامی، لطفاً در صورت وجود هرگونه سوال یا ابهامی، از طریق راه های
+                        ارتباطی با ما تماس بگیرید.همچنین از طریق فرم زیر میتوانید با ما در ارتباط باشید...
+                    </p>
+                    <div class="row comments-add-col--content">
+
+                        <div class="col-md-6 col-sm-12">
+                            <div id="errorshow" class="alert alert-danger hidden">
+
+                            </div>
+                            <form class="px-5" id="commentForm" action="" method="post">
+                                <div class="row">
+                                    <div class="alert alert-danger" style="display:none" id="alert_show"></div>
+                                    <div class="alert alert-success" style="display:none" id="alert_show_success"></div>
+                                    <div class="col-12">
+                                        <div class="form-account-title">نام و نام&zwnj;خانوادگی</div>
+                                        <div class="form-account-row">
+                                            @{
+                                                if (userid != 0 && user != null && user.firstName != null && user.lastName != null)
+                                                {
+                                                    <input name="name" id="name" value="@user.firstName @user.lastName" class="input-field text-right" type="text">
+                                                }
+                                                else
+                                                {
+                                                    <input name="fullName" id="fullName" value="" class="input-field text-right" type="text">
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-account-title">ایمیل</div>
+                                        <div class="form-account-row">
+                                            @{
+                                                if (userid != 0 && user != null && user.email != null)
+                                                {
+                                                    <input name="email" id="email" oninvalid="this.setCustomValidity('ایمیل وارد شده صحیح نیست')" oninput="this.setCustomValidity('')" readonly="" class="input-field text-left dir-ltr" value="@user.email" type="email">
+
+                                                }
+                                                else
+                                                {
+                                                    <input name="email" id="email" oninvalid="this.setCustomValidity('ایمیل وارد شده صحیح نیست')" oninput="this.setCustomValidity('')" class="input-field text-left dir-ltr" type="email">
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-account-title">تلفن تماس</div>
+                                        <div class="form-account-row">
+                                            @{
+                                                if (userid != 0 && user != null && user.mobile != null)
+                                                {
+                                                    <input name="mobile" id="mobile" value="@user.mobile" readonly="" class="input-field text-left dir-ltr" type="text">
+
+                                                }
+                                                else
+                                                {
+                                                    <input name="mobile" id="mobile" class="input-field text-left dir-ltr" type="text">
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-account-title">موضوع</div>
+                                        <div class="form-account-row">
+                                            <div class="form-element">
+                                                <select name="subject" class="selectpicker select"
+                                                        placeholder="انتخاب کنید">
+                                                    <option value="1">
+                                                        پیشنهادات
+                                                    </option>
+                                                    <option value="2">
+                                                        انتقادات
+                                                    </option>
+                                                    <option value="3">
+                                                        باگ
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-5">
+                                        <div class="form-account-title">متن پیام</div>
+                                        <div class="form-account-row">
+                                            <textarea name="Content" id="Content" class="input-field text-right" rows="5" placeholder="متن خود را بنویسید"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button class="btn btn-primary btn-no-icon">
+                                            ثبت اطلاعات
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="c-info-page-content px-0">
+                                <h1 class="c-info-page-title">به موارد زیر توجه کنید</h1>
+                            </div>
+                            <div class="message-light">
+                                <p>روزهایی که در سال جاری به دلیل تعطیلی، توسعه @setting.WebsiteName هیچ&zwnj;گونه پاسخگویی، سرویس&zwnj;دهی و خدماتی ندارد، به شرح زیر است:</p>
+
+                                <ul>
+                                    <li>۱۳ فروردین</li>
+                                    <li>۱۴ خرداد</li>
+                                    <li>۱۸ شهریور (تاسوعا)</li>
+                                    <li>۱۹ شهریور (عاشورا)</li>
+                                    <li>۲۷ مهر (اربعین)</li>
+                                    <li>۵ آبان (رحلت حضرت رسول اکرم)</li>
+                                    <li>۲۲ بهمن</li>
+                                </ul>
+                            </div>
+                            <div class="message-light">
+                                <span class="font-weight-bold">
+                                    تلفن تماس:
+                                    @contact.phone
+                                </span>
+                            </div>
+                            <div class="message-light">
+                                <span class="font-weight-bold">
+                                    آدرس:
+                                    @contact.address
+                                </span>
+                            </div>
+                            <div class="message-light">
+                                <span class="font-weight-bold">
+                                    ایمیل:
+                                    @contact.email
+                                </span>
+                            </div>
+                 
+                        </div>
+
+                    </div>
+                    <br />
+                    <div class="row comments-add-col--content">
+                        <div class="col-md-12">
+                            <div class="c-info-page-content px-0">
+                                <h1 class="c-info-page-title">نقشه</h1>
+                            </div>
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+    </div>
+</main>
+@section CSS{
+    <link href="/template/css/select2-bootstrap4.min.css" rel="stylesheet" />
+    <link href="/template/css/select2.min.css" rel="stylesheet" />
+}
+@section JS{
+    <script src="~/Template/js/select2.min.js"></script>
+    <script>
+        $(document).on('submit', '#commentForm', function (event) {
+            event.preventDefault();
+            var errormessage = "";
+
+            if (($("#fullName").val() == "" || $("#fullName").val() == undefined) && ($("#name").val() == "" || $("#name").val() == undefined))
+                errormessage += "نام خود را وارد کنید.<br>";
+            var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            var vli = regex.test($("#email").val());
+            if (vli != true || $("#email").val() == "" || $("#email").val() == undefined)
+                errormessage += "ایمیل وارد شده صحیح نیست.<br>";
+            if ($("#mobile").val().length != 0) {
+                if ($("#mobile").val().length != 11 || $.isNumeric($("#mobile").val()) == false || $("#mobile").val().substr(0, 2) != '09')
+                    errormessage += "موبایل وارد شده صحیح نیست.<br>";
+            }
+
+            if ($("#Content").val() == "" || $("#Content").val() == undefined)
+                errormessage += "متن را وارد کنید.<br>";
+            if (errormessage != "") {
+                $("#errorshow").html(errormessage);
+                $("#errorshow").removeClass('hidden');
+                $('html, body').animate({
+                    scrollTop: $("#errorshow").offset().top
+                }, 500);
+            }
+            else {
+                $("#errorshow").addClass('hidden')
+                $.ajax({
+                    type: "POST",
+                    url: '/home/contact',
+                    data: $('#commentForm').serialize(),
+                    success: function (t) {
+                        if (t.title != null && t.title == 'error') {
+                            swal.fire("خطا !", t.desc, "error")
+                        } else {
+                            swal.fire("انجام شد !", t.success, "success"),
+                                window.location = $($(selected).closest('.myForm')).attr("data-redirect"), hashChange()
+                        }
+                    }
+                });
+
+            }
+        })
+    </script>
+
+    <script src="https://www.parsimap.ir/js/v3.1.0/parsimap.js?key=public"></script>
+    <script>
+        var container = document.getElementById('map');
+        var map = new parsimap.Map(container, {
+            zoom: 16,
+            center: [@Contact.lon, @Contact.lat],
+        });
+
+        map.on('load', onMapLoad);
+
+        function onMapLoad() {
+            var pointGeoJSON = {
+                type: 'FeatureCollection',
+                features: [
+                    {
+                        type: 'Feature',
+                        properties: { image: 'home' },
+                        geometry: { type: 'Point', coordinates: [@Contact.lon, @Contact.lat] },
+                    },
+                ],
+            };
+
+            var imageHostUrl =
+                'https://www.parsimap.ir/js/v3.1.0/examples/marker/';
+            var imageCollection = [
+                { name: 'home', url: imageHostUrl + 'home.png' },
+            ];
+
+            map.addSource('point-source', pointGeoJSON);
+            map.loadImageCollection(imageCollection, function () {
+                map.addSymbolLayer('marker-symbol', 'point-source', {
+                    layout: { 'icon-image': '{image}' },
+                });
+            });
+        }
+    </script>
+}
+<style>
+    #map{
+        height:300px
+    }
+</style>

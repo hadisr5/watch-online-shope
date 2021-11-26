@@ -1,0 +1,149 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    Layout = null;
+    int userId = Convert.ToInt32(Session["userLogin"]);
+    var isPrime = false;
+    var user = db.Users.Where(r => r.id == userId).FirstOrDefault();
+    if (user!=null && user.Special == true)
+    {
+        isPrime = true; 
+    }
+
+}
+@{
+    if (Session["orders"] == null)
+    {
+        <div class="cart dropdown" id="cart-view">
+            <a href="/cart" class="btn cartbtn">
+                <img src="/template/images/buy.svg" alt="">
+            </a>
+        </div>
+    }
+    else
+    {
+        var ords = (List<Order>)Session["orders"];
+        Int64 sum = 0;
+        foreach (var item in ords)
+        {
+            var off = db.Discounts.Where(r => r.percentage != null && r.status == 1 && r.productId == item.productId && r.expire > DateTime.Now).FirstOrDefault();
+            var pro = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+            var sellerPro = db.SellersProducts.Where(r => r.sellerId == item.SellerId && r.productId == item.productId).FirstOrDefault();
+            if (sellerPro == null)
+            {
+                if (off != null)
+                {
+                    if (isPrime)
+                    {
+                        sum += Convert.ToInt64((pro.priceForSpecialUsers - (pro.priceForSpecialUsers * off.percentage) / 100) * item.quantity);
+
+                    }
+                    else
+                    {
+                        sum += Convert.ToInt64((pro.price - (pro.price * off.percentage) / 100) * item.quantity);
+
+                    }
+
+                }
+                else
+                {
+                    if (isPrime)
+                    {
+                        sum += Convert.ToInt64((pro.priceForSpecialUsers) * item.quantity);
+                    }
+                    else
+                    {
+                        sum += Convert.ToInt64((pro.price) * item.quantity);
+
+                    }
+                }
+            }
+            else
+            {
+                sum += Convert.ToInt64((sellerPro.price) * item.quantity);
+            }
+        }
+        if (ords.Count != 0)
+        {
+            <div class="cart dropdown" id="cart-view">
+                <a href="/cart" class="btn cartbtn" data-toggle="dropdown" id="navbarDropdownMenuLink1">
+                    <img src="/template/images/buy.svg" alt="">
+                    <span class="count-cart">@ords.Count</span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">
+                    <div class="basket-header">
+                        <div class="basket-total">
+                            <span>مبلغ کل خرید:</span>
+                            <span class="fixPrice">@sum</span>
+                            <span> تومان</span>
+                        </div>
+                        <a href="/cart" class="basket-link">
+                            <span>مشاهده سبد خرید</span>
+                        </a>
+                    </div>
+                    <ul class="basket-list">
+                        @{
+                            foreach (var item in ords)
+                            {
+                                var pro = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+
+                                <li id="cart_row_392">
+                                    <a href="javascript:void(0)" class="basket-item">
+                                        <button class="basket-item-remove remove-cart-item removeFromCard" data-id="@item.productId"></button>
+                                        <div class="basket-item-content">
+                                            <div class="basket-item-image">
+                                                @{
+                                                    if (pro.MainImage != null)
+                                                    {
+                                                        <img alt="" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@pro.MainImage">
+                                                    }
+                                                    else
+                                                    {
+                                                        <img alt="" src="/Template/images/loading.png">
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="basket-item-details">
+                                                <div class="basket-item-title" style="font-size: 8pt">
+                                                    @{
+                                                        if (pro.title.Length <= 40)
+                                                        {
+                                                            @pro.title
+                                                        }
+                                                        else
+                                                        {
+                                                            string simplePro = pro.title;
+                                                            simplePro = simplePro.Substring(0, 39);
+                                                            @simplePro
+                                                        }
+                                                    }
+                                                </div>
+                                                <div class="basket-item-params">
+                                                    <div class="basket-item-props">
+                                                        <span> @item.quantity عدد</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <a href="/cart" class="basket-submit"> ثبت سفارش و ارسال </a>
+                </ul>
+            </div>
+        }
+        else
+        {
+            <div class="cart dropdown" id="cart-view">
+                <a href="/cart" class="btn cartbtn">
+                    <img src="~/Template/images/buy.svg" alt="">
+                </a>
+            </div>
+        }
+    }
+}
+<script>
+    fixprice();
+</script>

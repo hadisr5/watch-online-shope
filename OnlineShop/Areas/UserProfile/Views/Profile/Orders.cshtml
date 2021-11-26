@@ -1,0 +1,131 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(Session["userLogin"]);
+    var user = db.Users.Find(id);
+    Layout = "~/views/shared/_layout.cshtml";
+    var baskets = db.Baskets.Where(r => r.userId == id).OrderByDescending(r => r.id).ToList();
+}
+<main class="profile-user-page default">
+    <div class="container">
+        <div class="row">
+            <div class="profile-page col-xl-9 col-lg-8 col-md-12 order-2">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-12">
+                            <h1 class="title-tab-content">لیست سفارش های شما</h1>
+                        </div>
+                        <div class="content-section default">
+                            @{
+                                if (baskets.Count != 0)
+                                {
+                                    <div class="table-responsive">
+
+
+                                        <table class="table table-order">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th scope="col">
+                                                        شناسه
+                                                    </th>
+                                                    <th scope="col">
+                                                        مبلغ پرداخت شده
+                                                    </th>
+                                                    <th>
+                                                        روش پرداخت
+                                                    </th>
+                                                    <th scope="col">
+                                                        وضعیت
+                                                    </th>
+                                                    <th scope="col">
+                                                        تاریخ
+                                                    </th>
+
+                                                    <th scope="col">
+                                                        جزئیات
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    int i = baskets.Count;
+                                                    foreach (var item in baskets)
+                                                    {
+                                            <tr>
+                                                <td>
+                                                    @item.id
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        if (item.payed == true)
+                                                        {
+                                                            @(item.Price + Convert.ToInt64(item.shippingPrice) - Convert.ToInt64(item.DiscountAmount))@: تومان
+
+                                                                                            }
+                                                        else
+                                                        {
+                                                            @:پرداخت نشده
+                                                        }
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @item.payMethod
+                                                </td>
+                                                <td>
+                                                    @item.status
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        try
+                                                        {
+                                                            DateTime d = Convert.ToDateTime(item.creationDate);
+                                                            PersianCalendar pc = new PersianCalendar();
+                                                            string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), d.Hour , d.Minute));
+                                                        @p
+                                                                    }
+                                                                    catch (Exception)
+                                                                    {
+                                                                    }
+                                                    }
+                                                </td>
+                                                <td><a href="/UserProfile/profile/orderDetail/@item.id" class="order-detail-link"><i class="now-ui-icons arrows-1_minimal-left"></i></a></td>
+                                            </tr>
+                                                                        i -= 1;
+                                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="content-section text-center">
+                                                                <div class="icon-empty">
+                                                                    <i class="now-ui-icons travel_info"></i>
+                                                                </div>
+                                                                <h1 class="text-empty">موردی برای نمایش وجود ندارد!</h1>
+                                                            </div>
+                                                        }
+                            }
+             
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @RenderPage("~/Areas/UserProfile/Views/Shared/_SideBar.cshtml")
+        </div>
+
+        @RenderPage("~/Areas/UserProfile/Views/Shared/_recentViews.cshtml")
+
+
+
+
+    </div>
+</main>
+@section JS{
+    <script>
+        changeMenu('orders')
+    </script>
+}

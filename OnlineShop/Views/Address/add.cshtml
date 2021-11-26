@@ -1,0 +1,318 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    int userid = Convert.ToInt32(Session["userLogin"]);
+    var user = db.Users.Where(r => r.id == userid).FirstOrDefault();
+    var setting = db.Settings.FirstOrDefault();
+    ViewBag.header = false;
+}
+
+
+<link href="/template/css/select2.min.css" rel="stylesheet" />
+<link href="/template/css/select2-bootstrap4.min.css" rel="stylesheet" />
+<script src="https://www.parsimap.ir/js/v3.1.0/parsimap.js?key=public"></script>
+<script src="https://www.parsimap.ir/js/v3.1.0/plugins/parsimap-pointer.js"></script>
+
+<div class="wrapper default shopping-page">
+
+    <!-- header-shopping -->
+    <header class="header-shopping default">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center pt-4">
+                    <div class="header-shopping-logo default">
+                        <a href="/">
+                            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@setting.WebsiteLogo" alt="" style="width:200px">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header-shopping -->
+    <!-- main-shopping -->
+    <main class="cart-page default">
+        <div class="container">
+            <div class="row mt-4 mb-4">
+                <div class="send-info send-info-page default">
+                    <div class="send-info-content default">
+                        <div class="modal-header">
+                            <h5 class="send-info-title">
+                                <i class="now-ui-icons location_pin"></i>
+                                افزودن آدرس جدید
+                            </h5>
+                        </div>
+                        <div class="send-info-body default">
+                            <div class="alert alert-danger print-error-msg-new" style="display:none">
+                                <ul></ul>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12">
+                                    <form class="form-account" id="new-address-user"
+                                          onsubmit="return false">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="form-account-title">
+                                                    نام و نام
+                                                    خانوادگی تحویل گیرنده
+                                                </div>
+                                                <div class="form-account-row">
+                                                    <input class="input-field text-right" name="Reciver"
+                                                           type="text"
+                                                           value="@user.firstName @user.lastName"
+                                                           placeholder="نام و نام خانوادگی شخص تحویل گیرنده را وارد نمایید">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="form-account-title">
+                                                    شماره موبایل
+                                                </div>
+                                                <div class="form-account-row">
+                                                    <input class="input-field" type="text" name="ReciverPhone"
+                                                           value="@user.mobile"
+                                                           placeholder="09xxxxxxxxx">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="form-account-title">استان</div>
+                                                <div class="form-account-row">
+                                                    <div class="form-element">
+                                                        <select name="State" id="state-new"
+                                                                class="selectpicker select"
+                                                                placeholder="استان مورد نظر خود را انتخاب کنید">
+                                                            <option></option>
+                                                            @{
+                                                                var states = db.States.ToList();
+                                                                if (states.Count != 0)
+                                                                {
+                                                                    foreach (var item in states)
+                                                                    {
+                                                                        <option value="@item.id">@item.name</option>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="form-account-title">شهر</div>
+                                                <div class="form-account-row">
+                                                    <div class="form-element">
+                                                        <select class="selectpicker select" name="City" id="city-new"
+                                                                placeholder="شهر مورد نظر خود را انتخاب کنید"
+                                                                data-allow-clear="1">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12" id="parish-display-new" style="display: none">
+                                                <div class="form-account-title">منطقه</div>
+                                                <div class="form-account-row">
+                                                    <div class="form-element">
+                                                        <select class="selectpicker select" name="parish_id"
+                                                                id="parish-new"
+                                                                placeholder="منطقه مورد نظر خود را انتخاب کنید"
+                                                                data-allow-clear="1">
+                                                            <option value=""></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <div class="form-account-title">آدرس پستی</div>
+                                                <div class="form-account-row">
+                                                    <textarea class="input-field text-right"
+                                                              rows="5" name="Address"
+                                                              placeholder=" آدرس تحویل گیرنده را وارد نمایید"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-account-title">کد پستی</div>
+                                                <div class="form-account-row">
+                                                    <input class="input-field" name="postalCode"
+                                                           type="text"
+                                                           placeholder=" کد پستی را بدون خط تیره بنویسید">
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="Location" id="billing_map_lat_long" value="" />
+                                            <div class="col-12 pad-5">
+                                                <a onclick="save_new_address();return false"
+                                                   class="btn btn-sm btn-primary btn-submit-form">
+                                                    ثبت
+                                                    و
+                                                    ارسال به این آدرس
+                                                </a>
+                                                <a href="/"
+                                                   class="btn-link-border form-account-link float-left" data-dismiss="modal">
+                                                    انصراف
+                                                    و بازگشت
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="text-justify">
+                                        برای ثبت موقعیت خود بر روی نقشه کافی است بر روی محل مورد نظر کلیک نمایید.
+                                    </div>
+                                   
+                                    <div id='map' style='width: 100%; height: 400px;'></div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- main-shopping -->
+    <div id="loading" style="display: none">
+        <div class="snippet">
+            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@setting.WebsiteLogo" alt="">
+            <div class="stage">
+                <div class="dot-floating"></div>
+            </div>
+        </div>
+        <div class="overlay-loading"></div>
+    </div>
+</div>
+
+
+
+@section JS{
+
+    <script src="/template/js/cedarmaps.js"></script>
+    <script src="/template/js/vue.min.js"></script>
+    <script src="/template/js/L.Control.Locate.min.js"></script>
+    <!--  Select2 -->
+    <script src="/template/js/select2.min.js" type="text/javascript"></script>
+    <script src="/template/js/select2.min.js" type="text/javascript"></script>
+    <script>
+        save_new_address = function () {
+            $('#loading').show();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            var data = $('#new-address-user').serialize();
+            $.ajax({
+                url: '/address/store',
+                method: "POST",
+                data: data,
+                success: function (response) {
+                    if (response.status == 500) {
+                        $('#loading').hide();
+                        toastr.error(response.text);
+                    } else {
+                        setTimeout(function () {
+                            window.location.replace('/shipping/index');
+                        }, 1000);
+                    }
+                },
+             
+            });
+
+
+            function printErrorMsgNew(msg) {
+                $(".print-error-msg-new").find("ul").html('');
+                $(".print-error-msg-new").css('display', 'block');
+                $.each(msg, function (key, value) {
+                    $(".print-error-msg-new").find("ul").append('<li>' + value + '</li>');
+                });
+            }
+        }
+        $('#state-new').change(function () {
+            var stateID = $(this).val();
+            if (stateID) {
+                $.ajax({
+                    type: "GET",
+                    url: "/address/cities/" + stateID,
+                    success: function (res) {
+                        $("#city-new").empty();
+                        $("#city-new").append('<option value="">انتخاب کنید</option>');
+                        if (res.length != 0) {
+                            for (var i = 0; i < res.length; i++) {
+                                $("#city-new").append('<option value="' + res[i].id + '">' + res[i].name + '</option>');
+                            }
+                        }
+                        //if (res) {
+
+                        //    $.each(res, function (key, value) {
+                        //    });
+
+                        //} else {
+                        //    $("#city-new").empty();
+                        //}
+                    }
+                });
+            } else {
+                $("#city-new").empty();
+                $("#parish-new").empty();
+            }
+        });
+        $('#city-new').on('change', function () {
+            var cityID = $(this).val();
+            if (cityID) {
+                $.ajax({
+                    type: "GET",
+                    url: "/get-parish-list?city_id=" + cityID,
+                    success: function (res) {
+                        if (Object.keys(res).length) {
+                            $('#parish-display-new').show();
+                            $("#parish-new").empty();
+                            $("#parish-new").append('<option value="">انتخاب کنید</option>');
+                            $.each(res, function (key, value) {
+                                $("#parish-new").append('<option value="' + key + '">' + value + '</option>');
+                            });
+
+                        } else {
+                            $("#parish-new").empty();
+                            $('#parish-display-new').hide();
+                        }
+                    }
+                });
+            } else {
+                $("#parish-new").empty();
+            }
+
+        });
+
+      
+
+
+    </script>
+    <script>
+        var container = document.getElementById('map');
+        var mapOptions = { center: [51.41, 35.7575], zoom: 17 };
+        var map = new parsimap.Map(container, mapOptions);
+
+        map.on('load', function () {
+            // JS docs part of symbol layer for custom symbol.
+            // @@see https://www.parsimap.ir/js/v3.1.0/parsimap-javascript-docs.pdf
+            //
+            // interface symbolLayerOptions: {
+            //   layout: LayerLayout,
+            //   paint: LayerPaint,
+            //   filter: LayerFilter
+            // }
+            var symbolLayerOptions = map.getDefaultSymbol();
+
+            var pointer = new parsimap.Pointer(map, {
+                type: 'center',
+                layerOptions: symbolLayerOptions,
+            });
+            pointer.enable();
+
+            pointer.on('select', function (event) {
+                var stringLngLat =
+                    event.lngLat.lat + "," + event.lngLat.lng;
+                document.getElementById('billing_map_lat_long').value = stringLngLat;
+            });
+        });
+    </script>
+
+}

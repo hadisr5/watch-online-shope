@@ -1,0 +1,150 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Create";
+    Layout = null;
+    var promotion = db.Promotions.FirstOrDefault();
+
+}
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            اطلاعات پروموشن
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/promotion/indexPost" data-redirect="/Admin/AdminDashboard/Index#/Admin/promotion/index">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <input type="number" value="@promotion.id" style="display:none" name="id" />
+                        <div class="form-group">
+                            <label>عنوان پروموشن</label>
+                            <input type="text" value="@promotion.title" class="form-control" placeholder="عنوان پروموشن" name="title">
+                        </div>
+                        <div class="form-group">
+                            <label>تاریخ انقضا</label>
+                            @{
+                                if (promotion.date == null)
+                                {
+                                    <input type="text" class="form-control" autocomplete="off" id="test-date-id" name="exp" placeholder="برای انتخاب تاریخ انقضا کیک کنید">
+
+                                }
+                                else
+                                {
+                                    DateTime d = Convert.ToDateTime(promotion.date);
+                                    PersianCalendar pc = new PersianCalendar();
+                                    string month = string.Empty;
+                                    string day = string.Empty;
+                                    if (pc.GetMonth(d) < 10)
+                                    {
+                                        month = "0" + pc.GetMonth(d).ToString();
+                                    }
+                                    else
+                                    {
+                                        month = pc.GetMonth(d).ToString();
+                                    }
+                                    if (pc.GetDayOfMonth(d) < 10)
+                                    {
+                                        day = "0" + pc.GetDayOfMonth(d).ToString();
+                                    }
+                                    else
+                                    {
+                                        day = pc.GetDayOfMonth(d).ToString();
+                                    }
+                                    string psFormat = (string.Format("{0}/{1}/{2}", pc.GetYear(d), month, day));
+                                    <input type="text" value="@psFormat" class="form-control" autocomplete="off" id="test-date-id" name="exp" placeholder="برای انتخاب تاریخ انقضا کیک کنید">
+
+                                }
+                            }
+                        </div>
+                        <div class="form-group">
+                            <label class="col-3 col-form-label">فعال سازی پروموشن</label>
+                            <div class="col-3">
+                                <span class="kt-switch">
+                                    <label>
+                                        @{
+                                            if (promotion.active != null && promotion.active == true)
+                                            {
+                                                <input type="checkbox" checked="checked" name="active" value="True" />
+
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" name="active" value="True" />
+
+                                            }
+                                        }
+                                        <span></span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">
+                                عکس پروموشن
+                            </label>
+                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@promotion.bgImage" id="imgPre" style="width: 337px;
+    border-radius: 10px;
+" />
+                                <div class="m-dropzone dropzone" action="/admin/promotion/upload" id="m-dropzone-one">
+                                    <div class="m-dropzone__msg dz-message needsclick">
+                                        <h3 class="m-dropzone__msg-title">
+                                            برای ویرایش عکس ، اینجا کلیک کنید
+                                        </h3>
+                                        @*<span class="m-dropzone__msg-desc">
+                            عکس آپلود شده به عنوان عکس پروفایل کاربر نمایش داده می شود
+                        </span>*@
+                                    </div>
+                                </div>
+                                <input type="text" class="hidden" id="img" name="bgImage" style="display:none" value="@promotion.bgImage" />
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ویرایش پروموشن</button>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ویرایش پروموشن')
+</script>
+<script>
+            kamaDatepicker('test-date-id');
+            $('.dropzone').dropzone({
+                success: function (file, response) {
+                    $('#img').val(response);
+                    $('#imgPre').remove();
+
+                }
+            });
+</script>
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-menu="promotion"]').addClass('kt-menu__item--active')
+
+</script>

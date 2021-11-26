@@ -1,0 +1,454 @@
+﻿@{
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت محصول</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/Products/create" class="btn btn-light-warning font-weight-bolder btn-sm">ایجاد محصول جدید</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+            <!--begin::Actions-->
+            @*<a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Today</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Month</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Year</a>*@
+            <!--end::Actions-->
+            <!--begin::Daterange-->
+            @*<a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="" data-placement="left" data-original-title="Select dashboard daterange">
+                    <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
+                    <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Aug 11</span>
+                </a>*@
+            <!--end::Daterange-->
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+
+<div class="card card-custom">
+    <div class="card-header flex-wrap border-0 pt-6 pb-0">
+        <div class="card-title">
+            <h3 class="card-label">
+                لیست محصولات
+                @*<span class="text-muted pt-2 font-size-sm d-block">Javascript array as data source</span>*@
+            </h3>
+        </div>
+        <div class="card-toolbar">
+            <!--begin::Dropdown-->
+            <!--<div class="dropdown dropdown-inline mr-2">
+                <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="svg-icon svg-icon-md">-->
+                        <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Design/PenAndRuller.svg-->
+                        <!--<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24"></rect>
+                                <path d="M3,16 L5,16 C5.55228475,16 6,15.5522847 6,15 C6,14.4477153 5.55228475,14 5,14 L3,14 L3,12 L5,12 C5.55228475,12 6,11.5522847 6,11 C6,10.4477153 5.55228475,10 5,10 L3,10 L3,8 L5,8 C5.55228475,8 6,7.55228475 6,7 C6,6.44771525 5.55228475,6 5,6 L3,6 L3,4 C3,3.44771525 3.44771525,3 4,3 L10,3 C10.5522847,3 11,3.44771525 11,4 L11,19 C11,19.5522847 10.5522847,20 10,20 L4,20 C3.44771525,20 3,19.5522847 3,19 L3,16 Z" fill="#000000" opacity="0.3"></path>
+                                <path d="M16,3 L19,3 C20.1045695,3 21,3.8954305 21,5 L21,15.2485298 C21,15.7329761 20.8241635,16.200956 20.5051534,16.565539 L17.8762883,19.5699562 C17.6944473,19.7777745 17.378566,19.7988332 17.1707477,19.6169922 C17.1540423,19.602375 17.1383289,19.5866616 17.1237117,19.5699562 L14.4948466,16.565539 C14.1758365,16.200956 14,15.7329761 14,15.2485298 L14,5 C14,3.8954305 14.8954305,3 16,3 Z" fill="#000000"></path>
+                            </g>
+                        </svg>-->
+                        <!--end::Svg Icon-->
+                    <!--</span>خروجی
+                </button>-->
+                <!--begin::Dropdown Menu-->
+                <!--<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">-->
+                    <!--begin::Navigation-->
+                    <!--<ul class="navi flex-column navi-hover py-2">
+                        <li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">انتخاب نوع خروجی</li>
+                        <li class="navi-item">
+                            <a class="navi-link">
+                                <span class="navi-icon">
+                                    <i class="la la-print"></i>
+                                </span>
+                                <span class="navi-text">Print</span>
+                            </a>
+                        </li>
+                        <li class="navi-item">
+                            <a class="navi-link">
+                                <span class="navi-icon">
+                                    <i class="la la-copy"></i>
+                                </span>
+                                <span class="navi-text">Copy</span>
+                            </a>
+                        </li>
+                        <li class="navi-item">
+                            <a class="navi-link">
+                                <span class="navi-icon">
+                                    <i class="la la-file-excel-o"></i>
+                                </span>
+                                <span class="navi-text">Excel</span>
+                            </a>
+                        </li>
+                        <li class="navi-item">
+                            <a class="navi-link">
+                                <span class="navi-icon">
+                                    <i class="la la-file-text-o"></i>
+                                </span>
+                                <span class="navi-text">CSV</span>
+                            </a>
+                        </li>
+                        <li class="navi-item">
+                            <a class="navi-link">
+                                <span class="navi-icon">
+                                    <i class="la la-file-pdf-o"></i>
+                                </span>
+                                <span class="navi-text">PDF</span>
+                            </a>
+                        </li>
+                    </ul>-->
+                    <!--end::Navigation-->
+                <!--</div>-->
+                <!--end::Dropdown Menu-->
+            <!--</div>-->
+            <!--end::Dropdown-->
+            <!--begin::Button-->
+            <a href="#/admin/Products/create" class="btn btn-primary font-weight-bolder">
+                <span class="svg-icon svg-icon-md">
+                    <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Design/Flatten.svg-->
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"></rect>
+                            <circle fill="#000000" cx="9" cy="15" r="6"></circle>
+                            <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3"></path>
+                        </g>
+                    </svg>
+                    <!--end::Svg Icon-->
+                </span>ایجاد مورد جدید
+            </a>
+            <!--end::Button-->
+        </div>
+    </div>
+    <div class="card-body">
+        <!--begin: Search Form-->
+        <!--begin::Search Form-->
+        <div class="mb-7">
+            <div class="row align-items-center">
+                <div class="col-lg-9 col-xl-8">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 my-2 my-md-0">
+                            <div class="input-icon">
+                                <input type="text" class="form-control" placeholder="جستجو ..." id="SearchInput">
+                                <span>
+                                    <i class="flaticon2-search-1 text-muted"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 my-2 my-md-0">
+                            <div class="d-flex align-items-center">
+                                <label class="mr-3 mb-0 d-none d-md-block">نمایش</label>
+                                <select class="form-control dropdown pag" id="kt_datatable_search_status">
+                                    <option value="10" selected>10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--begin: Datatable-->
+        <div class="datatable-head-custom datatable-default datatable-primary datatable-loaded" id="kt_datatable" style="">
+
+            <div class="datatable datatable-head-custom datatable-default datatable-primary datatable-loaded" id="kt_datatable" style="">
+                <table class="table  table-condensed datatable-table" id="Table">
+                    <thead>
+                        <tr>
+                            <th>شناسه</th>
+                            <th>عکس</th>
+                            <th>عنوان</th>
+                            <th>موجودی</th>
+                            <th>نمایش</th>
+                            <th>موجود</th>
+                            <th>قیمت</th>
+                            <th>اقدامات</th>
+                        </tr>
+                    </thead>
+
+
+                </table>
+
+            </div>
+
+        </div>
+        <!--end: Datatable-->
+    </div>
+</div>
+<script>
+    titlePage('مدیریت برند ها')
+    MenuChange('Products');
+</script>
+<script>
+    $(document).ready(function () {
+        var table = $("#Table").DataTable({
+
+            responsive: !0, searchDelay: 500, processing: !0, serverSide: !0, ajax: "/admin/Products/List",
+            columns:
+                [
+                    {
+                        data: "id"
+                    },
+                    {
+                        data: "MainImage",
+                        orderable: false,
+
+                        render: function (data, type, row) {
+                            if (data == null) {
+                                return '<img src="/Template/images/loading.png" alt=""  style="width:70px;border-radius:4px;height: 70px;" />'
+
+                            } else {
+                                return '<img data-src="' + "@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]" + data + '" src="/Template/images/loading.png" alt=""  style="width:70px;border-radius:4px;height: 70px;" class="lazyload" />'
+
+                            }
+                        }
+                    },
+
+                    {
+                        data: "title",
+                        orderable: false
+                    },
+                    {
+                        data: "Inventory",
+                        render: function (data, type, row) {
+                            return '<div class="form-group row" style="width:320px"><div class="col-md-12"><input   type="text" data-id="' + row.id + '"  class="form-control touchspin" value="' + data + '" name="demo0" placeholder="Select time" /></div></div>'
+
+
+                        }
+                    },
+                    {
+                        data: "Active",
+                        render: function (data, type, row) {
+                            if (data == true) {
+                                return '<label class="checkbox"><input type="checkbox" data-activeCheck="true" checked="checked" data-id="' + row.id + '"><span></span></label>'
+
+                            } else {
+                                return '<label class="checkbox"><input type="checkbox" data-activeCheck="true" data-id="' + row.id + '"><span></span></label>'
+
+                            }
+                        }
+                    },
+                    {
+                        data: "isAvailable",
+                        render: function (data, type, row) {
+                            if (data == true) {
+                                return '<span class="switch"><label><input type="checkbox" data-id="' + row.id +'" checked="checked" name="isAvailable" /><span></span></label></span>'
+
+                            } else {
+                                return '<span class="switch"><label><input type="checkbox" data-id="' + row.id +'" name="isAvailable" /><span></span></label></span>'
+
+                            }
+                        }
+                    },
+                    {
+                        data: "price",
+                        render: function (data, type, row) {
+                            if (data != null) {
+                                return formatPrice(data) + ' تومان'
+
+                            } else {
+                                return ''
+                            }
+                        }
+
+                    },
+                    {
+                        data: "id",
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return '<span style="overflow: visible; position: relative; width: 125px;"> <div class="dropdown dropdown-inline">  <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right"> <ul class="navi flex-column navi-hover py-2"> <li class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2"> Choose an action: </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-print"></i></span> <span class="navi-text">Print</span> </a> </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-copy"></i></span> <span class="navi-text">Copy</span> </a> </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-file-excel-o"></i></span> <span class="navi-text">Excel</span> </a> </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-file-text-o"></i></span> <span class="navi-text">CSV</span> </a> </li> <li class="navi-item"> <a href="#" class="navi-link"> <span class="navi-icon"><i class="la la-file-pdf-o"></i></span> <span class="navi-text">PDF</span> </a> </li> </ul> </div> </div> <a  href="#/admin/Products/edit/' + data + '"  class="btn btn-sm btn-clean btn-icon mr-2" title="Edit details"> <span class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <rect x="0" y="0" width="24" height="24"></rect> <path d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) "></path> <rect fill="#000000" opacity="0.3" x="5" y="20" width="15" height="2" rx="1"></rect> </g> </svg> </span> </a></span>'
+                        }
+
+                    }
+                ],
+
+
+            language: {
+                url: "/newScripts/Persian.json",
+                processing: "در حال دریافت اطلاعات ...",
+                search: "جستجو : ",
+                info: "نمایش _START_ تا _END_ از _TOTAL_ ",
+                sLengthMenu: "نمایش _MENU_ آیتم در صفحه",
+                emptyTable: "هیچ داده ای وجود ندارد",
+                zeroRecords: "هیچ داده ای وجود ندارد",
+                infoEmpty: "نمایش 0 تا 0 از 0 داده"
+            },
+            ajax: {
+                url: "/admin/Products/list",
+                type: "POST"
+            },
+            fnDrawCallback: function (oSettings, json) {
+                lazyload();
+                $('input.touchspin').each(function () {
+                    $(this).TouchSpin({
+
+                        // Minimum value.
+                        min: 0,
+
+                        // Maximum value.
+                        max: 5000,
+
+                        // Applied when no explicit value is set on the input with the value attribute.
+                        // Empty string means that the value remains empty on initialization.
+                        initval: '',
+                        replacementval: '',
+
+                        // Number of decimal points.
+                        decimals: 0,
+
+                        // none | floor | round | ceil
+                        forcestepdivisibility: 'round',
+
+                        // Enables the traditional up/down buttons.
+                        verticalbuttons: false,
+
+                        // Class of the up button with vertical buttons mode enabled.
+                        verticalupclass: 'glyphicon glyphicon-chevron-up',
+
+                        // Class of the down button with vertical buttons mode enabled.
+                        verticaldownclass: 'glyphicon glyphicon-chevron-down',
+
+                        // Boost at every nth step.
+                        boostat: 5,
+
+                        // If enabled, the the spinner is continually becoming faster as holding the button.
+                        booster: true,
+
+                        // Maximum step when boosted.
+                        maxboostedstep: 10,
+
+                        // Text after the input.
+                        postfix: 'عدد',
+
+                        // Text before the input.
+                        //prefix: '$',
+
+                        // Extra class(es) for prefix.
+                        prefix_extraclass: '',
+
+                        //  Extra class(es) for postfix.
+                        postfix_extraclass: '',
+
+                        // Incremental/decremental step on up/down change.
+                        step: 1,
+
+                        // Refresh rate of the spinner in milliseconds.
+                        stepinterval: 100,
+
+                        // Time in milliseconds before the spinner starts to spin.
+                        stepintervaldelay: 500,
+
+                        //  Enables the mouse wheel to change the value of the input.
+                        mousewheel: true,
+
+                        //  Class(es) of down button.
+                        buttondown_class: 'btn btn-default',
+
+                        //  Class(es) of up button.
+                        buttonup_class: 'btn btn-default',
+
+                        // Text for down button
+                        buttondown_txt: '-',
+
+                        // Text for up button
+                        buttonup_txt: '+'
+
+                    });
+
+                })
+                $('input.touchspin').on("touchspin.on.stopspin", function () {
+                    updateInventory($(this).attr('data-id'), $(this).val())
+                });
+            }
+        })
+
+        $('#SearchInput').on('keyup', function () {
+            table.search(this.value).draw();
+        });
+
+        $('.dropdown').selectpicker();
+
+    })
+
+    $('select.pag').on('change', function (e) {
+        $('select[name="Table_length"]').val(this.value).trigger('change');
+    });
+
+
+    $(document).on('keyup', '.touchspin', function () {
+        updateInventory($(this).attr('data-id'), $(this).val() )
+    })
+
+
+
+    function updateInventory(id, val) {
+        $.ajax({
+            type: "POST",
+            url: '/admin/inventory/update/' + id,
+            data: { inventory: val },
+            success: function (t) {
+            }
+        })
+    }
+
+
+    $(document).on('change', 'input[data-activeCheck="true"]', function () {
+        if ($(this).is(':checked') == true) {
+            activeProduct($(this).attr('data-id'), $(this).prop(':checked'));
+        } else {
+            diActiveProduct($(this).attr('data-id'), $(this).prop(':checked'));
+        }
+    })
+    $(document).on('change', 'input[name="isAvailable"]', function () {
+        isAvailable($(this).attr('data-id'), $(this).is(':checked'))
+    })
+
+    function isAvailable(id, val) {
+        $.ajax({
+            type: "POST",
+            url: '/admin/inventory/isAvailable/' + id,
+            data: { check: val },
+            success: function (t) {
+            }
+        })
+    }
+
+    function activeProduct(id , val) {
+        $.ajax({
+            type: "POST",
+            url: '/admin/inventory/Active/' + id,
+            data: { check: true , uncheck:false },
+            success: function (t) {
+            }
+        })
+    }
+    function diActiveProduct(id, val) {
+        $.ajax({
+            type: "POST",
+            url: '/admin/inventory/Active/' + id,
+            data: { uncheck: true , check:false },
+            success: function (t) {
+            }
+        })
+    }
+
+
+
+</script>
+<style>
+    input.form-control.touchspin {
+        min-width: 32px;
+        text-align: center;
+    }
+</style>

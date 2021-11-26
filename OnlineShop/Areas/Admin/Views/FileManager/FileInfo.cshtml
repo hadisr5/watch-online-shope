@@ -1,0 +1,92 @@
+﻿@{
+    Layout = null;
+    string fileName = ViewBag.FileName;
+    Boolean isFolder = ViewBag.isFolder;
+    string fNme = Path.GetFileName(fileName);
+    string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+
+}
+@{
+    if (isFolder)
+    {
+        <div class="row">
+            <div class="col-md-5">
+                <img src="/newScripts/images/folder.svg" alt="@fileName" />
+                <br />
+                <h5  class="fileName" >
+                    @{
+                        @fNme
+                    }
+                </h5>
+            </div>
+            <div class="col-md-6">
+
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-5">
+                @{ 
+                    string ext = Path.GetExtension(fileName).Replace(".", "");
+                    string fileIcon = "/newScripts/images/ex/unknown.svg";
+                    if (File.Exists(Server.MapPath("~") + @"newScripts\images\ex\" + ext + ".svg"))
+
+                    {
+                        fileIcon = "/newScripts/images/ex/" + ext + ".svg";
+                    }
+                }
+                <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@fileIcon" alt="@fileName" style="width:100%;" />
+                <br />
+                <h5 class="fileName" >
+                    @{
+                        @fNme
+                    }
+                </h5>
+            </div>
+            <div class="col-md-7">
+                <div class="form-group">
+                    <label>
+                        حجم : 
+                        <span>
+                            @{ 
+                                double len = new FileInfo(fileName).Length;
+                                int order = 0;
+                                while (len >= 1024 && order < sizes.Length - 1)
+                                {
+                                    order++;
+                                    len = len / 1024;
+                                }
+                                @len @:Mg
+                            }
+                        </span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        آدرس دقیق : 
+                        <br />
+                        <span style="overflow-wrap: break-word;text-align:left ; width:90% ; display:inline-block">@fileName</span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <a href="/admin/fileManager/download?filename=@fileName" target="_blank" class="btn btn-primary" download>دانلود</a>
+                </div>
+            </div>
+        </div>
+        
+                                }
+}
+
+
+<style>
+    label{
+        width: 100%;
+    }
+</style>
+
+
+
+
+

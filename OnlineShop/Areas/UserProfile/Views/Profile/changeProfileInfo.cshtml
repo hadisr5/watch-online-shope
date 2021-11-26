@@ -1,0 +1,200 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(Session["userLogin"]);
+    var user = db.Users.Find(id);
+    Layout = "~/views/shared/_layout.cshtml";
+    var setting = db.Settings.FirstOrDefault();
+
+}
+
+
+<main class="profile-user-page default">
+    <div class="container">
+        <div class="row">
+            <div class="profile-page col-xl-9 col-lg-8 col-md-12 order-2">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-12">
+                            <h1 class="title-tab-content">اطلاعات شخصی</h1>
+                        </div>
+                        <div class="content-section default">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h1 class="title-tab-content">حساب شخصی</h1>
+                                </div>
+                            </div>
+                            <form class="form-account form-account" id="profileInfo" action="/userProfile/profile/changeProfileInfo" method="post">
+                                <div class="row">
+                                    @Html.AntiForgeryToken()
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="form-account-title">نام</div>
+                                        <div class="form-account-row">
+                                            <input class="input-field text-right" oninvalid="this.setCustomValidity('نام را وارد کنید')" oninput="this.setCustomValidity('')" required type="text" name="name" id="name" value="@user.firstName" placeholder="نام خود را وارد نمایید" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="form-account-title">نام خانوادگی</div>
+                                        <div class="form-account-row">
+                                            <input class="input-field text-right" oninvalid="this.setCustomValidity('نام خانوادگی را وارد کنید')" oninput="this.setCustomValidity('')" required type="text" name="family" id="family" value="@user.lastName" placeholder="نام خانوادگی خود را وارد نمایید" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="form-account-title">کد ملی</div>
+                                        <div class="form-account-row">
+                                            <div class="validationError hidden text-danger">
+                                                شماره ملی وارد شده نامعتبر است.
+                                            </div>
+                                            <input dir="ltr" class="input-field" data-validator="nationalCode" type="text" name="codeMeli" id="codeMeli" value="@user.codeMeli" placeholder="کد ملی خود را وارد نمایید" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="form-account-title">شماره موبایل</div>
+                                        <div class="form-account-row">
+                                            <div class="validationError hidden text-danger">
+                                                شماره همراه وارد شده نامعتبر است.
+                                            </div>
+                                            <input data-validator="mobile" class="input-field" type="text" maxlength="11" name="mobile" id="mobile" value="@user.mobile" placeholder="شماره موبایل خود را وارد نمایید" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="form-account-title">شماره کارت</div>
+                                        <div class="form-account-row">
+                                            <input class="input-field" maxlength="19" id="card" type="text" name="card" style="direction:ltr!important;letter-spacing:2px" value="@user.card" placeholder="شماره کارت خود را وارد نمایید" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="form-account-title">آدرس ایمیل</div>
+                                        <div class="form-account-row">
+                                            <div class="validationError hidden text-danger">
+                                                ایمیل وارد شده نامعتبر است.
+                                            </div>
+                                            <input dir="ltr" class="input-field" data-validator="email" type="text" name="email" id="email" value="@user.email" placeholder="آدرس ایمیل خود را وارد نمایید" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 no-padding">
+                                    <div class="form-account-agree">
+                                        <label class="checkbox-form checkbox-primary">
+                                            @{ 
+                                                if(user.RecieveNews==null)
+                                                {
+                                                    user.RecieveNews = false;
+                                                }
+                                            }
+                                            @if ((bool)user.RecieveNews)
+                                            {
+                                                <input type="checkbox" id="RecieveNews" value="true" checked name="RecieveNews">
+
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" id="RecieveNews" value="false" name="RecieveNews">
+                                            }
+                                            <span class="checkbox-check"></span>
+                                        </label>
+                                        <label for="RecieveNews">
+                                            اشتراک در خبرنامه @setting.WebsiteName
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <button class="btn btn-default btn-lg" type="submit">ذخیره</button>
+                                    <a href="/userProfile/profile/" class="btn btn-default btn-lg">انصراف</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @RenderPage("~/Areas/UserProfile/Views/Shared/_SideBar.cshtml")
+        </div>
+
+        @RenderPage("~/Areas/UserProfile/Views/Shared/_recentViews.cshtml")
+
+
+
+
+    </div>
+</main>
+
+@section JS{
+    @*<script src="~/Template/Login/JS/LoginService.js"></script>*@
+<script>
+
+        $(document).on('submit', '#profileInfo', function (event) {
+            var submit = FormValidation();
+
+            if (submit == true) {
+
+                return;
+            }
+            else
+                event.preventDefault();
+
+        });
+
+        document.getElementById('card').addEventListener('input', function (e) {
+            if ($(this).val().length < 15) {
+                e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1-').trim();
+            }
+        });
+        changeMenu('profile');
+
+        function FormValidation() {
+            var mobileselector = $("#mobile");
+            var nationalcodeselector = $("#codeMeli");
+            var emailselector = $("#email");
+            var result = true;
+            if ($(mobileselector).val().length == 11 && $.isNumeric($(mobileselector).val()) == true && $(mobileselector).val().substr(0, 2) == '09') {
+                $(mobileselector).removeClass('WrongFormatInput');
+                $(mobileselector).parent().find('label').find('i').removeClass('WrongFormatInput');
+                $(mobileselector).parent().find('.validationError').addClass('hidden')
+
+                } else {
+                $(mobileselector).addClass('WrongFormatInput');
+                $(mobileselector).parent().find('.validationError').removeClass('hidden')
+                $(mobileselector).parent().find('label').find('i').addClass('WrongFormatInput');
+                result = false;
+                }
+            if (($(nationalcodeselector).val().length == 10 && $.isNumeric($(nationalcodeselector).val()) == true) || nationalcodeselector.val().length == 0  ) {
+                $(nationalcodeselector).removeClass('WrongFormatInput');
+                $(nationalcodeselector).parent().find('label').find('i').removeClass('WrongFormatInput');
+                $(nationalcodeselector).parent().find('.validationError').addClass('hidden')
+
+            } else {
+                $(nationalcodeselector).addClass('WrongFormatInput');
+                $(nationalcodeselector).parent().find('.validationError').removeClass('hidden')
+                $(nationalcodeselector).parent().find('label').find('i').addClass('WrongFormatInput');
+                result = false;
+            }
+
+           
+        var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            var vli = regex.test($(emailselector).val());
+            if (vli == true || $(emailselector).val()=="") {
+            $(emailselector).removeClass('WrongFormatInput');
+            $(emailselector).parent().find('label').find('i').removeClass('WrongFormatInput');
+            $(emailselector).parent().find('.validationError').addClass('hidden')
+        } else {
+            $(emailselector).addClass('WrongFormatInput');
+            $(emailselector).parent().find('.validationError').removeClass('hidden')
+            $(emailselector).parent().find('label').find('i').addClass('WrongFormatInput');
+            result = false;
+        }
+    
+
+            return result;
+
+    }
+
+    $("#RecieveNews").change(function () {
+        if (this.checked) {
+            $(this).val('TRUE');
+        }
+        else {
+            $(this).val('FALSE');
+        }
+    });
+</script>
+}

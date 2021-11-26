@@ -1,0 +1,390 @@
+﻿@using OnlineShop.Models
+@using System.Globalization;
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var user = db.Users.Find(id);
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت کاربران</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/users/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست کاربران</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+            <a href="/Admin/AdminDashboard/Index#/Admin/wallet/pay/@user.id" class="btn btn-default">
+                شارژ کیف پول
+            </a>
+            <a href="/Admin/AdminDashboard/Index#/Admin/wallet/payList/@user.id" class="btn btn-default">
+                شارژ های کیف پول
+            </a>
+            <a href="/Admin/AdminDashboard/Index#/Admin/wallet/Payed/@user.id" class="btn btn-default">
+                برداشت ها از کیف پول
+            </a>
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        @{
+            string p = "";
+            try
+            {
+                DateTime d = Convert.ToDateTime(user.birth);
+                PersianCalendar pc = new PersianCalendar();
+                p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+            }
+            catch (Exception)
+            {
+            }
+        }
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <h1>
+                    @user.id - @user.firstName @user.lastName
+                </h1>
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            <div class="m-portlet__head-title">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td colspan="2">
+                                اطلاعات کاربر
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                شناسه کاربر
+                            </td>
+                            <td>
+                                #@user.id
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>کد ملی</td>
+                            <td>
+                                @user.codeMeli
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ایمیل
+                            </td>
+                            <td>
+                                @user.email
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                شماره کارت
+                            </td>
+                            <td>
+                                @user.card
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                تاریخ تولد
+                            </td>
+                            <td>
+                                @p
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                پسورد
+                            </td>
+                            <td>
+                                @user.password
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>تلفن</td>
+                            <td>@user.mobile</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                نام و نام خانوادگی
+                            </td>
+                            <td>
+                                @user.firstName @user.lastName
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>سفارش ها</td>
+                            <td>
+                                @{
+                                    var baskets = db.Baskets.Where(r => r.userId == user.id).ToList();
+                                    if (baskets.Count != 0)
+                                    {
+                                        foreach (var item in baskets)
+                                        {
+                                            <a class="btn btn-bold btn-sm btn-font-sm  btn-label-brand" href="/Admin/AdminDashboard/Index#/Admin/orders/details/@item.id">#@item.id</a>
+                                            <br />
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @:هیچ سفارشی برای کاربر ثبت نشده است
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                کامنت ها
+                            </td>
+                            <td>
+                                @{
+                                    var comments = db.Comments.Where(r => r.userid == user.id).ToList();
+                                    if (comments.Count != 0)
+                                    {
+                                        foreach (var item in comments)
+                                        {
+                                            var product = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+                                            string proTitle = "محصول حذف شده است";
+                                            if (product != null && product.title != null)
+                                            {
+                                                proTitle = product.title;
+                                            }
+                                            <a class="btn btn-bold btn-sm btn-font-sm  btn-label-brand" href="/Admin/AdminDashboard/Index#/Admin/Comments/detail/@item.id">@proTitle</a>
+                                            <br />
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @:هیچ کامنتی از طرف کاربر ثبت نشده است
+                                    }
+                                }
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                تیکت ها
+                            </td>
+                            <td>
+                                @{
+                                    var tickets = db.Tickets.Where(r => r.userid == user.id).ToList();
+                                    if (tickets.Count != 0)
+                                    {
+                                        foreach (var item in tickets)
+                                        {
+                                            <a class="btn btn-bold btn-sm btn-font-sm  btn-label-brand" href="/Admin/AdminDashboard/Index#/Admin/Tickets/chat/@item.id">@item.title</a>
+                                            <br />
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @:هیچ تیکتی ارسال نکرده است
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>آدرس ها</td>
+                            <td>
+                                @{
+                                    var userAddress = db.UsersAdresses.Where(r => r.userId == user.id).ToList();
+                                    if (userAddress.Count != 0)
+                                    {
+                                        foreach (var item in userAddress)
+                                        {
+                                            <div style="margin-bottom:5px" class="btn btn-bold btn-sm btn-font-sm  btn-label-brand">@item.Address کد پستی : @item.postalCode</div>
+                                            <br />
+
+
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @:فعلا آدرسی ثبت نکرده است
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                موجودی کیف پول
+                            </td>
+                            <td>
+                                @{
+                                    long total = 0;
+                                    var income = db.Wallets.Where(r => r.userId == user.id).ToList();
+                                    if (income.Count != 0)
+                                    {
+                                        foreach (var item in income)
+                                        {
+                                            total += Convert.ToInt64(item.amount);
+                                        }
+                                    }
+                                    var outCome = db.WalletPays.Where(r => r.userid == user.id).ToList();
+                                    if (outCome.Count != 0)
+                                    {
+                                        foreach (var item in outCome)
+                                        {
+                                            total -= Convert.ToInt64(item.amount);
+
+                                        }
+                                    }
+                                    @:@total تومان
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                احراز هویت
+                            </td>
+                            <td>
+                                @{
+                                    if (ViewBag.sms == null)
+                                    {
+                                        <a href="/Admin/AdminDashboard/Index#/Admin/Users/details/@user.id?sendVerificationCode=@user.id" class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">ارسال کد احراز هویت</a>
+
+                                    }
+                                    else
+                                    {
+                                        <h6>@ViewBag.sms</h6>
+                                        <a href="/Admin/AdminDashboard/Index#/Admin/Users/details/@user.id?sendVerificationCode=@user.id" class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">ارسال دوباره</a>
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                @{
+                    var views = db.UserViews.Where(r => r.userId == user.id).ToList();
+                    if (views.Count != 0)
+                    {
+                        <table class="table hover">
+                            <thead>
+                                <tr>
+                                    <td colspan="2">بازدید های اخیر کاربر</td>
+                                </tr>
+                                <tr>
+                                    <td>محصول</td>
+                                    <td>تاریخ</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    views = views.OrderByDescending(r => r.id).ToList();
+                                    foreach (var item in views)
+                                    {
+                                        var product = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+
+                                        <tr>
+                                            <td>
+                                                @{
+                                                    if (product == null)
+                                                    {
+                                                        @:محصول حذف شده است
+                                                    }
+                                                    else
+                                                    {
+                                                        string tlt = product.title;
+                                                        while (tlt.Contains(" "))
+                                                        {
+                                                            tlt = tlt.Replace(" ", "-");
+                                                        }
+                                                        var gl = db.ProductGalleries.Where(r => r.product_id == product.id).FirstOrDefault();
+                                                        if (gl != null)
+                                                        {
+                                                            <img style="width:100px" src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@gl.big" />
+                                                            <br />
+                                                        }
+                                                        <a href="/home/product/9/@tlt">@product.title</a>
+
+                                                    }
+                                                }
+                                            </td>
+                                            <td style="padding-top:50px;direction:rtl">
+                                                @{
+                                                    string viewDate = "";
+                                                    try
+                                                    {
+                                                        DateTime d = Convert.ToDateTime(item.creationDate);
+                                                        PersianCalendar pc = new PersianCalendar();
+                                                        viewDate = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+                                                    }
+                                                    catch (Exception)
+                                                    {
+                                                    }
+                                                }
+                                                @viewDate
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    }
+                }
+
+
+
+
+            </div>
+
+
+
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    titlePage('@user.firstName @user.lastName')
+    var url = window.location.href;
+    if (window.location.href.indexOf('?') > -1) {
+        url = url.slice(0, url.indexOf('?'));
+        window.history.pushState('page2', 'Title', url);
+
+    }
+
+
+</script>
+<style>
+    .kt-svg-icon.fillStar g [fill] {
+        fill: #f59b3e;
+    }
+
+    .kt-svg-icon.emptyStar g [fill] {
+        fill: #9b9b9b;
+    }
+
+    a.btn.btn-bold.btn-sm.btn-font-sm.btn-label-brand {
+        margin-bottom: 4px;
+    }
+</style>

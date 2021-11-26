@@ -1,0 +1,223 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    Layout = null;
+    var ordersList = Session["orders"] as List<Order>;
+    var setting = db.Settings.FirstOrDefault();
+    Int64 sum = 0;
+    int userId = Convert.ToInt32(Session["userLogin"]);
+    var isPrime = false;
+    var user = db.Users.Where(r => r.id == userId).FirstOrDefault();
+    if (user!=null && user.Special == true)
+    {
+        isPrime = true;
+    }
+}
+<div class="table-responsive checkout-content default">
+    @{
+        if (ordersList != null && ordersList.Count != 0)
+        {
+            <div class="checkout-header checkout-header--express">
+                <span class="checkout-header-title">ارسال کالا های عادی</span>
+                @{
+                    if (ordersList != null && ordersList.Count != 0)
+                    {
+                        <span class="checkout-header-extra-info">(@ordersList.Count کالا)</span>
+                    }
+                }
+            </div>
+            <table class="table table-cart">
+                <tbody>
+
+                    @foreach (var item in ordersList)
+                    {
+                        var pro = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+                        var gl = db.ProductGalleries.Where(r => r.product_id == pro.id).FirstOrDefault();
+                        string img = "/Template/images/loading.png";
+                        if (gl != null)
+                        {
+                            img = gl.big;
+                        }
+                        <tr class="checkout-item" id="row_product_347">
+                            <td>
+                                <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@img"
+                                     alt="" style="width:110px">
+                                <button class="checkout-btn-remove remove-cart-item removeFromCard" data-id="@item.productId">
+                                    &times;
+                                </button>
+                            </td>
+                            <td class="text-right">
+                                <h3 class="checkout-title">
+                                    @pro.title
+                                </h3>
+                                <p class="checkout-dealer">
+                                    @{
+                                        if (item.SellerId == null)
+                                        {
+                                            @setting.WebsiteName
+                                        }
+                                        else
+                                        {
+                                            var seller = db.Sellers.Where(r => r.id == item.SellerId).FirstOrDefault();
+                                            @:@seller.name @seller.lastname
+                                        }
+                                    }
+                                </p>
+                                <p class="checkout-guarantee">
+                                    @{
+                                        var sl = db.SellersProducts.Where(r => r.productId == item.productId && r.isActive == true).FirstOrDefault();
+                                        if (sl != null)
+                                        {
+                                            @sl.Warranty
+
+                                        }
+                                    }
+                                </p>
+                                @{
+                                    if (item.sizeId != null && item.sizeId != 0)
+                                    {
+                                        var size = db.Sizes.Where(r => r.id == item.sizeId).FirstOrDefault();
+                                        if (size != null)
+                                        {
+                                            <div class="checkout-variant checkout-variant--color">
+                                                <span class="checkout-variant-title">سایز :</span>
+                                                <span class="checkout-variant-value">
+                                                    @size.title
+                                                </span>
+                                            </div>
+                                        }
+                                    }
+                                    if (item.colorId != null && item.colorId != 0)
+                                    {
+                                        var color = db.Colors.Where(r => r.id == item.colorId).FirstOrDefault();
+                                        if (color != null)
+                                        {
+                                            <div class="checkout-variant checkout-variant--color">
+                                                <span class="checkout-variant-title">رنگ :</span>
+                                                <span class="checkout-variant-value">
+                                                    @color.title
+                                                    <div class="checkout-variant-shape" style="background-color:@color.Code"></div>
+                                                </span>
+                                            </div>
+                                        }
+                                    }
+                                }
+
+                            </td>
+                            <td>
+                                <p class="mb-0">تعداد</p>
+                                <div class="number-input">
+                                    <span>
+                                        <button class="minus" data-id="@item.productId"></button>
+                                    </span>
+                                    <input class="quantity" min="1" value="@item.quantity"
+                                           type="number" id="quantity-item-347" disabled>
+                                    <span>
+                                        <button class="plus" data-id="@item.productId"></button>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="totalInRow">
+                                <strong class="fixPrice">
+                                    @{
+                                        var off = db.Discounts.Where(r => r.percentage != null && r.status == 1 && r.productId == item.productId && r.expire > DateTime.Now).FirstOrDefault();
+                                        if (true)
+                                        {
+                                            var sellerPro = db.SellersProducts.Where(r => r.sellerId == item.SellerId && r.productId == item.productId).FirstOrDefault();
+                                            if (sellerPro == null)
+                                            {
+                                                if (off != null)
+                                                {
+                                                    if (isPrime)
+                                                    {
+                                                        @((pro.priceForSpecialUsers - (pro.priceForSpecialUsers * off.percentage) / 100) * item.quantity) @:تومان
+                                                        sum += Convert.ToInt64((pro.priceForSpecialUsers - (pro.priceForSpecialUsers * off.percentage) / 100) * item.quantity);
+                                                    }
+                                                    else
+                                                    {
+                                                        @((pro.price - (pro.price * off.percentage) / 100) * item.quantity) @:تومان
+                                                        sum += Convert.ToInt64((pro.price - (pro.price * off.percentage) / 100) * item.quantity);
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    if (isPrime)
+                                                    {
+                                                        @((pro.priceForSpecialUsers) * item.quantity) @:تومان
+                                                        sum += Convert.ToInt64((pro.priceForSpecialUsers) * item.quantity);
+                                                    }
+                                                    else
+                                                    {
+                                                        @((pro.price) * item.quantity) @:تومان
+                                                        sum += Convert.ToInt64((pro.price) * item.quantity);
+                                                    }
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                sum += Convert.ToInt64((sellerPro.price) * item.quantity);
+                                                @((sellerPro.price) * item.quantity) @:تومان
+                                            }
+                                        }
+
+                                    }
+                                </strong>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="cart-empty">
+                <img src="/Template/images/card.png" class="CardImg" alt="">
+
+                <div class="cart-empty-title">سبد خرید شما خالیست!</div>
+                <span class="emptyCardSubtitle">
+                    می‌توانید برای مشاهده محصولات بیشتر به <a style="color:mediumturquoise" href="@Url.Action("Index","Home")">صفحه اصلی</a> سایت بروید
+                </span>
+            </div>
+        }
+    }
+</div>
+@{
+    if (ordersList == null || ordersList.Count == 0)
+    {
+        <script>
+            $('aside').addClass('hidden');
+            $('.cart-page-content').attr('class', 'cart-page-content col-xl-12 col-lg-12 col-md-12 order-1')
+        </script>
+    }
+    else
+    {
+        <script>
+            $('aside').removeClass('hidden');
+        </script>
+    }
+}
+@{
+    if (ordersList != null)
+    {
+        <script>
+            $('#SumPrice').text('@sum تومان');
+            $('#totalProductsCount').text('@ordersList.Count')
+            $('#Total').text('@sum')
+            fixprice();
+        </script>
+    }
+}
+<script>
+    UpdateMiniCart();
+</script>
+<style>
+    .checkout-title {
+        font-size: 15px;
+        line-height: 1.88;
+        margin-bottom: 0;
+        border-bottom: 0;
+        padding-bottom: 0px;
+    }
+</style>

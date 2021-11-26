@@ -1,0 +1,514 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت محصولات</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/products/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست محصولات</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            اطلاعات محصول جدید
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" id="mainform" method="post" action="/admin/products/Create_product" data-redirect="/Admin/AdminDashboard/Index#/Admin/products/index">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <div class="example">
+                            <div class="example-preview">
+                                <ul class="nav nav-tabs nav-tabs-line">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#kt_tab_pane_1">اطلاعات پایه</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_2">توضیحات</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_3">گالری تصاویر</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_4">دسته بندی ها</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_5">فروش</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_6">نمایش</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_7">عکس اصلی</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_8">ویژگی های امتیاز دهی</a>
+                                    </li>
+
+                                </ul>
+
+                                <div class="tab-content mt-5" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel" aria-labelledby="kt_tab_pane_1">
+                                        <div class="form-group">
+                                            <label>عنوان محصول</label>
+                                            <input type="text" class="form-control" placeholder="عنوان محصول" name="title" id="title">
+                                            <span class="form-text text-muted">محصول شما با این عنوان نمایش داده می شود </span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>زیر عنوان</label>
+                                            <input type="text" class="form-control" placeholder="زیر عنوان" name="subTitle">
+                                            <span class="form-text text-muted">محصول شما با این عنوان نمایش داده می شود </span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>تگ ها</label>
+                                            <input id="kt_tagify_1" class="form-control tagify" name='tags' placeholder='تگ جدید...' value='' />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>انتخاب برند</label>
+                                            <select class="form-control m-bootstrap-select m_selectpicker" data-live-search="true" name="brandId">
+                                                @{
+                                                    var brands = db.ProductsBrands.ToList();
+                                                    if (brands.Count != 0)
+                                                    {
+                                                        <option data-tokens="" value="">
+                                                            برند ندارد
+                                                        </option>
+                                                        foreach (var item in brands)
+                                                        {
+                                                            <option data-tokens="@item.title" value="@item.id">
+                                                                @item.title
+                                                            </option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                            <span class="form-text text-muted">برای ایجاد برند جدید <a href="#/Admin/ProductsBrands/Create">اینجا</a> کلیک کنید</span>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel" aria-labelledby="kt_tab_pane_2">
+                                        <div class="form-group">
+                                            <label>توضیحات کوتاه</label>
+                                            <textarea name="short_description" style="min-height:230px" class="form-control" placeholder="توضیحات کوتاه محصول در قسمت بالای صفحه محصول نمایش داده خواهد شد"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>توضیحات</label>
+                                            <textarea id="mytextarea" name="desc"></textarea>
+
+                                            <span class="form-text text-muted"> این توضیحات در صفحه محصول قابل مشاهده است.</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="kt_tab_pane_3" role="tabpanel" aria-labelledby="kt_tab_pane_3">
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">
+                                                عکس محصول
+                                            </label>
+                                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                                <div class="m-dropzone dropzone dropzone1" action="/admin/products/upload" id="m-dropzone-one">
+                                                    <div class="m-dropzone__msg dz-message needsclick">
+                                                        <h3 class="m-dropzone__msg-title">
+                                                            فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">
+                                                گالری محصول
+                                            </label>
+                                            <div id="imgValues" class="imgValues">
+                                                <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="kt_tab_pane_4" role="tabpanel" aria-labelledby="kt_tab_pane_4">
+                                        <div class="form-group">
+                                            <label>دسته بندی اصلی</label>
+                                            <select style="border: 2px solid #f7931e" id="rootmenu" onchange="SelectRootMenu(this)" type="text" class="form-control select2list" placeholder="دسته بندی اصلی را انتخاب کنید" name="Parent">
+                                                <option value="0">انتخاب نشده</option>
+                                                @{
+                                                    //var firstlevel = db.Menus.Where(p => p.Parent == null).ToList();
+                                                    //var firstlevelids = firstlevel.Select(p => p.id).ToList();
+                                                    //var notnullparents = db.Menus.Where(p => p.Parent != null).ToList();
+                                                    //var secondlevel = notnullparents.Where(p => firstlevelids.Contains((int)p.Parent)).ToList();
+                                                    //var Menus = firstlevel.Union(secondlevel).ToList();
+                                                    var maincats = db.MainCats.OrderBy(p => p.priority).ToList();
+                                                    if (maincats.Count != 0)
+                                                    {
+                                                        foreach (var item in maincats)
+                                                        {
+                                                            <option value="@item.id">@(item.title)</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="form-group hidden">
+                                            <label>دسته بندی والد</label>
+                                            <select style="border: 2px solid #f7931e" id="childmenu" onchange="SelectChildMenu(this)" type="text" class="form-control select2list" placeholder="دسته بندی ریشه را انتخاب کنید" name="Child">
+                                                <option value="0">انتخاب نشده</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group hidden">
+                                            <label>دسته بندی فرزند</label>
+                                            <select style="border: 2px solid #f7931e" id="lastdmenu" type="text" class="form-control select2list" placeholder="دسته بندی ریشه را انتخاب کنید" name="Child">
+                                                <option value="0">انتخاب نشده</option>
+                                            </select>
+                                        </div>
+                                        <hr />
+                                        <div class="form-group" id="categoryContainer">
+
+
+                                        </div>
+                                        <div>
+                                            <a onclick="SelectCategory()" class="form-button btn btn-success">انتخاب دسته بندی</a>
+                                        </div>
+                                        <span class="form-text text-muted">برای حذف دسته بندی انتخاب شده، آن را از حالت انتخاب خارج کنید</span>
+
+
+                                    </div>
+
+
+
+                                    <div class="tab-pane fade" id="kt_tab_pane_5" role="tabpanel" aria-labelledby="kt_tab_pane_5">
+
+                                        <div class="form-group">
+                                            <label>ارسال در چند روز</label>
+                                            <input type="number" class="form-control" placeholder="ارسال در چند روز" name="deliveryDate">
+                                            <span class="form-text text-muted">محصول شما با این عنوان نمایش داده می شود </span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-2 col-form-label">موجودی</label>
+                                            <div class="col-10 col-form-label">
+                                                <div class="radio-list">
+
+                                                    <label class="radio">
+                                                        <input type="radio" name="Inventory" id="InventoryCheck" class="checkOnly">
+                                                        <span></span>موجو است و تعداد مشخص است
+                                                    </label>
+                                                    <div id="InventoryContainer" class="hidden">
+                                                        <br />
+                                                        <input type="number" class="form-control " placeholder="تعداد موجودی محصول" name="InventoryCount">
+                                                        <br />
+                                                    </div>
+                                                    <label class="radio">
+                                                        <input type="radio" name="Inventory" value="-1" checked="checked">
+                                                        <span></span>موجود است و تعداد مشخص نیست
+                                                    </label>
+                                                    <label class="radio">
+                                                        <input type="radio" name="Inventory" value="-2" />
+                                                        <span></span>ناموجود
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label>قیمت</label>
+                                            <input type="text" class="form-control priceInput" placeholder="قیمت محصول" name="price" />
+                                            <span class="form-text text-muted"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>قیمت برای کاربران ویژه</label>
+                                            <input type="text" class="form-control priceInput" placeholder="قیمت محصول" name="priceForSpecialUsers" />
+                                            <span class="form-text text-muted"></span>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>امتیاز محصول</label>
+                                            <input type="number" class="form-control" placeholder="امتیاز محصول" name="point">
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="tab-pane fade" id="kt_tab_pane_6" role="tabpanel" aria-labelledby="kt_tab_pane_6">
+
+                                        <div class="form-group">
+                                            <label class="col-3 col-form-label"></label>
+                                            <div class="col-3">
+                                                <span class="checkbox-list">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" checked="checked" name="ShowOnMainPage" value="True" />
+                                                        <span></span>نمایش در صفحه اصلی
+                                                    </label>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" checked="checked" name="specialSelling" value="True" />
+                                                        <span></span>فروش ویژه
+                                                    </label>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" checked="checked" name="Active" value="True" />
+                                                        <span></span>فعال بودن محصول
+                                                    </label>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" checked="checked" name="isOriginal" value="True" />
+                                                        <span></span>کالای اورجینال
+                                                    </label>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" checked="checked" name="isAvailable" value="True" />
+                                                        <span></span>موجود در انبار
+                                                    </label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>اولویت نمایش در صفحه اصلی</label>
+                                            <input type="number" class="form-control" placeholder="اولویت نمایش" name="Priority" />
+                                            <span class="form-text text-muted">اولویت بیشتر ، بالاتر قرار می گیرد</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_7" role="tabpanel" aria-labelledby="kt_tab_pane_7">
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">
+                                                عکس محصول
+                                            </label>
+                                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                                <div class="m-dropzone dropzone dropzone2" action="/admin/products/upload" id="m-dropzone-one">
+                                                    <div class="m-dropzone__msg dz-message needsclick">
+                                                        <h3 class="m-dropzone__msg-title">
+                                                            فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">
+                                                گالری محصول
+                                            </label>
+                                            <div id="imgValues2" class="imgValues">
+                                                <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto2" class="nophoto" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="kt_tab_pane_8" role="tabpanel" aria-labelledby="kt_tab_pane_8">
+                                        <div class="form-group">
+                                            <label>انتخاب گروه ویژگی ها</label>
+                                            <select class="form-control m-bootstrap-select m_selectpicker" data-live-search="true" name="RattingGroup">
+                                                @{
+                                                    var RatingGroups = db.RatingGroups.ToList();
+                                                    if (RatingGroups.Count != 0)
+                                                    {
+                                                        <option data-tokens="" value="">
+                                                            گروه ویژگی ندارد
+                                                        </option>
+                                                        foreach (var item in RatingGroups)
+                                                        {
+                                                            <option data-tokens="@item.title" value="@item.id">
+                                                                @item.title
+                                                            </option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button  class="btn btn-primary">ایجاد محصول جدید</button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/products/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var counter = 0;
+    //$(document).ready(function () {
+    //    CKEDITOR.replace('desc');
+    //    CKEDITOR.replace('desc');
+    //})
+
+    $(document).on("submit", "#mainform", function (e) {
+        var result = CheckValidation();
+        return result;
+    })
+
+    function CheckValidation() {
+        if ($("#title").val() == "" || $("#title").val() == undefined) {
+            toastr.error("عنوان محصول را وارد کنید.")
+            return false;
+        }      
+
+        return true;
+    }
+
+    tinymce.remove('#mytextarea');
+    TinymceInitial('#mytextarea');
+    titlePage('ایجاد منو جدید');
+    $('.dropzone1').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto').addClass('hidden')
+            $('#imgValues').html($('.imgValues').html() + '<div data-id="' + counter + '"><span>x</span><input type="text" value="' + response + '" name="image" /><img src="' + response + '" />');
+
+        }
+    });
+    $('.dropzone2').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto2').addClass('hidden')
+            $('#imgValues2').html('<div data-id="' + counter + '"><span>x</span><input type="text" value="' + response + '" name="MainImage" /><img src="' + response + '" />');
+
+        }
+    });
+    var BootstrapSelect = { init: function () { $(".m_selectpicker").selectpicker() } }; jQuery(document).ready(function () { BootstrapSelect.init() });
+
+
+    // category drop down
+    var catidlist = [];
+    function SelectCategory() {
+
+        if ($("#childmenu").children("option:selected").val() == 0 && $("#lastdmenu").children("option:selected").val() == 0)
+            toastr.error("لطفا یکی از دو دسته بندی آخر را انتخاب کنید");
+        else {
+            var child = $("#childmenu").children("option:selected").val();
+            var last = $("#lastdmenu").children("option:selected").val();
+            var childt = $("#childmenu").children("option:selected").html();
+            var lastt = $("#lastdmenu").children("option:selected").html();
+            var html = '';
+            if (child != 0 && last == 0 && catidlist.indexOf(child) < 0) {
+                html = '<div class="kt-checkbox-list"><label class="kt-checkbox kt-checkbox--tick kt-checkbox--success"><input type="checkbox" style="height:auto;width:auto" checked class="catBox" data-id="' + child + '" name="cat" value="' + child + '">' + childt + '<span></span></label><div class="catProperties" data-id="' + child + '"></div></div>';
+                catidlist.push(child);
+
+            }
+            else if (last != 0 && catidlist.indexOf(last) < 0) {
+                html = '<div class="kt-checkbox-list"><label class="kt-checkbox kt-checkbox--tick kt-checkbox--success"><input type="checkbox" style="height:auto;width:auto" checked class="catBox" data-id="' + last + '" name="cat" value="' + last + '">' + lastt + '<span></span></label><div class="catProperties" data-id="' + last + '"></div></div>';
+                catidlist.push(last);
+            }
+            $('#categoryContainer').html($('#categoryContainer').html() + html);
+        }
+
+    }
+    $(document).on('contextmenu', '.catBox', function (event) {
+        event.preventDefault()
+        var id = $(this).attr('data-id');
+        catidlist.pop(id);
+        $(this).parent().parent().remove();
+
+
+    });
+
+    function SelectRootMenu(sel) {
+        rootid = $(sel).children("option:selected").val();
+
+        $.ajax({
+            url: '/home/GetMainCats',
+            method: "GET",
+            data: { "id": rootid },
+            success: function (response) {
+                console.log(response);
+                if (response.length > 0) {
+                    $('#childmenu').parent().removeClass("hidden");
+                    $('#childmenu').html('');
+                    var options = '';
+                    options += '<option value="0">انتخاب نشده</option>';
+                    for (var i = 0; i < response.length; i++) {
+                        options += '<option value="' + response[i].Id + '">' + response[i].Title + '</option>';
+                        console.log(response[i].Key);
+                    }
+                    console.log(options);
+                    $('#childmenu').append(options);
+                }
+                else {
+
+                    $('#childmenu').html('');
+                    var options = '';
+                    options += '<option value="0">انتخاب نشده</option>';
+                    console.log(options);
+                    $('#childmenu').append(options);
+                    $('#childmenu').parent().addClass("hidden");
+                    $('#lastdmenu').parent().addClass("hidden");
+
+                }
+            }
+        });
+
+    }
+
+    function SelectChildMenu(sel) {
+        rootid = $(sel).children("option:selected").val();
+
+        $.ajax({
+            url: '/home/GetRootCats',
+            method: "GET",
+            data: { "id": rootid },
+            success: function (response) {
+                console.log(response);
+                if (response.length > 0) {
+                    $('#lastdmenu').parent().removeClass("hidden");
+                    $('#lastdmenu').html('');
+                    var options = '';
+                    options += '<option value="0">انتخاب نشده</option>';
+                    for (var i = 0; i < response.length; i++) {
+                        options += '<option value="' + response[i].Id + '">' + response[i].Title + '</option>';
+                        console.log(response[i].Key);
+                    }
+                    console.log(options);
+                    $('#lastdmenu').append(options);
+                }
+                else {
+
+                    $('#lastdmenu').html('');
+                    var options = '';
+                    options += '<option value="0">انتخاب نشده</option>';
+                    console.log(options);
+                    $('#lastdmenu').append(options);
+                    $('#lastdmenu').parent().addClass("hidden");
+
+                }
+            }
+        });
+
+    }
+
+
+            // category drop down
+
+</script>
+<script src="/newScripts/assets/js/pages/crud/forms/widgets/tagify.js?v=7.1.2"></script>

@@ -1,0 +1,153 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    var setting = db.Settings.FirstOrDefault();
+}
+<style>
+    .field-icon {
+        float: right;
+        margin-left: -25px;
+        margin-top: -25px;
+        position: relative;
+        z-index: 2;
+    }
+
+    span.fa.fa-fw.fa-mobile-phone.field-icon {
+        color: #484848;
+        margin-right: 10px;
+    }
+
+    span.fa.fa-fw.fa-eye.field-icon.toggle-password {
+        color: #484848;
+        margin-right: 0;
+    }
+</style>
+<div class="main-content col-12 col-md-7 col-lg-5 mx-auto">
+    <div class="account-box">
+        <a href="/" class="logo">
+            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@setting.WebsiteLogo" alt="">
+        </a>
+        <div class="account-box-title text-right">ورود به @setting.WebsiteName</div>
+
+
+        <div class="account-box-content">
+            <form class="form-account" method="post" id="submitLogin" action="" enctype="multipart/form-data">
+                <a href="/userlogin/main/fastLogin" class="btn-link-border form-account-link">
+                    ورود سریع با شماره موبایل
+                </a>
+                @Html.AntiForgeryToken()
+                <div class="form-account-title">شماره موبایل</div>
+                <div class="form-account-row">
+                    <div class="validationError hidden text-danger">
+                        شماره همراه وارد شده نامعتبر است.
+                    </div>
+                    <label class="input-label"><i class="now-ui-icons users_single-02"></i></label>
+                    <input autocomplete="off" class="input-field" data-validator="mobile" type="text" placeholder="شماره موبایل خود را وارد نمایید" name="mobile" value="" oninvalid="this.setCustomValidity('شماره موبایل را وارد کنید')" oninput="this.setCustomValidity('')" required autofocus="" tabindex="1">
+
+                </div>
+
+                <div class="form-account-title">
+                    رمز عبور
+                    <a href="/userlogin/main/forget" class="btn-link-border form-account-link">
+                        رمز
+                        عبور خود را فراموش
+                        کرده ام
+                    </a>
+                </div>
+
+                <div class="input-group">
+                    <div class="col-md-12" style="padding:0;">
+                        <input class="form-control" style="direction:ltr !important" type="password" id="password" placeholder="رمز عبور" name="password">
+                        <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                    </div>
+                </div>
+                <div class="form-account-row form-account-submit">
+                    <div class="parent-btn">
+                        <button class="dk-btn dk-btn-info submitBtn">
+                            ورود به @setting.WebsiteName
+                            <i class="fa fa-sign-in"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-account-agree">
+                    <label class="checkbox-form checkbox-primary">
+                        <input type="checkbox" value="true" id="agree" name="remember">
+                        <span class="checkbox-check"></span>
+                    </label>
+                    <label for="agree">مرا به خاطر داشته باش</label>
+                </div>
+                @{
+                    if (ViewBag.error != null)
+                    {
+                        <div class="alert alert-danger">
+                            اطلاعات کاربری نادرست است .
+                        </div>
+                    }
+                }
+            </form>
+        </div>
+        <div class="account-box-footer">
+            <span>کاربر جدید هستید؟</span>
+            <a href="/userlogin/main/register" class="btn-link-border">
+                ثبت‌نام در
+                @setting.WebsiteName
+            </a>
+        </div>
+    </div>
+</div>
+
+@section JS{
+
+    <script>
+        $(".toggle-password").click(function () {
+
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            var input = $($(this).attr("toggle"));
+            if (input.attr("type") == "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+        $(document).on('submit', '#submitLogin', function (event) {
+            var submit = validateMobileNumber();
+
+            if (submit == true) {
+
+                return;
+            }
+            else
+                event.preventDefault();
+
+        });
+
+        $(document).on('keyup', 'input[data-validator="mobile"]', function () {
+            validateMobileNumber();
+        })
+        $(document).on('focusout', 'input[data-validator="mobile"]', function () {
+            validateMobileNumber();
+        })
+        function validateMobileNumber() {
+            var result = true;
+            $('input[data-validator="mobile"]').each(function () {
+                if ($(this).val().length == 11 && $.isNumeric($(this).val()) == true && $(this).val().substr(0, 2) == '09') {
+                    $(this).removeClass('WrongFormatInput');
+                    $(this).parent().find('label').find('i').removeClass('WrongFormatInput');
+                    $(this).parent().find('.validationError').addClass('hidden')
+
+                } else {
+                    $(this).addClass('WrongFormatInput');
+                    $(this).parent().find('.validationError').removeClass('hidden')
+                    $(this).parent().find('label').find('i').addClass('WrongFormatInput');
+                    result = false;
+                }
+
+            })
+
+            return result;
+
+        }
+
+    </script>
+
+}

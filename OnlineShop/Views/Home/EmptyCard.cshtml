@@ -1,0 +1,44 @@
+﻿@{ 
+    Layout = "~/views/shared/_Layout.cshtml";
+}
+<main class="cart-page default">
+    <div class="container" id="cart_show">
+        <div class="cart-empty">
+            <img src="~/Template/images/card.png" class="CardImg" alt="" />
+            @*<div class="cart-empty-icon">
+                <i class="now-ui-icons shopping_basket"></i>
+            </div>*@
+            <div class="cart-empty-title">سبد خرید شما خالیست!</div>
+        </div>
+        <script>
+    quantity = function (id) {
+        var quantity = $('#quantity-item-' + id).val();
+        $('#loading').show();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: '#',
+            method: "PATCH",
+            data: {'id': id, 'quantity': quantity},
+            success: function (data) {
+                $('#cart_show').html('');
+                $('#cart_show').html(data);
+                $('#loading').hide();
+            }
+        });
+    }
+        </script>
+
+        <script type="text/javascript">toastr.options = {"positionClass":"toast-bottom-left"};</script>
+    </div>
+</main>
+
+
+<style>
+    .CardImg{
+        width:250px
+    }
+</style>

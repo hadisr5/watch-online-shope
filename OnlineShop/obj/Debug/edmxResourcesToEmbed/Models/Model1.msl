@@ -1,0 +1,1292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="wikisaat_shopModelStoreContainer" CdmEntityContainer="OnlineShopEntities">
+    <EntitySetMapping Name="AdminUsers">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.AdminUser">
+        <MappingFragment StoreEntitySet="AdminUsers">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="token" ColumnName="token" />
+          <ScalarProperty Name="lastOnline" ColumnName="lastOnline" />
+          <ScalarProperty Name="profileImage" ColumnName="profileImage" />
+          <ScalarProperty Name="introMessage" ColumnName="introMessage" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AllowedIpAddresses">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.AllowedIpAddress">
+        <MappingFragment StoreEntitySet="AllowedIpAddresses">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="IpAddress" ColumnName="IpAddress" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Banners">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Banner">
+        <MappingFragment StoreEntitySet="Banners">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="banner1" ColumnName="banner1" />
+          <ScalarProperty Name="banner2" ColumnName="banner2" />
+          <ScalarProperty Name="banner3" ColumnName="banner3" />
+          <ScalarProperty Name="banner4" ColumnName="banner4" />
+          <ScalarProperty Name="banner5" ColumnName="banner5" />
+          <ScalarProperty Name="banner6" ColumnName="banner6" />
+          <ScalarProperty Name="banner7" ColumnName="banner7" />
+          <ScalarProperty Name="banner8" ColumnName="banner8" />
+          <ScalarProperty Name="link1" ColumnName="link1" />
+          <ScalarProperty Name="link2" ColumnName="link2" />
+          <ScalarProperty Name="link3" ColumnName="link3" />
+          <ScalarProperty Name="link4" ColumnName="link4" />
+          <ScalarProperty Name="link5" ColumnName="link5" />
+          <ScalarProperty Name="link6" ColumnName="link6" />
+          <ScalarProperty Name="link7" ColumnName="link7" />
+          <ScalarProperty Name="link8" ColumnName="link8" />
+          <ScalarProperty Name="active" ColumnName="active" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="banner9" ColumnName="banner9" />
+          <ScalarProperty Name="link9" ColumnName="link9" />
+          <ScalarProperty Name="banner10" ColumnName="banner10" />
+          <ScalarProperty Name="link10" ColumnName="link10" />
+          <ScalarProperty Name="banner11" ColumnName="banner11" />
+          <ScalarProperty Name="link11" ColumnName="link11" />
+          <ScalarProperty Name="banner12" ColumnName="banner12" />
+          <ScalarProperty Name="link12" ColumnName="link12" />
+          <ScalarProperty Name="banner13" ColumnName="banner13" />
+          <ScalarProperty Name="link13" ColumnName="link13" />
+          <ScalarProperty Name="banner14" ColumnName="banner14" />
+          <ScalarProperty Name="link14" ColumnName="link14" />
+          <ScalarProperty Name="banner15" ColumnName="banner15" />
+          <ScalarProperty Name="link15" ColumnName="link15" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Baskets">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Basket">
+        <MappingFragment StoreEntitySet="Baskets">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="payMethod" ColumnName="payMethod" />
+          <ScalarProperty Name="payed" ColumnName="payed" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="token" ColumnName="token" />
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="post" ColumnName="post" />
+          <ScalarProperty Name="sendReserveTime" ColumnName="sendReserveTime" />
+          <ScalarProperty Name="sendReservePeriod" ColumnName="sendReservePeriod" />
+          <ScalarProperty Name="periodString" ColumnName="periodString" />
+          <ScalarProperty Name="shippingPrice" ColumnName="shippingPrice" />
+          <ScalarProperty Name="DiscountCode" ColumnName="DiscountCode" />
+          <ScalarProperty Name="DiscountAmount" ColumnName="DiscountAmount" />
+          <ScalarProperty Name="addressId" ColumnName="addressId" />
+          <ScalarProperty Name="authority" ColumnName="authority" />
+          <ScalarProperty Name="invoicing" ColumnName="invoicing" />
+          <ScalarProperty Name="ShippingId" ColumnName="ShippingId" />
+          <ScalarProperty Name="wizardStatus" ColumnName="wizardStatus" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Blog_Cats">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Blog_Cats">
+        <MappingFragment StoreEntitySet="Blog_Cats">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="img" ColumnName="img" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Blog_Comments">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Blog_Comments">
+        <MappingFragment StoreEntitySet="Blog_Comments">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="comment" ColumnName="comment" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="Submitted" ColumnName="Submitted" />
+          <ScalarProperty Name="PostId" ColumnName="PostId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Blog_post">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Blog_post">
+        <MappingFragment StoreEntitySet="Blog_post">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="Cnt" ColumnName="Cnt" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="img" ColumnName="img" />
+          <ScalarProperty Name="catId" ColumnName="catId" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="shortDesc" ColumnName="shortDesc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Blog_Tags">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Blog_Tags">
+        <MappingFragment StoreEntitySet="Blog_Tags">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Blog_TagsPosts">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Blog_TagsPosts">
+        <MappingFragment StoreEntitySet="Blog_TagsPosts">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="postId" ColumnName="postId" />
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Brands">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Brand">
+        <MappingFragment StoreEntitySet="Brands">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="logo" ColumnName="logo" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="link" ColumnName="link" />
+          <ScalarProperty Name="active" ColumnName="active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Category">
+        <MappingFragment StoreEntitySet="Categories">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="banner" ColumnName="banner" />
+          <ScalarProperty Name="RightBanner" ColumnName="RightBanner" />
+          <ScalarProperty Name="HomePhoto" ColumnName="HomePhoto" />
+          <ScalarProperty Name="MainCat" ColumnName="MainCat" />
+          <ScalarProperty Name="Img" ColumnName="Img" />
+          <ScalarProperty Name="parent" ColumnName="parent" />
+          <ScalarProperty Name="Adv" ColumnName="Adv" />
+          <ScalarProperty Name="line1Ads" ColumnName="line1Ads" />
+          <ScalarProperty Name="line2Ads" ColumnName="line2Ads" />
+          <ScalarProperty Name="line3Ads" ColumnName="line3Ads" />
+          <ScalarProperty Name="showInHomePage" ColumnName="showInHomePage" />
+          <ScalarProperty Name="priority" ColumnName="priority" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Icon" ColumnName="Icon" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CatProes">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.CatPro">
+        <MappingFragment StoreEntitySet="CatPro">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="product_id" ColumnName="product_id" />
+          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CatProperties">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.CatProperty">
+        <MappingFragment StoreEntitySet="CatProperties">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="catId" ColumnName="catId" />
+          <ScalarProperty Name="priority" ColumnName="priority" />
+          <ScalarProperty Name="showInFilter" ColumnName="showInFilter" />
+          <ScalarProperty Name="MainProperty" ColumnName="MainProperty" />
+          <ScalarProperty Name="category" ColumnName="category" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cities">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.City">
+        <MappingFragment StoreEntitySet="Cities">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="StateId" ColumnName="StateId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Colors">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Color">
+        <MappingFragment StoreEntitySet="Color">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="title" ColumnName="title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ColorSizes">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.ColorSize">
+        <MappingFragment StoreEntitySet="ColorSize">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="colorId" ColumnName="colorId" />
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+          <ScalarProperty Name="SizeId" ColumnName="SizeId" />
+          <ScalarProperty Name="Inventory" ColumnName="Inventory" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CommentAdvantages">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.CommentAdvantage">
+        <MappingFragment StoreEntitySet="CommentAdvantages">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="commentId" ColumnName="commentId" />
+          <ScalarProperty Name="advantage" ColumnName="advantage" />
+          <ScalarProperty Name="disAdvantage" ColumnName="disAdvantage" />
+          <ScalarProperty Name="text" ColumnName="text" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Comments">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Comment">
+        <MappingFragment StoreEntitySet="Comments">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="text" ColumnName="text" />
+          <ScalarProperty Name="rate" ColumnName="rate" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="show" ColumnName="show" />
+          <ScalarProperty Name="guestName" ColumnName="guestName" />
+          <ScalarProperty Name="title" ColumnName="title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CommnetsLikes">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.CommnetsLike">
+        <MappingFragment StoreEntitySet="CommnetsLikes">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="Like" ColumnName="Like" />
+          <ScalarProperty Name="disLike" ColumnName="disLike" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Contacts">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Contact">
+        <MappingFragment StoreEntitySet="Contact">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="firstName" ColumnName="firstName" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="subject" ColumnName="subject" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="date" ColumnName="date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ContactInformations">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.ContactInformation">
+        <MappingFragment StoreEntitySet="ContactInformations">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="phone" ColumnName="phone" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="facebook" ColumnName="facebook" />
+          <ScalarProperty Name="twitter" ColumnName="twitter" />
+          <ScalarProperty Name="instagram" ColumnName="instagram" />
+          <ScalarProperty Name="pinterest" ColumnName="pinterest" />
+          <ScalarProperty Name="skype" ColumnName="skype" />
+          <ScalarProperty Name="lat" ColumnName="lat" />
+          <ScalarProperty Name="lon" ColumnName="lon" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Discounts">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Discount">
+        <MappingFragment StoreEntitySet="Discount">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="creationDay" ColumnName="creationDay" />
+          <ScalarProperty Name="expire" ColumnName="expire" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="percentage" ColumnName="percentage" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="promotionId" ColumnName="promotionId" />
+          <ScalarProperty Name="priority" ColumnName="priority" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DiscountCodes">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.DiscountCode">
+        <MappingFragment StoreEntitySet="DiscountCode">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="code" ColumnName="code" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="useDate" ColumnName="useDate" />
+          <ScalarProperty Name="Amont" ColumnName="Amont" />
+          <ScalarProperty Name="basketId" ColumnName="basketId" />
+          <ScalarProperty Name="isUsed" ColumnName="isUsed" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+          <ScalarProperty Name="maxPercentage" ColumnName="maxPercentage" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DiscountGroups">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.DiscountGroup">
+        <MappingFragment StoreEntitySet="DiscountGroup">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+          <ScalarProperty Name="maxPercentage" ColumnName="maxPercentage" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FalsePasswords">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.FalsePassword">
+        <MappingFragment StoreEntitySet="FalsePassword">
+          <ScalarProperty Name="FalsePasswordId" ColumnName="FalsePasswordId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="FalsePass" ColumnName="FalsePass" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Faqs">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Faq">
+        <MappingFragment StoreEntitySet="Faq">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="Question" ColumnName="Question" />
+          <ScalarProperty Name="Answer" ColumnName="Answer" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="priority" ColumnName="priority" />
+          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FaqCategories">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.FaqCategory">
+        <MappingFragment StoreEntitySet="FaqCategory">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="priority" ColumnName="priority" />
+          <ScalarProperty Name="Icon" ColumnName="Icon" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Footers">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Footer">
+        <MappingFragment StoreEntitySet="Footer">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="f1Header" ColumnName="f1Header" />
+          <ScalarProperty Name="f1r1" ColumnName="f1r1" />
+          <ScalarProperty Name="f1r1_Link" ColumnName="f1r1_Link" />
+          <ScalarProperty Name="f1r2" ColumnName="f1r2" />
+          <ScalarProperty Name="f1r2_Link" ColumnName="f1r2_Link" />
+          <ScalarProperty Name="f1r3" ColumnName="f1r3" />
+          <ScalarProperty Name="f1r3_Link" ColumnName="f1r3_Link" />
+          <ScalarProperty Name="f1r4" ColumnName="f1r4" />
+          <ScalarProperty Name="f1r4_Link" ColumnName="f1r4_Link" />
+          <ScalarProperty Name="f1r5" ColumnName="f1r5" />
+          <ScalarProperty Name="f1r5_Link" ColumnName="f1r5_Link" />
+          <ScalarProperty Name="f1r6" ColumnName="f1r6" />
+          <ScalarProperty Name="f1r6_Link" ColumnName="f1r6_Link" />
+          <ScalarProperty Name="f1r7" ColumnName="f1r7" />
+          <ScalarProperty Name="f1r7_Link" ColumnName="f1r7_Link" />
+          <ScalarProperty Name="f2Header" ColumnName="f2Header" />
+          <ScalarProperty Name="f2r1" ColumnName="f2r1" />
+          <ScalarProperty Name="f2r1_Link" ColumnName="f2r1_Link" />
+          <ScalarProperty Name="f2r2" ColumnName="f2r2" />
+          <ScalarProperty Name="f2r2_Link" ColumnName="f2r2_Link" />
+          <ScalarProperty Name="f2r3" ColumnName="f2r3" />
+          <ScalarProperty Name="f2r3_Link" ColumnName="f2r3_Link" />
+          <ScalarProperty Name="f2r4" ColumnName="f2r4" />
+          <ScalarProperty Name="f2r4_Link" ColumnName="f2r4_Link" />
+          <ScalarProperty Name="f2r5" ColumnName="f2r5" />
+          <ScalarProperty Name="f2r5_Link" ColumnName="f2r5_Link" />
+          <ScalarProperty Name="f2r6" ColumnName="f2r6" />
+          <ScalarProperty Name="f2r6_Link" ColumnName="f2r6_Link" />
+          <ScalarProperty Name="f2r7" ColumnName="f2r7" />
+          <ScalarProperty Name="f2r7_Link" ColumnName="f2r7_Link" />
+          <ScalarProperty Name="f3Header" ColumnName="f3Header" />
+          <ScalarProperty Name="f3r1" ColumnName="f3r1" />
+          <ScalarProperty Name="f3r1_Link" ColumnName="f3r1_Link" />
+          <ScalarProperty Name="f3r2" ColumnName="f3r2" />
+          <ScalarProperty Name="f3r2_Link" ColumnName="f3r2_Link" />
+          <ScalarProperty Name="f3r3" ColumnName="f3r3" />
+          <ScalarProperty Name="f3r3_Link" ColumnName="f3r3_Link" />
+          <ScalarProperty Name="f3r4" ColumnName="f3r4" />
+          <ScalarProperty Name="f3r4_Link" ColumnName="f3r4_Link" />
+          <ScalarProperty Name="f3r5" ColumnName="f3r5" />
+          <ScalarProperty Name="f3r5_Link" ColumnName="f3r5_Link" />
+          <ScalarProperty Name="f3r6" ColumnName="f3r6" />
+          <ScalarProperty Name="f3r6_Link" ColumnName="f3r6_Link" />
+          <ScalarProperty Name="f3r7" ColumnName="f3r7" />
+          <ScalarProperty Name="f3r7_Link" ColumnName="f3r7_Link" />
+          <ScalarProperty Name="f4Header" ColumnName="f4Header" />
+          <ScalarProperty Name="f4r1" ColumnName="f4r1" />
+          <ScalarProperty Name="f4r1_Link" ColumnName="f4r1_Link" />
+          <ScalarProperty Name="f4r2" ColumnName="f4r2" />
+          <ScalarProperty Name="f4r2_Link" ColumnName="f4r2_Link" />
+          <ScalarProperty Name="f4r3" ColumnName="f4r3" />
+          <ScalarProperty Name="f4r3_Link" ColumnName="f4r3_Link" />
+          <ScalarProperty Name="f4r4" ColumnName="f4r4" />
+          <ScalarProperty Name="f4r4_Link" ColumnName="f4r4_Link" />
+          <ScalarProperty Name="f4r5" ColumnName="f4r5" />
+          <ScalarProperty Name="f4r5_Link" ColumnName="f4r5_Link" />
+          <ScalarProperty Name="f4r6" ColumnName="f4r6" />
+          <ScalarProperty Name="f4r6_Link" ColumnName="f4r6_Link" />
+          <ScalarProperty Name="f4r7" ColumnName="f4r7" />
+          <ScalarProperty Name="f4r7_Link" ColumnName="f4r7_Link" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GeomaticCategories">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.GeomaticCategory">
+        <MappingFragment StoreEntitySet="GeomaticCategories">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="logo" ColumnName="logo" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="link" ColumnName="link" />
+          <ScalarProperty Name="active" ColumnName="active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GiftOrders">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.GiftOrder">
+        <MappingFragment StoreEntitySet="GiftOrder">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="GiftId" ColumnName="GiftId" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="pointRecived" ColumnName="pointRecived" />
+          <ScalarProperty Name="isDelivery" ColumnName="isDelivery" />
+          <ScalarProperty Name="isSent" ColumnName="isSent" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Gifts">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Gift">
+        <MappingFragment StoreEntitySet="Gifts">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="short_description" ColumnName="short_description" />
+          <ScalarProperty Name="isAvailable" ColumnName="isAvailable" />
+          <ScalarProperty Name="isValid" ColumnName="isValid" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="MainImage" ColumnName="MainImage" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Logs">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Log">
+        <MappingFragment StoreEntitySet="Log">
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+          <ScalarProperty Name="Controller" ColumnName="Controller" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="message" ColumnName="message" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogPasswords">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.LogPassword">
+        <MappingFragment StoreEntitySet="LogPassword">
+          <ScalarProperty Name="LogPasswordId" ColumnName="LogPasswordId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Pass" ColumnName="Pass" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogUserAuthenticationDatas">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.LogUserAuthenticationData">
+        <MappingFragment StoreEntitySet="LogUserAuthenticationData">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="AuthenticationLogType" ColumnName="AuthenticationLogType" />
+          <ScalarProperty Name="IP" ColumnName="IP" />
+          <ScalarProperty Name="Hostname" ColumnName="Hostname" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogUserDatas">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.LogUserData">
+        <MappingFragment StoreEntitySet="LogUserData">
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+          <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+          <ScalarProperty Name="AreaName" ColumnName="AreaName" />
+          <ScalarProperty Name="LogUserDataId" ColumnName="LogUserDataId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="IP" ColumnName="IP" />
+          <ScalarProperty Name="Hostname" ColumnName="Hostname" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MainCats">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.MainCat">
+        <MappingFragment StoreEntitySet="MainCats">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="priority" ColumnName="priority" />
+          <ScalarProperty Name="img" ColumnName="img" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Menus">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Menu">
+        <MappingFragment StoreEntitySet="Menus">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="link" ColumnName="link" />
+          <ScalarProperty Name="priority" ColumnName="priority" />
+          <ScalarProperty Name="Parent" ColumnName="Parent" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Models">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Model">
+        <MappingFragment StoreEntitySet="Models">
+          <ScalarProperty Name="ModelId" ColumnName="ModelId" />
+          <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="newsLetters">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.newsLetter">
+        <MappingFragment StoreEntitySet="newsLetters">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Order">
+        <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="basketId" ColumnName="basketId" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="SellerId" ColumnName="SellerId" />
+          <ScalarProperty Name="SellerPrice" ColumnName="SellerPrice" />
+          <ScalarProperty Name="singleProductPrice" ColumnName="singleProductPrice" />
+          <ScalarProperty Name="supply" ColumnName="supply" />
+          <ScalarProperty Name="supplyDate" ColumnName="supplyDate" />
+          <ScalarProperty Name="colorId" ColumnName="colorId" />
+          <ScalarProperty Name="sizeId" ColumnName="sizeId" />
+          <ScalarProperty Name="colorSizeDescription" ColumnName="colorSizeDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Pages">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Page">
+        <MappingFragment StoreEntitySet="Pages">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="content" ColumnName="content" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="img" ColumnName="img" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Payments">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Payment">
+        <MappingFragment StoreEntitySet="Payment">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="BasketId" ColumnName="BasketId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="GateWayString" ColumnName="GateWayString" />
+          <ScalarProperty Name="GatewayId" ColumnName="GatewayId" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Token" ColumnName="Token" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="StatusString" ColumnName="StatusString" />
+          <ScalarProperty Name="isWallet" ColumnName="isWallet" />
+          <ScalarProperty Name="Walletid" ColumnName="Walletid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Permissions">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Permission">
+        <MappingFragment StoreEntitySet="Permissions">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+          <ScalarProperty Name="Permition" ColumnName="Permition" />
+          <ScalarProperty Name="Controller" ColumnName="Controller" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductGalleries">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.ProductGallery">
+        <MappingFragment StoreEntitySet="ProductGallery">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="big" ColumnName="big" />
+          <ScalarProperty Name="product_id" ColumnName="product_id" />
+          <ScalarProperty Name="small" ColumnName="small" />
+          <ScalarProperty Name="giftId" ColumnName="giftId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductPropertiesValues">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.ProductPropertiesValue">
+        <MappingFragment StoreEntitySet="ProductPropertiesValue">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="value" ColumnName="value" />
+          <ScalarProperty Name="proId" ColumnName="proId" />
+          <ScalarProperty Name="propertiesid" ColumnName="propertiesid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductQAnswers">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.ProductQAnswer">
+        <MappingFragment StoreEntitySet="ProductQAnswers">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Answer" ColumnName="Answer" />
+          <ScalarProperty Name="IsValidate" ColumnName="IsValidate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductQuestions">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.ProductQuestion">
+        <MappingFragment StoreEntitySet="ProductQuestions">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+          <ScalarProperty Name="Question" ColumnName="Question" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="IsValidate" ColumnName="IsValidate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductRatings">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.ProductRating">
+        <MappingFragment StoreEntitySet="ProductRating">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="groupId" ColumnName="groupId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Products">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Product">
+        <MappingFragment StoreEntitySet="Products">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="Inventory" ColumnName="Inventory" />
+          <ScalarProperty Name="short_description" ColumnName="short_description" />
+          <ScalarProperty Name="ShowOnMainPage" ColumnName="ShowOnMainPage" />
+          <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="brandId" ColumnName="brandId" />
+          <ScalarProperty Name="isOriginal" ColumnName="isOriginal" />
+          <ScalarProperty Name="isAvailable" ColumnName="isAvailable" />
+          <ScalarProperty Name="sellerId" ColumnName="sellerId" />
+          <ScalarProperty Name="isValid" ColumnName="isValid" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="submitDate" ColumnName="submitDate" />
+          <ScalarProperty Name="editSubmition" ColumnName="editSubmition" />
+          <ScalarProperty Name="point" ColumnName="point" />
+          <ScalarProperty Name="deliveryDate" ColumnName="deliveryDate" />
+          <ScalarProperty Name="specialSelling" ColumnName="specialSelling" />
+          <ScalarProperty Name="subTitle" ColumnName="subTitle" />
+          <ScalarProperty Name="MainImage" ColumnName="MainImage" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="priceForSpecialUsers" ColumnName="priceForSpecialUsers" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductsBrands">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.ProductsBrand">
+        <MappingFragment StoreEntitySet="ProductsBrands">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="logo" ColumnName="logo" />
+          <ScalarProperty Name="link" ColumnName="link" />
+          <ScalarProperty Name="active" ColumnName="active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductTags">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.ProductTag">
+        <MappingFragment StoreEntitySet="ProductTags">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="TagId" ColumnName="TagId" />
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="productViews">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.productView">
+        <MappingFragment StoreEntitySet="productViews">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="productid" ColumnName="productid" />
+          <ScalarProperty Name="views" ColumnName="views" />
+          <ScalarProperty Name="token" ColumnName="token" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Promotions">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Promotion">
+        <MappingFragment StoreEntitySet="Promotion">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="active" ColumnName="active" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="bgImage" ColumnName="bgImage" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="priority" ColumnName="priority" />
+          <ScalarProperty Name="color" ColumnName="color" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="propertiesCategories">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.propertiesCategory">
+        <MappingFragment StoreEntitySet="propertiesCategory">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="groupname" ColumnName="groupname" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ratings">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Rating">
+        <MappingFragment StoreEntitySet="Rating">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="groupName" ColumnName="groupName" />
+          <ScalarProperty Name="title" ColumnName="title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RatingGroups">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.RatingGroup">
+        <MappingFragment StoreEntitySet="RatingGroup">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RattingComments">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.RattingComment">
+        <MappingFragment StoreEntitySet="RattingComment">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="rating" ColumnName="rating" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="submited" ColumnName="submited" />
+          <ScalarProperty Name="commentId" ColumnName="commentId" />
+          <ScalarProperty Name="rattingId" ColumnName="rattingId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Role">
+        <MappingFragment StoreEntitySet="Role">
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Scans">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Scan">
+        <MappingFragment StoreEntitySet="Scans">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="url" ColumnName="url" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="basketId" ColumnName="basketId" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="statusString" ColumnName="statusString" />
+          <ScalarProperty Name="isConfirmed" ColumnName="isConfirmed" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Seller_cats">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Seller_cats">
+        <MappingFragment StoreEntitySet="Seller_cats">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="sellerId" ColumnName="sellerId" />
+          <ScalarProperty Name="catId" ColumnName="catId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SellerComments">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.SellerComment">
+        <MappingFragment StoreEntitySet="SellerComment">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="text" ColumnName="text" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="sellerId" ColumnName="sellerId" />
+          <ScalarProperty Name="show" ColumnName="show" />
+          <ScalarProperty Name="rate" ColumnName="rate" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Sellers">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Seller">
+        <MappingFragment StoreEntitySet="Sellers">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="lastname" ColumnName="lastname" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="codeMeli" ColumnName="codeMeli" />
+          <ScalarProperty Name="sheba" ColumnName="sheba" />
+          <ScalarProperty Name="shomareKart" ColumnName="shomareKart" />
+          <ScalarProperty Name="img" ColumnName="img" />
+          <ScalarProperty Name="isValid" ColumnName="isValid" />
+          <ScalarProperty Name="token" ColumnName="token" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="phone" ColumnName="phone" />
+          <ScalarProperty Name="easyLogin" ColumnName="easyLogin" />
+          <ScalarProperty Name="easyLoginTime" ColumnName="easyLoginTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SellersProducts">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.SellersProduct">
+        <MappingFragment StoreEntitySet="SellersProduct">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="sellerId" ColumnName="sellerId" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="isValid" ColumnName="isValid" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="submitDate" ColumnName="submitDate" />
+          <ScalarProperty Name="Delivery" ColumnName="Delivery" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="Warranty" ColumnName="Warranty" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SendPeriods">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.SendPeriod">
+        <MappingFragment StoreEntitySet="SendPeriods">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Peroid" ColumnName="Peroid" />
+          <ScalarProperty Name="BasketId" ColumnName="BasketId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="isPost" ColumnName="isPost" />
+          <ScalarProperty Name="isDelivery" ColumnName="isDelivery" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ServicePrices">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.ServicePrice">
+        <MappingFragment StoreEntitySet="ServicePrices">
+          <ScalarProperty Name="ServicePriceId" ColumnName="ServicePriceId" />
+          <ScalarProperty Name="ModelId" ColumnName="ModelId" />
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Services">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Service">
+        <MappingFragment StoreEntitySet="Services">
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="ServiceContent" ColumnName="ServiceContent" />
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Settings">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Setting">
+        <MappingFragment StoreEntitySet="Settings">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="shippingFree" ColumnName="shippingFree" />
+          <ScalarProperty Name="homePaye" ColumnName="homePaye" />
+          <ScalarProperty Name="shippingPrice" ColumnName="shippingPrice" />
+          <ScalarProperty Name="WebsiteName" ColumnName="WebsiteName" />
+          <ScalarProperty Name="WebsiteUrl" ColumnName="WebsiteUrl" />
+          <ScalarProperty Name="WebsiteLogo" ColumnName="WebsiteLogo" />
+          <ScalarProperty Name="WebsiteFullname" ColumnName="WebsiteFullname" />
+          <ScalarProperty Name="TopAlertText" ColumnName="TopAlertText" />
+          <ScalarProperty Name="topAlertLink" ColumnName="topAlertLink" />
+          <ScalarProperty Name="topAlertColor" ColumnName="topAlertColor" />
+          <ScalarProperty Name="WebsiteLogo2" ColumnName="WebsiteLogo2" />
+          <ScalarProperty Name="WebsiteLogo3" ColumnName="WebsiteLogo3" />
+          <ScalarProperty Name="SmsToken1" ColumnName="SmsToken1" />
+          <ScalarProperty Name="SmsToken2" ColumnName="SmsToken2" />
+          <ScalarProperty Name="smsToken_welcome" ColumnName="smsToken_welcome" />
+          <ScalarProperty Name="smsToken_forgetPassword" ColumnName="smsToken_forgetPassword" />
+          <ScalarProperty Name="smsToken_submittedOrder" ColumnName="smsToken_submittedOrder" />
+          <ScalarProperty Name="smsToken_fastLogin" ColumnName="smsToken_fastLogin" />
+          <ScalarProperty Name="smsToken_TicketAnswer" ColumnName="smsToken_TicketAnswer" />
+          <ScalarProperty Name="smsToken_validateUser" ColumnName="smsToken_validateUser" />
+          <ScalarProperty Name="smsToken_submittedCartToCart" ColumnName="smsToken_submittedCartToCart" />
+          <ScalarProperty Name="smsToken_CanceledCartToCart" ColumnName="smsToken_CanceledCartToCart" />
+          <ScalarProperty Name="zarinpal_merchant_id" ColumnName="zarinpal_merchant_id" />
+          <ScalarProperty Name="delivery_Price" ColumnName="delivery_Price" />
+          <ScalarProperty Name="PostalPrice" ColumnName="PostalPrice" />
+          <ScalarProperty Name="maxOrdersPerDay" ColumnName="maxOrdersPerDay" />
+          <ScalarProperty Name="ActiveOnlineChat" ColumnName="ActiveOnlineChat" />
+          <ScalarProperty Name="smsToken_onlineChat" ColumnName="smsToken_onlineChat" />
+          <ScalarProperty Name="smsToken_changeStatusOfOrder" ColumnName="smsToken_changeStatusOfOrder" />
+          <ScalarProperty Name="InstantOffer" ColumnName="InstantOffer" />
+          <ScalarProperty Name="FooterShortText" ColumnName="FooterShortText" />
+          <ScalarProperty Name="FooterLongText" ColumnName="FooterLongText" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Shippings">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Shipping">
+        <MappingFragment StoreEntitySet="Shipping">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="ShippingType" ColumnName="ShippingType" />
+          <ScalarProperty Name="ShippingTypeString" ColumnName="ShippingTypeString" />
+          <ScalarProperty Name="ShippingPrice" ColumnName="ShippingPrice" />
+          <ScalarProperty Name="BasketId" ColumnName="BasketId" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+          <ScalarProperty Name="DeliveryPeriod" ColumnName="DeliveryPeriod" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SizeProducts">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.SizeProduct">
+        <MappingFragment StoreEntitySet="SizeProduct">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="SizeId" ColumnName="SizeId" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Sizes">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Size">
+        <MappingFragment StoreEntitySet="Sizes">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="Size1" ColumnName="Size" />
+          <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="title" ColumnName="title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Sliders">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Slider">
+        <MappingFragment StoreEntitySet="Sliders">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="subTitle" ColumnName="subTitle" />
+          <ScalarProperty Name="img" ColumnName="img" />
+          <ScalarProperty Name="btnText" ColumnName="btnText" />
+          <ScalarProperty Name="btnLink" ColumnName="btnLink" />
+          <ScalarProperty Name="active" ColumnName="active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SocialMedias">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.SocialMedia">
+        <MappingFragment StoreEntitySet="SocialMedia">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="Facebook" ColumnName="Facebook" />
+          <ScalarProperty Name="Instagram" ColumnName="Instagram" />
+          <ScalarProperty Name="Twitter" ColumnName="Twitter" />
+          <ScalarProperty Name="Youtube" ColumnName="Youtube" />
+          <ScalarProperty Name="Aparat" ColumnName="Aparat" />
+          <ScalarProperty Name="Linkedin" ColumnName="Linkedin" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="States">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.State">
+        <MappingFragment StoreEntitySet="States">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Subscribes">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Subscribe">
+        <MappingFragment StoreEntitySet="Subscribes">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tags">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Tag">
+        <MappingFragment StoreEntitySet="Tags">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Templates">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Template">
+        <MappingFragment StoreEntitySet="Template">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="BtnColor" ColumnName="BtnColor" />
+          <ScalarProperty Name="btnHoverColor" ColumnName="btnHoverColor" />
+          <ScalarProperty Name="BtnTextColor" ColumnName="BtnTextColor" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="LinkColor" ColumnName="LinkColor" />
+          <ScalarProperty Name="backgroundShadowInLogin" ColumnName="backgroundShadowInLogin" />
+          <ScalarProperty Name="topLabelColor" ColumnName="topLabelColor" />
+          <ScalarProperty Name="labelInProduct" ColumnName="labelInProduct" />
+          <ScalarProperty Name="labelUnderMenu" ColumnName="labelUnderMenu" />
+          <ScalarProperty Name="ActiveMenuColor" ColumnName="ActiveMenuColor" />
+          <ScalarProperty Name="sliderButtonColor" ColumnName="sliderButtonColor" />
+          <ScalarProperty Name="BasketColorOnMobileMode" ColumnName="BasketColorOnMobileMode" />
+          <ScalarProperty Name="labelUnderCategory" ColumnName="labelUnderCategory" />
+          <ScalarProperty Name="BasketLabelColor" ColumnName="BasketLabelColor" />
+          <ScalarProperty Name="AmazingSliderColor" ColumnName="AmazingSliderColor" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TicketChats">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.TicketChat">
+        <MappingFragment StoreEntitySet="TicketChats">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="ticketId" ColumnName="ticketId" />
+          <ScalarProperty Name="isUser" ColumnName="isUser" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="text" ColumnName="text" />
+          <ScalarProperty Name="voice" ColumnName="voice" />
+          <ScalarProperty Name="isSeller" ColumnName="isSeller" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tickets">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Ticket">
+        <MappingFragment StoreEntitySet="Tickets">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="for" ColumnName="for" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="voice" ColumnName="voice" />
+          <ScalarProperty Name="sellerid" ColumnName="sellerid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Uploads">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Upload">
+        <MappingFragment StoreEntitySet="Uploads">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="url" ColumnName="url" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserLogs">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.UserLog">
+        <MappingFragment StoreEntitySet="UserLog">
+          <ScalarProperty Name="UserLogId" ColumnName="UserLogId" />
+          <ScalarProperty Name="Unsuccessfulattempt" ColumnName="Unsuccessfulattempt" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserPoints">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.UserPoint">
+        <MappingFragment StoreEntitySet="UserPoints">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="orderId" ColumnName="orderId" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="point" ColumnName="point" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserRoles">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.UserRole">
+        <MappingFragment StoreEntitySet="UserRole">
+          <ScalarProperty Name="UserRoleId" ColumnName="UserRoleId" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="firstName" ColumnName="firstName" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="birth" ColumnName="birth" />
+          <ScalarProperty Name="gender" ColumnName="gender" />
+          <ScalarProperty Name="image" ColumnName="image" />
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="location" ColumnName="location" />
+          <ScalarProperty Name="token" ColumnName="token" />
+          <ScalarProperty Name="mobieVerify" ColumnName="mobieVerify" />
+          <ScalarProperty Name="smsToken" ColumnName="smsToken" />
+          <ScalarProperty Name="mobile" ColumnName="mobile" />
+          <ScalarProperty Name="easyLogin" ColumnName="easyLogin" />
+          <ScalarProperty Name="easyLoginTime" ColumnName="easyLoginTime" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="forgetSmsToken" ColumnName="forgetSmsToken" />
+          <ScalarProperty Name="mobileVerify_forget" ColumnName="mobileVerify_forget" />
+          <ScalarProperty Name="mobileForgetDateTime" ColumnName="mobileForgetDateTime" />
+          <ScalarProperty Name="codeMeli" ColumnName="codeMeli" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="card" ColumnName="card" />
+          <ScalarProperty Name="LoginAttemps" ColumnName="LoginAttemps" />
+          <ScalarProperty Name="registrationCode" ColumnName="registrationCode" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="lastOnline" ColumnName="lastOnline" />
+          <ScalarProperty Name="Special" ColumnName="Special" />
+          <ScalarProperty Name="RecieveNews" ColumnName="RecieveNews" />
+          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+          <ScalarProperty Name="LockoutEnd" ColumnName="LockoutEnd" />
+          <ScalarProperty Name="IsLock" ColumnName="IsLock" />
+          <ScalarProperty Name="IsResetPassword" ColumnName="IsResetPassword" />
+          <ScalarProperty Name="DatePassRefresh" ColumnName="DatePassRefresh" />
+          <ScalarProperty Name="CookieToken" ColumnName="CookieToken" />
+          <ScalarProperty Name="Hostname" ColumnName="Hostname" />
+          <ScalarProperty Name="IsEmailConfirm" ColumnName="IsEmailConfirm" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UsersAdresses">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.UsersAdress">
+        <MappingFragment StoreEntitySet="UsersAdress">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="postalCode" ColumnName="postalCode" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="Reciver" ColumnName="Reciver" />
+          <ScalarProperty Name="ReciverPhone" ColumnName="ReciverPhone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserSettings">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.UserSetting">
+        <MappingFragment StoreEntitySet="UserSetting">
+          <ScalarProperty Name="UserSettingId" ColumnName="UserSettingId" />
+          <ScalarProperty Name="Key" ColumnName="Key" />
+          <ScalarProperty Name="value" ColumnName="value" />
+          <ScalarProperty Name="description" ColumnName="description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserViews">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.UserView">
+        <MappingFragment StoreEntitySet="UserViews">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VisitStatistics">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.VisitStatistic">
+        <MappingFragment StoreEntitySet="VisitStatistics">
+          <ScalarProperty Name="VisitStatisticsId" ColumnName="VisitStatisticsId" />
+          <ScalarProperty Name="DateInput" ColumnName="DateInput" />
+          <ScalarProperty Name="IpAddress" ColumnName="IpAddress" />
+          <ScalarProperty Name="HostName" ColumnName="HostName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Wallets">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.Wallet">
+        <MappingFragment StoreEntitySet="Wallet">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="payWay" ColumnName="payWay" />
+          <ScalarProperty Name="payByAdmin" ColumnName="payByAdmin" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="desc" ColumnName="desc" />
+          <ScalarProperty Name="Success" ColumnName="Success" />
+          <ScalarProperty Name="Token" ColumnName="Token" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WalletPays">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.WalletPay">
+        <MappingFragment StoreEntitySet="WalletPay">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="basketId" ColumnName="basketId" />
+          <ScalarProperty Name="desc" ColumnName="desc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="watchBrands">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.watchBrand">
+        <MappingFragment StoreEntitySet="watchBrands">
+          <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WishLists">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.WishList">
+        <MappingFragment StoreEntitySet="WishList">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ServiceInquiries">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.ServiceInquiry">
+        <MappingFragment StoreEntitySet="ServiceInquiry">
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+          <ScalarProperty Name="ServicePriceId" ColumnName="ServicePriceId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InquiryManagements">
+      <EntityTypeMapping TypeName="wikisaat_shopModel.InquiryManagement">
+        <MappingFragment StoreEntitySet="InquiryManagement">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+          <ScalarProperty Name="ModelId" ColumnName="ModelId" />
+          <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+          <ScalarProperty Name="InquiryId" ColumnName="InquiryId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

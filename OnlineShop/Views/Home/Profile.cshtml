@@ -1,0 +1,137 @@
+﻿@using OnlineShop.Models
+@{
+    int id = Convert.ToInt16(Session[ "userLogin"]);
+    var db = new OnlineShopEntities();
+    var user = db.Users.Find(id);
+    Layout = "/views/shared/_Layout.cshtml";
+}
+
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Breadcrumb Tow Start-->
+    <div class="breadcrumb-tow mb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-title">
+                        <h1>ویرایش اطلاعات کاربری</h1>
+                    </div>
+                    <div class="breadcrumb-content breadcrumb-content-tow">
+                        <ul>
+                            <li><a href="index.html">خانه</a></li>
+                            <li class="active">ویرایش اطلاعات کاربری</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Breadcrumb Tow End-->
+    <!--Login Register Area Strat-->
+    <div class="login-register-area mb-80">
+        <div class="container">
+            <div class="row">
+                <!--Login Form Start-->
+                <div class="col-md-6 col-sm-6 col-md-offset-3 offset-3 mx-auto">
+                    <div class="customer-login-register">
+                        <div class="form-login-title">
+                            <h2>ویرایش اطلاعات کاربری</h2>
+                        </div>
+                        <div class="login-form">
+                            @{
+                                if (ViewBag.error != null)
+                                {
+                                    <div class="result">
+
+                                        <div class="alert alert-danger">
+                                            <strong>خطا !</strong><br /> @Html.Raw(ViewBag.error)
+                                        </div>
+                                    </div>
+
+                                }
+                            }
+                            <form action="/home/profile" method="post">
+                                <div class="form-fild">
+                                    <p><label>نام <span class="required">*</span></label></p>
+                                    <input name="firstName" value="@user.firstName"  type="text">
+                                </div>
+                                <div class="form-fild">
+                                    <p><label>نام خانوادگی <span class="required">*</span></label></p>
+                                    <input name="lastName" value="@user.lastName" type="text">
+                                </div>
+                               
+                                <br />
+                                <div class="login-submit">
+                                    <button type="submit" class="form-button">ویرایش اطلاعات پروفایل</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--Login Form End-->
+            </div>
+        </div>
+    </div>
+    <!--Login Register Area End-->
+    <!--Brand Area Start-->
+    <div class="brand-area mb-105">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="brand-active">
+                        <!--Single Brand Start-->
+                        <div class="single-brand img-full">
+                            <a href="#"><img src="img/brand/brand1.png" alt=""></a>
+                        </div>
+                        <!--Single Brand End-->
+                        <!--Single Brand Start-->
+                        <div class="single-brand img-full">
+                            <a href="#"><img src="img/brand/brand2.png" alt=""></a>
+                        </div>
+                        <!--Single Brand End-->
+                        <!--Single Brand Start-->
+                        <div class="single-brand img-full">
+                            <a href="#"><img src="img/brand/brand3.png" alt=""></a>
+                        </div>
+                        <!--Single Brand End-->
+                        <!--Single Brand Start-->
+                        <div class="single-brand img-full">
+                            <a href="#"><img src="img/brand/brand4.png" alt=""></a>
+                        </div>
+                        <!--Single Brand End-->
+                        <!--Single Brand Start-->
+                        <div class="single-brand img-full">
+                            <a href="#"><img src="img/brand/brand5.png" alt=""></a>
+                        </div>
+                        <!--Single Brand End-->
+                        <!--Single Brand Start-->
+                        <div class="single-brand img-full">
+                            <a href="#"><img src="img/brand/brand3.png" alt=""></a>
+                        </div>
+                        <!--Single Brand End-->
+                        <!--Single Brand Start-->
+                        <div class="single-brand img-full">
+                            <a href="#"><img src="img/brand/brand4.png" alt=""></a>
+                        </div>
+                        <!--Single Brand End-->
+                        <!--Single Brand Start-->
+                        <div class="single-brand img-full">
+                            <a href="#"><img src="img/brand/brand5.png" alt=""></a>
+                        </div>
+                        <!--Single Brand End-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Footer Area Start-->
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+
+</div>

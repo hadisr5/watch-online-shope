@@ -1,0 +1,221 @@
+﻿@using OnlineShop.Models
+@using System.Globalization;
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var comments = db.SellerComments.Find(id);
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title">AdminDashboard</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <a href="/Admin/AdminDashboard/Index#/Admin/sellerComments/index" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
+            لیست کامنت های فروشندگان
+        </a>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/admin/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+</div>
+<!-- end:: Content Head -->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        @{
+            string p = "";
+            try
+            {
+                DateTime d = Convert.ToDateTime(comments.creationDate);
+                PersianCalendar pc = new PersianCalendar();
+                p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+            }
+            catch (Exception)
+            {
+            }
+        }
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+
+                <br />
+                @if (comments.show == null || comments.show == false)
+                {
+            <form class="myForm" action="/admin/sellerComments/submitComment/@comments.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/sellerComments/index">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-success">تائید کامنت</button>
+                <a href="/Admin/AdminDashboard/Index#/Admin/sellerComments/remove/@comments.id" class="btn btn-danger">حدف کامنت</a>
+            </form>
+                }
+                else
+                {
+            <form class="myForm" action="/admin/sellerComments/deactiveComment/@comments.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/sellerComments/index">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-warning">غیرفعال کردن کامنت</button>
+                <a href="/Admin/AdminDashboard/Index#/Admin/sellerComments/remove/@comments.id" class="btn btn-danger">حدف کامنت</a>
+
+            </form>
+                }
+
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            <div class="m-portlet__head-title">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td colspan="2">
+                                اطلاعات کامنت
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                شناسه کامنت
+                            </td>
+                            <td>
+                                #@comments.id
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                تاریخ ارسال کامنت
+                            </td>
+                            <td>
+                                @p
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ارسال کننده
+                            </td>
+                            <td>
+                                @if (comments.userid == null)
+                                {
+                                        <span> ناشناس</span>
+
+                                }
+                                else
+                                {
+                                    var user = db.Users.Where(r => r.id == comments.userid).FirstOrDefault();
+                                    if (user != null)
+                                    {
+                                        <span><a href="#/admin/users/detail/@user.id">@user.firstName @user.lastName</a></span>
+                                    }
+                                    else
+                                    {
+                                        <span> کاربر حدف شده است</span>
+                                    }
+
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>فروشنده</td>
+                            <td>
+                                @{
+                                    var seller = db.Sellers.Where(r => r.id == comments.sellerId).FirstOrDefault();
+                                    if (seller != null)
+                                    {
+                                        <span>فروشنده : <a href="/home/sellers/@comments.sellerId/فروشنده" target="_blank" class="btn btn-info">@seller.name @seller.lastname</a></span>
+
+                                    }
+                                    else
+                                    {
+                                        <span>فروشنده : فروشنده حذف شده است</span>
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                امتیاز
+                            </td>
+                            <td>
+                                @{
+                                    if (comments.rate == null)
+                                    {
+                                        <span class="btn btn-bold btn-sm btn-font-sm  btn-label-info">ثبت نشده</span>
+                                    }
+                                    else
+                                    {
+                                        for (int i = 0; i < comments.rate; i++)
+                                        {
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="35px" height="35px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon fillStar">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                                    <path d="M12,18 L7.91561963,20.1472858 C7.42677504,20.4042866 6.82214789,20.2163401 6.56514708,19.7274955 C6.46280801,19.5328351 6.42749334,19.309867 6.46467018,19.0931094 L7.24471742,14.545085 L3.94038429,11.3241562 C3.54490071,10.938655 3.5368084,10.3055417 3.92230962,9.91005817 C4.07581822,9.75257453 4.27696063,9.65008735 4.49459766,9.61846284 L9.06107374,8.95491503 L11.1032639,4.81698575 C11.3476862,4.32173209 11.9473121,4.11839309 12.4425657,4.36281539 C12.6397783,4.46014562 12.7994058,4.61977315 12.8967361,4.81698575 L14.9389263,8.95491503 L19.5054023,9.61846284 C20.0519472,9.69788046 20.4306287,10.2053233 20.351211,10.7518682 C20.3195865,10.9695052 20.2170993,11.1706476 20.0596157,11.3241562 L16.7552826,14.545085 L17.5353298,19.0931094 C17.6286908,19.6374458 17.263103,20.1544017 16.7187666,20.2477627 C16.5020089,20.2849396 16.2790408,20.2496249 16.0843804,20.1472858 L12,18 Z" fill="#000000" />
+                                                </g>
+                                            </svg>
+                                        }
+                                        if (comments.rate != 5)
+                                        {
+                                            for (int i = 0; i < 5 - comments.rate; i++)
+                                            {
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="35px" height="35px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon emptyStar">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                                        <path d="M12,18 L7.91561963,20.1472858 C7.42677504,20.4042866 6.82214789,20.2163401 6.56514708,19.7274955 C6.46280801,19.5328351 6.42749334,19.309867 6.46467018,19.0931094 L7.24471742,14.545085 L3.94038429,11.3241562 C3.54490071,10.938655 3.5368084,10.3055417 3.92230962,9.91005817 C4.07581822,9.75257453 4.27696063,9.65008735 4.49459766,9.61846284 L9.06107374,8.95491503 L11.1032639,4.81698575 C11.3476862,4.32173209 11.9473121,4.11839309 12.4425657,4.36281539 C12.6397783,4.46014562 12.7994058,4.61977315 12.8967361,4.81698575 L14.9389263,8.95491503 L19.5054023,9.61846284 C20.0519472,9.69788046 20.4306287,10.2053233 20.351211,10.7518682 C20.3195865,10.9695052 20.2170993,11.1706476 20.0596157,11.3241562 L16.7552826,14.545085 L17.5353298,19.0931094 C17.6286908,19.6374458 17.263103,20.1544017 16.7187666,20.2477627 C16.5020089,20.2849396 16.2790408,20.2496249 16.0843804,20.1472858 L12,18 Z" fill="#000000" />
+                                                    </g>
+                                                </svg>
+                                            }
+                                        }
+
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:justify">
+                                @comments.text
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
+
+            </div>
+
+
+
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    titlePage('#@comments.id')
+</script>
+<style>
+    .kt-svg-icon.fillStar g [fill] {
+        fill: #f59b3e;
+    }
+
+    .kt-svg-icon.emptyStar g [fill] {
+        fill: #9b9b9b;
+    }
+</style>

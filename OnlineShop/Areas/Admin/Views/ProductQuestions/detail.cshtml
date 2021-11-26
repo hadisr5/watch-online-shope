@@ -1,0 +1,350 @@
+﻿@using OnlineShop.Models
+@using System.Globalization;
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var question = db.ProductQuestions.Find(id);
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت پرسش ها</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/productquestions/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست پرسش ها</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        @{
+            string p = "";
+            try
+            {
+                DateTime d = Convert.ToDateTime(question.CreationDate);
+                PersianCalendar pc = new PersianCalendar();
+                p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+            }
+            catch (Exception)
+            {
+            }
+        }
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+
+                <br />
+                @*@if (question.IsValidate == null || question.IsValidate == false)
+        {
+            <form class="myForm" action="/admin/productquestions/submitquestion/@question.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/productquestions/index">
+                <button type="submit" class="btn btn-success">تائید پرسش</button>
+                <a href="/Admin/AdminDashboard/Index#/Admin/productquestions/remove/@question.id" class="btn btn-danger">حذف پرسش</a>
+            </form>
+        }
+        else
+        {
+            <form class="myForm" action="/admin/productquestions/deactivequestion/@question.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/productquestions/index">
+                <button type="submit" class="btn btn-warning">غیرفعال کردن پرسش</button>
+                <a href="/Admin/AdminDashboard/Index#/Admin/productquestions/remove/@question.id" class="btn btn-danger">حذف پرسش</a>
+
+            </form>
+        }*@
+                @if (question.IsValidate == null || question.IsValidate == false)
+                {
+            <form style="margin-left: 2px;" class="myForm float-left" action="/admin/productquestions/submitquestion/@question.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/productquestions/index">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-success">تائید پرسش</button>
+            </form>
+            <form class="myForm float-left" action="/admin/productquestions/remove/@question.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/productquestions/index">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-danger">حذف پرسش</button>
+                @*<a href="/Admin/AdminDashboard/Index#/Admin/productquestions/removeanswer/@item.id" class="btn btn-danger">حذف پاسخ</a>*@
+            </form>
+                }
+                else
+                {
+            <form style="margin-left: 2px;" class="myForm float-left" action="/admin/productquestions/deactivequestion/@question.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/productquestions/index">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-warning">غیرفعال کردن پرسش</button>
+                @*<a href="/Admin/AdminDashboard/Index#/Admin/productquestions/removeanswer/@item.id" class="btn btn-danger">حذف پاسخ</a>*@
+
+            </form>
+            <form class="myForm float-left" action="/admin/productquestions/remove/@question.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/productquestions/index">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-danger">حذف پرسش</button>
+                @*<a href="/Admin/AdminDashboard/Index#/Admin/productquestions/removeanswer/@item.id" class="btn btn-danger">حذف پاسخ</a>*@
+            </form>
+                }
+
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            <div class="m-portlet__head-title">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td colspan="2">
+                                اطلاعات کامنت
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*@{
+                                var ratting = db.RattingComments.Where(r => r.commentId == id).ToList();
+                                if (ratting.Count != 0)
+                                {
+
+                                    foreach (var item in ratting)
+                                    {
+                                        var rate = db.Ratings.Where(r => r.id == item.rattingId).FirstOrDefault();
+                                        if (rate != null)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @rate.title
+                                                </td>
+                                                <td>
+                                                    @for (int i = 0; i < 5 - item.rating; i++)
+                                                    {
+                                                        <i class="fas fa-star"></i>
+                                                    }
+                                                    @for (int i = 0; i < item.rating; i++)
+                                                    {
+                                                        <i class="fas fa-star active"></i>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            }*@
+
+                        <tr>
+                            <td>
+                                شناسه پرسش
+                            </td>
+                            <td>
+                                #@question.id
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                تاریخ ارسال پرسش
+                            </td>
+                            <td>
+                                @p
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ارسال کننده
+                            </td>
+                            <td>
+                                @{
+                                    var user = db.Users.Where(r => r.id == question.UserId).FirstOrDefault();
+                                    if (user != null)
+                                    {
+                                        <span><a href="#/admin/users/detail/@user.id">@user.firstName @user.lastName</a></span>
+                                    }
+                                    else
+                                    {
+                                        <span> کاربر حذف شده است</span>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>محصول</td>
+                            <td>
+                                @{
+                                    var product = db.Products.Where(r => r.id == question.ProductId).FirstOrDefault();
+                                    if (product != null)
+                                    {
+                                        <span>محصول : <a href="/home/product/@question.ProductId" target="_blank" class="btn btn-info">@product.title</a></span>
+
+                                    }
+                                    else
+                                    {
+                                        <span>محصول : محصول حذف شده است</span>
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        @*<tr>
+                                <td>
+                                    امتیاز
+                                </td>
+                                <td>
+                                    @{
+                                        if (comments.rate == null)
+                                        {
+                                            <span class="btn btn-bold btn-sm btn-font-sm  btn-label-info">ثبت نشده</span>
+                                        }
+                                        else
+                                        {
+                                            for (int i = 0; i < comments.rate; i++)
+                                            {
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="35px" height="35px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon fillStar">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                                        <path d="M12,18 L7.91561963,20.1472858 C7.42677504,20.4042866 6.82214789,20.2163401 6.56514708,19.7274955 C6.46280801,19.5328351 6.42749334,19.309867 6.46467018,19.0931094 L7.24471742,14.545085 L3.94038429,11.3241562 C3.54490071,10.938655 3.5368084,10.3055417 3.92230962,9.91005817 C4.07581822,9.75257453 4.27696063,9.65008735 4.49459766,9.61846284 L9.06107374,8.95491503 L11.1032639,4.81698575 C11.3476862,4.32173209 11.9473121,4.11839309 12.4425657,4.36281539 C12.6397783,4.46014562 12.7994058,4.61977315 12.8967361,4.81698575 L14.9389263,8.95491503 L19.5054023,9.61846284 C20.0519472,9.69788046 20.4306287,10.2053233 20.351211,10.7518682 C20.3195865,10.9695052 20.2170993,11.1706476 20.0596157,11.3241562 L16.7552826,14.545085 L17.5353298,19.0931094 C17.6286908,19.6374458 17.263103,20.1544017 16.7187666,20.2477627 C16.5020089,20.2849396 16.2790408,20.2496249 16.0843804,20.1472858 L12,18 Z" fill="#000000" />
+                                                    </g>
+                                                </svg>
+                                            }
+                                            if (comments.rate != 5)
+                                            {
+                                                for (int i = 0; i < 5 - comments.rate; i++)
+                                                {
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="35px" height="35px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon emptyStar">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                                            <path d="M12,18 L7.91561963,20.1472858 C7.42677504,20.4042866 6.82214789,20.2163401 6.56514708,19.7274955 C6.46280801,19.5328351 6.42749334,19.309867 6.46467018,19.0931094 L7.24471742,14.545085 L3.94038429,11.3241562 C3.54490071,10.938655 3.5368084,10.3055417 3.92230962,9.91005817 C4.07581822,9.75257453 4.27696063,9.65008735 4.49459766,9.61846284 L9.06107374,8.95491503 L11.1032639,4.81698575 C11.3476862,4.32173209 11.9473121,4.11839309 12.4425657,4.36281539 C12.6397783,4.46014562 12.7994058,4.61977315 12.8967361,4.81698575 L14.9389263,8.95491503 L19.5054023,9.61846284 C20.0519472,9.69788046 20.4306287,10.2053233 20.351211,10.7518682 C20.3195865,10.9695052 20.2170993,11.1706476 20.0596157,11.3241562 L16.7552826,14.545085 L17.5353298,19.0931094 C17.6286908,19.6374458 17.263103,20.1544017 16.7187666,20.2477627 C16.5020089,20.2849396 16.2790408,20.2496249 16.0843804,20.1472858 L12,18 Z" fill="#000000" />
+                                                        </g>
+                                                    </svg>
+                                                }
+                                            }
+
+
+                                        }
+                                    }
+                                </td>
+                            </tr>*@
+                        <tr>
+                            <td colspan="2" style="text-align:justify">
+                                @question.Question
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <div class="m-portlet__body">
+
+                    <div id="tbody" style="margin-top:30px">
+                        @{
+                            var answers = db.ProductQAnswers.Where(q => q.QuestionId == question.id).ToList();
+                            if (answers.Count != 0)
+                            {
+                                foreach (var item in answers)
+                                {
+                                    var answerclass = "";
+                                    if (item.IsValidate == true)
+                                    {
+                                        answerclass = "success";
+                                    }
+                                    else
+                                    {
+                                        answerclass = "warning";
+                                    }
+
+                                    <div class="alert alert-@answerclass m--margin-top-10 myMsg ticketMSG">
+                                        @{
+                                            string userName = "کاربر حذف شده است";
+                                            var auser = db.Users.Where(r => r.id == item.UserId).FirstOrDefault();
+                                            if (auser != null)
+                                            {
+                                                userName = auser.firstName + " " + auser.lastName;
+                                            }
+                                        }
+                                        <span class="sender">@userName</span>
+                                        <div class="float-right">
+                                            @if (item.IsValidate == null || item.IsValidate == false)
+                                            {
+                                            <form style="margin-left: 2px;" class="myForm float-left" action="/admin/productquestions/submitanswer/@item.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/productquestions/detail/@question.id">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-success">تائید پاسخ</button>
+                                            </form>
+                                            <form class="myForm float-left" action="/admin/productquestions/removeanswer/@item.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/productquestions/detail/@question.id">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-danger">حذف پاسخ</button>
+                                            </form>
+                                            }
+                                            else
+                                            {
+                                        <form style="margin-left: 2px;" class="myForm float-left" action="/admin/productquestions/deactiveanswer/@item.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/productquestions/detail/@question.id">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-warning">غیرفعال کردن پاسخ</button>
+
+                                        </form>
+                                        <form class="myForm float-left" action="/admin/productquestions/removeanswer/@item.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/productquestions/detail/@question.id">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-danger">حذف پاسخ</button>
+                                        </form>
+                                            }
+                                        </div>
+                                        <br />
+                                        @item.Answer
+                                        <br />
+                                        <span class="sentDate">
+                                            @{
+                                                try
+                                                {
+                                                    DateTime d = Convert.ToDateTime(item.CreationDate);
+                                                    PersianCalendar pc = new PersianCalendar();
+                                                    string pp = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+                                                    @pp
+                                                }
+                                                catch (Exception)
+                                                {
+                                                }
+                                            }
+                                        </span>
+                                    </div>
+
+                                }
+                            }
+                        }
+
+
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    titlePage('#@question.id')
+</script>
+<style>
+
+    .kt-svg-icon.fillStar g [fill] {
+        fill: #f59b3e;
+    }
+
+    .kt-svg-icon.emptyStar g [fill] {
+        fill: #9b9b9b;
+    }
+</style>

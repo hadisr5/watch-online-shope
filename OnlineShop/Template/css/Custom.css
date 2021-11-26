@@ -1,0 +1,146 @@
+﻿
+
+.alert-site {
+    padding-left: 4rem;
+    padding-right: 1.25rem;
+    background-color: #666 !important;
+    background-image: url(/template/images/701f8a6b.svg);
+    margin-bottom: 0;
+    text-align: center;
+    z-index: 1000;
+    position: relative;
+    width: 100%;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    font-size: 13px;
+}
+
+    .alert-site .close {
+        left: 0;
+        right: auto;
+        top: 0;
+        background-color: #f58220;
+        border-radius: 0;
+        color: #666;
+        width: 32px;
+        height: 32px;
+        text-align: center;
+        line-height: 36px;
+        padding: 0 !important;
+        font-size: 28px;
+    }
+
+header.main-header {
+    padding: 15px 0 0;
+    margin-bottom: 15px;
+    background-color: #fff;
+    z-index: 100000000000;
+}
+
+    header.main-header .logo-area a img {
+        float: right;
+        max-height: 43.2px;
+    }
+
+    header.main-header .search-area form.search button {
+        width: 60px;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        border: none;
+        border-radius: 0;
+        background-color: #f58220;
+        cursor: pointer;
+        outline: none;
+    }
+
+    header.main-header .logo-area a img {
+        margin-top: 15px;
+    }
+
+#amazing-slider .carousel-indicators li.active {
+    background: #f58220;
+}
+
+    #amazing-slider .carousel-indicators li.active:after {
+        background: #f58220;
+    }
+
+.btn-primary {
+    background-color: #f58220;
+    border: 1px solid #f58220;
+}
+
+#amazing-slider .carousel-inner .carousel-item .row .left-col .price .discount-percent {
+    background: #f58220;
+}
+
+#amazing-slider .carousel-inner .carousel-item .row .left-col .price ins {
+    color: #f58220;
+}
+
+.dk-btn-info {
+    background-color: #F69400;
+}
+
+.price-value {
+    color: #f58220;
+}
+
+.box-tabs-tab .active:before {
+    background: #F69400;
+}
+
+.btn-link-border {
+    color: #f58220;
+}
+
+footer.main-footer .footer-widgets .newsletter form .btn {
+    background-color: #f58220;
+}
+
+header.main-header .user-login .dropdown-menu:before, .btn-info {
+    background-color: #f58220;
+}
+
+header.main-header .user-login .dropdown-menu:after {
+    border-color: transparent transparent #f58220;
+}
+
+header.main-header .user-login .dropdown-menu .dropdown-item a.register {
+    color: #f58220;
+    border-bottom: 1px dashed #f58220;
+}
+
+.listing-sort li a.active {
+    background-color: #f58220;
+}
+
+.promotion-badge--special-sale {
+    color: #f58220;
+    border-bottom: 1px solid #f58220;
+}
+
+.checkbox label::after {
+    background: #f58220;
+    border: 1px solid #f58220;
+}
+
+.comparisonForm {
+    background: #f58220;
+    border: 1px solid #b46018;
+}
+
+.dk-btn-info {
+    background-color: #F69400;
+}
+
+.form-account-submit button {
+    border: 1px solid #f58220;
+}
+
+header.main-header .cart a.btn {
+    background-color: #f58220;
+}

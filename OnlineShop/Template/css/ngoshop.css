@@ -1,0 +1,187 @@
+﻿
+input.btn.btn-warning.btnTopSearch {
+    background-color: #1b222a !important;
+    color: white !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100px !important;
+    margin: 0;
+    padding-right: auto !important;
+}
+.greentext, .fixPrice, .specialOfferPriceT, specialOfferPriceNumber {
+    color: #F69400;
+}
+
+.specialOfferNoPriceNumber {
+    font-size: 12px;
+    color: #BCBCBC;
+}
+
+.inquiryFixPrice .price-currency {
+    color: #BCBCBC;
+    font-size: 10px;
+}
+.dk-btn-info, header.main-header .cart .dropdown-menu .basket-submit, a.btn.btn-info, .btn-primary, .comparisonForm, #remove-location .remodal-general-alert-button--approve, .radio-box input[type="radio"]:checked + label::after, .ui-radio input[type="radio"]:checked + .ui-radio-check::before {
+    background-color: #F69400 !important;
+}
+
+.user-login.dropdown:before {
+    display: none;
+}
+
+/*header.main-header .dropdown {
+    float: right;
+}*/
+
+a.btn.btn-warning.btnTopSearch {
+    background-color: #ffffff !important;
+    color: black !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    /*width: 100px !important;*/
+    margin: 0;
+    padding-right: auto !important;
+}
+
+header.main-header .search-area form.search input {
+    padding-right: 120px;
+    border-radius: 10px !important;
+}
+
+a > .userIcon {
+    width: 14px;
+    position: absolute;
+    right: 9px;
+    top: 12px;
+}
+
+/*main menu styles*/
+nav.main-menu {
+    background-color: #ffffff;
+}
+
+.dropdownmenu {
+    background-color: #ffffff;
+}
+
+header.main-header .menu ul li a {
+    color: #313131 !important;
+}
+
+header.main-header .menu .product-category {
+    background-color: #ffffff;
+}
+
+    header.main-header .menu .product-category .parent-category {
+        background-color: #ffffff;
+    }
+
+        header.main-header .menu .product-category .parent-category li a:hover {
+            background-color: #fff;
+            color: #ef394e;
+        }
+
+        header.main-header .menu .product-category .parent-category li a:hover {
+            background-color: #3a3939;
+        }
+        header.main-header .menu .product-category .parent-category li.active a {
+            background-color: #ffffff;
+        }
+/*main menu styles*/
+
+/*Main Page datalist Background*/
+
+.greenproductslider {
+    background-color: #77ad23;
+}
+.grayproductslider {
+    background-color: #4c4c4c;
+}
+img.img-fluid.lazyload.pslideritem {
+    padding: 0 !important;
+    height: auto !important;
+}
+
+.widget-product .swiper-slide a {
+    max-width: 300px !important;
+}
+.widget-product .product-carousel .swiper-slide {
+    padding: 0 !important;
+    margin-right:10px;
+    background-color:#ffffff;
+    border-radius:10px;
+}
+div.price ins, div.price {
+    text-align: center;
+}
+.specialOfferPriceNumber {
+    font-size: 18px;
+}
+/*.btnautowidth{
+    width:auto;
+}*/
+header.main-header .menu ul li.category-products > a::after {
+    border-left: 0;
+}
+.dropdown-toggle::after {
+    border-left: .3em solid transparent !important;
+    margin-top: .85em;
+    margin-left: -.25em;
+}
+/*Main Page datalist Background*/
+/*Footer*/
+.footer-widgets .row {
+    background-color: #FBFBFB;
+}
+ul.footer-menu li a {
+    color: #6A6975 !important;
+}
+footer.main-footer .footer-services .service-item {
+    border-left: 1px solid #f0f0f1;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: #e8e8e8;
+    margin: 0;
+}
+footer.main-footer .copyright {
+    background: #FBFBFB;
+    color: #6A6975 !important;
+}
+header.card-header .footer-maintitle {
+    color: #EF1340;
+    font-size: 24px;
+    font-weight:bold;
+}
+.widget .card-header, .brand-slider .card-header {
+    margin-bottom: 5px;
+}
+
+footer.main-footer .footer-widgets .widget-menu .card-title {
+    color: #6A6975;
+    padding-bottom: 0;
+}
+    /*Footer*/
+    /*BreadCrumb*/
+
+main.single-product .breadcrumb {
+    margin-top:10px;
+}
+    /*BreadCrumb*/
+
+
+.usera {
+    margin-right: 10px;
+}
+
+price-off-text {
+    margin-top: 7px;
+    font-size: 14px;
+}
+
+.coloring {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+}

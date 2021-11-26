@@ -1,0 +1,228 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+
+@{
+    var db = new OnlineShopEntities();
+    var productList = db.Products.Where(r => r.sellerId != null).ToList();
+    productList = productList.OrderByDescending(r => r.id).ToList();
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">محصولات فروشندگان</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            @*<a href="#/admin/Products/create" class="btn btn-light-warning font-weight-bolder btn-sm">ایجاد محصول جدید</a>*@
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+            <!--begin::Actions-->
+            @*<a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Today</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Month</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Year</a>*@
+            <!--end::Actions-->
+            <!--begin::Daterange-->
+            @*<a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="" data-placement="left" data-original-title="Select dashboard daterange">
+                    <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
+                    <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Aug 11</span>
+                </a>*@
+            <!--end::Daterange-->
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                        لیست محصولات
+                    </h3>
+                </div>
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            @{
+                int total = 0;
+            }
+            <!--begin: Datatable -->
+            <table class="table table-hover" width="100%">
+                <thead>
+                    <tr>
+                        <th>
+                            شناسه
+                        </th>
+                        <th>
+                            عنوان
+                        </th>
+                        <th>
+                            توضیحات
+                        </th>
+                        <th>
+                            قیمت
+                        </th>
+                        <th>
+                            فروشنده
+                        </th>
+                        <th>
+                            تاریخ ایجاد
+                        </th>
+                        <th>
+                            وضعیت
+                        </th>
+
+                        <th>
+
+                        </th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (productList.Count != 0)
+                        {
+                            foreach (var item in productList)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.id
+                                    </td>
+                                    <td>
+                                        @item.title
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.short_description != null && item.short_description.Length >= 40)
+                                            {
+                                                @:@item.short_description.Substring(0, 30) ...
+                                            }
+                                            else
+                                            {
+                                                @item.short_description
+
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.price تومان
+                                    </td>
+                                    <td>
+                                        @{
+                                            var seller = db.Sellers.Where(r => r.id == item.sellerId).FirstOrDefault();
+                                            if (seller != null)
+                                            {
+                                                <a href="#">@seller.name @seller.lastname</a>
+
+                                            }
+                                            else
+                                            {
+                                                @:فروشنده حذف شده است
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            try
+                                            {
+                                                DateTime d = Convert.ToDateTime(item.creationDate);
+                                                PersianCalendar pc = new PersianCalendar();
+                                                string p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+                                                @p
+                                            }
+                                            catch (Exception)
+                                            {
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.isValid == true)
+                                            {
+                                                <span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">تائید شده</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">تائید نشده</span>
+
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="actionIcon" data-url="/admin/products/remove/@item.id" data-role="remove">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50px" height="50px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect id="bound" x="0" y="0" width="24" height="24" />
+                                                    <path d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" />
+                                                    <path d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" id="Shape" fill="#000000" opacity="0.3" />
+                                                </g>
+                                            </svg>
+                                        </div>
+                                        <a href="/Admin/AdminDashboard/Index#/Admin/sellerProducts/edit/@item.id" class="editIcon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect id="bound" x="0" y="0" width="24" height="24" />
+                                                    <path d="M10.5,8 L6,19 C6.0352633,19.1332661 6.06268417,19.2312688 6.08226261,19.2940083 C6.43717645,20.4313361 8.07642225,21 9,21 C10.5,21 11,19 12.5,19 C14,19 14.5917308,20.9843119 16,21 C16.9388462,21.0104588 17.9388462,20.3437921 19,19 L14.5,8 L10.5,8 Z" id="Path-18" fill="#000000" />
+                                                    <path d="M11.3,6 L12.5,3 L13.7,6 L11.3,6 Z M14.5,8 L10.5,8 L14.5,8 Z" id="Combined-Shape" fill="#000000" />
+                                                </g>
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="noEntry">
+                                    <span style="padding:50px 0 ; display:inline-block">
+                                        <i class="flaticon-exclamation" style="font-size:20px"></i> هیچ اطلاعاتی برای نمایش وجود ندارد
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+            <!--end: Datatable -->
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    titlePage('مدیریت محصولات ')
+</script>
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-Menu="sellerProducts"]').addClass('kt-menu__item--active')
+
+</script>

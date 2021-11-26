@@ -1,0 +1,152 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+    int userid = Convert.ToInt16(Session["userLogin"]);
+    int id = Convert.ToInt16(ViewBag.id);
+    var ticket = db.Tickets.Find(id);
+    var ticketChats = db.TicketChats.Where(r => r.ticketId == id).OrderByDescending(r => r.id).ToList();
+    var user = db.Users.Where(r => r.id == userid).FirstOrDefault();
+
+}
+
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Breadcrumb Tow Start-->
+    <div class="breadcrumb-tow mb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-title">
+                        <h1>جزئیات تیکت پشتیبانی</h1>
+                    </div>
+                    <div class="breadcrumb-content breadcrumb-content-tow">
+                        <ul>
+                            <li><a href="index.html">خانه</a></li>
+                            <li><a href="/home/ticket">تیکت ها</a></li>
+                            <li class="active">@ticket.title</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Breadcrumb Tow End-->
+    <!--Login Register Area Strat-->
+    <div class="login-register-area mb-80">
+        <div class="container">
+            <div class="row">
+                <!--Login Form Start-->
+                <div class="col-md-12 col-sm-12 col-md-offset-3 offset-3 mx-auto">
+                    <div class="customer-login-register">
+                        <div class="form-login-title">
+                            <h2>تیکت #@ticket.id</h2>
+                            <br />
+                            <form action="/home/ticketDetails" method="post" id="MyForm" class="hidden" style="text-align:right">
+                                <input type="number" value="@ticket.id" name="id" style="display:none !important" />
+                                <div class="form-fild">
+                                    <p><label>ارسال پیام</label></p>
+                                    <textarea style="min-height:80px ; text-align:right !important" class="form-control" placeholder="پیام خود را اینجا بنویسید ..." name="text"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-warning">ارسال پیام</button>
+                            </form>
+                            <div class="col-md-12">
+                                @{
+                                    if (ticketChats.Count != 0)
+                                    {
+                                        foreach (var item in ticketChats)
+                                        {
+                                            if (item.isUser == true)
+                                            {
+                                                <div class="chatContainer userChat">
+                                                    <h1 class="ticketNameInChat">
+                                                        @user.firstName @user.lastName
+                                                    </h1>
+                                                    <span class="text">
+                                                        @item.text
+                                                    </span>
+                                                    <br />
+                                                    <span class="timeInTicketChat">
+                                                        @{
+                                                            try
+                                                            {
+                                                                DateTime d = Convert.ToDateTime(item.creationDate);
+                                                                PersianCalendar pc = new PersianCalendar();
+                                                                string p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                                @p
+                                                            }
+                                                            catch (Exception)
+                                                            {
+                                                            }
+                                                        }
+                                                    </span>
+                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="chatContainer adminChat">
+                                                                    <h1 class="ticketNameInChat">
+                                                                        ادمین رویان
+                                                                    </h1>
+                                                                    @{
+                                                                        if (item.voice != null)
+                                                                        {
+                                                                            <audio controls style="width:100%">
+                                                                                <source src="/voice/@item.voice" type="audio/wav">
+                                                                                مرورگر شما از صدا پشتیبانی نمی کند !
+                                                                            </audio>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span class="text">
+
+                                                                                @item.text
+                                                                            </span>
+
+                                                                        }
+                                                                    }
+                                                                    <br />
+                                                                    <span class="timeInTicketChat">
+                                                                        @{
+                                                                            try
+                                                                            {
+                                                                                DateTime d = Convert.ToDateTime(item.creationDate);
+                                                                                PersianCalendar pc = new PersianCalendar();
+                                                                                string p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                                                @p
+                                                                            }
+                                                                            catch (Exception)
+                                                                            {
+                                                                            }
+                                                                        }
+                                                                    </span>
+                                                                </div>
+                                                                                    }
+
+                                                                                }
+                                                                            }
+                                }
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <!--Login Form End-->
+            </div>
+        </div>
+    </div>
+    <!--Login Register Area End-->
+
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+</div>

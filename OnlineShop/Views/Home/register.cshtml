@@ -1,0 +1,141 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+}
+<link href="~/Theme/Css/login.css" rel="stylesheet" />
+<link href="~/Theme/dt/kamadatepicker.min.css" rel="stylesheet" />
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Breadcrumb Tow Start-->
+    <div class="breadcrumb-tow mb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-title">
+                        <h1>ثبت نام در رویان</h1>
+                    </div>
+                    <div class="breadcrumb-content breadcrumb-content-tow">
+                        <ul>
+                            <li><a href="index.html">خانه</a></li>
+                            <li class="active">ثبت نام</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Breadcrumb Tow End-->
+    <!--Login Register Area Strat-->
+    <div class="login-register-area mb-80">
+        <div class="container">
+            <div class="row">
+                <!--Login Form Start-->
+                <div class="col-md-6 col-sm-6 col-md-offset-3 offset-3 mx-auto">
+                    <div class="customer-login-register">
+                        <div class="form-login-title">
+                            <h2>فرم ثبت نام</h2>
+                        </div>
+                        <div class="login-form">
+                            @{
+                                if (ViewBag.error != null)
+                                {
+                                    <div class="result">
+
+                                        <div class="alert alert-danger">
+                                            <strong>خطا !</strong><br /> @Html.Raw(ViewBag.error)
+                                        </div>
+                                    </div>
+
+                                }
+                            }
+                            <form action="/home/register" method="post">
+                                <div class="form-fild">
+                                    <p><label>نام <span class="required">*</span></label></p>
+                                    <input autocomplete="off" name="firstName" placeholder="نام" value="" type="text">
+                                </div>
+                                <div class="form-fild">
+                                    <p><label>نام خانوادگی <span class="required">*</span></label></p>
+                                    <input autocomplete="off" name="lastName" value="" placeholder="نام خانوادگی" type="text">
+                                </div>
+                                <div class="form-fild">
+                                    <p><label>شماره موبایل <span class="required">*</span></label></p>
+                                    <input autocomplete="off" name="mobile" value="" placeholder="شماره موبایل" type="text">
+                                </div>
+                                <div class="form-fild">
+                                    <p><label>ایمیل <span class="required">*</span></label></p>
+                                    <input autocomplete="off" name="email" value="" placeholder="ایمیل" type="text">
+                                </div>
+                                <div class="form-fild">
+                                    <p><label>کد ملی <span class="required">*</span></label></p>
+                                    <input autocomplete="off" name="codeMeli" value="" placeholder="کد ملی" type="text" min="10" max="10">
+                                </div>
+                                <div class="form-fild">
+                                    <p><label>شماره کارت <span class="required">*</span></label></p>
+                                    <input autocomplete="off" name="card" value="" placeholder="شماره کارت" type="text" min="16" max="16">
+                                </div>
+                                <div class="form-fild">
+                                    <p><label>تاریخ تولد <span class="required">*</span></label></p>
+                                    <input autocomplete="off" style="text-align:center!important" type="text" id="test-date-id"  name="birth" placeholder="برای انتخاب تاریخ تولد کلیک کنید">
+                                </div>
+                                <div class="form-fild">
+                                    <p><label>رمز عبور <span class="required">*</span></label></p>
+                                    <input autocomplete="off" name="password" value="" placeholder="رمز عبور" type="password">
+                                </div>
+                                <div class="form-fild">
+                                    <p><label>تکرار رمز عبور <span class="required">*</span></label></p>
+                                    <input autocomplete="off" name="password2" value="" placeholder="تکرار رمزعبور" type="password">
+                                </div>
+                                <div class="form-fild cpt">
+                                    @Html.Captcha("کد جدید", "لطفا کد سه رقمی بالا را وارد کنید", 3)
+                                </div>
+                                <br />
+                                <div class="login-submit">
+                                    <button type="submit" class="form-button">ثبت نام</button>
+                                </div>
+                                <div class="lost-password">
+                                    <a href="/home/login">قبلا ثبت نام کردید ؟ برای ورود کلیک کنید </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--Login Form End-->
+            </div>
+        </div>
+    </div>
+    <!--Login Register Area End-->
+    <!--Brand Area Start-->
+    
+    <!--Footer Area Start-->
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+    @section js{
+        <script src="~/Theme/dt/kamadatepicker.min.js"></script>
+        <script>
+            kamaDatepicker('test-date-id');
+
+
+        </script>
+
+    }
+    <style>
+        input {
+             direction: rtl;
+    text-align: right !important;
+    padding: 0 7px;
+    height: 40px;
+    border-radius: 5px;
+    background: #ffecd3;
+        }
+    </style>
+
+</div>

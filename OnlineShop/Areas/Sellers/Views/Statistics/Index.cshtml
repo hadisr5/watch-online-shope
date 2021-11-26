@@ -1,0 +1,298 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+
+@{
+    var db = new OnlineShopEntities();
+    var Menu = db.Menus.ToList();
+    Menu = Menu.OrderByDescending(r => r.priority).ToList();
+    Layout = null;
+    DateTime start = new DateTime();
+    DateTime end = new DateTime();
+    if (ViewBag.start != null)
+    {
+        start = Convert.ToDateTime(ViewBag.start);
+        Session.Remove("start");
+    }
+    else
+    {
+        start = DateTime.Now.AddDays(-7);
+    }
+    if (ViewBag.end != null)
+    {
+        end = Convert.ToDateTime(ViewBag.end);
+        Session.Remove("end");
+
+    }
+    else
+    {
+        end = DateTime.Now;
+    }
+
+}
+<script src="/themefiles/js/Chart.min.js"></script>
+<script src="/themefiles/js/utils.js"></script>
+<link href="~/Theme/Css/login.css" rel="stylesheet" />
+<link href="~/Theme/dt/kamadatepicker.min.css" rel="stylesheet" />
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+</style>
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title">AdminDashboard</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/sellers/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+</div>
+<!-- end:: Content Head -->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                        آمار خرید
+                    </h3>
+                    <div class="row">
+                        <form class="kt-form myForm " style="width:100%" method="get" action="/sellers/Statistics/index" data-redirect="/sellers/sellerDashboard/Index#/Sellers/Statistics/index">
+                            @Html.AntiForgeryToken()
+                            <div class="col-md-3" style="float:right;">
+                                <input autocomplete="off" class="form-control" style="text-align:center!important" type="text" id="StartDate" name="start" placeholder="انتخاب تاریخ شروع آمار">
+                            </div>
+                            <div class="col-md-3" style="float:right;">
+                                <input autocomplete="off" class="form-control" style="text-align:center!important" type="text" id="EndDate" name="end" placeholder="انتخاب تاریخ پایان آمار">
+                            </div>
+                            <div class="col-md-2" style="float:right;">
+                                <button type="submit" class="btn btn-warning" id="updateChartViews">به روزرسانی</button>
+                            </div>
+                            <div style="clear:both ; display:block"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body" style="text-align:center">
+
+            <div style="width:90%;display:inline-block;margin:0 auto ; float:none">
+                <canvas id="canvas"></canvas>
+            </div>
+
+            <script>
+                $(document).ready(function () {
+                    var lineChartData = {
+                        labels: [
+                            @{
+                                if (start!=null)
+                                {
+                                    double days = (DateTime.Now - start).TotalDays;
+
+                                    for (int i = 0; i < days; i++)
+                                    {
+                                        string p = "";
+                                        try
+                                        {
+                                            DateTime d = Convert.ToDateTime(start.AddDays(i));
+                                            PersianCalendar pc = new PersianCalendar();
+                                            p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                        }
+                                        catch (Exception)
+                                        {
+                                        }
+
+                                        @:'@(p)'
+                                        if (i+1!=days)
+                                        {
+                                            @:,
+                                        }
+                                    }
+                                }
+
+                             }
+                        ],
+                        datasets: [
+                            @{
+                                int sellerId = Convert.ToInt16(Session["seller"]);
+
+                                var pricingProducts = db.SellersProducts.Where(r => r.sellerId == sellerId).ToList();
+                                int cCount = pricingProducts.Count;
+                                if (pricingProducts!=null)
+                                {
+                                    foreach (var item in pricingProducts)
+                                    {
+                                        var pro = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+
+                                        string open = "{", close = "}",AP="," ,A1="[" , A2="]" , b1="'";
+                                        @:
+
+                                        @:@open
+                                        @:label: '@pro.title'@AP
+                                        @:borderColor:window.chartColors.red @AP
+                                        @:backgroundColor: window.chartColors.red @AP
+                                        @:fill: false @AP
+                                        @:data:
+                                        @:[
+                                                             
+                             if (start!=null)
+                                        {
+                                            double days = (DateTime.Now - start).TotalDays;
+
+                                            for (int i = 0; i < days; i++)
+                                            {
+                                                var c = new DateTime();
+                                                var d = new DateTime();
+                                                string p = "";
+                                                try
+                                                {
+                                                    d = Convert.ToDateTime(start.AddDays(i));
+                                                    c = d.AddDays(1);
+                                                    PersianCalendar pc = new PersianCalendar();
+                                                    p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                }
+                                                catch (Exception)
+                                                {
+                                                }
+
+                                        @:'@(db.Orders.Where(r=>r.SellerId==sellerId && r.productId==pro.id && d <r.creationDate && c>r.creationDate ).ToList().Count)'
+                                        if (i+1!=days)
+                                        {
+                                            @:,
+                                        }
+                                    }
+                                }
+                                        @:]
+                                        @:@close
+
+                                        cCount = cCount - 1;
+                                        if (cCount!=0)
+                                        {
+                                            @:,
+                                        }
+                                    }
+                                }
+                            }
+
+
+
+
+                        ]
+                    };
+
+                    var ctx = document.getElementById('canvas').getContext('2d');
+                    window.myLine = Chart.Line(ctx, {
+                        data: lineChartData,
+                        options: {
+                            responsive: true,
+                            hoverMode: 'index',
+                            stacked: false,
+                            title: {
+                                display: true,
+                                text: 'نمودار سفارش از فروشگاه من'
+                            },
+                            scales: {
+                                yAxes: [{
+                                    type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                                    display: true,
+                                    position: 'left',
+                                    id: 'y-axis-1',
+                                }, {
+                                    type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                                    display: true,
+                                    position: 'left',
+                                    id: 'y-axis-1',
+
+                                    // grid line settings
+                                    gridLines: {
+                                        drawOnChartArea: false, // only want the grid lines for one axis to show up
+                                    },
+                                }],
+                            }
+                        }
+                    });
+
+                    $(document).on('click', '#randomizeData', function () {
+                        lineChartData.datasets.forEach(function (dataset) {
+                            dataset.data = dataset.data.map(function () {
+                                return randomScalingFactor();
+                            });
+                        });
+
+                        window.myLine.update();
+                    })
+
+
+                })
+
+            </script>
+
+
+
+
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+<script src="~/Theme/dt/kamadatepicker.min.js"></script>
+<script>
+    kamaDatepicker('StartDate');
+    kamaDatepicker('EndDate')
+    $(document).on('change', '#StartDate', function () {
+        $('.myForm').attr("data-redirect", '/sellers/sellerDashboard/Index#/Sellers/Statistics/index?start=' + $('#StartDate').val() + '&end=' + $('#EndDate').val())
+    })
+    $(document).on('change', '#EndDate', function () {
+        $('.myForm').attr("data-redirect", '/sellers/sellerDashboard/Index#/Sellers/Statistics/index?start=' + $('#StartDate').val() + '&end=' + $('#EndDate').val())
+    })
+
+</script>
+<script>
+    titlePage('نمودار خرید ')
+</script>
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-menu="Statistics"]').addClass('kt-menu__item--active')
+
+</script>
+@*<script>
+        $(document).on('click', '#updateChartViews', function () {
+
+            $.ajax({
+                type: "POST",
+                data: { start: $('#StartDate').val(), end: $('#EndDate').val() },
+
+                url: '/sellers/Statistics/views',
+                success: function (t)
+                {
+                    swal.fire("انجام شد", "آیتم مورد نظر با موفقیت حذف شد", "success"),
+                    hashChange()
+                }
+            })
+        })
+    </script>*@

@@ -1,0 +1,302 @@
+﻿@using OnlineShop.Models
+@using System.Globalization;
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var seller = db.Sellers.Find(id);
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title">AdminDashboard</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <a href="/Admin/AdminDashboard/Index#/Admin/sellers/index" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
+            لیست فروشندگان
+        </a>
+
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/admin/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+</div>
+<!-- end:: Content Head -->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        @{
+            string p = "";
+            try
+            {
+                DateTime d = Convert.ToDateTime(seller.creationDate);
+                PersianCalendar pc = new PersianCalendar();
+                p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+            }
+            catch (Exception)
+            {
+            }
+        }
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <h1>
+                    @seller.id - @seller.name @seller.lastname
+                </h1>
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            <div class="m-portlet__head-title">
+                <form class="kt-form myForm" method="post" action="/admin/sellers/changeCats/@seller.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/sellers/details/@seller.id">
+                    <table class="table table-hover">
+                        @Html.AntiForgeryToken()
+                        <thead>
+                            <tr>
+                                <td colspan="2">
+                                    اطلاعات فروشنده
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>وضعیت</td>
+                                <td>
+                                    @{
+                                        if (seller.isValid == true)
+                                        {
+                                            @:فعال
+                                        }
+                                        else
+                                        {
+                                            @:غیرفعال
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    شناسه فروشنده
+                                </td>
+                                <td>
+                                    #@seller.id
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>کد ملی</td>
+                                <td>
+                                    @seller.codeMeli
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ایمیل
+                                </td>
+                                <td>
+                                    @seller.email
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    شماره کارت
+                                </td>
+                                <td>
+                                    @seller.shomareKart
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ورود به پنل فروشنده
+                                </td>
+                                <td>
+                                    <a href="/sellers/login?id=@seller.id" target="_blank" class="btn btn-bold btn-sm btn-font-sm  btn-label-warning">
+                                        برای ورود کلیک کنید
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    پسورد
+                                </td>
+                                <td>
+                                    @seller.password
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>تلفن</td>
+                                <td>@seller.phone</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    نام و نام خانوادگی
+                                </td>
+                                <td>
+                                    @seller.name @seller.lastname
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>سفارش ها</td>
+                                <td>
+                                    @{
+                                        var orders = db.Orders.Where(r => r.SellerId == seller.id).ToList();
+                                        @orders.Count
+
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    کامنت ها
+                                </td>
+                                <td>
+                                    @{
+                                        var comments = db.SellerComments.Where(r => r.sellerId == seller.id).ToList();
+                                        @comments.Count
+                                    }
+
+                                </td>
+                            </tr>
+
+                            <tr>
+
+                                <td>
+                                    دسته بندی ها
+                                </td>
+                                <td>
+                                    @{
+                                        var sellerCats = db.SellerCats.Where(r => r.sellerId == seller.id).ToList();
+                                        var MainCts = db.MainCats.ToList();
+                                        if (MainCts.Count != 0)
+                                        {
+                                            <div class="checkbox-list">
+
+
+
+                                                @foreach (var item in MainCts)
+                                                {
+                                                    if (item != null)
+                                                    {
+                                                        if (sellerCats.Where(r => r.catId == item.id).FirstOrDefault() != null)
+                                                        {
+                                                            <label class="checkbox">
+                                                                <input name="MainCat" checked value="@item.id" type="checkbox" class="autoUpdate" /> @item.title
+                                                                <span></span>
+                                                            </label>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label class="checkbox">
+                                                                <input name="MainCat" value="@item.id" type="checkbox" class="autoUpdate" /> @item.title
+                                                                <span></span>
+                                                            </label>
+                                                        }
+
+
+                                                    }
+                                                }
+                                            </div>
+
+                                        }
+                                    }
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </form>
+                <form class="kt-form myForm" method="post" action="/admin/sellers/changeStatus/@seller.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/sellers/details/@seller.id">
+                    <table class="table table-hover">
+                        @Html.AntiForgeryToken()
+                        <tbody>
+                            <tr>
+                                <td>
+                                    وضعیت فروشنده
+                                </td>
+                                <td>
+                                    <select class="form-control" name="status" id="statusOrder">
+                                        @{
+                                            if (seller.isValid == true)
+                                            {
+                                                <option value="True" selected>
+                                                    فعال
+                                                </option>
+                                                <option value="False">
+                                                    غیرفعال
+                                                </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="True">
+                                                    فعال
+                                                </option>
+                                                <option value="False" selected>
+                                                    غیرفعال
+                                                </option>
+
+                                            }
+
+                                        }
+
+                                    </select>
+                                    <input type="submit" style="display:none" id="submit" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+
+
+
+
+
+            </div>
+
+
+
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    titlePage('@seller.name @seller.lastname')
+    var url = window.location.href;
+    if (window.location.href.indexOf('?') > -1) {
+        url = url.slice(0, url.indexOf('?'));
+        window.history.pushState('page2', 'Title', url);
+
+    }
+
+
+</script>
+<style>
+    .kt-svg-icon.fillStar g [fill] {
+        fill: #f59b3e;
+    }
+
+    .kt-svg-icon.emptyStar g [fill] {
+        fill: #9b9b9b;
+    }
+
+    a.btn.btn-bold.btn-sm.btn-font-sm.btn-label-brand {
+        margin-bottom: 4px;
+    }
+</style>

@@ -1,0 +1,561 @@
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\OnlineShop.dll.config
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\OnlineShop.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\OnlineShop.pdb
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Antlr3.Runtime.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\CaptchaMvc.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\EntityFramework.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\EntityFramework.SqlServer.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\ExcelLibrary.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.AspNet.Identity.Core.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.Cookies.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.Facebook.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.Google.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.OAuth.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.Twitter.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Web.Infrastructure.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Newtonsoft.Json.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Owin.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\SmsIrRestful.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Net.Http.Formatting.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.Helpers.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.Http.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.Http.WebHost.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.Mvc.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.Optimization.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.Razor.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.WebPages.Deployment.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.WebPages.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.WebPages.Razor.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\WebGrease.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\CaptchaMvc.pdb
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\CaptchaMvc.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Net.Http.Formatting.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.Http.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.Http.WebHost.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.Helpers.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.Mvc.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.Optimization.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.Razor.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.WebPages.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.WebPages.Deployment.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\System.Web.WebPages.Razor.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Antlr3.Runtime.pdb
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Newtonsoft.Json.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\EntityFramework.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\EntityFramework.SqlServer.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.AspNet.Identity.Core.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.Facebook.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.Cookies.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.OAuth.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.Google.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.Twitter.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\obj\Debug\OnlineShop.csproj.AssemblyReference.cache
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\obj\Debug\OnlineShop.csproj.CoreCompileInputs.cache
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\obj\Debug\OnlineShop.csproj.CopyComplete
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\obj\Debug\OnlineShop.dll
+F:\Projects\PulseDesign\Salamat Shop\Salamat Shop\OnlineShop\obj\Debug\OnlineShop.pdb
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\roslyn\csc.exe
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\roslyn\vbc.exe
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\roslyn\VBCSCompiler.exe
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\OnlineShop.dll.config
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\OnlineShop.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\OnlineShop.pdb
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Antlr3.Runtime.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\CaptchaMvc.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\EntityFramework.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\EntityFramework.SqlServer.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\ExcelLibrary.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Facebook.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Google.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Twitter.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Newtonsoft.Json.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Owin.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\SmsIrRestful.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Net.Http.Formatting.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.Helpers.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.Http.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.Http.WebHost.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.Mvc.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.Optimization.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.Razor.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.WebPages.Deployment.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.WebPages.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.WebPages.Razor.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\WebGrease.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\CaptchaMvc.pdb
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\CaptchaMvc.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Net.Http.Formatting.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.Http.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.Http.WebHost.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.Helpers.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.Mvc.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.Optimization.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.Razor.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.WebPages.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.WebPages.Deployment.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\System.Web.WebPages.Razor.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Antlr3.Runtime.pdb
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Newtonsoft.Json.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\EntityFramework.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\EntityFramework.SqlServer.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Google.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\obj\Debug\OnlineShop.csprojAssemblyReference.cache
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\obj\Debug\OnlineShop.csproj.CoreCompileInputs.cache
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\obj\Debug\OnlineShop.csproj.CopyComplete
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\obj\Debug\OnlineShop.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShope\wikisaat_shop\OnlineShop\obj\Debug\OnlineShop.pdb
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\obj\Debug\OnlineShop.csproj.CoreCompileInputs.cache
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\obj\Debug\OnlineShop.csproj.AssemblyReference.cache
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\roslyn\csc.exe
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\roslyn\Microsoft.CSharp.Core.targets
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\roslyn\Microsoft.VisualBasic.Core.targets
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\roslyn\System.Collections.Immutable.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\roslyn\System.Reflection.Metadata.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\roslyn\vbc.exe
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\roslyn\VBCSCompiler.exe
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\roslyn\VBCSCompiler.exe.config
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\OnlineShop.dll.config
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\OnlineShop.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\OnlineShop.pdb
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Antlr3.Runtime.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\CaptchaMvc.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\EntityFramework.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\EntityFramework.SqlServer.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\ExcelLibrary.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.AspNet.Identity.Core.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.Cookies.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.Facebook.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.Google.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.OAuth.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.Twitter.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Web.Infrastructure.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Newtonsoft.Json.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Owin.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\SmsIrRestful.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Net.Http.Formatting.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.Helpers.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.Http.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.Http.WebHost.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.Mvc.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.Optimization.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.Razor.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.WebPages.Deployment.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.WebPages.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.WebPages.Razor.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\WebGrease.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\CaptchaMvc.pdb
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\CaptchaMvc.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Net.Http.Formatting.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.Http.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.Http.WebHost.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.Helpers.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.Mvc.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.Optimization.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.Razor.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.WebPages.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.WebPages.Deployment.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\System.Web.WebPages.Razor.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Antlr3.Runtime.pdb
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Newtonsoft.Json.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\EntityFramework.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\EntityFramework.SqlServer.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.AspNet.Identity.Core.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.Facebook.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.Cookies.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.OAuth.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.Google.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.Twitter.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\obj\Debug\OnlineShop.csproj.CopyComplete
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\obj\Debug\OnlineShop.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop\OnlineShop\obj\Debug\OnlineShop.pdb
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\roslyn\csc.exe
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\roslyn\vbc.exe
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\roslyn\VBCSCompiler.exe
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\OnlineShop.dll.config
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\OnlineShop.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\OnlineShop.pdb
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Antlr3.Runtime.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\CaptchaMvc.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\EntityFramework.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\EntityFramework.SqlServer.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\ExcelLibrary.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.Facebook.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.Google.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.Twitter.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Newtonsoft.Json.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Owin.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\SmsIrRestful.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Net.Http.Formatting.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.Helpers.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.Http.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.Http.WebHost.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.Mvc.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.Optimization.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.Razor.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.WebPages.Deployment.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.WebPages.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.WebPages.Razor.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\WebGrease.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\CaptchaMvc.pdb
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\CaptchaMvc.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Net.Http.Formatting.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.Http.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.Http.WebHost.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.Helpers.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.Mvc.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.Optimization.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.Razor.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.WebPages.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.WebPages.Deployment.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\System.Web.WebPages.Razor.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Antlr3.Runtime.pdb
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Newtonsoft.Json.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\EntityFramework.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\EntityFramework.SqlServer.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.Google.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\a\Desktop\wikisaat\OnlineShop\obj\Debug\OnlineShop.csproj.CoreCompileInputs.cache
+C:\Users\a\Desktop\wikisaat\OnlineShop\obj\Debug\OnlineShop.dll
+C:\Users\a\Desktop\wikisaat\OnlineShop\obj\Debug\OnlineShop.pdb
+C:\Users\a\Desktop\wikisaat\OnlineShop\obj\Debug\OnlineShop.csproj.AssemblyReference.cache
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\roslyn\csc.exe
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\roslyn\vbc.exe
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\roslyn\VBCSCompiler.exe
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\OnlineShop.dll.config
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\OnlineShop.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\OnlineShop.pdb
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Antlr3.Runtime.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\CaptchaMvc.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\EntityFramework.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\EntityFramework.SqlServer.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\ExcelLibrary.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Facebook.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Google.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Twitter.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Newtonsoft.Json.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Owin.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\SmsIrRestful.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Net.Http.Formatting.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.Helpers.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.Http.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.Http.WebHost.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.Mvc.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.Optimization.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.Razor.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.WebPages.Deployment.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.WebPages.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.WebPages.Razor.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\WebGrease.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\CaptchaMvc.pdb
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\CaptchaMvc.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Net.Http.Formatting.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.Http.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.Http.WebHost.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.Helpers.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.Mvc.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.Optimization.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.Razor.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.WebPages.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.WebPages.Deployment.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\System.Web.WebPages.Razor.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Antlr3.Runtime.pdb
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Newtonsoft.Json.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\EntityFramework.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\EntityFramework.SqlServer.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Google.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\obj\Debug\OnlineShop.csproj.CoreCompileInputs.cache
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\obj\Debug\OnlineShop.csproj.CopyComplete
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\obj\Debug\OnlineShop.dll
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\obj\Debug\OnlineShop.pdb
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\roslyn\csc.exe
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\roslyn\Microsoft.CSharp.Core.targets
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\roslyn\Microsoft.VisualBasic.Core.targets
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\roslyn\System.Collections.Immutable.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\roslyn\System.Reflection.Metadata.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\roslyn\vbc.exe
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\roslyn\VBCSCompiler.exe
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\roslyn\VBCSCompiler.exe.config
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\OnlineShop.dll.config
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\OnlineShop.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\OnlineShop.pdb
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Antlr3.Runtime.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\CaptchaMvc.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\EntityFramework.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\EntityFramework.SqlServer.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\ExcelLibrary.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.AspNet.Identity.Core.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.Cookies.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.Facebook.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.Google.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.OAuth.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.Twitter.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Web.Infrastructure.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Newtonsoft.Json.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Owin.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\SmsIrRestful.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Net.Http.Formatting.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.Helpers.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.Http.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.Http.WebHost.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.Mvc.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.Optimization.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.Razor.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.WebPages.Deployment.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.WebPages.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.WebPages.Razor.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\WebGrease.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\CaptchaMvc.pdb
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\CaptchaMvc.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Net.Http.Formatting.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.Http.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.Http.WebHost.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.Helpers.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.Mvc.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.Optimization.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.Razor.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.WebPages.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.WebPages.Deployment.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\System.Web.WebPages.Razor.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Antlr3.Runtime.pdb
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Newtonsoft.Json.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\EntityFramework.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\EntityFramework.SqlServer.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.AspNet.Identity.Core.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.Facebook.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.Cookies.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.OAuth.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.Google.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.Twitter.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\obj\Debug\OnlineShop.csproj.AssemblyReference.cache
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\obj\Debug\OnlineShop.csproj.CoreCompileInputs.cache
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\obj\Debug\OnlineShop.csproj.CopyComplete
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\obj\Debug\OnlineShop.dll
+F:\Projects\PulseDesign\Wikisaat Shop\Wikisaat Shop Final\OnlineShop\obj\Debug\OnlineShop.pdb
+C:\Users\Surfce\OneDrive\Work\OnlineShop\wikisaat_shop\OnlineShop\obj\Debug\OnlineShop.csprojAssemblyReference.cache
+D:\projects\wikisaat-shop\OnlineShop\bin\roslyn\csc.exe
+D:\projects\wikisaat-shop\OnlineShop\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\projects\wikisaat-shop\OnlineShop\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\projects\wikisaat-shop\OnlineShop\bin\roslyn\System.Collections.Immutable.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\roslyn\System.Reflection.Metadata.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\roslyn\vbc.exe
+D:\projects\wikisaat-shop\OnlineShop\bin\roslyn\VBCSCompiler.exe
+D:\projects\wikisaat-shop\OnlineShop\bin\roslyn\VBCSCompiler.exe.config
+D:\projects\wikisaat-shop\OnlineShop\bin\OnlineShop.dll.config
+D:\projects\wikisaat-shop\OnlineShop\bin\OnlineShop.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\OnlineShop.pdb
+D:\projects\wikisaat-shop\OnlineShop\bin\Antlr3.Runtime.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\CaptchaMvc.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\EntityFramework.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\EntityFramework.SqlServer.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\ExcelLibrary.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.AspNet.Identity.Core.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.Cookies.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.Facebook.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.Google.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.OAuth.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.Twitter.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Web.Infrastructure.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Newtonsoft.Json.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\Owin.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\SmsIrRestful.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Net.Http.Formatting.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.Helpers.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.Http.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.Http.WebHost.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.Mvc.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.Optimization.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.Razor.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.WebPages.Deployment.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.WebPages.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.WebPages.Razor.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\WebGrease.dll
+D:\projects\wikisaat-shop\OnlineShop\bin\CaptchaMvc.pdb
+D:\projects\wikisaat-shop\OnlineShop\bin\CaptchaMvc.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Net.Http.Formatting.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.Http.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.Http.WebHost.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.Helpers.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.Mvc.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.Optimization.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.Razor.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.WebPages.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.WebPages.Deployment.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\System.Web.WebPages.Razor.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Antlr3.Runtime.pdb
+D:\projects\wikisaat-shop\OnlineShop\bin\Newtonsoft.Json.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\EntityFramework.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\EntityFramework.SqlServer.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.AspNet.Identity.Core.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.Facebook.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.Cookies.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.OAuth.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.Google.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.Twitter.xml
+D:\projects\wikisaat-shop\OnlineShop\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\projects\wikisaat-shop\OnlineShop\obj\Debug\OnlineShop.csproj.AssemblyReference.cache
+D:\projects\wikisaat-shop\OnlineShop\obj\Debug\OnlineShop.csproj.CoreCompileInputs.cache
+D:\projects\wikisaat-shop\OnlineShop\obj\Debug\OnlineShop.csproj.CopyComplete
+D:\projects\wikisaat-shop\OnlineShop\obj\Debug\OnlineShop.dll
+D:\projects\wikisaat-shop\OnlineShop\obj\Debug\OnlineShop.pdb

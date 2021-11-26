@@ -1,0 +1,99 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Create";
+    Layout = null;
+    int sellerId = Convert.ToInt32(Request.Params["sellerId"]);
+    string txt = Request.Params["txt"];
+    var seller = new Seller();
+    if (sellerId != null && sellerId != 0)
+    {
+        seller = db.Sellers.Where(r => r.id == sellerId).FirstOrDefault();
+    }
+
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title"></h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <a href="/sellers/sellerDashboard/Index#/sellers/sellerTickets/index" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
+            لیست تیکت ها
+        </a>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/sellers/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+
+</div>
+
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            اطلاعات تیکت جدید
+                        </h3>
+                    </div>
+
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/sellers/Tickets/CreateNewTicket" data-redirect="/sellers/sellerDashboard/Index#/sellers/Tickets/index">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label>قسمت</label>
+                            <select class="form-control m-bootstrap-select m_selectpicker" data-live-search="true" name="for">
+                                <option data-tokens="ادمین سایت" value="ادمین سایت">
+                                    ادمین سایت
+                                </option>
+                                <option data-tokens="قسمت مالی" value="قسمت مالی">
+                                    قسمت مالی
+                                </option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>عنوان تیکت</label>
+                            <textarea type="text" class="form-control" placeholder="عنوان" name="title"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>متن تیکت</label>
+                            <textarea type="text" class="form-control" placeholder="متن تیکت" name="Desc"></textarea>
+                        </div>
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ایجاد تیکت جدید</button>
+                            <a href="/sellers/sellerDashboard/Index#/sellers/Tickets/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ایجاد تیکت جدید')
+    var BootstrapSelect = { init: function () { $(".m_selectpicker").selectpicker() } }; jQuery(document).ready(function () { BootstrapSelect.init() });
+
+</script>

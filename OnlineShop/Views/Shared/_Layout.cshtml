@@ -1,0 +1,1066 @@
+﻿@using OnlineShop.Models
+@using System.Configuration
+@{
+    var db = new OnlineShopEntities();
+    User user = new User();
+    var setting = db.Settings.FirstOrDefault();
+    if (ViewBag.withoutLogin == null)
+    {
+        if (Session["userLogin"] != null)
+        {
+            int id = Convert.ToInt16(Session["userLogin"]);
+            user = db.Users.Find(id);
+            //if (ViewBag.verifyMobile == null)
+            //{
+            //    if (user.mobieVerify != true)
+            //    {
+            //        if (ViewBag.page != "mobileVerify")
+            //        {
+            //            Response.Redirect("/userLogin/main/verify");
+            //        }
+            //    }
+            //}
+
+        }
+    }
+
+    var sliders = db.Sliders.Where(r => r.active == true).ToList();
+    var discounts = db.Discounts.Where(r => r.percentage != null && r.status == 1 && r.expire > DateTime.Now).ToList();
+    var productDiscount = new List<Product>();
+    if (discounts.Count != 0)
+    {
+        foreach (var item in discounts)
+        {
+            var singleProduct = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+            if (singleProduct != null)
+            {
+                productDiscount.Add(singleProduct);
+            }
+        }
+    }
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="fa" style="overflow-x: hidden;">
+
+<head>
+    <meta charset="utf-8">
+    @{
+        if (setting != null && !string.IsNullOrEmpty(setting.WebsiteLogo2))
+        {
+            <link rel="apple-touch-icon" sizes="96x96" href="@setting.WebsiteLogo2">
+            <link rel="icon" type="image/jpeg" sizes="96x96" href="@setting.WebsiteLogo2">
+            <link rel="icon" type="image/jpeg" sizes="32x32" href="@setting.WebsiteLogo2">
+            <link rel="icon" type="image/jpeg" sizes="16x16" href="@setting.WebsiteLogo2">
+        }
+    }
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport'>
+    <meta name="theme-color" content="#fa344b">
+    <meta name="msapplication-navbutton-color" content="#fa344b">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#fa344b">
+    <meta name="keywords" content="@setting.WebsiteFullname">
+    @{
+        if (ViewBag.title == null)
+        {
+            <title>@setting.WebsiteName</title>
+        }
+        else
+        {
+            <title>
+                @ViewBag.title
+            </title>
+        }
+    }
+    <link rel="stylesheet" href="/Template/css/font-awesome.min.css">
+    <link href="/Template/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/Template/css/now-ui-kit.css" rel="stylesheet">
+    <link href="/Template/css/swiper.min.css" rel="stylesheet">
+    <link href="/Template/css/jquery-stack-menu.min.css" rel="stylesheet">
+    <link href="/Template/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/Template/css/toastr.min.css">
+
+
+    <script src="/Template/js/sweetalert.all.js"></script>
+    @*<link rel="stylesheet" href="~/Template/css/Red.css" />*@
+    <link rel="stylesheet" href="~/Template/css/white.css" />
+    <link href="~/Template/css/placeholder-loading.min.css" rel="stylesheet" />
+    @*<link href="~/Template/css/custom.css" rel="stylesheet" />*@
+    <link href="~/Template/css/customStyles.css" rel="stylesheet" />
+    <link href="~/Template/css/Cart.css" rel="stylesheet" />
+    <link href="~/Template/css/ngoshop.css" rel="stylesheet" />
+    <link href="~/Template/css/passtrength.css" rel="stylesheet" />
+    <link href="~/Template/css/select2-bootstrap4.min.css" />
+    <link href="~/Template/css/select2.min.css" />
+    @RenderSection("CSS", required: false)
+</head>
+
+<body class="index-page sidebar-collapse" style="background-color: #ffffff !important;">
+
+    <!-- Modal -->
+    <div class="modal fade" id="remove-cart-item" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mb-3" id="exampleModalLabel">آیا مایل به حذف این کالا هستید؟</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="remodal-general-alert-button remodal-general-alert-button--approve" id="add-button-card" data-id="" data-dismiss="modal">
+                        لغو
+                    </button>
+                    <a style="text-align:center" class="remodal-general-alert-button remodal-general-alert-button--cancel remove-cart-product" id="remove-button-cards" data-id="" data-dismiss="modal">
+                        بله
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal remove-location -->
+    <!-- Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mb-3" id="exampleModalLabel">لطفا برای ثبت سفارش وارد حساب کاربری خود شوید</h5>
+                </div>
+                <div class="modal-footer">
+                    <a style="text-align:center ; color:white" class="btn btn-primary" data-id="">
+                        ثبت نام
+                    </a>
+                    <a href="/userLogin/main/login" style="text-align:center;color:white" class="btn btn-primary" data-id="">
+                        ورود
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal remove-location -->
+    <!-- responsive-header -->
+    @{
+        if (ViewBag.header == null)
+        {
+            <nav class="navbar direction-ltr fixed-top header-responsive">
+                <div class="container">
+                    <div class="navbar-translate">
+                        <a class="navbar-brand " href="/">
+                            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@setting.WebsiteLogo" alt="">
+                            <div height="30px" alt=""></div>
+
+                        </a>
+                        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </button>
+                        <div class="search-nav default">
+                            <form action="/home/search" class="search" id="search-form-dl-res">
+                                @*<input type="button" name="name" value="جستجو کالا" class="btn btn-warning btnTopSearch" style=" padding-right: 10px !important; border-radius:0;">*@
+                                <input type="text" placeholder="جستجو ..." autocomplete="off" name="search" id="gsearchsimpleMobile">
+                                <button type="button" class="closeResultSearchMobile">×</button>
+                                <div class="localSearchSimpleMobile"></div>
+                                <button type="submit">
+                                    <img src="/Template/images/search-mb.png" alt="">
+                                </button>
+                            </form>
+                            <ul>
+                                @{
+                                    if (Session["userLogin"] != null)
+                                    {
+                                        <li>
+                                            <a href="/UserProfile/profile/index"><i class="now-ui-icons users_single-02"></i></a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <a href="/userlogin/main/login"><i class="now-ui-icons users_single-02"></i></a>
+                                        </li>
+                                    }
+                                }
+                                @{
+                                    if (Session["orders"] != null)
+                                    {
+                                        var ordersList = Session["orders"] as List<Order>;
+                                        <li class="cart-mb">
+                                            <a href="/cart" data-counter="@ordersList.Count">
+                                                <i class="now-ui-icons shopping_basket"></i>
+                                            </a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="cart-mb">
+                                            <a href="/cart" data-counter="0">
+                                                <i class="now-ui-icons shopping_basket"></i>
+                                            </a>
+                                        </li>
+                                    }
+                                }
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                        <div class="logo-nav-res default text-center">
+                            <a href="/">
+                                <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@setting.WebsiteLogo" alt="">
+                            </a>
+                        </div>
+                        <ul class="navbar-nav default">
+                            @{
+                                var mainCats = db.MainCats.ToList();
+                                if (mainCats.Count != 0)
+                                {
+                                    foreach (var item in mainCats)
+                                    {
+                                        <li class='sub-menu'>
+                                            <a href="#">@item.title</a>
+                                            <ul style='display: none;'>
+                                                @{
+                                                    var topCat = db.Categories.Where(r => r.MainCat == item.id).ToList();
+                                                    if (topCat.Count != 0)
+                                                    {
+                                                        foreach (var item2 in topCat)
+                                                        {
+                                                            var subCats = db.Categories.Where(r => r.parent == item2.id).ToList();
+                                                            if (subCats.Count != 0)
+                                                            {
+                                                                <li class='sub-menu'>
+                                                                    <a href="/home/parentCategory/@item2.id">@item2.title</a>
+                                                                    <ul style='display: none;'>
+                                                                        <li>
+                                                                            <a href="/home/category/@item2.id/@item2.title.Trim().Replace(" ","-")">همه موارد این دسته</a>
+                                                                        </li>
+                                                                        @{
+                                                                            foreach (var item3 in subCats)
+                                                                            {
+                                                                                <li>
+                                                                                    <a href="/home/category/@item3.id">@item3.title</a>
+                                                                                    <ul style='display: none;'></ul>
+                                                                                </li>
+                                                                            }
+                                                                        }
+                                                                    </ul>
+                                                                </li>
+                                                            }
+                                                            else
+                                                            {
+                                                                <li>
+                                                                    <a href="/home/parentCategory/@item2.id">@item2.title</a>
+                                                                    <ul style='display: none;'></ul>
+                                                                </li>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                            </ul>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- responsive-header -->
+        }
+    }
+
+
+    <div class="wrapper default @ViewBag.shippingClass">
+        <!-- header -->
+        @{
+
+            if (Context.Request.Cookies["topAlert"] == null || Context.Request.Cookies["topAlert"].Value != "false")
+            {
+                if (!string.IsNullOrEmpty(setting.TopAlertText))
+                {
+                    <div class="alert-site alert alert-warning alert-dismissible fade show" role="alert" style="background-color:@setting.topAlertColor !important">
+                        @if (!string.IsNullOrEmpty(setting.topAlertLink))
+                        {
+                            <a href="@setting.topAlertLink" style="color:white !important">
+                                @setting.TopAlertText
+
+                            </a>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" id="closeTopNav">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        }
+                        else
+                        {
+                            @setting.TopAlertText
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" id="closeTopNav">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        }
+                    </div>
+                }
+
+            }
+            else
+            {
+
+            }
+        }
+
+        <div class="overlay-search-box"></div>
+        @{
+            if (ViewBag.header == null)
+            {
+                <header class="main-header default" style="margin-bottom:0;">
+                    <div class="container">
+                        <div class="row">
+
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-5">
+                                @*@if (Session["userLogin"] == null)*@
+
+
+                                <div class="default">
+                                    <a href="/">
+                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@setting.WebsiteLogo" alt="">
+                                    </a>
+                                </div>
+
+
+                            </div>
+                            @*<div class="col-lg-4 col-md-3 col-sm-6 col-5">
+                                </div>*@
+                            <div class="col-lg-5 col-md-5 col-sm-6 col-5">
+                                <div class="search-area default">
+                                    <form action="/home/search" class="search" id="search-form-dl">
+                                        @*<input type="button" name="name" value="" class="btn btn-warning btnTopSearch" style=" padding-right: 10px !important; background-image: url('/Template/images/search-mb.png'); background-repeat: no-repeat; background-position: center;">*@
+                                        <input type="text" style=" font-size: 10px; padding-right: 30px !important; background-image: url('/Template/images/search-mb.png'); background-repeat: no-repeat; background-position: right;" name="search" id="gsearchsimple" placeholder="جستجو کنید" autocomplete="off">
+                                        <ul class="list-group search-box-list" id="results" style="height: auto; max-height: 500px; padding: 0px; border-top: 0px; width: 100%; display: none;">
+                                            @*<li style="padding:10px">
+                                                    جستجو ...
+                                                </li>*@
+                                        </ul>
+                                        <div class="localSearchSimple">
+
+                                        </div>
+                                        @*<button type="submit">
+                                            <img src="/Template/images/search.png" alt="">
+                                            </button>*@
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-1 col-sm-12" style="flex: 0 0 20.666667%; max-width: 20.666667%;">
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-12">
+                                @if (Session["userLogin"] != null)
+                                {
+                                    <div class="user-login dropdown" style="margin-top: 0; top: 11%;">
+                                        <a href="#" class="btn btn-neutral dropdown-toggle userLoginBtnContainer btn btn-warning btnTopSearch" data-toggle="dropdown">
+                                            <img src="~/Template/images/user.png" alt="" class="userIcon" />
+                                            @{
+                                                if (user.firstName == null || user.lastName == null || string.IsNullOrEmpty(user.firstName) || string.IsNullOrEmpty(user.lastName))
+                                                {
+                                                    if (user.mobile == null)
+                                                    {
+                                                        @user.email
+                                                    }
+                                                    else
+                                                    {
+                                                        @user.mobile
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    @:@user.firstName @user.lastName
+                                                }
+                                            }
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1" style="width: 180px;">
+                                            <div class="header-profile-dropdown-account-container">
+                                                <a href="/UserProfile/Profile/Index" class="d-block">
+                                                    <div class="header-profile-dropdown-user">
+                                                        <div class="header-profile-dropdown-user-img">
+                                                            <img src="/Template/images/user.svg">
+                                                        </div>
+                                                        <div class="header-profile-dropdown-user-info">
+                                                            <p class="header-profile-dropdown-user-name">
+                                                                @{
+                                                                    if (user.mobile != null)
+                                                                    {
+                                                                        @user.mobile
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @user.email
+                                                                    }
+                                                                }
+                                                            </p>
+                                                            <span class="header-profile-dropdown-user-profile-link">
+                                                                مشاهده حساب
+                                                                کاربری
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="header-profile-dropdown-account">
+
+                                                        <div class="header-profile-dropdown-account-item">
+                                                            <span class="header-profile-dropdown-account-item-title">اعتبار</span>
+                                                            <span class="header-profile-dropdown-account-item-amount">
+                                                                <span class="header-profile-dropdown-account-item-amount-number">0</span>
+                                                                تومان
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="dropdown-item">
+                                                <a href="/UserProfile/Profile/orders" class="dropdown-item-link">
+                                                    <i class="now-ui-icons shopping_bag-16"></i>
+                                                    پیگیری سفارش
+                                                </a>
+                                            </div>
+                                            <hr>
+                                            <div class="dropdown-item">
+                                                <a href="/userlogin/main/logOut" class="dropdown-item-link">
+                                                    <i class="now-ui-icons media-1_button-power"></i>
+                                                    خروج
+                                                </a>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="user-login dropdown" style="margin-top: 0; top: 11%;">
+                                        <a href="/userlogin/main/login" class="btn btn-warning btnTopSearch ">
+                                            <img src="~/Template/images/user.png" alt="" class="userIcon" />
+                                            <span class="usera">حساب کاربری</span>
+                                        </a>
+
+                                    </div>
+                                }
+
+
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-12 verline" style="flex: 0 0 1.333333%; max-width: 1.333333%;height:35px;margin-top:10px;">
+                            </div>
+
+                            <div class="col-lg-1 col-md-1 col-sm-12 leftTopMenu">
+
+
+
+                                <div id="miniCart">
+                                    <div class="cart dropdown show" id="cart-view">
+                                        <a href="/cart" class="btn cartbtn" data-toggle="dropdown" id="navbarDropdownMenuLink1" aria-expanded="true">
+                                            <img src="/template/images/buy.svg" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    @RenderPage("~/views/shared/_Menu.cshtml")
+                </header>
+            }
+        }
+
+        <!-- header -->
+        @RenderBody()
+    </div>
+    @RenderPage("~/views/shared/_Footer.cshtml")
+    @{
+        if (Session["userLogin"] == null)
+        {
+            <div class="modal-login modal fade" id="modalLogin" role="dialog" aria-labelledby="modalLogin" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title mt-0" id="myModalLabel">ورود به @setting.WebsiteName</h4>
+                        </div>
+                        <div class="modal-body px-0" id="modalLoginBody">
+                            @{Html.RenderPartial("~/Areas/userLogin/views/main/loginModal.cshtml");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    <div id="loading" style="display: none">
+        <div class="snippet">
+            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@setting.WebsiteLogo" alt="">
+            <div class="stage">
+                <div class="dot-floating"></div>
+            </div>
+        </div>
+        <div class="overlay-loading"></div>
+    </div>
+
+
+    <!--   Core JS Files   -->
+    <script src="/Template/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+    <script src="/Template/js/jquery-stack-menu.min.js" type="text/javascript"></script>
+    <script src="/Template/js/popper.min.js" type="text/javascript"></script>
+    <script src="/Template/js/bootstrap.min.js" type="text/javascript"></script>
+    <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+    <script src="/Template/js/bootstrap-switch.js"></script>
+    <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+    <script src="/Template/js/nouislider.min.js" type="text/javascript"></script>
+    <!-- Share Library etc -->
+    <script src="/Template/js/jquery.sharrre.js" type="text/javascript"></script>
+    <!-- Control Center for Now Ui Kit: parallax effects, scripts for the example pages etc -->
+    <script src="/Template/js/now-ui-kit.js" type="text/javascript"></script>
+    <!--  CountDown -->
+    <script src="/Template/js/countdown.min.js" type="text/javascript"></script>
+    <!--  Plugin for Sliders -->
+    <script src="/Template/js/swiper.min.js" type="text/javascript"></script>
+    <!--  Jquery easing -->
+    <script src="/Template/js/jquery.easing.1.3.min.js" type="text/javascript"></script>
+    <!--  LocalSearch -->
+    <script src="/Template/js/JsLocalSearch.js" type="text/javascript"></script>
+
+    <script src="/Template/js/select2.min.js" type="text/javascript"></script>
+
+
+    <script src="/Template/js/lazyload.js" type="text/javascript"></script>
+    <script>
+        window.addEventListener("load", function (event) {
+            lazyload();
+        });
+    </script>
+
+    <script type="text/javascript" src="/Template/js/toastr.min.js"></script>
+    @*<script type="text/javascript">toastr.options = { "positionClass": "toast-bottom-left" };</script>*@
+    <!-- For Js Create -->
+    <script>
+        function UpdateMiniCart() {
+            $.ajax({
+                url: '/cart/miniCart',
+                method: "POST",
+                success: function (data) {
+                    $('#miniCart').html(data);
+                }
+            });
+        }
+        $(document).ready(function () {
+            UpdateMiniCart();
+        })
+    </script>
+    <script>
+        $(document).on("click", ".remove-cart-item", function () {
+            var CartId = $(this).data('id');
+            $('#remove-button-card').data('id', CartId);
+            $('#add-button-card').data('id', CartId);
+            $('#remove-cart-item').modal('show');
+            UpdateMiniCart();
+        });
+    </script>
+    <script>
+        function showLoginModal() {
+            $('#loginModal').modal('show');
+        }
+    </script>
+    <script>
+        //$(".remove-cart-product").click(function (e) {
+        //    e.preventDefault();
+        //    var ID = $('#remove-button-card').data('id');
+        //    $.ajaxSetup({
+        //        headers: {
+        //            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        //        }
+        //    });
+        //    $.ajax({
+        //        url: '#',
+        //        method: "DELETE",
+        //        data: { id: ID },
+        //        success: function (data) {
+        //            $('#cart-view').html('');
+        //            $('#cart-view').html(data);
+        //            $('#remove-cart-item').modal('hide');
+        //            update_cart();
+        //        }
+        //    });
+        //});
+
+
+        //$('.transfer-to-future-purchases').click(function (e) {
+        //    e.preventDefault();
+        //    var ID = $('#add-button-card').data('id');
+        //    $.ajaxSetup({
+        //        headers: {
+        //            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        //        }
+        //    });
+        //    $.ajax({
+        //        url: '#',
+        //        method: "PATCH",
+        //        data: { id: ID },
+        //        success: function (data) {
+        //            $('#cart-view').html('');
+        //            $('#cart-view').html(data);
+        //            $('#remove-cart-item').modal('hide');
+        //            update_cart();
+        //        }
+        //    });
+        //});
+
+        //update_cart = function () {
+        //    $.ajaxSetup({
+        //        headers: {
+        //            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        //        }
+        //    });
+        //    $.ajax({
+        //        url: '#',
+        //        method: "GET",
+        //        data: {},
+        //        success: function (data) {
+        //            $('#cart_show').html('');
+        //            $('#cart_show').html(data);
+        //        }
+        //    });
+        //}
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            fetch_product_data();
+            function fetch_product_data(query = '') {
+                $.ajax({
+                    url: "/Home/Ajax_Search",
+                    method: 'POST',
+                    data: { query: query },
+                    dataType: 'json',
+                    success: function (data) {
+                        try {
+                            if (data.status === 200) {
+                                if (data.categorys.length === 0 && data.keywords.length === 0) {
+                                    $('#results').html('');
+                                    $('#results').append('<li class="list-group-item contsearch"><a href="/search?q=' + data.query + '" class="gsearch"><i class="fa fa-search"></i> نمایش همه نتایج برای <span style="color: #5DC0CD;font-weight: bold" >' + data.query + '</span></a></li>');
+                                } else {
+                                    $('#results').html('');
+                                    if (data.categorys.length > 0) {
+                                        jQuery.each(data.categorys, function (key, value) {
+                                            jQuery('#results').append('<li class="list-group-item contsearch"><a href="/home/category/' + value.id + '?q=' + value.title + '" class="gsearch"><i class="fa fa-search"></i> همه کالا های دسته <span style="color: #5DC0CD;font-weight: bold" >' + value.title + '</span></a></li>');
+                                        });
+                                    }
+
+                                    if (data.keywords.length > 0 && data.categorys.length > 0) {
+                                        $('#results').append('<hr>');
+                                    }
+
+                                    if (data.keywords.length > 0) {
+                                        jQuery.each(data.keywords, function (key, value) {
+                                            jQuery('#results').append('<li class="list-group-item contsearch"><a href="/home/product/' + value.id + '" class="gsearch">' + value.title + '</a></li>');
+                                        });
+                                    }
+
+                                }
+                            }
+                        } catch (e) {
+
+                        }
+
+                    }
+                })
+            }
+            $(document).on('keyup', '#gsearchsimple', function (event) {
+                console.log(event.keyCode);
+                var query = $('#gsearchsimple').val();
+                var obj = $('#gsearchsimple');
+                setTimeout(function () {
+                    var search = obj.val();
+                    if (search == query) {
+                        doSearch(query)
+                    }
+                }, 1000)
+
+            });
+
+            function doSearch(query) {
+                var n = query.length;
+                if (n > 2) {
+                    fetch_product_data(query);
+                } else {
+                    $('#results').empty()
+                    //$('#results').empty().append('<div class="pr-2"><span>بیشترین جستجوهای اخیر:</span></div>\n' +
+                    //    '<ul class="search-results-trends" id="search-trends">');
+                    //$('#search-trends').append('<li><a href="/search?q=فرش دست باف" >فرش دست باف</a></li>');
+                    //$('#search-trends').append('<li><a href="/search?q=تابلو فرش" >تابلو فرش</a></li>');
+                    //$('#search-trends').append('<li><a href="/search?q=فرش مدرن" >فرش مدرن</a></li>');
+                    //$('#results').append('</ul>');
+                    $('#results').empty().append('' +
+                        '<ul class="" id="search-trends">');
+                    //$('#search-trends').append('<li style="padding:10px">جستجو ...</li>');
+                    $('#results').append('</ul>');
+                }
+            }
+        });
+    </script>
+
+    <script>
+        $(document).on('click', '.removeFromCard', function () {
+            $('#remove-button-cards').attr('data-id', $(this).attr('data-id'))
+        })
+        $(document).on('click', '#remove-button-cards', function () {
+            removeProduct($(this).attr('data-id'));
+        })
+        function removeProduct(id) {
+            $.ajax({
+                type: "POST",
+                url: '/cart/removeProduct',
+                data: { id: id },
+                success: function (t) {
+                    $('#products').html(t);
+                    UpdateMiniCart();
+                    try {
+                        loadBasketProducts();
+                    } catch (e) {
+                    }
+                }
+            })
+        }
+        $(document).ready(function () {
+            fetch_product_data();
+            function fetch_product_data(query = '') {
+                $.ajax({
+                    url: "#",
+                    method: 'GET',
+                    data: { query: query },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.status === 200) {
+                            if (data.categorys.length === 0 && data.keywords.length === 0) {
+                                $('#resultsMobile').html('');
+                                $('#resultsMobile').append('<li class="list-group-item contsearch"><a href="/search?q=' + data.query + '" class="gsearch"><i class="fa fa-search"></i> نمایش همه نتایج برای <span style="color: #5DC0CD;font-weight: bold" >' + data.query + '</span></a></li>');
+                            } else {
+                                $('#resultsMobile').html('');
+                                if (data.categorys.length > 0) {
+                                    jQuery.each(data.categorys, function (key, value) {
+                                        jQuery('#resultsMobile').append('<li class="list-group-item contsearch"><a href="/search/' + value.url + '?q=' + value.label + '" class="gsearch"><i class="fa fa-search"></i> همه کالا های دسته <span style="color: #5DC0CD;font-weight: bold" >' + value.label + '</span></a></li>');
+                                    });
+                                }
+
+                                if (data.keywords.length > 0 && data.categorys.length > 0) {
+                                    $('#resultsMobile').append('<hr>');
+                                }
+
+                                if (data.keywords.length > 0) {
+                                    jQuery.each(data.keywords, function (key, value) {
+                                        jQuery('#resultsMobile').append('<li class="list-group-item contsearch"><a href="/search?q=' + value.keyword + '" class="gsearch">' + value.keyword + '</a></li>');
+                                    });
+                                }
+
+                            }
+                        }
+                    }
+                })
+            }
+
+            $(document).on('keyup', '#gsearchsimpleMobile', function () {
+                var query = $('#gsearchsimpleMobile').val();
+                var obj = $('#gsearchsimpleMobile');
+                setTimeout(function () {
+                    var search = obj.val();
+                    if (search == query) {
+                        doSearchMobile(query)
+                    }
+                }, 1000)
+
+            });
+
+            function doSearchMobile(query) {
+                var n = query.length;
+                if (n > 2) {
+                    fetch_product_data(query);
+                } else {
+                    //$('#resultsMobile').html('');
+                    //$('#resultsMobile').append('<div class="pr-2"><span>بیشترین جستجوهای اخیر:</span></div>\n' +
+                    //    '                            <ul class="search-results-trends" id="search-trends">');
+                    //$('#search-trends-mobile').append('<li><a href="/search?q=فرش دست باف" >فرش دست باف</a></li>');
+                    //$('#search-trends-mobile').append('<li><a href="/search?q=تابلو فرش" >تابلو فرش</a></li>');
+                    //$('#search-trends-mobile').append('<li><a href="/search?q=فرش مدرن" >فرش مدرن</a></li>');
+                    //$('#resultsMobile').append('</ul>');
+                }
+            }
+        });
+    </script>
+
+    <script>
+        saveSubscribe = function () {
+            $('#loading').show();
+            var email = document.getElementById('emailsubscribe').value;
+            ValidateEmail(email);
+        };
+
+        function ValidateEmail(inputText) {
+
+            var mailformat = /^\w+([\.-]?\w+)*@@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if (inputText.match(mailformat)) {
+                var data = $('#subscribeForm').serialize();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: 'home/subscribes',
+                    type: "POST",
+                    data: data,
+                    success: function (response) {
+                        $('#loading').hide();
+                        if (response.Result == true) {
+                            toastr.success(response.Message);
+                            document.getElementById("subscribeForm").reset();
+                        }
+                        else
+                            toastr.error(response.Message);
+
+                    },
+                    error: function (xhr) {
+                        $('#loading').hide();
+                        if (xhr.status === 422) {
+                            jQuery.each(xhr.responseJSON.errors, function (key, value) {
+                                toastr.error(value);
+                            });
+                            document.getElementById("subscribeForm").reset();
+                        }
+                        if (xhr.status !== 422) {
+                            toastr.warning(xhr.responseJSON.errors);
+                        }
+                    }
+                });
+            } else {
+                $('#loading').hide();
+                toastr.warning('ایمیل را به درستی وارد نمایید.');
+                document.getElementById("subscribeForm").emailsubscribe.focus();
+                return false;
+            }
+        }
+    </script>
+    @*fix price format*@
+    <script>
+        $(document).ready(function () {
+            fixprice()
+        })
+        function fixprice() {
+            $('.fixPrice').each(function () {
+                $(this).digits()
+            })
+        }
+        $.fn.digits = function () {
+            return this.each(function () {
+                $(this).text($(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+            })
+        }
+    </script>
+
+    <!-- Main Js -->
+    <script src="/Template/js/main.js" type="text/javascript"></script>
+    <script>
+        function changeMenu(menu) {
+            $('[data-menu="' + menu + '"]').addClass('active')
+        }
+    </script>
+    <script>
+
+        //main menu functions
+        var ahinted = false;
+        var subahinted = false;
+        $("a.mainlink").mouseenter(function () {
+            $(this).next().children('ul').css("visibility", "visible");
+            ahinted = true;
+        });
+        $("a.mainlink").mouseout(function () {
+            if ($(this).children('ul.dropdownmenu:not(.subdropdownmenu):hover').length == 0) {
+                ahinted = true;
+                $(this).next().children('ul').css("visibility", "hidden");
+            }
+            else {
+                ahinted = false;
+            }
+        });
+
+        $("ul.dropdownmenu:not(.subdropdownmenu)").mouseenter(function () {
+            if (ahinted == true) {
+                $(this).css("visibility", "visible");
+            }
+            else {
+                $(this).css("visibility", "hidden");
+            }
+        });
+        $("ul.dropdownmenu:not(.subdropdownmenu)").mouseleave(function () {
+            $(this).css("visibility", "hidden");
+            ahinted = false;
+        });
+
+        //main menu functions
+
+
+        $(document).on('mouseenter', '.cartbtn', function () {
+            $(this).click();
+        })
+        $(document).on('click', '#closeTopNav', function () {
+            createCookie('topAlert', false, 10);
+        })
+        function createCookie(name, value, days) {
+            var expires;
+
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toGMTString();
+            } else {
+                expires = "";
+            }
+            document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
+        }
+
+        function readCookie(name) {
+            var nameEQ = encodeURIComponent(name) + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === ' ')
+                    c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0)
+                    return decodeURIComponent(c.substring(nameEQ.length, c.length));
+            }
+            return null;
+        }
+
+        function eraseCookie(name) {
+            createCookie(name, "", -1);
+        }
+    </script>
+    @RenderSection("JS", required: false)
+    <style>
+        .product-box-title {
+            font-size: 11px;
+            line-height: 27px;
+            text-align: right;
+        }
+
+        .comparisonForm {
+            cursor: pointer !important;
+        }
+
+        td.col-md-3.ComparisonTd {
+            text-align: center;
+        }
+
+        .btnTopSearch {
+            border: 1px solid #DBDBDB;
+            border-radius: 0.53rem;
+        }
+
+        .verline {
+            border-left: 1px solid #f0f0f1;
+            border-left-width: 1px;
+            border-left-style: solid;
+            border-left-color: #a0a0a0;
+        }
+
+        .verlineright {
+            border-right: 1px solid #f0f0f1;
+            border-right-width: 1px;
+            border-right-style: solid;
+            border-right-color: #a0a0a0;
+        }
+
+        .bestsellerslider {
+            background-color: #ffebf1;
+            border: 1px solid #FFC2D7;
+            border-radius: 10px;
+        }
+
+        .newerproducts {
+            background-color: #FFF7F1;
+            border: 1px solid #E9E9E9;
+            border-radius: 10px;
+        }
+
+        .recentlyviewed {
+            background-color: #FFF7F1;
+            border: 1px solid #E9E9E9;
+            border-radius: 10px;
+        }
+
+        /*.box-tabs-tab .active:before {
+            background: #F69400;
+        }*/
+
+        /*.BtnColor {
+            background-color: #F69400;
+        }*/
+
+    </style>
+
+
+    @{
+        var template = db.Templates.Where(r => r.Active == true).FirstOrDefault();
+        if (template != null)
+        {
+            <style>
+                @if (template.BtnColor!=null)
+                {
+                    @:.dk-btn-info,header.main-header .cart .dropdown-menu .basket-submit,a.btn.btn-info,.btn-primary,.comparisonForm,#remove-location .remodal-general-alert-button--approve,.radio-box input[type="radio"]:checked + label::after,.ui-radio input[type="radio"]:checked + .ui-radio-check::before{  background-color:@template.BtnColor  !important  }
+                    @:footer.main-footer .footer-widgets .newsletter form .btn{    background-color: @template.BtnColor !important;box-shadow: 0 2px 6px 0 @template.BtnColor;}
+                    @:.listing-sort li a.active,button#add-button-card,.checkbox label::after{background-color:@template.BtnColor !important}
+                    @:.comparisonForm{border-color:@template.BtnColor !important}
+                    @:.checkbox-form .input-checkbox:checked + .checkbox-check, .checkbox-form input[type=checkbox]:checked + .checkbox-check{background:@template.BtnColor !important ; border-color:@template.BtnColor !important}
+
+                }
+                @if (template.LinkColor!=null)
+                {
+                    @:.btn-link-border,.btn-link-border:hover,.header-profile-dropdown-user-profile-link{color:@template.LinkColor}
+                    @:.btn-link-border:after{border-bottom: 1px dashed @template.LinkColor;}
+                }
+                @if (template.labelUnderMenu!=null)
+                {
+                    @:.js-nav-list-category-hover>div:before{background-color:@template.labelUnderMenu !important}
+                }
+                @if (template.ActiveMenuColor!=null)
+                {
+                    @:header.main-header .menu .product-category .parent-category li a:hover,header.main-header .menu .product-category a:hover,header.main-header .menu .product-category .parent-category li.active a,header.main-header .menu .product-category .children-categories .children-category ul li a:hover{color:@template.ActiveMenuColor}
+                }
+                @if (template.topLabelColor!=null)
+                {
+                    @:header.main-header .user-login .dropdown-menu:after{border-color:transparent transparent @template.topLabelColor !important}
+                    @:header.main-header .user-login .dropdown-menu:before{background-color:@template.topLabelColor!important}
+                }
+                @if (template.labelInProduct!=null)
+                {
+                    @:.box-tabs-tab .active:before{background:@template.labelInProduct  !important}
+                }
+                @if (template.sliderButtonColor!=null)
+                {
+                    @:.main-slider .carousel-indicators li.active{background:@template.sliderButtonColor !important}
+                }
+                @if (template.BasketColorOnMobileMode!=null)
+                {
+                    @:nav.header-responsive .search-nav li.cart-mb a[data-counter]::after{background-color: @template.BasketColorOnMobileMode !important;}
+                }
+                     @if (template.labelUnderCategory!=null)
+                {
+                    @:.widget-product .card-header .card-title span{    border-bottom-color: @template.labelUnderCategory !important;}
+                }
+                     @if (template.BasketLabelColor!=null)
+                     {
+                         @:.checkout-header--express{color:@template.BasketLabelColor !important ; border-bottom-color:@template.BasketLabelColor !important}
+                     }
+                     @if (template.AmazingSliderColor!=null)
+                     {
+                         @:#amazing-slider .carousel-indicators li.active,#amazing-slider .carousel-inner .carousel-item .row .left-col .price .discount-percent,#amazing-slider .carousel-indicators li.active:after{background:@template.AmazingSliderColor !important}
+
+                     }
+            </style>
+        }
+    }
+
+</body>
+
+
+</html>

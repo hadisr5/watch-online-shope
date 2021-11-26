@@ -1,0 +1,652 @@
+﻿@using OnlineShop.Models
+@using System.Globalization;
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var basket = db.Baskets.Find(id);
+    ViewBag.Title = "Index";
+    Layout = null;
+    var address = db.UsersAdresses.Where(r => r.id == basket.addressId).FirstOrDefault();
+
+}
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">جزئیات سفارش شناسه @basket.id</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/orders/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست سفارش ها</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        @{
+            string p = "";
+            try
+            {
+                DateTime d = Convert.ToDateTime(basket.creationDate);
+                PersianCalendar pc = new PersianCalendar();
+                p = (string.Format("{0}/{1}/{2} ساعت {3}:{4}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d), pc.GetHour(d), pc.GetMinute(d)));
+            }
+            catch (Exception)
+            {
+            }
+        }
+        @*<div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <h1>
+                        سفارش شناسه @basket.id
+                    </h1>
+                </div>
+
+            </div>*@
+        <!--begin::Form-->
+        <div class="kt-portlet__body">
+            <div class="example">
+                <div class="example-preview">
+                    <ul class="nav nav-tabs nav-tabs-line">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#kt_tab_pane_1">اطلاعات سفارش</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_2">جزئیات سفارش</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_3">جزئیات پرداخت</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_4">وضعیت سفارش</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_5" id="loadMap">آدرس تحویل گیرنده</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content mt-5" id="myTabContent">
+                        <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel" aria-labelledby="kt_tab_pane_1">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <td colspan="2">
+                                            اطلاعات سفارش
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            شناسه
+                                        </td>
+                                        <td>
+                                            @basket.id
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            تاریخ سفارش
+                                        </td>
+                                        <td>
+                                            @p
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            هزینه ارسال
+                                        </td>
+                                        <td>
+                                            @if (basket.shippingPrice == null)
+                                            {
+                                                @:رایگان
+
+                                            }
+                                            else
+                                            {
+                                                @:@basket.shippingPrice تومان
+                                            }
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            بازه زمانی ارسال
+                                        </td>
+                                        <td>
+                                            @{
+                                                var shipping = db.Shippings.Where(r => r.id == basket.ShippingId).FirstOrDefault();
+                                                if (shipping == null || shipping.ShippingType == 1)
+                                                {
+                                                    @:وابسته به پُست
+                                                }
+                                                else
+                                                {
+                                                    if (shipping.ShippingType == 2)
+                                                    {
+                                                        var send = db.SendPeriods.Where(r => r.BasketId == id).FirstOrDefault();
+                                                        if (send != null)
+                                                        {
+                                                            @:@GetDayOfWeekName(Convert.ToDateTime(send.Date)) @GetDayOfMonth(Convert.ToDateTime(send.Date)) @GetMonthName(Convert.ToDateTime(send.Date))
+                                                        }
+                                                        @:- بازه زمانی
+                                                        switch (send.Peroid)
+                                                        {
+                                                            case 1:
+                                                                {
+                                                                    @:9 تا 12
+                                                                    break;
+                                                                }
+                                                            case 2:
+                                                                {
+                                                                    @:12 تا 15
+                                                                    break;
+                                                                }
+                                                            case 3:
+                                                                {
+                                                                    @:15 تا 18
+                                                                    break;
+                                                                }
+                                                            default:
+                                                                break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            @basket.periodString
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            وضعیت سفارش
+                                        </td>
+                                        <td>
+                                            @basket.wizardStatus
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            وضعیت پرداخت
+                                        </td>
+                                        <td>
+                                            @basket.status
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>کاربر</td>
+                                        <td>
+                                            @{
+                                                var user = db.Users.Where(r => r.id == basket.userId).FirstOrDefault();
+                                                if (user != null)
+                                                {
+                                                    <a href="/Admin/AdminDashboard/Index#/Admin/users/details/@basket.userId">@user.firstName @user.lastName</a>
+                                                }
+                                                else
+                                                {
+                                                    @:کاربر حذف شده است
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            قیمت
+                                        </td>
+                                        <td>
+                                            @basket.Price
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>روش پرداخت</td>
+                                        <td>
+                                            @basket.payMethod
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>کد تخفیف</td>
+                                        <td>
+                                            @{
+                                                if (basket.DiscountCode == null)
+                                                {
+                                                    @:کد تخفیف ندارد
+                                                }
+                                                else
+                                                {
+                                                    @:کد تخفیف با شناسه @basket.DiscountCode
+                                                }
+                                            }
+                                        </td>
+
+                                    </tr>
+                                    @{
+                                        if (basket.DiscountCode != null)
+                                        {
+                                            <Tr>
+                                                <td>
+                                                    مبلغ کد تخفیف
+                                                </td>
+                                                <td>
+                                                    @basket.DiscountAmount تومان
+                                                </td>
+                                            </Tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel" aria-labelledby="kt_tab_pane_2">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            محصول
+                                        </td>
+                                        <td>
+                                            تعداد
+                                        </td>
+                                        <td>
+                                            قیمت واحد
+                                        </td>
+                                        <td>
+                                            فروشنده
+                                        </td>
+                                        <td>
+                                            قیمت کل
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var orders = db.Orders.Where(r => r.basketId == basket.id).ToList();
+                                        if (orders.Count != 0)
+                                        {
+                                            foreach (var item in orders)
+                                            {
+                                                var product = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+                                                string productTitle = "محصول حذف شده";
+                                                if (product != null && product.title != null)
+                                                {
+                                                    productTitle = product.title;
+                                                }
+                                                <tr>
+                                                    <td>
+                                                        <a href="/home/product/@item.productId" target="_blank">@productTitle</a>
+                                                    </td>
+                                                    <td>
+                                                        @item.quantity عدد
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            if (item.SellerId != null)
+                                                            {
+                                                                @item.SellerPrice @:تومان
+                                                            }
+                                                            else
+                                                            {
+                                                                @item.singleProductPrice @:تومان
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            if (item.SellerId == null)
+                                                            {
+                                                                @:ندارد
+                                                            }
+                                                            else
+                                                            {
+                                                                var seller = db.Sellers.Where(r => r.id == item.SellerId).FirstOrDefault();
+                                                                if (seller != null)
+                                                                {
+                                                                    <a href="/Admin/AdminDashboard/Index#/Admin/sellers/details/@item.SellerId">@seller.name @seller.lastname</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    @:فروشنده حذف شده است
+                                                                }
+                                                            }
+                                                        }
+
+
+                                                    </td>
+                                                    <td>
+                                                        @if (item.SellerId == null)
+                                                        {
+                                                            @:@(item.singleProductPrice * item.quantity) تومان
+
+                                                        }
+                                                        else
+                                                        {
+                                                            @:@(item.SellerPrice * item.quantity) تومان
+
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="kt_tab_pane_3" role="tabpanel" aria-labelledby="kt_tab_pane_3">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            مبلغ کل سفارش
+                                        </td>
+                                        <td>
+                                            هزینه ارسال
+                                        </td>
+                                        <td>
+                                            کد تخفیف
+                                        </td>
+                                        <td>
+                                            مبلغ پرداخت شده
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            @basket.Price تومان
+                                        </td>
+                                        <td>
+                                            @{
+                                                if (basket.shippingPrice == null || basket.shippingPrice == 0)
+                                                {
+                                                    @:رایگان
+                                                }
+                                                else
+                                                {
+                                                    @:@basket.shippingPrice تومان
+
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            @{
+                                                if (basket.DiscountAmount == null)
+                                                {
+                                                    @:ندارد
+                                                }
+                                                else
+                                                {
+                                                    @basket.DiscountAmount @:تومان
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            @(basket.Price+Convert.ToInt64( basket.shippingPrice)-Convert.ToInt64( basket.DiscountAmount)) تومان
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="kt_tab_pane_4" role="tabpanel" aria-labelledby="kt_tab_pane_4">
+                            <form class="kt-form myForm" method="post" action="/admin/orders/changeStatus/@basket.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/orders/details/@basket.id">
+                                <table class="table table-hover">
+                                    @Html.AntiForgeryToken()
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                روش پرداخت
+                                            </td>
+                                            <td>
+                                                @basket.payMethod
+                                            </td>
+                                        </tr>
+                                        @{
+                                            if (db.Scans.Where(r => r.basketId == basket.id).FirstOrDefault() != null)
+                                            {
+                                                var scan = db.Scans.Where(r => r.basketId == basket.id).FirstOrDefault();
+                                                <tr>
+                                                    <td>
+                                                        فیش پرداخت
+                                                    </td>
+                                                    <td>
+                                                        <a href="/uploads/@scan.url" target="_blank"><img src="/uploads/@scan.url" alt="فیش پرداخت" style="width:200px" /></a>
+                                                    </td>
+
+                                                </tr>
+                                            }
+                                        }
+                                        <tr>
+                                            <td>
+                                                وضعیت سفارش
+                                            </td>
+                                            <td>
+                                                <select class="form-control" name="status" id="statusOrder">
+                                                    @{
+                                                        var wizardStatusList = new List<string>();
+                                                        wizardStatusList.Add("در صف بررسی");
+                                                        wizardStatusList.Add("تایید سفارش");
+                                                        wizardStatusList.Add("آماده‌سازی سفارش");
+                                                        wizardStatusList.Add("خروج از مرکز پردازش");
+                                                        wizardStatusList.Add("تحویل به پست");
+                                                        wizardStatusList.Add("تحویل مرسوله به مشتری");
+                                                        foreach (var item in wizardStatusList)
+                                                        {
+                                                            if (basket.wizardStatus != null && basket.wizardStatus == item)
+                                                            {
+                                                                <option value="@item" selected>@item</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item">@item</option>
+                                                            }
+                                                        }
+                                                    }
+
+                                                </select>
+                                                <input type="submit" style="display:none" id="submit" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="kt_tab_pane_5" role="tabpanel" aria-labelledby="kt_tab_pane_5">
+                            @if (address != null)
+                            {
+                                <form class="kt-form myForm" method="post" action="/admin/orders/changeAddress/@address.id" data-redirect="/Admin/AdminDashboard/Index#/Admin/orders/details/@(basket.id)">
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input type="hidden" value="@address.userId" name="userId" />
+                                            <input type="hidden" value="@address.id" name="id" />
+                                            <input type="hidden" value="@address.creationDate" name="creationDate" />
+                                            <input type="hidden" value="@address.Location" name="Location" id="Location" />
+                                            <table class="table table-hover">
+                                                <thead>
+
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>آدرس</td>
+                                                        <td>
+                                                            <textarea class="form-control" style="height:80px" name="Address">@address.Address</textarea>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>تحویل گیرنده</td>
+                                                        <td>
+                                                            <input name="Reciver" value="@address.Reciver" placeholder="تحویل گیرنده" class="form-control" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>شماره تماس دریافت کننده</td>
+                                                        <td>
+                                                            <input name="ReciverPhone" value="@address.ReciverPhone" placeholder="شماره تماس دریافت کننده" class="form-control" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>کد پستی</td>
+                                                        <td>
+                                                            <input name="postalCode" value="@address.postalCode" placeholder="کد پستی" class="form-control" />
+
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            مختصات
+                                                        </td>
+                                                        <td>
+                                                            <div id='map' style='width: 100%; height: 400px;'></div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+
+                                            @*<div>
+                                                    <strong>استان</strong>
+                                                    <p>
+                                                        @{
+                                                            var state = db.States.Where(r => r.id == address.State).FirstOrDefault();
+                                                        }
+                                                        @state.name
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <strong>شهر</strong>
+                                                    <p>
+                                                        @{
+                                                            var city = db.States.Where(r => r.id == address.State).FirstOrDefault();
+                                                        }
+                                                        @city.name
+                                                    </p>
+                                                </div>*@
+                                        </div>
+                                    </div>
+
+                                    <input type="submit" value="ویرایش آدرس" class="btn btn-primary" />
+
+
+                                </form>
+                            }
+                            else
+                            {
+                                <div>
+                                    <span class="text-info">آدرسی ثبت نشده است.</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+@{
+    if (address != null && address.Location != null)
+    {
+        var latAndLon = address.Location.Split(',');
+        <script>
+        $(document).on('click', '#loadMap', function () {
+            //LoadMapsInOrderDetails(@latAndLon[1],@latAndLon[0])
+            showPointOnMap(@latAndLon[1],@latAndLon[0]);
+        })
+
+        </script>
+    }
+}
+
+<script>
+    titlePage('سفارش #@basket.id')
+    updateOrderNotification(true);
+
+</script>
+<style>
+    .kt-svg-icon.fillStar g [fill] {
+        fill: #f59b3e;
+    }
+
+    .kt-svg-icon.emptyStar g [fill] {
+        fill: #9b9b9b;
+    }
+
+    a.btn.btn-bold.btn-sm.btn-font-sm.btn-label-brand {
+        margin-bottom: 4px;
+    }
+</style>
+
+@functions{
+    public static string GetDayOfWeekName(DateTime date)
+    {
+        switch (date.DayOfWeek)
+        {
+            case DayOfWeek.Saturday: return "شنبه";
+            case DayOfWeek.Sunday: return "يکشنبه";
+            case DayOfWeek.Monday: return "دوشنبه";
+            case DayOfWeek.Tuesday: return "سه‏ شنبه";
+            case DayOfWeek.Wednesday: return "چهارشنبه";
+            case DayOfWeek.Thursday: return "پنجشنبه";
+            case DayOfWeek.Friday: return "جمعه";
+            default: return "";
+        }
+    }
+
+    public static string GetMonthName(DateTime date)
+    {
+        PersianCalendar jc = new PersianCalendar();
+        string pdate = string.Format("{0:0000}/{1:00}/{2:00}", jc.GetYear(date), jc.GetMonth(date), jc.GetDayOfMonth(date));
+
+        string[] dates = pdate.Split('/');
+        int month = Convert.ToInt32(dates[1]);
+
+        switch (month)
+        {
+            case 1: return "فررودين";
+            case 2: return "ارديبهشت";
+            case 3: return "خرداد";
+            case 4: return "تير‏";
+            case 5: return "مرداد";
+            case 6: return "شهريور";
+            case 7: return "مهر";
+            case 8: return "آبان";
+            case 9: return "آذر";
+            case 10: return "دي";
+            case 11: return "بهمن";
+            case 12: return "اسفند";
+            default: return "";
+        }
+
+    }
+    public static string GetDayOfMonth(DateTime date)
+    {
+
+        try
+        {
+            PersianCalendar jc = new PersianCalendar();
+            return jc.GetDayOfMonth(date).ToString();
+        }
+        catch
+        {
+            throw new FormatException("The input string must be in 0000/00/00 format.");
+        }
+    }
+
+}

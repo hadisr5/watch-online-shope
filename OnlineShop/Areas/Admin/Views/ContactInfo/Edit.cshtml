@@ -1,0 +1,97 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var ci = db.ContactInformations.Find(id);
+    Layout = null;
+}
+
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            ویرایش اطلاعات تماس
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/ContactInfo/Edit_Post" data-redirect="/Admin/AdminDashboard/Index#/Admin/contactInfo/edit">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <input type="number" value="@ci.id" name="id" style="display:none" />
+
+                        <div class="form-group">
+                            <label>تلفن</label>
+                            <input type="text" class="form-control" placeholder="تلفن تماس" name="phone" value="@ci.phone">
+                        </div>
+                        <div class="form-group">
+                            <label>ایمیل</label>
+                            <input type="email" class="form-control" placeholder="ایمیل" name="email" value="@ci.email">
+                        </div>
+                        <div class="form-group">
+                            <label>آدرس</label>
+                            <input type="text" class="form-control" placeholder="آدرس" name="address" value="@ci.address">
+                        </div>
+
+                        <div class="form-group">
+                            <label>facebook</label>
+                            <input type="text" class="form-control" placeholder="آدرس فیسبوک" name="facebook" value="@ci.facebook">
+                        </div>
+                        <div class="form-group">
+                            <label>twitter</label>
+                            <input type="text" class="form-control" placeholder="آدرس توییتر" name="twitter" value="@ci.twitter">
+                        </div>
+                        <div class="form-group">
+                            <label>instagram</label>
+                            <input type="text" class="form-control" placeholder="آدرس اینستاگرام" name="instagram" value="@ci.instagram">
+                        </div>
+                        <div class="form-group">
+                            <label>pinterest</label>
+                            <input type="text" class="form-control" placeholder="آدرس پینترس" name="pinterest" value="@ci.pinterest">
+                        </div>
+                        <div class="form-group">
+                            <label>skype</label>
+                            <input type="text" class="form-control" placeholder="آدرس اسکایپ" name="skype" value="@ci.skype">
+                        </div>
+                        <div class="form-group">
+                            <label>عرض جعرافیایی</label>
+                            <input type="text" class="form-control" placeholder="عرض جغرافیایی" name="lat" value="@ci.lat">
+                        </div>
+                        <div class="form-group">
+                            <label>طول جغرافیایی</label>
+                            <input type="text" class="form-control" placeholder="طول جغرافیایی" name="lon" value="@ci.lon">
+                        </div>
+
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ویرایش اطلاعات تماس</button>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ویرایش اطلاعات تماس')
+</script>
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-Menu="Contact"]').addClass('kt-menu__item--active')
+
+</script>

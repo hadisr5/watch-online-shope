@@ -1,0 +1,47 @@
+  #partitioned {
+            padding-left: 7px;
+            letter-spacing: 37px;
+            border: 0;
+            background-image: linear-gradient(to left, #cacacae8 70%, rgba(255, 255, 255, 0) 0%);
+            background-position: bottom;
+            background-size: 53px 2px;
+            background-repeat: repeat-x;
+            background-position-x: 35px;
+            width: 220px;
+            min-width: 220px;
+            font-size: 25px;
+            color: #545454;
+            font-weight: bold;
+            text-align: left !important;
+            direction: ltr !important;
+        }
+
+        input {
+            border: 2px solid #f7931e !important;
+            text-align: center !important;
+            width: 250px;
+        }
+
+        #divInner {
+            left: 0;
+            position: sticky;
+        }
+
+        #divOuter {
+            width: 190px;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+               .form-fild, .login-submit {
+            text-align: center;
+        }
+
+        .modal-body {
+            padding: 50px 20px;
+            position: relative;
+            text-align: center;
+        }

@@ -1,0 +1,90 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    Layout = "~/views/shared/_layout.cshtml";
+}
+<main class="profile-user-page default">
+    <div class="container">
+        <div class="row">
+            <div class="profile-page col-xl-9 col-lg-8 col-md-12 order-2">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-12">
+                            <h1 class="title-tab-content">ایجاد تیکت جدید</h1>
+
+                        </div>
+                        <form action="/userProfile/profile/Create_New_Ticket" method="post">
+                            @Html.AntiForgeryToken()
+                            <div class="content-section default">
+                                @{
+                                    if (ViewBag.error != null)
+                                    {
+                                        <div class="alert alert-danger profile_alert">
+                                            @ViewBag.error
+                                        </div>
+                                    }
+                                }
+
+                                <div class="form-group">
+                                    <label>
+                                        عنوان تیکت
+                                    </label>
+                                    <input type="text" name="title" class="form-control" placeholder="عنوان تیکت خود را وارد کنید" value="" />
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        ارسال به ...
+                                    </label>
+                                    <select class="form-control" name="for">
+                                        <option>پشتیبانی فنی</option>
+                                        <option>بخش مالی</option>
+                                        <option>سوالات</option>
+                                        <option>مدیریت</option>
+                                        <option>انتقادات / پیشنهادات</option>
+                                    </select>
+                                </div>
+                                <hr />
+                                <div class="form-group">
+                                    <label>
+                                        متن پیام
+                                    </label>
+                                    <textarea name="Ticket_content" class="form-control" rows="10" placeholder="متن پیام خود را وارد کنید"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">
+                                        ایجاد تیکت جدید
+                                        <i class="now-ui-icons arrows-1_minimal-left"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            @RenderPage("~/Areas/UserProfile/Views/Shared/_SideBar.cshtml")
+        </div>
+
+        @RenderPage("~/Areas/UserProfile/Views/Shared/_recentViews.cshtml")
+
+
+
+
+    </div>
+</main>
+@section JS{
+    <script>
+        changeMenu('tickets')
+    </script>
+}
+<style>
+    .profile_alert {
+        border-radius: 3px;
+    }
+
+        .profile_alert.alert-danger {
+            background: #ff6868;
+        }
+</style>

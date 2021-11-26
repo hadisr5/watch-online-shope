@@ -1,0 +1,72 @@
+
+.btn-link-border {
+    color: #ea4750;
+}
+
+    .btn-link-border:after {
+        border-bottom: 1px dashed #ea4750;
+    }
+
+input.input-field {
+    font-size: 18px;
+}
+
+.alert.alert-danger {
+    background-color: #fff9fa;
+    border: 1px solid #ffc1c5;
+    color: #ef5662;
+}
+
+.alert.alert-success {
+    background-color: #f9fff9;
+    border: 1px solid #21a62b;
+    color: #21a62b;
+}
+
+.btn-link-border:hover {
+    color: #ff5d5d;
+}
+
+.WrongFormatInput {
+    border-color: #ea4750;
+    color: #ea4750;
+}
+
+i.WrongFormatInput:before {
+    color: #ea4750 !important;
+}
+
+input[data-validator="mobile"] {
+    direction: ltr !important;
+}
+
+.account-box-content .form-account-row {
+    position: relative;
+}
+
+.validationError {
+    position: absolute;
+    left: -30px;
+    top: -50px;
+    background: #ef5662;
+    color: white;
+    padding: 9px 16px;
+    border-radius: 0;
+    font-size: 13px;
+}
+
+    .validationError:before {
+        width: 0;
+        height: 0;
+        border-color: #ef5662 transparent transparent;
+        border-style: solid;
+        border-width: 10px 12px 0;
+        top: 100%;
+        right: 35px;
+        content: "";
+        position: absolute;
+    }
+
+.hidden {
+    display: none !important;
+}

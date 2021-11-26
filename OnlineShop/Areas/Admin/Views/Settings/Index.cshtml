@@ -1,0 +1,381 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Create";
+    Layout = null;
+    int id = Convert.ToInt16(ViewBag.id);
+    var settings = db.Settings.Find(id);
+    var usersettings = db.UserSettings.ToList();
+
+
+}
+
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            ویرایش تنظیمات
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/settings/indexPost" data-redirect="/Admin/AdminDashboard/Index#/Admin/settings/index">
+                    <input type="hidden" value="@settings.zarinpal_merchant_id" name="zarinpal_merchant_id" />
+                    @Html.AntiForgeryToken()
+                    <div class="kt-portlet__body">
+                        <div class="example">
+                            <div class="example-preview">
+                                <ul class="nav nav-tabs nav-tabs-line">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#kt_tab_pane_1">اطلاعات پایه</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_2">اطلاعات ارسال</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_3">alert بالای صفحه</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_4">پنل sms</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_5">لوگو</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_6">آیکون</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_7">چت آنلاین</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_8">تنظیمات امنیتی کاربر</a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content mt-5" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel" aria-labelledby="kt_tab_pane_1">
+                                        <div class="form-group">
+                                            <label>نام فروشگاه</label>
+                                            <input type="text" value="@settings.WebsiteName" class="form-control" placeholder="نام فروشگاه" name="WebsiteName">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>نام کامل فروشگاه</label>
+                                            <input type="text" value="@settings.WebsiteFullname" class="form-control" placeholder="نام کامل فروشگاه" name="WebsiteFullname">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>URL فروشگاه</label>
+                                            <input type="text" value="@settings.WebsiteUrl" class="form-control" placeholder="URL فروشگاه" name="WebsiteUrl">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>متن کوتاه فوتر</label>
+                                            <input type="text" value="@settings.FooterShortText" class="form-control" placeholder="متن کوتاه فوتر" name="FooterShortText">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>متن بلند فوتر</label>
+                                            <textarea rows="5" cols="50" value="@settings.FooterLongText" class="form-control" name="FooterLongText">@settings.FooterLongText</textarea>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">
+                                                پیشنهاد لحظه ای
+                                            </label>
+                                            <div class="col-3">
+                                                <span class="switch">
+                                                    <label>
+                                                        @{
+                                                            if (settings.InstantOffer == null || settings.InstantOffer == false)
+                                                            {
+                                                                <input type="checkbox" value="true" name="InstantOffer" />
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <input type="checkbox" value="true" checked="checked" name="InstantOffer" />
+
+                                                            }
+                                                        }
+                                                        <span>
+                                                        </span>
+                                                    </label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel" aria-labelledby="kt_tab_pane_2">
+                                        <div class="form-group">
+                                            <label>کمترین مقدار برای ارسال رایگان</label>
+                                            <input type="text" value="@settings.shippingFree" class="form-control priceInput" placeholder="کمترین مقدار برای ارسال رایگان" name="shippingFree">
+                                            <span class="form-text text-muted"></span>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>بیشترین تعداد ارسال در روز</label>
+                                            <input type="number" value="@settings.maxOrdersPerDay" class="form-control" placeholder="بیشترین تعداد ارسال در روز" name="maxOrdersPerDay">
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>بیشترین مقدار برای پرداخت درب منزل</label>
+                                            <input type="text" value="@settings.homePaye" class="form-control priceInput" placeholder="بیشترین مقدار برای پرداخت درب منزل" name="homePaye">
+                                            <span class="form-text text-muted"></span>
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>هزینه ارسال با پست</label>
+                                            <input type="text" value="@settings.shippingPrice" class="form-control priceInput" placeholder="هزینه ارسال با پست" name="shippingPrice">
+                                            <span class="form-text text-muted"></span>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>هزینه ارسال با پیک</label>
+                                            <input type="text" value="@settings.delivery_Price" class="form-control priceInput" placeholder="هزینه ارسال با پیک" name="delivery_Price">
+                                            <span class="form-text text-muted"></span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="tab-pane fade" id="kt_tab_pane_3" role="tabpanel" aria-labelledby="kt_tab_pane_3">
+                                        <div class="form-group">
+                                            <label>متن اعلان</label>
+                                            <input type="text" value="@settings.TopAlertText" class="form-control" placeholder="کمترین مقدار برای ارسال رایگان" name="TopAlertText">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>لینک</label>
+                                            <input type="text" value="@settings.topAlertLink" class="form-control" placeholder="کمترین مقدار برای ارسال رایگان" name="topAlertLink">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>رنگ</label>
+                                            <input class="form-control" name="topAlertColor" type="color" value="@settings.topAlertColor" id="example-color-input" />
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="kt_tab_pane_4" role="tabpanel" aria-labelledby="kt_tab_pane_4">
+                                        <div class="form-group">
+                                            <label>token ارسال sms 1</label>
+                                            <input type="text" value="@settings.SmsToken1" class="form-control" placeholder="token ارسال sms 1" name="SmsToken1">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>token ارسال sms 2</label>
+                                            <input type="text" value="@settings.SmsToken2" class="form-control" placeholder="token ارسال sms 2" name="SmsToken2">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>کد قالب ثبت نام</label>
+                                            <input type="text" value="@settings.smsToken_welcome" class="form-control" placeholder="کد قالب ثبت نام" name="smsToken_welcome">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>کد قالب فراموشی رمزعبور</label>
+                                            <input type="text" value="@settings.smsToken_forgetPassword" class="form-control" placeholder="کد قالب فراموشی رمزعبور" name="smsToken_forgetPassword">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>کد قالب تائید سفارش</label>
+                                            <input type="text" value="@settings.smsToken_submittedOrder" class="form-control" placeholder="کد قالب تائید سفارش" name="smsToken_submittedOrder">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>کد قالب ارسال سریع</label>
+                                            <input type="text" value="@settings.smsToken_fastLogin" class="form-control" placeholder="کد قالب ورود سریع" name="smsToken_fastLogin">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>کد قالب پاسخ به تیکت</label>
+                                            <input type="text" value="@settings.smsToken_TicketAnswer" class="form-control" placeholder="کد قالب پاسخ به تیکت" name="smsToken_TicketAnswer">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>کد قالب احراز هویت کاربر</label>
+                                            <input type="text" value="@settings.smsToken_validateUser" class="form-control" placeholder="کد قالب احراز هویت کاربر" name="smsToken_validateUser">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>کد قالب تائید کارت به کارت</label>
+                                            <input type="text" value="@settings.smsToken_submittedCartToCart" class="form-control" placeholder="کد قالب تائید کارت به کارت" name="smsToken_submittedCartToCart">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>کد قالب عدم تائید کارت به کارت</label>
+                                            <input type="text" value="@settings.smsToken_CanceledCartToCart" class="form-control" placeholder="کد قالب عدم تائید کارت به کارت" name="smsToken_CanceledCartToCart">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>کد تغییر وضعیت سفارش</label>
+                                            <input type="text" value="@settings.smsToken_changeStatusOfOrder" class="form-control" placeholder="کد قالب چت آنلاین" name="smsToken_changeStatusOfOrder">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>کد قالب چت آنلاین</label>
+                                            <input type="text" value="@settings.smsToken_onlineChat" class="form-control" placeholder="کد قالب چت آنلاین" name="smsToken_onlineChat">
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_5" role="tabpanel" aria-labelledby="kt_tab_pane_5">
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">
+                                                لوگو وب سایت
+                                            </label>
+                                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                                <div class="m-dropzone dropzone dropzone1" action="/admin/products/upload" id="m-dropzone-one">
+                                                    <div class="m-dropzone__msg dz-message needsclick">
+                                                        <h3 class="m-dropzone__msg-title">
+                                                            فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">
+                                                لوگو
+                                            </label>
+                                            <div id="imgValues" class="imgValues">
+                                                <div id="logoInputContainer">
+                                                    <input name="WebsiteLogo" value="@settings.WebsiteLogo" class="hidden" />
+
+                                                </div>
+                                                @{
+                                                    if (settings.WebsiteLogo != null)
+                                                    {
+                                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@settings.WebsiteLogo" alt="Alternate Text" id="nophoto" style="height:auto!important;width:300px" />
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto" style="height:auto!important;width:300px" />
+
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_6" role="tabpanel" aria-labelledby="kt_tab_pane_6">
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">
+                                                آیکون وبسایت
+                                            </label>
+                                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                                <div class="m-dropzone dropzone dropzone2" action="/admin/products/upload" id="m-dropzone-one">
+                                                    <div class="m-dropzone__msg dz-message needsclick">
+                                                        <h3 class="m-dropzone__msg-title">
+                                                            فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">
+                                                آیکون وبسایت
+                                            </label>
+                                            <div id="imgValues" class="imgValues">
+                                                <div id="logoInputContainer2">
+                                                    <input name="WebsiteLogo2" value="@settings.WebsiteLogo2" class="hidden" />
+                                                </div>
+                                                @{
+                                                    if (settings.WebsiteLogo2 != null)
+                                                    {
+                                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@settings.WebsiteLogo2" alt="Alternate Text" id="nophoto2" />
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto2" />
+
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_7" role="tabpanel" aria-labelledby="kt_tab_pane_6">
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">
+                                                چت آنیلان
+                                            </label>
+                                            <div class="col-3">
+                                                <span class="switch">
+                                                    <label>
+
+                                                        @{
+                                                            if (settings.ActiveOnlineChat == null || settings.ActiveOnlineChat == false)
+                                                            {
+                                                                <input type="checkbox" value="true" name="ActiveOnlineChat" />
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <input type="checkbox" value="true" checked="checked" name="ActiveOnlineChat" />
+
+                                                            }
+                                                        }
+
+                                                        <span>
+                                                        </span>
+                                                    </label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_8" role="tabpanel" aria-labelledby="kt_tab_pane_8">
+
+                                        @foreach (var item in usersettings)
+                                        {
+                                            <div class="form-group">
+                                                <label>@item.description</label>
+                                                <input type="text" value="@item.value" class="form-control" placeholder="@item.Key" name="@item.Key">
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+                        <input type="number" value="@settings.id" style="display:none" name="id" />
+
+
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ویرایش تنظیمات</button>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ویرایش تنظیمات')
+</script>
+
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-menu="Settings"]').addClass('kt-menu__item--active')
+    $('.dropzone1').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto').attr('src', response)
+            $('#logoInputContainer').html('<input type="text" value="' + response + '" name="WebsiteLogo" />');
+
+        }
+    });
+    $('.dropzone2').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto2').attr('src', response)
+            $('#logoInputContainer2').html('<input type="text" value="' + response + '" name="WebsiteLogo2" />');
+
+        }
+    });
+</script>

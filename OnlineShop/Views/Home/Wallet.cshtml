@@ -1,0 +1,188 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+    int useird = Convert.ToInt16(Session["userLogin"]);
+    var wallet = db.Wallets.Where(r => r.userId == useird).ToList();
+    int total = 0;
+}
+
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Breadcrumb Tow Start-->
+    <div class="breadcrumb-tow mb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-title">
+                        <h1>کیف پول</h1>
+                    </div>
+                    <div class="breadcrumb-content breadcrumb-content-tow">
+                        <ul>
+                            <li><a href="/">خانه</a></li>
+                            <li class="active">کیف پول</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Breadcrumb Tow End-->
+    <!--Login Register Area Strat-->
+    <div class="login-register-area mb-80">
+        <div class="container">
+            <div class="row">
+                <!--Login Form Start-->
+                <div class="col-md-12 col-sm-12 col-md-offset-3 offset-3 mx-auto">
+                    <div class="customer-login-register">
+                        <a href="payWallet" class="btn btn-warning newTicketbtn" style="float:right">شارژ کیف پول</a>
+                        <div class="clearfix"></div>
+                        <h2 style="text-align:center ; font-size:20px">پرداخت های کیف پول</h2>
+                        <br />
+                       <table class="table table-hover">
+                           <thead>
+                               <tr>
+                                   <td>شناسه</td>
+                                   <td>پرداخت شده توسط</td>
+                                   <td>مبلغ</td>
+                                   <td>تاریخ</td>
+                                   <td>توضیحات</td>
+                               </tr>
+                           </thead>
+                           <tbody>
+                               @{
+                                   if (wallet.Count!=0)
+                                   {
+                                       foreach (var item in wallet)
+                                       {
+                                           <tr>
+                                               <td>
+                                                   @item.id
+                                               </td>
+                                               <td>
+                                                   @{
+                                                       if (item.payByAdmin == true)
+                                                       {
+                                                           @:پرداخت شده توسط ادمین
+                                                       }
+                                                       else
+                                                       {
+                                                           @:درگاه پرداخت
+                                                       }
+                                                   }
+                                               </td>
+                                               <td>
+                                                   @item.amount تومان
+                                                   @{
+                                                       total += Convert.ToInt32(item.amount);
+                                                   }
+                                               </td>
+                                               <td>
+                                                   @{
+                                                       try
+                                                       {
+                                                           DateTime d = Convert.ToDateTime(item.creationDate);
+                                                           PersianCalendar pc = new PersianCalendar();
+                                                           string p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                           @p
+                                                       }
+                                                       catch (Exception)
+                                                       {
+                                                       }
+                                                   }
+                                               </td>
+                                               <td>
+                                                   @item.desc
+                                               </td>
+                                           </tr>
+                                       }
+                                   }
+                               }
+                           </tbody>
+                       </table>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <td colspan="5" style="text-align:center">برداشت ها از کیف پول</td>
+                                </tr>
+                                <tr>
+                                    <td>شناسه</td>
+                                    <td>شناسه سفارش</td>
+                                    <td>مبلغ</td>
+                                    <td>تاریخ</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var payed = db.WalletPays.Where(r => r.userid == useird).ToList();
+
+                                    if (payed.Count != 0)
+                                    {
+                                        foreach (var item in payed)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.id
+                                                </td>
+                                                <td>
+                                                  @item.basketId
+                                                </td>
+                                                <td>
+                                                    @item.amount تومان
+                                                    @{
+                                                        total -= Convert.ToInt32(item.amount);
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        try
+                                                        {
+                                                            DateTime d = Convert.ToDateTime(item.creationDate);
+                                                            PersianCalendar pc = new PersianCalendar();
+                                                            string p = (string.Format("{0}/{1}/{2}", pc.GetYear(d), pc.GetMonth(d), pc.GetDayOfMonth(d)));
+                                                            @p
+                                                        }
+                                                        catch (Exception)
+                                                        {
+                                                        }
+                                                    }
+                                                </td>
+                                                <td></td>
+                                             
+
+                                            </tr>
+                                                            }
+                                                        }
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5">
+                                        باقی مانده کیف پول : @total تومان
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!--Login Form End-->
+            </div>
+        </div>
+    </div>
+    <!--Login Register Area End-->
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+</div>
+@section js{
+
+
+}
+

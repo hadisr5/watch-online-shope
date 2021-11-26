@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12" style="text-align:center">
+        <img src="~/newScripts/warning.svg" style="width:200px ; margin:0 auto ; float:none" />
+        <h1 style="font-family:monospace ; direction:ltr;margin:20px">401 Error</h1>
+        <h2>
+            شما مجاز به دسترسی به این بخش نمی باشید
+        </h2>
+        <br />
+        <button onclick="goBack()" class="btn btn-default">بازگشت</button>
+
+    </div>
+
+
+</div>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>

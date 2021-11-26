@@ -1,0 +1,536 @@
+span.verticalText.persian {
+    transform: rotate(631deg);
+    display: inline-block;
+    float: right;
+    font-size: 66px;
+    width: 500px;
+    color: white;
+    font-weight: bold;
+    text-align: right;
+    float: right;
+    transform-origin: 80% 33%;
+}
+.roundVertical{
+    cursor:pointer !important;
+}
+.littleRound {
+    width: 62px;
+    height: 62px;
+    border-radius: 80px;
+    background: white;
+    text-align: center;
+    padding: 20px 2px;
+    margin-left: 17px;
+    float: right;
+    font-size: 13px;
+    cursor:pointer!important;
+    color:black
+}
+
+    .littleRound.active {
+        background: #535550;
+        color: white;
+    }
+
+.leftLogo {
+    width: 50%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.topLogoContainer {
+    width: 100%;
+    height: 500px;
+}
+
+    .topLogoContainer > div {
+        text-align: right;
+        float: right;
+    }
+
+.counterText {
+    font-size: 22px;
+    padding-top: 8px;
+    font-weight: bold;
+}
+
+.Counter {
+    text-align: center;
+    font-size: 40px;
+    color: white;
+}
+
+body {
+    background: #fad665;
+    padding-bottom: 50px;
+    background-image: url('/themefiles/images/shadow.png');
+    background-size: cover;
+}
+
+.leftFloat {
+    text-align: left;
+}
+
+.servicesContent > p {
+    font-weight: bold;
+    text-align: justify;
+    direction: rtl;
+    width: 80%;
+    float: right;
+    line-height: 30px;
+}
+
+.servicesContent {
+    text-align: right;
+}
+
+.servicesHeader {
+    color: #525650;
+    font-size: 35px;
+    margin-bottom: 40px;
+}
+
+.servicesFooter {
+    margin-top: 40px;
+    color: white;
+    font-size: 35px;
+}
+
+h1, span {
+    direction: rtl;
+}
+
+.roundImg {
+    color:black ; 
+    cursor:pointer !important; 
+    width: 150px;
+    height: 150px;
+    padding: 50px 0;
+    border-radius: 150px;
+    background: white;
+    position: relative;
+    display: inline-block;
+    margin-right: 30px;
+    text-align: center;
+    float: left;
+}
+
+    .roundImg.hover {
+        background: #535550;
+    }
+
+    .roundImg > h1 {
+        z-index: 2;
+        position: relative;
+        font-size: 32px;
+    }
+
+    .roundImg.hover > h1 {
+        color: white;
+    }
+
+    .roundImg > span {
+        position: absolute;
+        top: -30px;
+        left: 38px;
+        font-size: 130px;
+        font-weight: 700;
+        color: #eee;
+    }
+
+    .roundImg.hover > span {
+        color: #6b6d6a;
+    }
+
+span.verticalText.persian {
+    transform: rotate(631deg);
+    display: inline-block;
+    float: right;
+    font-size: 66px;
+    width: 500px;
+    color: white;
+    font-weight: bold;
+    text-align: right;
+    float: right;
+    transform-origin: 80% 33%;
+}
+
+
+
+
+
+
+.counterText {
+    font-size: 22px;
+    padding-top: 8px;
+    font-weight: bold;
+}
+
+.Counter {
+    text-align: center;
+    font-size: 40px;
+    color: white;
+}
+
+body {
+    background: #fad665 !important;
+    padding-bottom: 50px;
+    background-image: url('/themefiles/images/shadow.png');
+    background-size: cover;
+}
+
+.leftFloat {
+    text-align: left;
+}
+
+.servicesContent > p {
+    font-weight: bold;
+    text-align: justify;
+    direction: rtl;
+    width: 80%;
+    float: right;
+    line-height: 30px;
+}
+
+.servicesContent {
+    text-align: right;
+}
+
+.servicesHeader {
+    color: #525650;
+    font-size: 35px;
+    margin-bottom: 40px;
+}
+
+.servicesFooter {
+    margin-top: 40px;
+    color: white;
+    font-size: 35px;
+}
+
+h1, span {
+    direction: rtl;
+}
+
+.roundImg {
+    width: 150px;
+    height: 150px;
+    padding: 50px 0;
+    border-radius: 150px;
+    background: white;
+    position: relative;
+    display: inline-block;
+    margin-right: 30px;
+    text-align: center;
+    float: left;
+}
+
+    .roundImg.hover {
+        background: #535550;
+    }
+
+    .roundImg > h1 {
+        z-index: 2;
+        position: relative;
+        font-size: 32px;
+    }
+
+    .roundImg.hover > h1 {
+        color: white;
+    }
+
+    .roundImg > span {
+        position: absolute;
+        top: -30px;
+        left: 38px;
+        font-size: 130px;
+        font-weight: 700;
+        color: #eee;
+    }
+
+    .roundImg.hover > span {
+        color: #6b6d6a;
+    }
+
+
+
+
+
+
+
+
+.clientsTopHeader {
+    color: white;
+    text-align: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.clientsTopText {
+    color: black;
+    text-align: right;
+    font-size: 20px;
+    text-align: justify;
+    direction: rtl !important;
+    float: right;
+    font-size: 18px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.list-item {
+    width: 170px;
+    height: 170px;
+    background: white;
+    margin-left: 20px;
+    display: inline-block;
+    border-radius: 200px;
+    position: relative;
+    text-align: center;
+    padding: 2px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.logoCover {
+    background: #d22236;
+    width: 170px;
+    height: 170px;
+    position: absolute;
+    left: 0;
+    z-index: 2;
+    cursor: pointer;
+    PADDING: 60PX 10px;
+    font-size: 19px;
+    color: white;
+    opacity: 0.94;
+}
+
+.roundVertical {
+    display: inline-block;
+    text-align: center;
+    background: white;
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+    color: black;
+    float: right;
+    font-size: 11px;
+    padding: 15px 0;
+    margin-bottom: 8px;
+}
+
+    .roundVertical.active {
+        background: #535550;
+        color: white;
+    }
+
+.hidden {
+    display: none !important;
+}
+
+/*.list-item > img {
+        top: 50px;
+        left: 13px;
+        width: 140px;
+    }*/
+
+.scroll {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    width: auto;
+    padding: 20px 0;
+}
+
+    .scroll > a {
+        position: relative;
+    }
+
+
+/* Let's get this party started */
+::-webkit-scrollbar {
+    width: 6px;
+    width: 10px;
+    height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background-color: #ecca5f;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: white;
+}
+
+    ::-webkit-scrollbar-thumb:window-inactive {
+        background: white;
+    }
+
+.aboutUsText {
+    padding-top: 200px;
+    padding-right: 70px;
+    font-size: 18px;
+}
+
+.teammate {
+    text-align: center;
+}
+
+    .teammate > a > img {
+        width: 85%;
+    }
+
+.teammateContainer {
+    height: 440px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.teammate > a > h1 {
+    font-size: 15px;
+    margin-top: 10px;
+    font-weight: bold;
+    color:black
+}
+
+a {
+    text-decoration: none !important;
+}
+    
+.teammate > a > h2 {
+    font-size: 13px;
+    margin-top: 10px;
+    font-weight: bold;
+    color: white;
+}
+
+.teammate.col-md-4 {
+    float: left;
+}
+
+.singleTeammate {
+    text-align: center;
+}
+
+    .singleTeammate > img {
+        width: 270px;
+    }
+
+    .singleTeammate > h1 {
+        font-size: 29px;
+        margin: 20px 0;
+    }
+
+    .singleTeammate > h2 {
+        font-size: 22px;
+        color: white;
+    }
+
+.singleTeammateDescContainer {
+    height: 400px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+    .singleTeammateDescContainer > span {
+        direction: rtl;
+        text-align: right;
+        float: right;
+    }
+
+.contactRound {
+    width: 450px;
+    height: 450px;
+    border-radius: 400px;
+    border: 20px solid #fdf3d0;
+    display: inline-block;
+    padding: 50px 70px;
+}
+
+.contactRoundContainer {
+    text-align: center;
+}
+
+.contactRound > h1 {
+    color: #2d2c29;
+    font-size: 23px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.line1Contact {
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.line2Contact {
+    float: left;
+    text-align: left;
+    font-size: 14px;
+}
+
+
+
+
+
+
+
+
+.topMenu {
+        height: 60px;
+        padding: 15px 10px;
+        float: right;
+        width: 100%;
+        text-align: right;
+    }
+
+    .socialIcon {
+        font-size: 22px;
+        color: white;
+        float: left;
+        display: inline-block;
+        margin-right: 7px;
+        margin-top:10px
+    }
+
+    .MenuLogoContainer {
+        float: left;
+    }
+
+        .MenuLogoContainer > img {
+            width: 115px;
+        }
+        .MenuLogoContainer>a:hover{
+            color:white;
+        }
+    .topMenu > a {
+        color: black;
+        text-align:center;
+        text-decoration: none;
+        display: inline-block;
+        margin-left: 20px;
+        font-size: 18px;
+        min-width:85px;
+    }
+
+        .topMenu > a:hover {
+            font-weight: bold;
+            color: white;
+        }

@@ -1,0 +1,390 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+    int id = Convert.ToInt16(ViewBag.id);
+    int Skip = 0;
+    if (Request.Params["page"] != null)
+    {
+        Skip = Convert.ToInt32(Request.Params["page"]);
+    }
+    var cat = db.Blog_Cats.Where(r => r.id == id).FirstOrDefault();
+    var catList = db.Blog_Cats.ToList();
+    var posts = db.Blog_post.Where(r => r.catId == cat.id).OrderByDescending(r => r.id).Skip(Skip * 10).Take(10).ToList();
+    var latestPosts = db.Blog_post.OrderByDescending(r => r.id).Skip(0).Take(10).ToList();
+    int totalPosts = db.Blog_post.Where(r => r.catId == id).ToList().Count;
+}
+
+<main class="single-product default">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <article class="product create-comment-product">
+                    <div class="postLists">
+
+                        @{
+                            if (posts.Count != 0)
+                            {
+                                foreach (var item in posts)
+                                {
+                                    <a class="postInList col-md-12" href="/blog/details/@item.id/@item.title.Trim().Replace(" ","-")">
+                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.img" alt="@item.title" class="ImageInPostList" />
+                                        <div class="postListContent">
+                                            <h1 class="titleInPostList">
+                                                @item.title
+                                            </h1>
+                                            <span class="DescPostList">
+                                                @{
+                                                    if (item.shortDesc!=null && item.shortDesc.Length > 550)
+                                                    {
+                                                        @(item.shortDesc.Substring(0, 499)) @:...
+                                                    }
+                                                    else
+                                                    {
+                                                        @item.shortDesc
+                                                    }
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </a>
+                                }
+                            }
+                        }
+                    </div>
+                    @{
+                        if (totalPosts > 10)
+                        {
+                            <div class="pagging">
+                                                    <ul class="paggingList">
+                                                        صفحه :
+                                                        @{
+                                                            int pageCounts = totalPosts / 10;
+                                                            if (totalPosts % 10 > 0)
+                                                            {
+                                                                pageCounts += 1;
+                                                            }
+                                                            for (int i = 0; i < pageCounts; i++)
+                                                            {
+                                                                if (Skip == i)
+                                                                {
+                                                                    <li class="paggingItem active"><a href="?page=@i">@(i+1)</a></li>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <li class="paggingItem"><a href="?page=@i">@(i+1)</a></li>
+                                                                }
+                                                            }
+                                                        }
+                                                    </ul>
+                            </div>
+                        }
+                    }
+
+
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="product create-comment-product">
+                    <div class="c-info-page-content px-0">
+                        <h1 class="border-bottom paddingBottom">دسته بندی ها</h1>
+                        @{
+                            if (catList.Count != 0)
+                            {
+                                <ul class="categoriesInPost">
+                                    @foreach (var item in catList)
+                                    {
+                                        <li>
+                                            <a href="/Blog/Category/@item.id/@item.title.Trim().Replace(" ","-")">
+                                                @item.title
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        }
+                        <br />
+                        <h1 class="border-bottom paddingBottom">آخرین پست های @cat.title</h1>
+                        <div class="relatedPostContainer">
+                            @{
+                                if (latestPosts.Count != 0)
+                                {
+                                    foreach (var item in latestPosts)
+                                    {
+                                        var creationDate = DateTime.Now;
+                                        if (item.CreationDate != null)
+                                        {
+                                            creationDate = Convert.ToDateTime(item.CreationDate);
+                                        }
+                                        <a class="relatedPost" href="/blog/details/@item.id/@item.title.Replace(" ","-")">
+                                            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.img" alt="@item.title" />
+                                            <h2 class="relatedpostHeader">@item.title</h2>
+                                            <span>
+                                                @item.CreationDate
+                                            </span>
+                                            <span class="commentDate">
+                                                @GetDayOfMonth(creationDate) @GetMonthName(creationDate) @GetYear(creationDate)
+                                            </span>
+                                            <div class="clearfix"></div>
+                                        </a>
+                                    }
+                                }
+                            }
+
+
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+    li.paggingItem.active {
+        background: #fdb0b0;
+    }
+
+    li.paggingItem {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        background: #e4e4e4;
+        padding: 10px 0;
+        font-size: 15px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 5px;
+        color: black;
+        border: 1px solid #dedede;
+    }
+
+    ul.paggingList {
+        text-align: center;
+    }
+
+    .pagging {
+        width: 100%;
+        display: block;
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+
+    .postInList {
+        display: block;
+    }
+
+    .postListContent {
+        padding-right: 320px;
+        padding-top: 10px;
+    }
+
+    img.ImageInPostList {
+        float: right;
+        width: 300px;
+        border-radius: 5px;
+    }
+
+    h1.titleInPostList {
+        font-size: 16px;
+        font-weight: bold
+    }
+
+    .postInList.col-md-12 {
+        box-shadow: 0 12px 12px 0 hsla(0, 0%, 71%, .11);
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #e8e8e8;
+    }
+
+    .relatedPostContainer {
+        margin-top: 20px;
+        position: relative;
+    }
+
+    img.commentUserImage {
+        float: right;
+        width: 40px;
+        margin: 5px 10px;
+    }
+
+    .postTopImage {
+        width: 60%;
+        margin: 0 auto;
+    }
+
+    .imagePostContainer {
+        margin: 0 auto;
+        width: 100%;
+        text-align: center;
+    }
+
+    .paddingBottom {
+        padding-bottom: 10px;
+        font-size: 15px !important;
+        font-weight: bold
+    }
+
+    .categoriesInPost > li {
+        font-size: 17px;
+        padding: 10px;
+    }
+
+    .singleComment {
+        padding: 20px;
+        box-shadow: 0 12px 12px 0 hsla(0, 0%, 71%, .11);
+        margin: 11px 0;
+        border: 1px solid #e8e8e8;
+        min-height: 150px;
+        position: relative;
+        padding-bottom: 45px
+    }
+
+    .commentContent {
+        width: 100%;
+        display: block;
+        padding-right: 60px;
+        text-align: justify;
+        color: #5a5a5a;
+        font-size: 12px;
+    }
+
+    span.usernameInComments {
+        font-weight: bold;
+        font-size: 15px;
+        width: 100%;
+        display: block;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+
+    .commentTitle {
+        font-size: 20px;
+        font-weight: bold;
+        background: #efefef;
+        padding: 10px;
+        border-radius: 20px;
+        padding: 10px 40px;
+        color: #6b6b6b;
+    }
+
+    span.commentDate {
+        left: 20px;
+        position: absolute;
+        bottom: 15px;
+        font-style: italic;
+        color: #8c8c8c;
+        font-size: 13px;
+    }
+
+    .relatedPost > img {
+        float: right;
+        width: 140px;
+        margin: 4px;
+        border-radius: 3px;
+        margin-left: 15px;
+    }
+
+    .relatedPost {
+        display: block;
+        position: relative;
+    }
+
+    .relatedpostHeader {
+        font-size: 15px !important;
+        text-align: justify;
+        font-weight: bold;
+        padding-top: 5px;
+    }
+
+    .relatedPost {
+        margin-bottom: 15px
+    }
+
+    .yourComment {
+        font-size: 16px;
+        font-weight: bold
+    }
+
+    textarea.form-control {
+        font-size: 16px
+    }
+
+    @@media only screen and (max-width: 600px) {
+        .commentContent {
+            padding-right: 0;
+            padding-top: 18px;
+        }
+
+        img.commentUserImage {
+            margin-left: 10px;
+            margin-bottom: 0;
+            margin-right: 0;
+        }
+
+        article.product.create-comment-product {
+            min-height: 0;
+        }
+
+        h2.relatedpostHeader {
+            font-size: 12px !important;
+        }
+    }
+</style>
+
+@functions{
+
+    public static string GetMonthName(DateTime date)
+    {
+        PersianCalendar jc = new PersianCalendar();
+        string pdate = string.Format("{0:0000}/{1:00}/{2:00}", jc.GetYear(date), jc.GetMonth(date), jc.GetDayOfMonth(date));
+
+        string[] dates = pdate.Split('/');
+        int month = Convert.ToInt32(dates[1]);
+
+        switch (month)
+        {
+            case 1: return "فررودين";
+            case 2: return "ارديبهشت";
+            case 3: return "خرداد";
+            case 4: return "تير‏";
+            case 5: return "مرداد";
+            case 6: return "شهريور";
+            case 7: return "مهر";
+            case 8: return "آبان";
+            case 9: return "آذر";
+            case 10: return "دي";
+            case 11: return "بهمن";
+            case 12: return "اسفند";
+            default: return "";
+        }
+
+    }
+    public static string GetDayOfMonth(DateTime date)
+    {
+        try
+        {
+            PersianCalendar jc = new PersianCalendar();
+            return jc.GetDayOfMonth(date).ToString();
+        }
+        catch
+        {
+            throw new FormatException("The input string must be in 0000/00/00 format.");
+        }
+    }
+    public static string GetYear(DateTime date)
+    {
+        try
+        {
+            PersianCalendar jc = new PersianCalendar();
+            return jc.GetYear(date).ToString();
+        }
+        catch
+        {
+            throw new FormatException("The input string must be in 0000/00/00 format.");
+        }
+    }
+
+}

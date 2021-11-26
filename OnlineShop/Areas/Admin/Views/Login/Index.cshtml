@@ -1,0 +1,311 @@
+﻿@using OnlineShop.Models
+@{
+    Layout = null;
+    ViewBag.Title = "Index";
+    var db = new OnlineShopEntities();
+    var settings = db.Settings.FirstOrDefault();
+
+}
+
+<!DOCTYPE html>
+<!--
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 4 & Angular 7
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Dribbble: www.dribbble.com/keenthemes
+Like: www.facebook.com/keenthemes
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+Renew Support: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
+-->
+<html lang="en" direction="rtl" style="direction: rtl;">
+<!-- begin::Head -->
+<head>
+    <meta charset="utf-8">
+
+    <title>ورود به حساب کاربری</title>
+    <meta name="description" content="Login page example">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!--begin::Fonts -->
+    <script src="/loginTheme/js/webfont.js"></script>
+
+    <!--end::Fonts -->
+    <!--begin::Page Custom Styles(used by this page) -->
+    <link href="/loginTheme/css/login-4.rtl.css" rel="stylesheet" type="text/css">
+    <!--end::Page Custom Styles -->
+    <!--begin::Global Theme Styles(used by all pages) -->
+    <link href="/loginTheme/css/vendors.bundle.rtl.css" rel="stylesheet" type="text/css">
+    <link href="/loginTheme/css/style.bundle.rtl.css" rel="stylesheet" type="text/css">
+    <!--end::Global Theme Styles -->
+    <!--begin::Layout Skins(used by all pages) -->
+
+    <link href="/loginTheme/css/light.rtl.css" rel="stylesheet" type="text/css">
+    <link href="/loginTheme/css/5light.rtl.css" rel="stylesheet" type="text/css">
+    <link href="/loginTheme/css/dark.rtl.css" rel="stylesheet" type="text/css">
+    <link href="/loginTheme/css/7dark.rtl.css" rel="stylesheet" type="text/css">        <!--end::Layout Skins -->
+    <link rel="shortcut icon" href="@settings.WebsiteLogo2">
+    <style>
+        .mail-sent-message {
+            display: none;
+            padding: 10px;
+        }
+    </style>
+</head>
+<!-- end::Head -->
+<!-- begin::Body -->
+<body class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--fixed kt-subheader--enabled kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-page--loading">
+
+    <!-- begin:: Page -->
+    <div class="kt-grid kt-grid--ver kt-grid--root">
+        <div class="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v4 kt-login--signin" id="kt_login">
+            <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+                <div class="kt-grid__item kt-grid__item--fluid kt-login__wrapper">
+                    <div class="kt-login__container">
+                        <div class="kt-login__logo">
+                            <a href="/home/index">
+                                <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@settings.WebsiteLogo" style="width:250px">
+                            </a>
+                        </div>
+                        <div class="kt-login__signin">
+                            <div class="kt-login__head">
+                                <h3 class="kt-login__title">ورود به پنل مدیریت</h3>
+                            </div>
+                            @if (ViewBag.error != null)
+                            {
+                                <div class="alert alert-danger" style="display:block">
+                                    @TempData["Error"]
+                                    @if (ViewBag.Error != null)
+                                    {
+                                        for (int i = 0; i < ViewBag.Error.Count; i++)
+                                        {
+                                            <p>@ViewBag.Error[i]</p>
+                                        }
+                                    }
+
+                                    @*@if (ViewBag.IsResetPAssword == true)
+                                    {
+                                        <a href="/Account/ChangePassword">فرم تغییر پسورد</a>
+                                    }*@
+                                </div>}
+                        <form class="kt-form" action="" method="post">
+                            <a href="/admin/login/fastLogin" class="btn-link-border form-account-link">
+                                ورود سریع با شماره موبایل
+                            </a>
+                            <div class="input-group">
+                                @Html.AntiForgeryToken()
+                                <input class="form-control" style="direction:ltr !important" type="text" placeholder="ایمیل" name="Username" autocomplete="off">
+                            </div>
+                            <div class="input-group">
+                                <div class="col-md-12" style="padding:0;">
+                                    <input class="form-control" style="direction:ltr !important" type="password" id="password" placeholder="رمز عبور" name="Password">
+                                    <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                                </div>
+                            </div>
+                            <div class="row kt-login__extra">
+                                @*<div class="col">
+                <label class="kt-checkbox">
+                    <input type="checkbox" name="remmember" value="1"> ورود من را به خاطر بسپار
+                    <span></span>
+                </label>
+            </div>*@
+                                <div class="col-md-12">
+                                    <span style=" margin-bottom: 10px;">رمز عبورم را فراموش کردم، <a href="#" onclick="event.preventDefault(); ShowForgotPassword()">بازیابی رمز عبور</a></span>
+
+                                </div>
+
+                            </div>
+                            <div>
+                                <img class="form-control" src="@Url.Action("CaptchaImage")" alt="captcha" />
+
+                                <input class="form-control" style="direction:ltr !important" type="text" placeholder="پسورد امنیتی" name="captcha" autocomplete="off">
+
+                            </div>
+                            <div class="kt-login__actions">
+                                <button class="btn btn-brand btn-pill kt-login__btn-primary" type="submit">ورود</button>
+                            </div>
+                        </form>
+                        </div>
+                        <div class="kt-login__signup">
+                            <div class="kt-login__head">
+                                <h3 class="kt-login__title">Sign Up</h3>
+                                <div class="kt-login__desc">Enter your details to create your account:</div>
+                            </div>
+                            <form class="kt-form" action="">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" placeholder="Fullname" name="fullname">
+                                </div>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="off">
+                                </div>
+                                <div class="input-group">
+                                    <input class="form-control" type="password" placeholder="Password" name="password">
+                                </div>
+                                <div class="input-group">
+                                    <input class="form-control" type="password" placeholder="Confirm Password" name="rpassword">
+                                </div>
+                                <div class="row kt-login__extra">
+                                    <div class="col kt-align-left">
+                                        <label class="kt-checkbox">
+                                            <input type="checkbox" name="agree">I Agree the <a href="#" class="kt-link kt-login__link kt-font-bold">terms and conditions</a>.
+                                            <span></span>
+                                        </label>
+                                        <span class="form-text text-muted"></span>
+                                    </div>
+                                </div>
+                                <div class="kt-login__actions">
+                                    <button id="kt_login_signup_submit" class="btn btn-brand btn-pill kt-login__btn-primary">Sign Up</button>&nbsp;&nbsp;
+                                    <button id="kt_login_signup_cancel" class="btn btn-secondary btn-pill kt-login__btn-secondary">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="kt-login__forgot">
+                            <div class="kt-login__head">
+                                <h3 class="kt-login__title">فراموشی رمز عبور</h3>
+                                <div class="kt-login__desc">لطفا نام کاربری خود را وارد کنید:</div>
+                            </div>
+                            <form class="kt-form forget-password-form">
+                                @Html.AntiForgeryToken()
+                                <div class="input-group">
+                                    <input class="form-control username" style="border: #b5b2c3 1px solid;" type="text" placeholder="نام کاربری" name="username" id="username" autocomplete="off">
+                                </div>
+                                <center class="text-success mail-sent-message">در صورتی که ایمیل شما در سیستم وجود داشته باشد، ایمیلی حاوی پسورد جدید برای شما ارسال میشود.</center>
+                                <center class="text-danger mail-sent-error hidden">نام کاربری را وارد کنید</center>
+                                <div class="kt-login__actions">
+
+                                    <button id="kt_login_forgot_submit" onclick="submitforget();" class="btn btn-brand btn-pill kt-login__btn-primary">ارسال</button>&nbsp;&nbsp;
+                                    <button id="kt_login_forgot_cancel" class="btn btn-secondary btn-pill kt-login__btn-secondary" onclick="ShowLogin()">انصراف</button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .field-icon {
+            float: right;
+            margin-left: -25px;
+            margin-top: -25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        @@font-face {
+            font-family: myFirstFont;
+            src: url("/template/Fonts/IRANSansWeb(FaNum).woff") format("woff2");
+        }
+
+        html, body, form, fieldset, table, tr, td, img {
+            font-family: myFirstFont;
+        }
+
+        input, button, select, textarea, optgroup, option {
+            font-family: myFirstFont;
+        }
+
+        /* rest of your styles; like: */
+        body {
+            font-family: myFirstFont;
+        }
+    </style>
+    <!-- end:: Page -->
+    <!-- begin::Global Config(global config for global JS sciprts) -->
+    <script src="/Template/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+    <script>
+        var KTAppOptions = { "colors": { "state": { "brand": "#5d78ff", "dark": "#282a3c", "light": "#ffffff", "primary": "#5867dd", "success": "#34bfa3", "info": "#36a3f7", "warning": "#ffb822", "danger": "#fd3995" }, "base": { "label": ["#c5cbe3", "#a1a8c3", "#3d4465", "#3e4466"], "shape": ["#f0f3ff", "#d9dffa", "#afb4d4", "#646c9a"] } } };
+        $(".toggle-password").click(function () {
+
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            var input = $($(this).attr("toggle"));
+            if (input.attr("type") == "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+    </script>
+    <!-- end::Global Config -->
+    <!--begin::Global Theme Bundle(used by all pages) -->
+    <script src="/loginTheme/js/vendors.bundle.js" type="text/javascript"></script>
+    <script src="/loginTheme/js/scripts.bundle.js" type="text/javascript"></script>
+    <!--end::Global Theme Bundle -->
+    <!--begin::Page Scripts(used by this page) -->
+    <script src="/loginTheme/js/login-general.js" type="text/javascript"></script>
+    <!--end::Page Scripts -->
+    <script>
+        function ShowForgotPassword() {
+            $(".kt-login__signin").hide();
+            $(".kt-login__forgot").show();
+        }
+
+        function ShowLogin() {
+            $(".kt-login__signin").show();
+            $(".kt-login__forgot").hide();
+        }
+        $(document).ready(function () {
+            //$(".forget-password-form").submit(function (e) {
+            //    e.preventDefault();
+            //    $.ajaxSetup({
+            //        headers: {
+            //            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            //        }
+            //    });
+
+            //    $.ajax({
+            //        url: "/admin/login/forgetpassword",
+            //        method: "POST",
+            //        data: {
+            //            username: $(".username").val()
+            //        }
+            //    });
+            //    $(".mail-sent-message").show();
+            //    setTimeout(function () {
+            //        $(".mail-sent-message").hide();
+            //        ShowLogin();
+            //    }, 3000);
+            //    return false;
+            //});
+
+            $(".mail-sent-error").hide();
+
+        });
+        function addRequestVerificationToken(data) {
+            data.__RequestVerificationToken = $('input[name=__RequestVerificationToken]').val();
+            return data;
+        };
+        function submitforget() {
+            //$.ajaxSetup({
+            //    headers: {
+            //        'X-CSRF-TOKEN': $('meta[name="__RequestVerificationToken"]').val()
+            //    }
+            //});
+
+            if ($("#username").val() != "" && $("#username").val() != null) {
+
+                $.ajax({
+                    url: "/admin/login/forgetpassword",
+                    method: "POST",
+                    data: {
+                        username: $(".username").val(),
+                        __RequestVerificationToken: $('input[name=__RequestVerificationToken]').val()
+                    }
+                });
+                $(".mail-sent-message").show();
+                $(".mail-sent-error").hide();
+                setTimeout(function () {
+                    $(".mail-sent-message").hide();
+                    ShowLogin();
+                }, 3000);
+            }
+            else
+                $(".mail-sent-error").show();
+            
+        }
+    </script>
+</body>
+<!-- end::Body -->
+</html>

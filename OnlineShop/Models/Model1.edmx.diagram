@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d2a6b966967d4f41a28aa9b92bba6ed2" Name="Diagram1" ZoomLevel="61">
+        <EntityTypeShape EntityType="wikisaat_shopModel.AdminUser" Width="1.5" PointX="10.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.AllowedIpAddress" Width="1.5" PointX="12.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Banner" Width="1.5" PointX="14.75" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Basket" Width="1.5" PointX="1.5" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Blog_Cats" Width="1.5" PointX="14.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Blog_Comments" Width="1.5" PointX="3" PointY="28.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Blog_post" Width="1.5" PointX="14.75" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Blog_Tags" Width="1.5" PointX="15.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Blog_TagsPosts" Width="1.5" PointX="17" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Brand" Width="1.5" PointX="16.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Category" Width="1.5" PointX="6" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.CatPro" Width="1.5" PointX="8.25" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.CatProperty" Width="1.5" PointX="8.25" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.City" Width="1.5" PointX="16.75" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Color" Width="1.5" PointX="17.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.ColorSize" Width="1.5" PointX="17.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.CommentAdvantage" Width="1.5" PointX="11.25" PointY="40.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Comment" Width="1.5" PointX="6" PointY="39.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.CommnetsLike" Width="1.5" PointX="11.25" PointY="36.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Contact" Width="1.5" PointX="11.75" PointY="18.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.ContactInformation" Width="1.5" PointX="6.75" PointY="19.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Discount" Width="1.5" PointX="3.75" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.DiscountCode" Width="1.5" PointX="1.5" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.DiscountGroup" Width="1.5" PointX="8.75" PointY="19.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.FalsePassword" Width="1.5" PointX="3" PointY="36.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Faq" Width="1.5" PointX="8" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.FaqCategory" Width="1.5" PointX="5.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Footer" Width="1.5" PointX="18.75" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.GeomaticCategory" Width="1.5" PointX="18.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.GiftOrder" Width="1.5" PointX="6" PointY="36" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Gift" Width="1.5" PointX="3.75" PointY="20.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Log" Width="1.5" PointX="19.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.LogPassword" Width="1.5" PointX="3" PointY="42.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.LogUserAuthenticationData" Width="1.5" PointX="3" PointY="45.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.LogUserData" Width="1.5" PointX="3" PointY="48.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.MainCat" Width="1.5" PointX="3.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Menu" Width="1.5" PointX="19.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Model" Width="1.5" PointX="13" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.newsLetter" Width="1.5" PointX="17.75" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Order" Width="1.5" PointX="0.75" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Page" Width="1.5" PointX="19.75" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Payment" Width="1.5" PointX="20.75" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Permission" Width="1.5" PointX="20.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.ProductGallery" Width="1.5" PointX="3.75" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.ProductPropertiesValue" Width="1.5" PointX="10.5" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.ProductQAnswer" Width="1.5" PointX="3" PointY="39.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.ProductQuestion" Width="1.5" PointX="6" PointY="44" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.ProductRating" Width="1.5" PointX="12" PointY="26.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Product" Width="1.5" PointX="1.5" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.ProductsBrand" Width="1.5" PointX="1.5" PointY="52.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.ProductTag" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.productView" Width="1.5" PointX="3.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Promotion" Width="1.5" PointX="20.75" PointY="18.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.propertiesCategory" Width="1.5" PointX="6" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Rating" Width="1.5" PointX="12" PointY="51.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.RatingGroup" Width="1.5" PointX="9.75" PointY="51.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.RattingComment" Width="1.5" PointX="14.25" PointY="39.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Role" Width="1.5" PointX="3.75" PointY="25.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Scan" Width="1.5" PointX="9" PointY="39.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Seller_cats" Width="1.5" PointX="9" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.SellerComment" Width="1.5" PointX="9" PointY="35.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Seller" Width="1.5" PointX="6.75" PointY="26" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.SellersProduct" Width="1.5" PointX="12" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.SendPeriod" Width="1.5" PointX="21.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.ServicePrice" Width="1.5" PointX="15.25" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Service" Width="1.5" PointX="13" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Setting" Width="1.5" PointX="20.75" PointY="22.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Shipping" Width="1.5" PointX="21.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.SizeProduct" Width="1.5" PointX="10.75" PointY="22.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Size" Width="1.5" PointX="22.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Slider" Width="1.5" PointX="22.75" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.SocialMedia" Width="1.5" PointX="22.75" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.State" Width="1.5" PointX="5.75" PointY="23.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Subscribe" Width="1.5" PointX="7.75" PointY="23.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Tag" Width="1.5" PointX="4.5" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Template" Width="1.5" PointX="22.75" PointY="20.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.TicketChat" Width="1.5" PointX="11.25" PointY="44.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Ticket" Width="1.5" PointX="9" PointY="43.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Upload" Width="1.5" PointX="23.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.UserLog" Width="1.5" PointX="3" PointY="70.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.UserPoint" Width="1.5" PointX="3" PointY="32" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.UserRole" Width="1.5" PointX="6" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.User" Width="1.5" PointX="0.75" PointY="35.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.UsersAdress" Width="1.5" PointX="3" PointY="79.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.UserSetting" Width="1.5" PointX="23.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.UserView" Width="1.5" PointX="6" PointY="48.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.VisitStatistic" Width="1.5" PointX="24.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.Wallet" Width="1.5" PointX="3" PointY="86.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.WalletPay" Width="1.5" PointX="9" PointY="32.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.watchBrand" Width="1.5" PointX="10.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.WishList" Width="1.5" PointX="9" PointY="48.375" IsExpanded="true" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Baskets_DiscountCode" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_DiscountCode_Baskets" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Orders_Baskets" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Scans_Baskets" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_WalletPay_Baskets" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Blog_Comments_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Blog_TagsPosts_Blog_post" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Categories_MainCats" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_CatPro_Categories" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_CatProperties_Categories" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Seller_cats_Categories" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_CatPro_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_CatProperties_propertiesCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_ProductPropertiesValue_CatProperties" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_CommentAdvantages_Comments" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_CommentAdvantages_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Comments_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Comments_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_CommnetsLikes_Comments" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_RattingComment_Comments" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_CommnetsLikes_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Discount_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_FalsePassword_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Faq_FaqCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_GiftOrder_Gifts" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_GiftOrder_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_LogPassword_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_LogUserAuthenticationData_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_LogUserData_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Models_watchBrands" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_ServicePrices_Models" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Orders_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_UserPoints_Orders" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_ProductGallery_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_ProductPropertiesValue_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_ProductQAnswers_ProductQAnswers" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_ProductQAnswers_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_ProductQuestions_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_ProductQuestions_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_ProductRating_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_ProductRating_RatingGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Products_Brands" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Products_ProductsBrands" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_ProductTags_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_productViews_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_RattingComment_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_SellersProduct_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_UserPoints_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_UserViews_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_WishList_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_ProductTags_Tags" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Rating_RatingGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_RattingComment_Rating" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_RattingComment_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_UserRole_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Scans_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Seller_cats_Sellers" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_SellerComment_Sellers" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_SellerComment_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_SellersProduct_Sellers" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Tickets_Sellers" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_ServicePrices_Services" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_TicketChats_Tickets" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Tickets_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_UserLog_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_UserPoints_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_UserRole_UserRole" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_UsersAdress_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_UserViews_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_Wallet_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_WalletPay_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="wikisaat_shopModel.FK_WishList_Users" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.ServiceInquiry" Width="1.5" PointX="14.375" PointY="24.75" />
+        <EntityTypeShape EntityType="wikisaat_shopModel.InquiryManagement" Width="1.5" PointX="25.375" PointY="10.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

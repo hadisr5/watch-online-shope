@@ -1,0 +1,241 @@
+﻿@using OnlineShop.Models
+@{
+    int sellerId = Convert.ToInt16(Session["seller"]);
+    var db = new OnlineShopEntities();
+    var sellerCats = db.SellerCats.Where(r => r.sellerId == sellerId).ToList();
+    var productList = new List<Product>();
+
+    if (sellerCats.Count!=0)
+    {
+        foreach (var item in sellerCats)
+        {
+            var subcats = db.Categories.Where(r => r.MainCat == item.catId).ToList();
+            if (subcats.Count!=0)
+            {
+                foreach (var item2 in subcats)
+                {
+                    var productCats = db.CatProes.Where(r => r.categoryId == item2.id).ToList();
+                    if (productCats.Count!=0)
+                    {
+                        foreach (var item3 in productCats)
+                        {
+                            var pro = db.Products.Where(r => r.id == item3.product_id).FirstOrDefault();
+                            if (pro!=null)
+                            {
+                                productList.Add(pro);
+                            }
+                        }
+                    }
+
+                }
+            }
+
+        }
+    }
+    productList = productList.Distinct().ToList();
+
+
+    productList = productList.OrderByDescending(r => r.id).ToList();
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+
+        <h3 class="kt-subheader__title">AdminDashboard</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/sellers/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+</div>
+<!-- end:: Content Head -->
+<!-- begin:: Content -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <!--begin::Portlet-->
+    <div class="m-portlet">
+        <!--begin::Form-->
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                        لیست همه محصولات
+                    </h3>
+                </div>
+            </div>
+
+        </div>
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+            @{
+                int total = 0;
+            }
+            <!--begin: Datatable -->
+            <table class="table table-hover" width="100%">
+                <thead>
+                    <tr>
+                        <th>
+                            شناسه
+                        </th>
+                        <th>
+                            عنوان
+                        </th>
+                        <th>
+                            توضیحات
+                        </th>
+                        <th>
+                            قیمت
+                        </th>
+                        <th>
+                            قیمت من
+                        </th>
+                        <th>
+                            موجودی
+                        </th>
+                        <th>
+
+                        </th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (productList.Count != 0)
+                        {
+                            foreach (var item in productList)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.id
+                                    </td>
+                                    <td>
+                                        @item.title
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.short_description != null && item.short_description.Length >= 40)
+                                            {
+                                                @:@item.short_description.Substring(0, 30) ...
+                                            }
+                                            else
+                                            {
+                                                @item.short_description
+
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.price == null || item.price == 0)
+                                            {
+                                                @:قیمت داده نشده
+                                            }
+                                            else
+                                            {
+                                                @:@item.price تومان
+
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            var myPrice = db.SellersProducts.Where(r => r.productId == item.id && r.sellerId == sellerId).FirstOrDefault();
+                                            if (myPrice != null)
+                                            {
+                                                @:@myPrice.price تومان
+                                            }
+                                            else
+                                            {
+                                                <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">
+                                                    قیمت دهی نشده
+                                                </span>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (myPrice != null && myPrice.isActive == true)
+                                            {
+                                                <span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">
+                                                    موجود
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">
+                                                    ناموجود
+                                                </span>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @*<div class="actionIcon" data-url="/sellers/products/remove/@item.id" data-role="remove">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50px" height="50px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect id="bound" x="0" y="0" width="24" height="24" />
+                                                        <path d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z" id="Combined-Shape" fill="#000000" fill-rule="nonzero" />
+                                                        <path d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" id="Shape" fill="#000000" opacity="0.3" />
+                                                    </g>
+                                                </svg>
+                                            </div>*@
+                                        <a href="/sellers/sellerDashboard/Index#/sellers/pricing/edit/@item.id" class="editIcon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24" height="24" />
+                                                    <path d="M2,6 L21,6 C21.5522847,6 22,6.44771525 22,7 L22,17 C22,17.5522847 21.5522847,18 21,18 L2,18 C1.44771525,18 1,17.5522847 1,17 L1,7 C1,6.44771525 1.44771525,6 2,6 Z M11.5,16 C13.709139,16 15.5,14.209139 15.5,12 C15.5,9.790861 13.709139,8 11.5,8 C9.290861,8 7.5,9.790861 7.5,12 C7.5,14.209139 9.290861,16 11.5,16 Z" fill="#000000" opacity="0.3" transform="translate(11.500000, 12.000000) rotate(-345.000000) translate(-11.500000, -12.000000) " />
+                                                    <path d="M2,6 L21,6 C21.5522847,6 22,6.44771525 22,7 L22,17 C22,17.5522847 21.5522847,18 21,18 L2,18 C1.44771525,18 1,17.5522847 1,17 L1,7 C1,6.44771525 1.44771525,6 2,6 Z M11.5,16 C13.709139,16 15.5,14.209139 15.5,12 C15.5,9.790861 13.709139,8 11.5,8 C9.290861,8 7.5,9.790861 7.5,12 C7.5,14.209139 9.290861,16 11.5,16 Z M11.5,14 C12.6045695,14 13.5,13.1045695 13.5,12 C13.5,10.8954305 12.6045695,10 11.5,10 C10.3954305,10 9.5,10.8954305 9.5,12 C9.5,13.1045695 10.3954305,14 11.5,14 Z" fill="#000000" />
+                                                </g>
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="6" class="noEntry">
+                                                        <span style="padding:50px 0 ; display:inline-block">
+                                                            <i class="flaticon-exclamation" style="font-size:20px"></i> هیچ محصولی برای نمایش وجود ندارد
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            }
+                    }
+
+                </tbody>
+            </table>
+            <!--end: Datatable -->
+        </div>
+        <!--end::Form-->
+        <!--end::Form-->
+    </div>
+    <!--end::Portlet-->
+</div>
+<!-- end:: Content -->
+
+
+<script>
+    titlePage('مدیریت محصولات ')
+</script>
+<script>
+    try {
+        $('.kt-menu__item--active').removeClass('kt-menu__item--active')
+    } catch (e) {
+
+    }
+    $('[data-Menu="Pricing"]').addClass('kt-menu__item--active')
+
+</script>

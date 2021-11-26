@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<table id="myTable">
+    <tr>
+        <td>1</td>
+        <td>Jan</td>
+        <td>01/04/2012</td>
+        <td>Approved</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Feb</td>
+        <td>01/04/2012</td>
+        <td>Approved</td>
+    </tr>
+</table>
+<form>
+    <input type="button" onclick="fnExcelReport();" value="Create Excel Sheet">
+</form>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+        crossorigin="anonymous"></script>
+<script>
+    function fnExcelReport() {
+        var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+        tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
+
+        tab_text = tab_text + '<x:Name>Test Sheet</x:Name>';
+
+        tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
+        tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+
+        tab_text = tab_text + "<table border='1px'>";
+        tab_text = tab_text + $('#myTable').html();
+        tab_text = tab_text + '</table></body></html>';
+
+        var data_type = 'data:application/vnd.ms-excel';
+
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+            if (window.navigator.msSaveBlob) {
+                var blob = new Blob([tab_text], {
+                    type: "application/csv;charset=utf-8;"
+                });
+                navigator.msSaveBlob(blob, 'Test file.xls');
+            }
+        } else {
+            $('#test').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
+            $('#test').attr('download', 'Test file.xls');
+        }
+    }
+</script>
+

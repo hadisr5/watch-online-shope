@@ -1,0 +1,286 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt32(ViewBag.id);
+    var promotion = db.Promotions.Find(id);
+    var discounts = db.Discounts.Where(r => r.promotionId == id).ToList();
+    var products = new List<Product>();
+    if (discounts.Count != 0)
+    {
+        foreach (var item in discounts)
+        {
+            var newProduct = new Product();
+            newProduct = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+            if (newProduct != null)
+            {
+                products.Add(newProduct);
+            }
+        }
+    }
+    if (products.Count != 0)
+    {
+        products = products.Distinct().ToList();
+    }
+    var setting = db.Settings.FirstOrDefault();
+    Layout = "/views/shared/_Layout.cshtml";
+}
+
+<main class="search-page default">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <a class="btn btn-light btn-search d-none show-sm" data-toggle="modal" data-target="#searchModal">جستجوی پیشرفته <img src="/template/images/setting-lines.svg" width="18"></a>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 order-2">
+                <div class="breadcrumb-section default">
+                    <h1 class="promotionPageTitle"></h1>
+                </div>
+
+                <section class="products">
+                    <div class="row topDiscount">
+                        <h1 class="promotionPageTitle">
+                            @promotion.title
+                        </h1>
+                    </div>
+                    <div class="topDiscountShadow row"></div>
+                    <div class="listing default" id="specialOfferPageMainBox">
+                        <div class="listing-counter">7 کالا</div>
+
+
+                        @{
+                            if (products.Count == 0)
+                            {
+                                <div class="tab-content default" id="noProduct">
+                                    <div class="tab-pane active" id="related" role="tabpanel" aria-expanded="true">
+                                        <div class="container no-padding-right">
+                                            <div class="message-light">
+                                                جستجو برای این ترکیب از فیلترها با هیچ کالایی هم&zwnj;خوانی نداشت.
+                                            </div>
+                                            <div class="container" style="padding-right: 5%">
+                                                <p>تلاش کنید:</p>
+                                                <p>- تعدادی از فیلترها را حذف کنید.</p>
+                                                <p>- در جستجو از عبارت&zwnj;های متداول&zwnj;تر استفاده کنید.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="tab-content default text-center" id="withproduct">
+                                    <div class="tab-pane active" id="related" role="tabpanel" aria-expanded="true">
+                                        <div class="container no-padding-right">
+                                            <ul class="row listing-items">
+                                                @{
+                                                    foreach (var item in products)
+                                                    {
+                                                        <li class="col-xl-2 col-lg-4 col-md-6 col-12 no-padding position-relative">
+                                                            <div class="skeleton-loader-product-card">
+                                                                <div class="ph-item">
+                                                                    <div class="pr-0 pl-0">
+                                                                        <div class="ph-row">
+                                                                            <div class="ph-col-12 big ph-h-230"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ph-item">
+                                                                    <div class="pr-0 pl-0">
+                                                                        <div class="ph-row mb-0">
+                                                                            <div class="ph-col-12 big ph-h-20"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ph-item">
+                                                                    <div class="pr-0 pl-0">
+                                                                        <div class="ph-row">
+                                                                            <div class="ph-col-12 big ph-h-20"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ph-item">
+                                                                    <div class="pr-0 pl-0">
+                                                                        <div class="ph-row">
+                                                                            <div class="ph-col-8 big ph-h-40"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ph-item direction-rtl">
+                                                                    <div class="pr-0 pl-0">
+                                                                        <div class="ph-row">
+                                                                            <div class="ph-col-8 big ph-h-40"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="product-box">
+                                                                <div class="product-seller-details product-seller-details-item-grid">
+                                                                    @{
+                                                                        if (item.sellerId != null)
+                                                                        {
+                                                                            var seller = db.Sellers.Where(r => r.id == item.sellerId).FirstOrDefault();
+                                                                            if (seller != null)
+                                                                            {
+                                                                                <span class="product-main-seller">
+                                                                                    <span class="product-seller-details-label">
+                                                                                        فروشنده:
+                                                                                    </span> @seller.name @seller.lastname
+                                                                                </span>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <span class="product-main-seller">
+                                                                                    <span class="product-seller-details-label">
+                                                                                        فروشنده:
+                                                                                    </span> @setting.WebsiteName
+                                                                                </span>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span class="product-main-seller">
+                                                                                <span class="product-seller-details-label">
+                                                                                    فروشنده:
+                                                                                </span> @setting.WebsiteName
+                                                                            </span>
+                                                                        }
+                                                                    }
+                                                                    <span class="product-seller-details-badge-container"></span>
+                                                                </div>
+                                                                @{
+                                                                    if (item.specialSelling != null || item.specialSelling == true)
+                                                                    {
+                                                                        <div class="promotion-badge promotion-badge--special-sale">
+                                                                            فروش ویژه
+                                                                        </div>
+                                                                    }
+                                                                    string tlt = item.title;
+                                                                    while (tlt.Contains(" "))
+                                                                    {
+                                                                        tlt = tlt.Replace(" ", "-");
+                                                                    }
+                                                                }
+                                                                <a class="product-box-img"
+                                                                   href="/home/product/@item.id/@tlt">
+                                                                    <img class="lazyload" src="~/Template/images/loading.png"
+                                                                         data-src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@item.MainImage" alt="">
+                                                                </a>
+                                                                <div class="product-box-content">
+                                                                    <div class="product-box-content-row">
+                                                                        <div class="product-box-title">
+                                                                            <a href="/home/product/@item.id">
+                                                                                @item.title
+                                                                            </a>
+                                                                        </div>
+                                                                        @*<ul class="c-product-box-variants" data-title="رنگ ها:">
+                                                                                <li>
+                                                                                    <span class="c-variant c-variant--color"
+                                                                                          style="background-color:#000000 ;">
+                                                                                    </span>
+                                                                                </li>
+                                                                            </ul>*@
+
+                                                                    </div>
+                                                                    @{
+                                                                        if (item.isAvailable == true)
+                                                                        {
+                                                                            var off = db.Discounts.Where(r => r.productId == item.id && r.expire > DateTime.Now && r.status == 1).FirstOrDefault();
+                                                                            if (off == null)
+                                                                            {
+                                                                                <div class="product-box-row product-box-row-price">
+                                                                                    <div class="price">
+                                                                                        <div class="price-value">
+                                                                                            <div class="price-value-wrapper fixPrice">
+                                                                                                @item.price
+                                                                                                <span class="price-currency">تومان</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var price = item.price - (item.price * off.percentage / 100);
+                                                                                <div class="price specialOfferPrice">
+                                                                                    <div>
+                                                                                        <span class="percentageInSpecialOffer">
+                                                                                            @off.percentage%
+                                                                                        </span>
+                                                                                        <del>
+                                                                                            <span class="fixPrice">@item.price تومان</span>
+                                                                                        </del>
+                                                                                    </div>
+                                                                                    <br />
+                                                                                    <ins>
+                                                                                        <span class="fixPrice specialOfferPriceNumber">@price</span><span class="specialOfferPriceT">تومان</span>
+                                                                                    </ins>
+                                                                                </div>
+                                                                            }
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <div class="product-box-row product-box-row-price">
+                                                                                <div class="price">
+                                                                                    <div class="price-value">
+                                                                                        <div class="price-value-wrapper">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="promotion-box-cover promotion-box-cover--out-of-stock">
+                                                                                    <div class="promotion-box-cover-text">ناموجود</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        }
+                                                                    }
+
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            }
+                        }
+
+                    </div>
+
+
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+
+</main>
+<style>
+.specialOfferPageContainer {
+    background-color: @promotion.color;
+}
+    .row.topDiscount {
+        background-color: @promotion.color;
+    }
+h1.promotionPageTitle {
+    color: @promotion.color;
+}
+ 
+    @@media only screen and (max-width: 600px){
+        main {
+            overflow-x: hidden;
+            margin-top: 110px !important;
+        }
+
+        h1.promotionPageTitle {
+            margin-top: 50px
+        }
+        .topDiscountShadow {
+            top: -34px !important;
+        }
+    }
+</style>

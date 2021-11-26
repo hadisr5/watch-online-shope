@@ -1,0 +1,103 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc
+@using System.Globalization
+@{
+    Layout = "/views/shared/_Layout.cshtml";
+    int id = Convert.ToInt16(Session["userLogin"]);
+
+}
+
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Breadcrumb Tow Start-->
+    <div class="breadcrumb-tow mb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-title">
+                        <h1>ارسال تیکت پشتیبانی</h1>
+                    </div>
+                    <div class="breadcrumb-content breadcrumb-content-tow">
+                        <ul>
+                            <li><a href="/">خانه</a></li>
+                            <li><a href="/home/ticket">تیک ها</a></li>
+                            <li class="active">ارسال تیکت پشتیبانی</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Breadcrumb Tow End-->
+    <!--Login Register Area Strat-->
+    <div class="login-register-area mb-80">
+        <div class="container">
+            <div class="row">
+                <!--Login Form Start-->
+                <div class="col-md-12 col-sm-12 col-md-offset-3 offset-3 mx-auto">
+                    <div class="customer-login-register">
+                        <div class="form-login-title">
+                            <h2>ارسال تیکت پشتیبانی</h2>
+                            <br />
+                            @{
+                                if (ViewBag.error != null)
+                                {
+
+                                    <div class="alert alert-danger">
+                                        <strong>خطا ! </strong> @ViewBag.error.
+                                    </div>
+                                }
+                            }
+                            <form action="/home/newTicket" method="post" id="MyForm">
+                                <div class="form-fild">
+                                    <p><label>عنوان تیکت <span class="required">*</span></label></p>
+                                    <input name="title" value="" style="text-align:right !important" type="text" placeholder="عنوان تیکت را وارد کنید ...">
+                                </div>
+                                <div class="form-fild">
+                                    <p><label>بخش مورد نظر <span class="required">*</span></label></p>
+                                    <select name="for">
+                                        <option>سوال در مورد گیاهان</option>
+                                        <option>پشتیبانی سفارش</option>
+                                    </select>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-fild">
+                                    <p><label></label></p>
+                                    <textarea name="text" style="min-height:80px ; text-align:right !important" placeholder="سوال خود را مطرح کنید ..."></textarea>
+                                </div>
+
+                                <div class="form-fild">
+                                    @Html.Captcha("کد جدید", "لطفا کد سه رقمی بالا را وارد کنید", 3)
+                                </div>
+                                <br />
+                                <div class="login-submit">
+                                    <button type="submit" class="form-button">ایجاد تیکت پشتیبانی جدید</button>
+                                </div>
+                                <br />
+                                <div class="lost-password">
+
+                                    <br />
+                                    <a href="/home/ticket" style="display:inline-block">برای مشاهده لیست تیکت های ارسال شده اینجا کلیک کنید </a>
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+                <!--Login Form End-->
+            </div>
+        </div>
+    </div>
+    <!--Login Register Area End-->
+
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+</div>

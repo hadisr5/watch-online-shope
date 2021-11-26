@@ -1,0 +1,108 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">مدیریت فرم ها</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/formBuilder/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست فرم ها</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+            <!--begin::Actions-->
+            @*<a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Today</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Month</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Year</a>*@
+            <!--end::Actions-->
+            <!--begin::Daterange-->
+            @*<a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="" data-placement="left" data-original-title="Select dashboard daterange">
+                    <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
+                    <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Aug 11</span>
+                </a>*@
+            <!--end::Daterange-->
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            اطلاعات فرم جدید
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/formBuilder/Create_form" data-redirect="/Admin/AdminDashboard/Index#/Admin/formBuilder/index">
+                    <div class="kt-portlet__body">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label>عنوان فرم</label>
+                            <input type="text" class="form-control" placeholder="عنوان فرم" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label>عنوان سمت راست</label>
+                            <input type="text" class="form-control" placeholder="عنوان فرم" name="SideTitle">
+                        </div>
+                        <span class="checkbox-list">
+                            <label class="checkbox">
+                                <input type="checkbox" checked="checked" name="active" value="True">
+                                <span></span>فعال
+                            </label>
+                        </span>
+                        <div class="form-group">
+                            <label>توضیحات</label>
+                            <textarea class="form-control" placeholder="توضیحات بالای صفحه" name="Desc"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>توضیحات</label>
+                            <textarea class="form-control" placeholder="توضیحات کنار صفحه" name="SideDesc"></textarea>
+                        </div>
+                        <br />
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ایجاد فرم جدید</button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/formbuilder/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    titlePage('ایجاد فرم جدید')
+</script>
+<script>
+    $('.dropzone').dropzone({
+        success: function (file, response) {
+            $('#img').val(response)
+        }
+    });
+</script>

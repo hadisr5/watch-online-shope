@@ -1,0 +1,123 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+
+    int id = ViewBag.id;
+    var form = db.FormBuilders.Find(id);
+    var inputs = form.Form_Input.ToList();
+
+}
+
+<main class="single-product default">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <article class="product create-comment-product">
+                    <div class="c-info-page-content px-0">
+                        <h1 class="c-info-page-title">@form.name</h1>
+                    </div>
+                    <p class="mb-5">@form.Desc </p>
+                    <div class="row comments-add-col--content">
+
+                        <div class="col-md-6 col-sm-12">
+
+                            <form class="px-5" id="commentForm" action="" method="post">
+                                <div class="row">
+                                    <div class="alert alert-danger" style="display:none" id="alert_show"></div>
+                                    <div class="alert alert-success" style="display:none" id="alert_show_success"></div>
+                                    @{
+                                        if (inputs.Count != 0)
+                                        {
+                                            foreach (var item in inputs)
+                                            {
+                                                if (item.type == "text")
+                                                {
+                                                    <div class="col-12">
+                                                        <div class="form-account-title">@item.label</div>
+                                                        <div class="form-account-row">
+                                                            <input name="input_@item.id" value="@item.value" class="@item.className input-field text-right" type="@item.subtype" placeholder="@item.placeholder">
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    if (item.type == "button")
+                                                    {
+                                                        if (item.subtype == "تائید")
+                                                        {
+                                                            <div class="col-12">
+                                                                <button type="submit" class="btn btn-primary btn-no-icon">
+                                                                    @item.label
+                                                                </button>
+                                                            </div>
+                                                        }
+
+                                                    }
+                                                    else
+                                                    {
+                                                        if (item.type == "paragraph")
+                                                        {
+                                                            <div class="col-12">
+                                                                <label>@item.label</label>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (item.type == "header")
+                                                            {
+                                                                <div class="col-12">
+                                                                    <@item.subtype>@item.label</@item.subtype>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="c-info-page-content px-0">
+                                <h1 class="c-info-page-title">@form.SideTitle</h1>
+                            </div>
+                            <div class="message-light">
+                                @form.SideDesc
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</main>
+@section CSS{
+    <link href="/template/css/select2-bootstrap4.min.css" rel="stylesheet" />
+    <link href="/template/css/select2.min.css" rel="stylesheet" />
+}
+@section JS{
+    <script src="https://demo.digilara.ir/assets/js/plugins/select2.min.js"></script>
+    <script>
+        $(document).on('submit', '#commentForm', function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '/home/contact',
+                data: $('#commentForm').serialize(),
+                success: function (t) {
+                    if (t.title != null && t.title == 'error') {
+                        swal.fire("خطا !", t.desc, "error")
+                    } else {
+                        swal.fire("انجام شد !", t.success, "success"),
+                            window.location = $($(selected).closest('.myForm')).attr("data-redirect"), hashChange()
+                    }
+                }
+            })
+        })
+    </script>
+}

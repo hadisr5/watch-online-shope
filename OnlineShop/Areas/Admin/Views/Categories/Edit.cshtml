@@ -1,0 +1,529 @@
+﻿@using OnlineShop.Models
+@{
+    int id = Convert.ToInt16(ViewBag.id);
+    var db = new OnlineShopEntities();
+    var cat = db.Categories.Find(id);
+    var selectedmaincatid = 0;
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+
+<!--begin::Subheader-->
+<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <!--begin::Info-->
+        <div class="d-flex align-items-center flex-wrap mr-2">
+            <!--begin::Page Title-->
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">لیست دسته بندی ها</h5>
+            <!--end::Page Title-->
+            <!--begin::Actions-->
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            @*<span class="text-muted font-weight-bold mr-4">#XRS-45670</span>*@
+            <a href="#/admin/Categories/index" class="btn btn-light-warning font-weight-bolder btn-sm">لیست دسته بندی ها</a>
+            <!--end::Actions-->
+        </div>
+        <!--end::Info-->
+        <!--begin::Toolbar-->
+        <div class="d-flex align-items-center">
+            <!--begin::Actions-->
+            @*<a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Today</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Month</a>
+                <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Year</a>*@
+            <!--end::Actions-->
+            <!--begin::Daterange-->
+            @*<a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="" data-placement="left" data-original-title="Select dashboard daterange">
+                    <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
+                    <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Aug 11</span>
+                </a>*@
+            <!--end::Daterange-->
+
+        </div>
+        <!--end::Toolbar-->
+    </div>
+</div>
+<!--end::Subheader-->
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            اطلاعات دسته بندی شناسه @id
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" id="createcatform" method="post" action="/admin/categories/Edit_Category" data-redirect="/Admin/AdminDashboard/Index#/Admin/categories/index">
+                    <input type="number" name="id" value="@id" class="hidden" />
+                 
+                    <div class="kt-portlet__body">
+                        <div class="example">
+                            <div class="example-preview">
+                                <ul class="nav nav-tabs nav-tabs-line">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#kt_tab_pane_1">اطلاعات</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_2">ویژگی ها</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tab_pane_3">نمایش</a>
+                                    </li>
+
+                                </ul>
+                                <div class="tab-content mt-5" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel" aria-labelledby="kt_tab_pane_2">
+                                        <div class="form-group">
+                                            <label>عنوان دسته بندی</label>
+                                            <input type="text" class="form-control" value="@cat.title" placeholder="عنوان دسته بندی" name="title" id="title">
+                                            <span class="form-text text-muted">دسته بندی شما با این عنوان نمایش داده می شود </span>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>دسته بندی اصلی</label>
+                                            @{
+                                                var mainCats = db.MainCats.ToList();
+                                                if (mainCats.Count != 0)
+                                                {
+
+                                                    <select onchange="SelectChildMenu(this)" class="form-control select2list" name="MainCat" id="MainCat">
+                                                        <option value="0">انتخاب نشده است</option>
+                                                        @foreach (var item in mainCats)
+                                                        {
+                                                            if (cat.MainCat == item.id)
+                                                            {
+                                                                <option value="@item.id" selected>@(item.title)</option>
+                                                                selectedmaincatid = item.id;
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item.id">@(item.title)</option>
+
+                                                            }
+                                                        }
+                                                    </select>
+
+                                                }
+                                                else
+                                                {
+                                                    <span>دسته بندی اصلی ثبت نشده است</span>
+                                                }
+                                            }
+                                        </div>
+                                        <div class="form-group">
+                                            <label>دسته بندی مادر</label>
+                                            @{
+                                                List<Category> parentCat;
+                                                if (selectedmaincatid == 0)
+                                                {
+                                                    parentCat = db.Categories.Where(r => r.parent == null).ToList();
+                                                }
+                                                else
+                                                {
+                                                    parentCat = db.Categories.Where(r => r.parent == null && r.MainCat == selectedmaincatid).ToList();
+                                                }
+
+                                                if (parentCat.Count != 0)
+                                                {
+
+                                                    <select class="form-control select2list" name="parent" id="parent">
+                                                        <option value="0">انتخاب نشده است</option>
+                                                        @foreach (var item in parentCat)
+                                                        {
+                                                            if (cat.parent == item.id)
+                                                            {
+                                                                <option value="@item.id" selected>@(item.title)</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item.id">@(item.title )</option>
+
+                                                            }
+                                                        }
+                                                    </select>
+
+                                                }
+                                                else
+                                                {
+                                                    <span>دسته بندی مادر ثبت نشده است</span>
+                                                }
+                                            }
+                                        </div>
+                                        <div class="form-group">
+                                            <label>توضیحات دسته بندی</label>
+                                            <textarea class="form-control" rows="5" name="Description">@cat.Description</textarea>
+                                        </div>
+
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">
+                                                آیکون
+                                            </label>
+                                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                                <div class="m-dropzone dropzone dropzone2" action="/admin/products/upload" id="m-dropzone-one">
+                                                    <div class="m-dropzone__msg dz-message needsclick">
+                                                        <h3 class="m-dropzone__msg-title">
+                                                            فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">
+                                                آیکون
+                                            </label>
+                                            <div id="imgValues2" class="imgValues">
+                                                <input name="MainImage" class="hidden" value="@cat.Icon" />
+                                                @{
+                                                    if (cat.Icon == null)
+                                                    {
+                                                        <img src="/Template/images/loading.png" alt="Alternate Text" id="nophoto2" class="nophoto" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@cat.Icon" alt="Alternate Text" id="nophoto2" class="nophoto" />
+
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel" aria-labelledby="kt_tab_pane_2">
+
+                                        <div class="form-group">
+                                            <label>ویژگی های دسته بندی</label>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <input type="text" class="form-control propInput" placeholder="ویژگی دسته بندی" name="PropertyTitle" id="PropertyTitle">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input type="number" class="form-control" placeholder="اولویت ویژگی" name="PropertyPriority" id="PropertyPriority">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <select class="form-control m-bootstrap-select m_selectpicker" data-live-search="true" name="PropertyCategory" id="PropertyCategory">
+                                                            @{
+                                                                var cats = db.propertiesCategories.ToList();
+                                                                if (cats.Count != 0)
+                                                                {
+                                                                    <option data-tokens="" value="">
+                                                                        دسته بندی ندارد
+                                                                    </option>
+                                                                    foreach (var item in cats)
+                                                                    {
+                                                                        <option data-tokens="@item.groupname" value="@item.id">
+                                                                            @item.groupname
+                                                                        </option>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </select>
+                                                        <span class="form-text text-muted">برای ایجاد دسته بندی جدید <a href="/Admin/AdminDashboard/Index#/admin/propertiesCategory/create">اینجا</a> کلیک کنید</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" value="true" checked="checked" name="showInFilter" id="showInFilter">
+                                                        <span></span>
+                                                        نمایش در فیلتر ها
+                                                    </label>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" value="true" checked="checked" name="MainProperty" id="MainProperty">
+                                                        <span></span>
+                                                        نمایش در ویژگی های اصلی محصول
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="row" id="propertTableContainer">
+
+                                            </div>
+                                        </div>
+
+                                        <span class="btn btn-default" id="newProp" data-id="@id">+ ویژگی جدید</span>
+                                        <br />
+                                        <br />
+
+                                    </div>
+                                    <div class="tab-pane fade" id="kt_tab_pane_3" role="tabpanel" aria-labelledby="kt_tab_pane_2">
+                                        <div class="form-group">
+                                            <label>نمایش تبلیغ محصول</label>
+                                            <select class="form-control m-bootstrap-select m_selectpicker" data-live-search="true" name="Adv">
+                                                @{
+                                                    <option data-tokens="" value="">
+                                                        ندارد
+                                                    </option>
+
+                                                    var preAdv = db.Products.Where(r => r.id == cat.Adv).FirstOrDefault();
+
+                                                    var products = db.Products.ToList();
+                                                    if (products.Count != 0)
+                                                    {
+
+                                                        foreach (var item in products)
+                                                        {
+                                                            if (preAdv != null && preAdv == item)
+                                                            {
+                                                                <option data-tokens="@item.title" value="@item.id" selected>
+                                                                    @item.title
+                                                                </option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option data-tokens="@item.title" value="@item.id">
+                                                                    @item.title
+                                                                </option>
+                                                            }
+
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>نمایش تبلیغ در سطر اول</label>
+                                            <select class="form-control m-bootstrap-select m_selectpicker" data-live-search="true" name="line1Ads">
+                                                @{
+                                                    if (products.Count != 0)
+                                                    {
+                                                        <option data-tokens="" value="">
+                                                            ندارد
+                                                        </option>
+                                                        foreach (var item in products)
+                                                        {
+                                                            if (item.id == cat.line1Ads)
+                                                            {
+                                                                <option selected data-tokens="@item.title" value="@item.id">
+                                                                    @item.title
+                                                                </option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option data-tokens="@item.title" value="@item.id">
+                                                                    @item.title
+                                                                </option>
+                                                            }
+
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>نمایش تبلیغ در سطر دوم</label>
+                                            <select class="form-control m-bootstrap-select m_selectpicker" data-live-search="true" name="line2Ads">
+                                                @{
+                                                    if (products.Count != 0)
+                                                    {
+                                                        <option data-tokens="" value="">
+                                                            ندارد
+                                                        </option>
+                                                        foreach (var item in products)
+                                                        {
+                                                            if (item.id == cat.line2Ads)
+                                                            {
+                                                                <option selected data-tokens="@item.title" value="@item.id">
+                                                                    @item.title
+                                                                </option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option data-tokens="@item.title" value="@item.id">
+                                                                    @item.title
+                                                                </option>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>نمایش تبلیغ در سطر سوم</label>
+                                            <select class="form-control m-bootstrap-select m_selectpicker" data-live-search="true" name="line3Ads">
+                                                @{
+                                                    if (products.Count != 0)
+                                                    {
+                                                        <option data-tokens="" value="">
+                                                            ندارد
+                                                        </option>
+                                                        foreach (var item in products)
+                                                        {
+                                                            if (item.id == cat.line3Ads)
+                                                            {
+                                                                <option selected data-tokens="@item.title" value="@item.id">
+                                                                    @item.title
+                                                                </option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option data-tokens="@item.title" value="@item.id">
+                                                                    @item.title
+                                                                </option>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-3 col-form-label">نمایش در صفحه اصلی</label>
+                                            <div class="col-3">
+                                                <span class="kt-switch">
+                                                    @{
+                                                        if (cat.showInHomePage == true)
+                                                        {
+                                                            <label>
+                                                                <input type="checkbox" checked="checked" name="showInHomePage" value="True" />
+                                                                <span></span>
+                                                            </label>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label>
+                                                                <input type="checkbox" name="showInHomePage" value="True" />
+                                                                <span></span>
+                                                            </label>
+                                                        }
+                                                    }
+
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="form-group">
+                                            <label>عنوان دسته بندی</label>
+                                            <input type="text" class="form-control" placeholder="اولویت نمایش در صفحه اصلی" value="@cat.priority" name="priority">
+                                        </div>
+
+                                        <div class="form-group m-form__group row">
+                                            <label for="example-text-input" class="col-2 col-form-label">
+                                                عکس دسته بندی
+                                            </label>
+                                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                                <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@cat.Img" id="imgPre" style="width: 337px; border-radius: 10px;" />
+                                                <div class="m-dropzone dropzone dropzone1" action="/admin/sliders/upload" id="m-dropzone-one">
+                                                    <div class="m-dropzone__msg dz-message needsclick">
+                                                        <h3 class="m-dropzone__msg-title">
+                                                            برای ویرایش عکس ، اینجا کلیک کنید
+                                                        </h3>
+                                                        @*<span class="m-dropzone__msg-desc">
+                                                عکس آپلود شده به عنوان عکس پروفایل کاربر نمایش داده می شود
+                                            </span>*@
+                                                    </div>
+                                                </div>
+                                                <input type="text" class="hidden" id="img" name="img" style="display:none" value="@cat.Img" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button id="btnsubmitcat" class="btn btn-primary">ویرایش دسته بندی شناسه @id</button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/categories/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+<script>
+    var BootstrapSelect = { init: function () { $(".m_selectpicker").selectpicker() } }; jQuery(document).ready(function () { BootstrapSelect.init() });
+    var BootstrapSelect = { init: function () { $(".m_selectpicker").selectpicker() } }; jQuery(document).ready(function () { BootstrapSelect.init() });
+
+</script>
+<script>
+    $('.dropzone1').dropzone({
+        success: function (file, response) {
+            $('#img').val(response);
+            $('#imgPre').remove();
+        }
+    });
+    $('.dropzone2').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto2').addClass('hidden')
+            $('#imgValues2').html('<input type="text" value="' + response + '" name="Icon" class="hidden" /><img src="' + response + '" />');
+
+        }
+    });
+
+</script>
+<script>
+
+        $(document).ready(function () {
+            updatePropertyTable(@id);
+        })
+    $("#btnsubmitcat").on("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        var result = CheckValidation();
+        if (result == true)
+            $("#createcatform").submit();
+    });
+    function CheckValidation() {
+        console.log("validation starts...");
+        if ($("#title").val() == "" || $("#title").val() == undefined) {
+            toastr.error("عنوان دسته بندی را وارد کنید");
+            return false;
+        }
+        if ($("#MainCat").children("option:selected").val() == "0" && $("#parent").children("option:selected").val() == "0") {
+            toastr.error("حداقل یک دسته بندی را انتخاب کنید");
+            return false;
+        }
+
+        return true;
+    }
+
+    function SelectChildMenu(sel) {
+        rootid = $(sel).children("option:selected").val();
+
+        $.ajax({
+            url: '/home/GetMainCats',
+            method: "GET",
+            data: { "id": rootid },
+            success: function (response) {
+                console.log(response);
+                if (response.length > 0) {
+                    $('#parent').html('');
+                    var options = '';
+                    options += '<option value="0">انتخاب نشده</option>';
+                    for (var i = 0; i < response.length; i++) {
+                        options += '<option value="' + response[i].Id + '">' + response[i].Title + '</option>';
+                        console.log(response[i].Key);
+                    }
+                    console.log(options);
+                    $('#parent').append(options);
+                }
+                else {
+
+                    $('#parent').html('');
+                    var options = '';
+                    options += '<option value="0">انتخاب نشده</option>';
+                    console.log(options);
+                    $('#parent').append(options);
+
+                }
+            }
+        });
+
+    }
+</script>

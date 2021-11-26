@@ -1,0 +1,115 @@
+﻿@using OnlineShop.Models
+@using CaptchaMvc.HtmlHelpers
+@using CaptchaMvc
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    int userid = Convert.ToInt16(Session["userLogin"]);
+    var recentViews = db.UserViews.Where(r => r.userId == userid).ToList();
+    var products = new List<Product>();
+    if (recentViews.Count != 0)
+    {
+        foreach (var item in recentViews)
+        {
+            var pro = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+            if (pro != null)
+            {
+                products.Add(pro);
+            }
+        }
+    }
+    if (products.Count != 0)
+    {
+        products = products.Distinct().ToList();
+    }
+    Layout = "/views/shared/_Layout.cshtml";
+}
+<main class="profile-user-page default" style="transform: none;">
+    <div class="container" style="transform: none;">
+        <div class="row" style="transform: none;">
+            <div class="profile-page col-xl-9 col-lg-8 col-md-12 order-2">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-12">
+                            <h1 class="title-tab-content">بازدید های اخیر</h1>
+                        </div>
+                        @{
+                            if (products.Count != 0)
+                            {
+
+                                <div class="content-section default">
+                                    <div class="row">
+
+                                        @foreach (var item in products)
+                                        {
+                                            var gl = db.ProductGalleries.Where(r => r.product_id == item.id).FirstOrDefault();
+                                            string img = "/Template/images/loading.png";
+                                            if (gl!=null)
+                                            {
+                                                img = gl.big; 
+                                            }
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="profile-recent-fav-row">
+                                                    <a href="/home/product/@item.id" class="profile-recent-fav-col profile-recent-fav-col-thumb">
+                                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@img">
+                                                    </a>
+                                                    <div class="profile-recent-fav-col profile-recent-fav-col-title">
+                                                        <a href="/home/product/@item.id">
+                                                            <h4 class="profile-recent-fav-name">
+                                                                @item.title
+                                                            </h4>
+                                                        </a>
+                                                        <div class="profile-recent-fav-price fixPrice">
+                                                            @{
+                                                                if (item.isAvailable == true)
+                                                                {
+                                                                    @item.price @:تومان
+                                                                }
+                                                                else
+                                                                {
+                                                                    @:ناموجود
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </div>
+                          
+                                                    <div class="col-12 text-left mb-3">
+                                                        <a href="/home/product/@item.id" class="view-product">مشاهده محصول</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                                }
+
+
+                                    </div>
+                                </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="content-section text-center">
+                                                                        <div class="icon-empty">
+                                                                            <i class="now-ui-icons travel_info"></i>
+                                                                        </div>
+                                                                        <h1 class="text-empty">موردی برای نمایش وجود ندارد!</h1>
+                                                                    </div>
+                                                                }
+                        }
+
+                    </div>
+                </div>
+            </div>
+            @RenderPage("~/Areas/UserProfile/Views/Shared/_SideBar.cshtml")
+        </div>
+
+        @RenderPage("~/Areas/UserProfile/Views/Shared/_recentViews.cshtml")
+
+
+
+
+    </div>
+</main>
+@section JS{
+    <script>
+        changeMenu('recentViews')
+    </script>
+}

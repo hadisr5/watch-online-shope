@@ -1,0 +1,126 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(Session["userLogin"]);
+    var user = db.Users.Find(id);
+    Layout = "~/views/shared/_layout.cshtml";
+}
+<main class="profile-user-page default">
+    <div class="container">
+        <div class="row">
+            <div class="profile-page col-xl-9 col-lg-8 col-md-12 order-2">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-12">
+                            <h1 class="title-tab-content">اطلاعات شخصی</h1>
+                        </div>
+                        <div class="content-section default">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    <p>
+                                        <span class="title">نام و نام خانوادگی :</span>
+                                        <span>
+                                            @{
+                                                string name = string.Empty;
+                                                if (user.firstName == null || user.lastName == null)
+                                                {
+                                            <span>-</span>
+                                                }
+                                                else
+                                                {
+                                            @:@user.firstName @user.lastName
+                                                }
+                                            }
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <p>
+                                        <span class="title">پست الکترونیک :</span>
+                                        @{
+                                            if (user.email == null)
+                                            {
+                                        <span>-</span>
+                                            }
+                                            else
+                                            {
+                                        <span>@user.email</span>
+                                            }
+                                        }
+                                    </p>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <p>
+                                        <span class="title">شماره تلفن همراه:</span>
+                                        <span>@user.mobile</span>
+                                    </p>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <p>
+                                        <span class="title">کد ملی :</span>
+                                        @{
+                                            if (user.codeMeli == null)
+                                            {
+                                        <span>-</span>
+                                            }
+                                            else
+                                            {
+                                        <span>@user.codeMeli</span>
+                                            }
+                                        }
+                                    </p>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <p>
+                                        <span class="title">دریافت خبرنامه :</span>
+
+                                        @if (user.RecieveNews == null || user.RecieveNews == false)
+                                        {
+                                            <span>خیر</span>
+                                        }
+                                        else
+                                        {
+                                            <span>بله</span>
+                                        }
+                                    </p>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <p>
+                                        <span class="title">شماره کارت :</span>
+                                        @{
+                                            if (user.card == null)
+                                            {
+                                        <span dir="ltr">-</span>
+                                            }
+                                            else
+                                            {
+                                        <span dir="ltr" style="font-family:monospace;font-weight:bold">@user.card</span>
+                                            }
+                                        }
+                                    </p>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <a href="/userProfile/profile/changeProfileInfo" class="btn-link-border form-account-link">
+                                        ویرایش اطلاعات شخصی
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @RenderPage("~/Areas/UserProfile/Views/Shared/_SideBar.cshtml")
+        </div>
+
+        @RenderPage("~/Areas/UserProfile/Views/Shared/_recentViews.cshtml")
+
+
+        
+
+    </div>
+</main>
+@section JS{
+    <script>
+        changeMenu('profile')
+    </script>
+    }

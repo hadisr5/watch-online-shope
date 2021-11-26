@@ -1,0 +1,297 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    Layout = "/views/shared/_Layout.cshtml";
+    var ordersList = Session["orders"] as List<Order>;
+    var settings = db.Settings.FirstOrDefault();
+    Int64 sum = 0;
+}
+
+<main class="cart-page default">
+    <div class="container" id="cart_show">
+        <div class="row">
+            <div class="cart-page-content col-xl-9 col-lg-8 col-md-12 order-1">
+                <div class="cart-page-title default mb-1">
+                    <h1 class="mb-1">سبد خرید</h1>
+                </div>
+                <div id="products">
+                    <div class="table-responsive checkout-content default">
+                        <div class="checkout-header checkout-header--express">
+                            <span class="checkout-header-title">ارسال کالا های عادی</span>
+                            <span class="checkout-header-extra-info">(@ordersList.Count کالا)</span>
+                        </div>
+                        <table class="table table-cart">
+                            <tbody>
+                                @{
+                                    if (ordersList.Count != 0)
+                                    {
+                                        foreach (var item in ordersList)
+                                        {
+                                            var pro = db.Products.Where(r => r.id == item.productId).FirstOrDefault();
+                                            var gl = db.ProductGalleries.Where(r => r.product_id == pro.id).FirstOrDefault();
+
+                                            <tr class="checkout-item" id="row_product_347">
+                                                <td>
+                                                    <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@gl.big"
+                                                         alt="" style="width:110px">
+                                                    <button class="checkout-btn-remove remove-cart-item" data-id="@item.productId">
+                                                        &times;
+                                                    </button>
+                                                </td>
+                                                <td class="text-right">
+                                                    <h3 class="checkout-title">
+                                                        @pro.title
+                                                    </h3>
+                                                    <p class="checkout-dealer">
+                                                        @{
+                                                            if (item.SellerId == null)
+                                                            {
+                                                                @settings.WebsiteName
+                                                        }
+                                                            else
+                                                            {
+                                                                var seller = db.Sellers.Where(r => r.id == item.SellerId).FirstOrDefault();
+                                                                @:@seller.name @seller.lastname
+                                                        }
+                                                        }
+                                                    </p>
+                                                    <p class="checkout-guarantee">
+                                                        @{
+                                                            var sl = db.SellersProducts.Where(r => r.productId == item.productId && r.isActive == true).FirstOrDefault();
+                                                            if (sl != null)
+                                                            {
+                                                                @sl.Warranty
+
+                                                            }
+                                                        }
+                                                    </p>
+                                                    @*<div class="checkout-variant checkout-variant--color">
+                                            <span class="checkout-variant-title">رنگ :</span>
+                                            <span class="checkout-variant-value">
+                                                نقره ای
+                                                <div class="checkout-variant-shape"
+                                                     style="background-color:#C0C0C0"></div>
+                                            </span>
+                                        </div>*@
+
+                                                </td>
+                                                <td>
+                                                    <p class="mb-0">تعداد</p>
+                                                    <div class="number-input">
+                                                        @if (item.quantity != 1)
+                                                        {
+                                                            <a href="/home/cardMinus/@item.productId">
+                                                                <button></button>
+
+                                                            </a>
+                                                        }
+                                                        <input class="quantity" min="1" value="@item.quantity"
+                                                               type="number" id="quantity-item-347" disabled>
+                                                        <a href="/home/cardPlus/@item.productId">
+                                                            <button class="plus"></button>
+                                                        </a>
+                                                </td>
+                                                @*<td>
+                                        <strong class="fixPrice">
+                                            @{
+                                                var off = db.Discounts.Where(r => r.percentage != null && r.status == 1 && r.productId == item.productId && r.expire > DateTime.Now).FirstOrDefault();
+
+                                                if (item.SellerId == null)
+                                                {
+                                                    if (off != null)
+                                                    {
+                                                        @(pro.price - (pro.price * off.percentage) / 100) @:تومان
+                                            }
+                                                    else
+                                                    {
+                                                        @pro.price @:تومان
+                                                }
+                                                }
+                                                else
+                                                {
+                                                    var sellerPro = db.SellersProducts.Where(r => r.sellerId == item.SellerId && r.productId == item.productId).FirstOrDefault();
+                                                    if (sellerPro != null)
+                                                    {
+                                                        @sellerPro.price @:تومان
+                                                }
+                                                }
+
+                                            }
+                                        </strong>
+                                    </td>*@
+                                                <td>
+                                                    <strong class="fixPrice">
+                                                        @{
+                                                            var off = db.Discounts.Where(r => r.percentage != null && r.status == 1 && r.productId == item.productId && r.expire > DateTime.Now).FirstOrDefault();
+
+                                                            if (true)
+                                                            {
+                                                                var sellerPro = db.SellersProducts.Where(r => r.sellerId == item.SellerId && r.productId == item.productId).FirstOrDefault();
+                                                                if (sellerPro == null)
+                                                                {
+                                                                    if (off != null)
+                                                                    {
+                                                                        @((pro.price - (pro.price * off.percentage) / 100) * item.quantity) @:تومان
+                                                                    sum += Convert.ToInt64((pro.price - (pro.price * off.percentage) / 100) * item.quantity);
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @((pro.price) * item.quantity) @:تومان
+                                                                    sum += Convert.ToInt64((pro.price) * item.quantity);
+
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    sum += Convert.ToInt64((sellerPro.price) * item.quantity);
+                                                                    @((sellerPro.price) * item.quantity) @:تومان
+
+
+                                                                }
+                                                            }
+
+                                                        }
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                                                }
+                                                            }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+         
+            </div>
+            <aside class="cart-page-aside col-xl-3 col-lg-4 col-md-6 center-section order-2"
+                   id="box-price-total">
+                <div class="checkout-aside">
+                    <div class="checkout-summary">
+                        <div class="checkout-summary-main">
+                            <ul class="checkout-summary-summary">
+                                <li>
+                                    <span>مبلغ کل (@(ordersList.Count) کالا)</span><span class="fixPrice">@sum تومان</span>
+                                </li>
+                                <li>
+                                    <span>هزینه ارسال</span>
+                                    <span>
+                                        وابسته به آدرس<span class="wiki wiki-holder">
+                                            <span class="wiki-sign"></span>
+                                            <div class="wiki-container js-dk-wiki is-right">
+                                                <div class="wiki-arrow"></div>
+                                                <p class="wiki-text">
+                                                    هزینه ارسال مرسولات می‌تواند وابسته به شهر و آدرس گیرنده
+                                                    متفاوت باشد. در
+                                                    صورتی که هر
+                                                    یک از مرسولات حداقل ارزشی برابر با ۱۰۰هزار تومان داشته باشد،
+                                                    آن مرسوله
+                                                    بصورت رایگان
+                                                    ارسال می‌شود.<br>
+                                                    "حداقل ارزش هر مرسوله برای ارسال رایگان، می تواند متغیر
+                                                    باشد."
+                                                </p>
+                                            </div>
+                                        </span>
+                                    </span>
+                                </li>
+                            </ul>
+                            <div class="checkout-summary-devider">
+                                <div></div>
+                            </div>
+                            <div class="checkout-summary-content">
+                                <div class="checkout-summary-price-title">مبلغ قابل پرداخت:</div>
+                                <div class="checkout-summary-price-value">
+                                    <span class="checkout-summary-price-value-amount fixPrice">@sum</span>تومان
+                                </div>
+                                <a href="address" class="selenium-next-step-shipping">
+                                    <div class="parent-btn">
+                                        <button class="dk-btn dk-btn-info">
+                                            ادامه ثبت سفارش
+                                            <i class="now-ui-icons shopping_basket"></i>
+                                        </button>
+                                    </div>
+                                </a>
+                                <div>
+                                    <span>
+                                        کالاهای موجود در سبد شما ثبت و رزرو نشده‌اند، برای ثبت سفارش مراحل بعدی
+                                        را تکمیل
+                                        کنید.
+                                    </span>
+                                    <span class="wiki wiki-holder">
+                                        <span class="wiki-sign"></span>
+                                        <div class="wiki-container is-right">
+                                            <div class="wiki-arrow"></div>
+                                            <p class="wiki-text">
+                                                محصولات موجود در سبد خرید شما تنها در صورت ثبت و پرداخت سفارش
+                                                برای شما رزرو
+                                                می‌شوند. در
+                                                صورت عدم ثبت سفارش، تاپ کالا هیچگونه مسئولیتی در قبال تغییر
+                                                قیمت یا موجودی
+                                                این کالاها
+                                                ندارد.
+                                            </p>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="checkout-feature-aside">
+                        <ul>
+
+                            <li class="checkout-feature-aside-item checkout-feature-aside-item-guarantee">
+                                هفت روز
+                                ضمانت تعویض
+                            </li>
+                            <li class="checkout-feature-aside-item checkout-feature-aside-item-cash">
+                                پرداخت در محل با
+                                کارت بانکی
+                            </li>
+                            <li class="checkout-feature-aside-item checkout-feature-aside-item-express">
+                                تحویل اکسپرس
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        <script>
+            quantity = function (id) {
+                var quantity = $('#quantity-item-' + id).val();
+                $('#loading').show();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '#',
+                    method: "PATCH",
+                    data: { 'id': id, 'quantity': quantity },
+                    success: function (data) {
+                        $('#cart_show').html('');
+                        $('#cart_show').html(data);
+                        $('#loading').hide();
+                    }
+                });
+            }
+        </script>
+
+        <script type="text/javascript">toastr.options = { "positionClass": "toast-bottom-left" };</script>
+    </div>
+</main>
+<!-- main -->
+<style>
+    .cart-page .checkout-aside {
+    margin-top: 65px;
+    margin-bottom: 83px;
+}
+</style>
+@section JS{
+    
+
+    
+    
+    }

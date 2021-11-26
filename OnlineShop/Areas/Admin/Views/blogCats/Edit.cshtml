@@ -1,0 +1,170 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    ViewBag.Title = "Create";
+    Layout = null;
+    int id = Convert.ToInt16(ViewBag.id);
+    var BlogCats = db.Blog_Cats.Where(r => r.id == id).FirstOrDefault();
+}
+<!-- begin:: Content Head -->
+<div class="kt-subheader   kt-grid__item" id="kt_subheader">
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">AdminDashboard</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        <a href="/Admin/AdminDashboard/Index#/Admin/BlogCats/index" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
+            لیست دسته بندی ها بلاگ
+        </a>
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+            <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+            <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                <span><i class="flaticon2-search-1"></i></span>
+            </span>
+        </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--quick-panel" data-toggle="kt-tooltip" title="" data-placement="right" data-original-title="Quick panel">
+        <a href="/admin/login/logOut" class="btn btn-brand" data-skin="brand" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Brand skin" style="margin-top:10px">
+            خروج از پنل کاربری
+        </a>
+
+    </div>
+
+</div>
+
+<!-- end:: Content Head -->
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+    <div class="row">
+        <div class="col-md-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            ویرایش دسته بندی بلاگ
+                        </h3>
+                    </div>
+                </div>
+                <!--begin::Form-->
+                <form class="kt-form myForm" method="post" action="/admin/BlogCats/EditPost" data-redirect="/Admin/AdminDashboard/Index#/Admin/BlogCats/index">
+                    <div class="kt-portlet__body">
+                      
+                        <input type="number" value="@id" name="id" style="display:none" />
+                        <div class="form-group">
+                            <label>عنوان دسته بندی</label>
+                            <input type="text" class="form-control" value="@BlogCats.title" placeholder="عنوان دسته بندی" name="title">
+                            <span class="form-text text-muted">صفحه شما با این عنوان نمایش داده می شود </span>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <label for="example-text-input" class="col-2 col-form-label">
+                                عکس دسته بندی
+                            </label>
+                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                <div class="m-dropzone dropzone" action="/admin/BlogCats/upload" id="m-dropzone-one">
+                                    <div class="m-dropzone__msg dz-message needsclick">
+                                        <h3 class="m-dropzone__msg-title">
+                                            فایل عکس را اینجا بندازید یا برای آپلود کلیک کنید
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div id="imgValues">
+                                <input src="@BlogCats.img" value="@BlogCats.img" name="img" style="display:none" />
+                                @{
+                                    if (BlogCats.img != null)
+                                    {
+                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@BlogCats.img" alt="Alternate Text" id="nophoto" />
+
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Theme/img/noPhoto.png" alt="Alternate Text" id="nophoto" />
+
+                                    }
+                                }
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <button type="submit" class="btn btn-primary">ویرایش دسته بندی </button>
+                            <a href="/Admin/AdminDashboard/Index#/Admin/BlogCats/index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </div>
+                </form>
+                <!--end::Form-->
+            </div>
+            <!--end::Portlet-->
+
+        </div>
+
+    </div>
+</div>
+<script>
+    var counter = 0;
+    $('.dropzone').dropzone({
+        success: function (file, response) {
+            this.removeAllFiles();
+            $('#nophoto').addClass('hidden')
+            $('#imgValues').html($('#imgValues').html() + '<div data-id="' + counter + '"><span>x</span><input type="text" value="' + response + '" name="img" /><img src="' + response + '" /></div>');
+        }
+    });
+</script>
+<script>
+    titlePage('ویرایش دسته بندی بلاگ')
+</script>
+<style>
+    #imgValues > div > input {
+        display: none;
+    }
+
+    #imgValues > div > img {
+        display: inline-block;
+        width: 200px;
+        height: 200px;
+        border: 1px solid #e4e4e4;
+        border-radius: 20px;
+        margin: 25px 5px;
+        float: right;
+    }
+
+    #imgValues > div {
+        position: relative;
+        float: right;
+        display: inline-block;
+    }
+
+        #imgValues > div > span {
+            width: 20px;
+            height: 20px;
+            content: check;
+            position: absolute;
+            right: 20px;
+            top: 40px;
+            background: #ff5c5c;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            padding: 1px 7px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+    #nophoto {
+        width: 200px;
+        height: 200px;
+        border-radius: 20px;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    #imgValues {
+        display: block;
+        width: 100%;
+        margin-top: 20px;
+        margin-right: 17%;
+    }
+</style>

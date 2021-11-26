@@ -1,0 +1,314 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    var setting = db.Settings.FirstOrDefault();
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<div class="main-content col-12 col-md-7 col-lg-5 mx-auto">
+    <div class="account-box">
+        <a href="/" class="logo">
+            <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@setting.WebsiteLogo" alt="">
+        </a>
+        <div class="account-box-title text-right">ورود به @setting.WebsiteName</div>
+
+
+        <div class="account-box-content">
+            <div class="form-account">
+                <a href="/admin/ServiceInquiry/index" class="btn-link-border form-account-link">
+                    ورود با شماره موبایل
+                </a>
+                <div class="form-account-title">شماره موبایل</div>
+                <div class="form-account-row">
+                    <div class="validationError hidden text-danger">
+                        شماره همراه وارد شده نامعتبر است.
+                    </div>
+                    <label class="input-label">
+                        <i class="now-ui-icons tech_mobile"></i>
+                    </label>
+                    <input class="input-field" id="easyLoginInput" data-validator="mobile" type="text" placeholder="شماره موبایل خود را وارد نمایید" name="mobile" value="" required="" autocomplete="off" autofocus="" tabindex="1">
+
+                </div>
+                <div class="ajaxLoader" id="ajaxLoader">
+
+                </div>
+                <div class="FooterContent" id="FooterContent">
+
+                </div>
+                <div class="form-account-row form-account-submit">
+                    <div class="parent-btn">
+                        <button class="dk-btn dk-btn-info submitBtn easyLogin">
+                            ارسال کد ورود سریع
+                            <i class="fa fa-sign-in"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-account-agree">
+                    <label class="checkbox-form checkbox-primary">
+                        <input type="checkbox" value="true" id="agree" name="remember">
+                        <span class="checkbox-check"></span>
+                    </label>
+                    <label for="agree">مرا به خاطر داشته باش</label>
+                </div>
+                @{
+                    if (ViewBag.error != null)
+                    {
+                        <div class="alert alert-danger">
+                            اطلاعات کاربری نادرست است .
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+        @*<div class="account-box-footer">
+                <span>کاربر جدید هستید؟</span>
+                <a href="/userLogin/Main/register" class="btn-link-border">
+                    ثبت‌نام در
+                    @setting.WebsiteName
+                </a>
+            </div>*@
+    </div>
+</div>
+@section JS{
+    <script>
+
+        $(document).on('click', '.easyLogin', function () {
+            var mobile = $("#easyLoginInput").val();
+            if ($(this).attr('mb') != null) {
+                mobile = $(this).attr('mb')
+            }
+            if (validateMobileNumber() == true) {
+
+                $('.ajaxLoader').html('<img src="/template/images/loader.gif"  style="width:55px;margin:35px"/>')
+                $.ajax({
+                    type: 'POST',
+                    url: '/ServiceInquiry/easyLogin',
+                    data: "mobile=" + mobile,
+                    success: function (response) {
+                        if (response == "done") {
+                            $('.ajaxLoader').empty();
+                            //$('.ajaxLoader').html('<span></span><div></div>')
+                            $('#easyLoginInput').attr('disabled', 'disabled')
+                            $('.form-account-row.form-account-submit').addClass('hidden')
+                            $('.ajaxLoader').html('<div class="form-account-row"><div style="text-align:center"><div id="divOuter"><div id="divInner"> <input autofocus id="partitioned" name="sms" type="text" maxlength="4" /></div></div></div></div>');
+                            $('#FooterContent').html('<div class="form-account-row form-account-submit hidden"><div class="parent-btn"> <button class="dk-btn dk-btn-info submitCode"> ارسال کد ورود سریع <i class="fa fa-sign-in"></i> </button></div></div>               <div class="form-account-row form-account-submit"><div class="parent-btn"> <button class="dk-btn dk-btn-info easyLogin timer" disabled="disabled" mb="' + mobile + '"> دریافت مجدد کد <i class="fa fa-sign-in"></i> </button></div></div>')
+                            $('#partitioned').focus();
+
+                            var count = 60;     // Set count
+                            var timer = null;  // For referencing the timer
+
+                            (function countDown() {
+                                // Display counter and start counting down
+                                $('.timer').html('ارسال کد فعال سازی مجدد در ' + count + " ثانیه " + '<i class="fa fa-sign-in"></i>');
+
+                                // Run the function again every second if the count is not zero
+                                if (count !== 0) {
+                                    timer = setTimeout(countDown, 1000);
+                                    count--; // decrease the timer
+                                } else {
+                                    $('.timer').html('ارسال مجدد کد')
+                                    // Enable the button
+                                    $('.timer').prop("disabled", false);
+                                }
+                            }());
+
+
+
+
+                        } else {
+                            $('.ajaxLoader').html('<div class="alert alert-danger">شماره وارد شده اشتباه است و یا در سایت ثبت نشده است</div>')
+                            $('#easyLoginInput').val('');
+                            $('#easyLoginInput').focus();
+                        }
+                    }
+                });
+            }
+
+
+        })
+
+    </script>
+    <script>
+        $(document).on('click', '.submitCode', function () {
+            var value = $('#partitioned').val();
+            var preValue = $('#FooterContent').html();
+            $('.ajaxLoader').html('<img src="/template/images/loader.gif"  style="width:55px;margin:35px"/>')
+            $.ajax({
+                type: 'POST',
+                url: '/ServiceInquiry/easyLoginPassword',
+                data: "code=" + value,
+                success: function (response) {
+                    if (response == "Success") {
+                        window.location.href = "/admin/admindashboard/index";
+                    } else {
+                        if (response == "Wrong") {
+                            $('.ajaxLoader').html('<div class="form-account-row"><div style="text-align:center"><div id="divOuter"><div id="divInner"> <input autofocus id="partitioned" name="sms" type="text" maxlength="4" /></div></div></div></div>')
+                            $('#FooterContent').html(preValue);
+                            $('.alert-danger').each(function () {
+                                $(this).remove();
+                            })
+                            preValue = $('#FooterContent').html();
+                            $('#FooterContent').html('<div class="alert alert-danger"> کد وارد شده اشتباه است .</div>' + preValue)
+                            $('#partitioned').focus();
+                        }
+                    }
+                }
+            });
+
+        })
+
+        //var obj = document.getElementById('partitioned');
+        //obj.addEventListener('keydown', stopCarret);
+        //obj.addEventListener('keyup', stopCarret);
+
+        //function stopCarret() {
+        //    if (obj.value.length > 3) {
+        //        setCaretPosition(obj, 3);
+        //    }
+        //}
+
+        //function setCaretPosition(elem, caretPos) {
+        //    if (elem != null) {
+        //        if (elem.createTextRange) {
+        //            var range = elem.createTextRange();
+        //            range.move('character', caretPos);
+        //            range.select();
+        //        }
+        //        else {
+        //            if (elem.selectionStart) {
+        //                elem.focus();
+        //                elem.setSelectionRange(caretPos, caretPos);
+
+        //            }
+        //            else {
+        //                elem.focus();
+        //            }
+        //        }
+        //    }
+        //}
+    </script>
+    <script>
+        $(document).on('keyup', '#partitioned', function () {
+            var lenth = $(this).val().length;
+            if (lenth == 4) {
+                $('.submitCode').click();
+            }
+
+        })
+    </script>
+    <script>
+
+
+        $(document).on('submit', '.form-account', function (event) {
+            validateMobileNumber();
+            if ($('.WrongFormatInput').length != 0) {
+                event.preventDefault();
+            }
+        })
+
+
+        $(document).on('keyup', 'input[data-validator="mobile"]', function () {
+            validateMobileNumber();
+        })
+        $(document).on('focusout', 'input[data-validator="mobile"]', function () {
+            validateMobileNumber();
+        })
+        function validateMobileNumber() {
+            var result = true;
+            $('input[data-validator="mobile"]').each(function () {
+                if ($(this).val().length == 11 && $.isNumeric($(this).val()) == true && $(this).val().substr(0, 2) == '09') {
+                    $(this).removeClass('WrongFormatInput');
+                    $(this).parent().find('label').find('i').removeClass('WrongFormatInput');
+                    $(this).parent().find('.validationError').addClass('hidden')
+
+                } else {
+                    $(this).addClass('WrongFormatInput');
+                    $(this).parent().find('.validationError').removeClass('hidden')
+                    $(this).parent().find('label').find('i').addClass('WrongFormatInput');
+                    result = false;
+                }
+
+            });
+
+            return result;
+
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#partitioned').focus();
+        })
+        var obj = document.getElementById('partitioned');
+        obj.addEventListener('keydown', stopCarret);
+        obj.addEventListener('keyup', stopCarret);
+
+        function stopCarret() {
+            if (obj.value.length > 3) {
+                setCaretPosition(obj, 3);
+            }
+        }
+
+        function setCaretPosition(elem, caretPos) {
+            if (elem != null) {
+                if (elem.createTextRange) {
+                    var range = elem.createTextRange();
+                    range.move('character', caretPos);
+                    range.select();
+                }
+                else {
+                    if (elem.selectionStart) {
+                        elem.focus();
+                        elem.setSelectionRange(caretPos, caretPos);
+                        alert
+                        $('#submitForm').click()
+                    }
+                    else {
+                        elem.focus();
+                    }
+                }
+            }
+        }
+    </script>
+}
+@section CSS{
+    <style>
+        #partitioned {
+            padding-left: 7px;
+            letter-spacing: 37px;
+            border: 0;
+            background-image: linear-gradient(to left, #cacacae8 70%, rgba(255, 255, 255, 0) 0%);
+            background-position: bottom;
+            background-size: 53px 2px;
+            background-repeat: repeat-x;
+            background-position-x: 35px;
+            width: 220px;
+            min-width: 220px;
+            font-size: 25px;
+            color: #545454;
+            font-weight: bold;
+            text-align: left !important;
+            direction: ltr !important;
+            outline: none;
+        }
+
+        .ajaxLoader {
+            text-align: center;
+        }
+
+        button.dk-btn.dk-btn-info.easyLogin.timer {
+            font-size: 13px;
+        }
+
+        #divInner {
+            left: 0;
+            position: sticky;
+        }
+
+        #divOuter {
+            width: 190px;
+            overflow: hidden;
+            display: inline-block;
+        }
+    </style>
+}
+

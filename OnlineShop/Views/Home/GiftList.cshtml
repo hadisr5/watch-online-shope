@@ -1,0 +1,120 @@
+﻿@using OnlineShop.Models
+@using System.Globalization
+@{
+    var db = new OnlineShopEntities();
+    int userid = Convert.ToInt16(Session["userLogin"]);
+    int totalPoints = Convert.ToInt16(db.UserPoints.Where(r => r.userId == userid).ToList().Sum(r => r.point));
+    totalPoints -=Convert.ToInt32( db.GiftOrders.Where(r => r.userid == userid).ToList().Sum(r=>r.pointRecived));
+    var user = db.Users.Where(r => r.id == userid).FirstOrDefault();
+    Layout = "/views/shared/_Layout.cshtml";
+    var baskets = db.Baskets.Where(r => r.userId == userid).ToList();
+}
+
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="wrapper">
+    <!--Header Area Start-->
+    @RenderPage("/views/shared/_Header2.cshtml")
+    <!--Header Area End-->
+    <!--Breadcrumb Tow Start-->
+    <div class="breadcrumb-tow mb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-title">
+                        <h1>لیست جایزه ها</h1>
+                    </div>
+                    <div class="breadcrumb-content breadcrumb-content-tow">
+                        <ul>
+                            <li><a href="/">خانه</a></li>
+                            <li class="active">لیست جایزه ها</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Breadcrumb Tow End-->
+    <!--Login Register Area Strat-->
+    <div class="login-register-area mb-80">
+        <div class="container">
+            <div class="row">
+                @{
+                    if (ViewBag.orderId != null)
+                    {
+                        <div class="col-md-12">
+                            <div class="alert alert-success">
+                                <strong>انجام شد !</strong> شناسه سفارش شما : @ViewBag.orderId
+                            </div>
+                        </div>
+                    }
+                }
+
+                
+                <!--Login Form Start-->
+                <div class="col-md-12 col-sm-12 col-md-offset-3 offset-3 mx-auto">
+                    <div class="customer-login-register">
+                        <h3 style="font-size: 24px;
+    direction: rtl;
+    text-align: right;
+    margin-bottom: 50px;
+    margin-top: 0;">
+                            امتیاز شما : @totalPoints
+                        </h3>
+                        <div class="form-login-title">
+                            <div class="row">
+                                @{
+                                    var gifts = db.Gifts.ToList();
+                                    if (gifts.Count != 0)
+                                    {
+                                        foreach (var item in gifts)
+                                        {
+                                            var gl = db.ProductGalleries.Where(r => r.giftId == item.id).FirstOrDefault();
+                                            <div class="col-md-3" style="border: 1px solid #ececec;
+    border-radius: 0;
+    padding: 15px;">
+                                                @{
+                                                    if (gl != null)
+                                                    {
+                                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@gl.big" style="width:70% ; margin:0 10px;" alt="" />
+
+                                                    }
+                                                    <h6 style="font-size: 15px;font-weight: bold;margin: 10px 0;">@item.title</h6>
+                                                    <span style="font-weight: bold;margin: 5px 0;display: inline-block;">@item.price امتیاز</span>
+                                                    <br />
+
+                                                    if (item.price > totalPoints)
+                                                    {
+                                                        @:امتیاز شما کافی نیست !
+                                                        }
+                                                    else
+                                                    {
+                                                        <form method="post" action="reciveGift">
+                                                            <input name="id" value="@item.id" style="display:none"/>
+                                                            <button class="btn btn-danger">دریافت جایزه</button>
+                                                        </form>
+                                                    }
+
+                                                }
+                                            </div>
+                                                        }
+                                                    }
+                                }
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+                <!--Login Form End-->
+            </div>
+        </div>
+    </div>
+    <!--Login Register Area End-->
+
+    @RenderPage("/views/shared/_Footer.cshtml")
+    <!--Footer Area End-->
+</div>

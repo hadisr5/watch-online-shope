@@ -1,0 +1,1091 @@
+﻿@using OnlineShop.Models
+@{
+    var db = new OnlineShopEntities();
+    int id = Convert.ToInt16(ViewBag.id);
+    var catPro = new List<CatPro>();
+    var childCats = db.Categories.Where(r => r.parent == id).ToList();
+    if (db.CatProes.Where(r=>r.categoryId == id).ToList().Count!=0)
+    {
+        catPro.AddRange(db.CatProes.Where(r => r.categoryId == id).ToList());
+    }
+    if (childCats.Count != 0)
+    {
+        foreach (var item in childCats)
+        {
+            var subCatsCatPro = db.CatProes.Where(r => r.categoryId == item.id).ToList();
+            if (subCatsCatPro.Count != 0)
+            {
+                catPro.AddRange(subCatsCatPro);
+            }
+        }
+    }
+    var products = new List<Product>();
+    var setting = db.Settings.FirstOrDefault();
+    var cat = db.Categories.Find(id);
+    var catProperties = db.CatProperties.Where(r => r.catId == id).ToList();
+    if (catPro != null)
+    {
+        foreach (var item in catPro)
+        {
+            if (item.product_id != null)
+            {
+                var product = db.Products.Where(r => r.id == item.product_id).FirstOrDefault();
+                if (product != null)
+                {
+                    products.Add(product);
+                }
+            }
+        }
+    }
+    if (products.Count != 0)
+    {
+        products = products.Distinct().ToList();
+
+    }
+    var brands = new List<ProductsBrand>();
+    foreach (var item in products)
+    {
+        if (item.brandId != null)
+        {
+            var brand = db.ProductsBrands.Where(r => r.id == item.brandId).FirstOrDefault();
+            if (brand != null)
+            {
+                brands.Add(brand);
+            }
+        }
+    }
+    if (brands.Count != 0)
+    {
+        brands = brands.Distinct().ToList();
+    }
+    Layout = "/views/shared/_Layout.cshtml";
+}
+<main class="search-page default">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <a class="btn btn-light btn-search d-none show-sm" data-toggle="modal" data-target="#searchModal">جستجوی پیشرفته <img src="/template/images/setting-lines.svg" width="18"></a>
+            </div>
+            <aside class="sidebar-page col-12 col-sm-12 col-md-4 col-lg-3 order-1 sticky-sidebar hidden-sm">
+
+
+
+
+
+
+                @{
+                    var subcats = db.Categories.Where(r => r.parent == id).ToList();
+                    if (subcats.Count != 0)
+                    {
+                        <div class="box">
+                            <div class="box-header">زیر دسته بندی ها</div>
+                            <div class="box-content category-result">
+                                <ul>
+                                    <ul>
+                                        <li>
+                                            <a href="#">@cat.title</a>
+                                            <ul>
+                                                @foreach (var item in subcats)
+                                                {
+                                                    <li><a href="/home/category/@item.id">@item.title</a></li>
+                                                }
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                }
+
+                @{
+                    if (cat.Adv != null)
+                    {
+                        var pro = db.Products.Where(r => r.id == cat.Adv).FirstOrDefault();
+                        if (pro != null)
+                        {
+                            var gl = db.ProductGalleries.Where(r => r.product_id == pro.id).FirstOrDefault();
+                            <div class="box">
+                                <div class="box-header">
+                                    <a class="adsLink" href="/home/product/@pro.id">
+                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["uploadwebpath"]@gl.big" alt="@pro.title" />
+                                    </a>
+                                    <div class="product-box-content">
+                                        <div class="product-box-content-row">
+                                            <div class="product-box-title">
+                                                <a href="/home/product/@pro.id">
+                                                    @pro.title
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="product-box-row product-box-row-price">
+                                            <div class="price">
+                                                <div class="price-value">
+                                                    <div class="price-value-wrapper fixPrice adsPrice">
+                                                        @pro.price
+                                                        تومان
+                                                    </div>
+                                                </div>
+                                            </div>
+                                       
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="box-content catAdsContainer">
+                                    <img src="~/Template/images/ads.svg" alt="" />Ads
+                                </div>
+                            </div>
+
+                        }
+                    }
+                }
+                <div class="box">
+                    <div class="box-header">جستجو در نتایج:</div>
+                    <div class="box-content">
+                        <div class="ui-input ui-input--quick-search">
+                            <form action="">
+                                <input type="text" name="q" value="@Request.Params["q"]" class="ui-input-field ui-input-field--cleanable"
+                                       placeholder="نام محصول یا برند مورد نظر را بنویسید…">
+                                <span class="ui-input-cleaner"></span>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                @{
+                    if (brands.Count != 0)
+                    {
+                        <div class="box">
+                            <div class="box-header">
+                                <div class="box-toggle" data-toggle="collapse" href="#collapseExample2" role="button"
+                                     aria-expanded="true" aria-controls="collapseExample2">
+                                    برند
+                                    <i class="now-ui-icons arrows-1_minimal-down"></i>
+                                </div>
+                            </div>
+                            <div class="box-content">
+                                <div class="collapse" id="collapseExample2">
+                                    <div class="ui-input ui-input--quick-search">
+                                        <input type="text" class="ui-input-field ui-input-field--cleanable filterItem"
+                                               placeholder="نام برند مورد نظر را بنویسید…">
+                                        <span class="ui-input-cleaner"></span>
+                                    </div>
+                                    <div class="filter-option">
+                                        @{
+                                            int count = 0;
+                                            foreach (var item in brands)
+                                            {
+                                                <div class="checkbox">
+                                                    <input id="checkbox@(count)" type="checkbox" name="brand[@count]"
+                                                           data-value="@item.id">
+                                                    <label for="checkbox@(count)" class="js-box-content-item">
+                                                        @item.title
+                                                    </label>
+                                                </div>
+                                                count += 1;
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                            }
+                }
+
+                @{
+                    if (catProperties.Count != 0)
+                    {
+                        int counter = 200;
+                        foreach (var item in catProperties)
+                        {
+                            <div class="box">
+                                <div class="box-header">
+                                    <div class="box-toggle" data-toggle="collapse" href="#collapseExample2" role="button"
+                                         aria-expanded="true" aria-controls="collapseExample2">
+                                        @item.title
+                                        <i class="now-ui-icons arrows-1_minimal-down"></i>
+                                    </div>
+                                </div>
+                                <div class="box-content">
+                                    <div class="collapse" id="collapseExample2">
+                                        <div class="ui-input ui-input--quick-search">
+                                            <input type="text" class="ui-input-field ui-input-field--cleanable filterItem"
+                                                   placeholder="نام برند مورد نظر را بنویسید…">
+                                            <span class="ui-input-cleaner"></span>
+                                        </div>
+                                        <div class="filter-option">
+                                            @{
+                                                var catOptions = db.ProductPropertiesValues.Where(r => r.propertiesid == item.id).ToList();
+                                                var optionsString = new List<string>();
+                                                if (catOptions.Count != 0)
+                                                {
+                                                    foreach (var item2 in catOptions)
+                                                    {
+                                                        if (optionsString.Count == 0)
+                                                        {
+                                                            optionsString.Add(item2.value);
+                                                        }
+                                                        else
+                                                        {
+                                                            var pre = optionsString.Where(r => r == item2.value).FirstOrDefault();
+                                                            if (pre == null)
+                                                            {
+                                                                optionsString.Add(item2.value);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+
+
+
+                                                foreach (var propertyValue in optionsString)
+                                                {
+                                                    <div class="checkbox">
+                                                        <input id="checkbox@(counter)" type="checkbox" name="property[@counter]"
+                                                               data-value="@propertyValue">
+                                                        <label for="checkbox@(counter)" class="js-box-content-item">
+                                                            @propertyValue
+                                                        </label>
+                                                    </div>
+                                                    counter += 1;
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                                    }
+
+                                                }
+                }
+                <div class="box">
+                    <div class="box-content">
+                        <div class="parent-switcher">
+                            <label class="ui-statusswitcher">
+                                <input id="switcher-1" type="checkbox" name="has_selling_stock"
+                                       data-value="1" />
+                                <span class="ui-statusswitcher-slider">
+                                    <span class="ui-statusswitcher-slider-toggle"></span>
+                                </span>
+                            </label>
+                            <label class="label-switcher" for="switcher-1">فقط کالاهای موجود</label>
+                        </div>
+                    </div>
+                </div>
+
+                @*<div class="box">
+                        <div class="box-content">
+                            <div class="parent-switcher">
+                                <label class="ui-statusswitcher">
+                                    <input id="switcher-2" type="checkbox" name="has_ready_to_shipment"
+                                           data-value="1" />
+                                    <span class="ui-statusswitcher-slider">
+                                        <span class="ui-statusswitcher-slider-toggle"></span>
+                                    </span>
+                                </label>
+                                <label class="label-switcher" for="switcher-2">فقط کالاهای آماده ارسال</label>
+                            </div>
+                        </div>
+                    </div>*@
+
+
+                <div class="box">
+                    <div class="box-header">
+                        <div class="box-toggle" data-toggle="collapse" href="#collapseExample3" role="button"
+                             aria-expanded="true" aria-controls="collapseExample3">
+                            محدوده قیمت مورد نظر
+                            <i class="now-ui-icons arrows-1_minimal-down"></i>
+                        </div>
+                    </div>
+                    @{
+                        int minPrice = 0;
+                        Int64 maxPrice = 0;
+                        if (products.Count != 0)
+                        {
+                            var MostExpensiveProduct = products.OrderByDescending(r => r.price).FirstOrDefault();
+                            maxPrice = Convert.ToInt64(MostExpensiveProduct.price);
+                        }
+                    }
+                    <div class="box-content">
+                        <div class="collapse" id="collapseExample3">
+                            <form action="" class="filter-price">
+                                <div class="mt-2 mb-2">
+                                    <div class="c-filter-slider">
+                                        <div id="slider-non-linear-step" class="c-slider"></div>
+                                    </div>
+                                    <ul class="c-filter-range">
+                                        <li data-label="از" data-currency="تومان">
+                                            <input type="text" data-value="0" value="0" name="price[min]"
+                                                   data-range="0"
+                                                   class="js-slider-range-from disabled example-val"
+                                                   id="skip-value-lower" disabled="disabled">
+                                        </li>
+                                        <li data-label="تا" data-currency="تومان">
+                                            <input type="text" data-value="@(maxPrice)"
+                                                   value="@(maxPrice)"
+                                                   name="price[max]" data-range="@maxPrice"
+                                                   class="js-slider-range-to disabled example-val"
+                                                   id="skip-value-upper" disabled="disabled">
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="mt-3 mb-3">
+                                    <button onclick="priceFilter();return false"
+                                            class="btn-primary btn-primary--filter">
+                                        اعمال محدوده قیمت
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+                @*<div class="box">
+                        <div class="box-header">
+                            <div class="box-toggle" data-toggle="collapse" href="#collapseExample4" role="button"
+                                 aria-expanded="true" aria-controls="collapseExample4">
+                                رنگ ها
+                                <i class="now-ui-icons arrows-1_minimal-down"></i>
+                            </div>
+                        </div>
+                        <div class="box-content">
+                            <div class="collapse show" id="collapseExample4">
+                                <div class="ui-input ui-input--quick-search">
+                                    <input type="text" class="ui-input-field ui-input-field--cleanable filterItem"
+                                           placeholder="نام رنگ مورد نظر را بنویسید…">
+                                    <span class="ui-input-cleaner"></span>
+                                </div>
+                                <div class="filter-option filter-color-product c-box-scroll">
+                                    <div class="checkbox">
+                                        <input id="checkboxcolor0" type="checkbox" name="color[0]"
+                                               data-value="1">
+                                        <label for="checkboxcolor0">
+                                            سفید
+                                        </label>
+                                        <span class="c-filter-color"
+                                              style="background-color: #ffffff"></span>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input id="checkboxcolor1" type="checkbox" name="color[1]"
+                                               data-value="2">
+                                        <label for="checkboxcolor1">
+                                            مشکی
+                                        </label>
+                                        <span class="c-filter-color"
+                                              style="background-color: #000000"></span>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input id="checkboxcolor2" type="checkbox" name="color[2]"
+                                               data-value="3">
+                                        <label for="checkboxcolor2">
+                                            نقره ای
+                                        </label>
+                                        <span class="c-filter-color"
+                                              style="background-color: #C0C0C0"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+
+            </aside>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-9 order-2">
+                <div class="breadcrumb-section default">
+                    <ul class="breadcrumb-list">
+                        <li>
+                            <a href="/">
+                                <span>فروشگاه اینترنتی  @setting.WebsiteName</span>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </div>
+
+                <section class="products">
+                    <div class="listing default" id="load">
+                        <div class="listing-counter">7 کالا</div>
+                        
+
+                        @{
+                            if (products.Count == 0)
+                            {
+                                <div class="tab-content default" id="noProduct">
+                                    <div class="tab-pane active" id="related" role="tabpanel" aria-expanded="true">
+                                        <div class="container no-padding-right">
+                                            <div class="message-light">
+                                                جستجو برای این ترکیب از فیلترها با هیچ کالایی هم&zwnj;خوانی نداشت.
+                                            </div>
+                                            <div class="container" style="padding-right: 5%">
+                                                <p>تلاش کنید:</p>
+                                                <p>- تعدادی از فیلترها را حذف کنید.</p>
+                                                <p>- در جستجو از عبارت&zwnj;های متداول&zwnj;تر استفاده کنید.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-content default text-center hidden" id="withproduct">
+                                    <div class="tab-pane active" id="related" role="tabpanel" aria-expanded="true">
+                                        <div class="container no-padding-right">
+                                            <ul class="row listing-items">
+                                                @for (int i = 0; i < products.Count; i++)
+                                                {
+                                                    <li class="col-xl-3 col-lg-4 col-md-6 col-12 no-padding position-relative">
+                                                        <div class="skeleton-loader-product-card">
+                                                            <div class="ph-item">
+                                                                <div class="pr-0 pl-0">
+                                                                    <div class="ph-row">
+                                                                        <div class="ph-col-12 big ph-h-230"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="ph-item">
+                                                                <div class="pr-0 pl-0">
+                                                                    <div class="ph-row mb-0">
+                                                                        <div class="ph-col-12 big ph-h-20"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="ph-item">
+                                                                <div class="pr-0 pl-0">
+                                                                    <div class="ph-row">
+                                                                        <div class="ph-col-12 big ph-h-20"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="ph-item">
+                                                                <div class="pr-0 pl-0">
+                                                                    <div class="ph-row">
+                                                                        <div class="ph-col-8 big ph-h-40"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="ph-item direction-rtl">
+                                                                <div class="pr-0 pl-0">
+                                                                    <div class="ph-row">
+                                                                        <div class="ph-col-8 big ph-h-40"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="listing-header default">
+                                    <ul class="listing-sort nav nav-tabs justify-content-center pagination" role="tablist"
+                                        data-label="مرتب ‌سازی بر اساس :">
+                                        <li>
+                                            <a class="active"
+                                               data-toggle="tab" onclick="sortBy('related')" href="" role="tab"
+                                               aria-expanded="false">مرتبط‌ ترین</a>
+                                        </li>
+                                        @*<li>
+                                            <a data-toggle="tab" onclick="sortBy('most-view')" role="tab" href=""
+                                               aria-expanded="false">پربازدیدترین</a>
+                                        </li>
+                                        <li>
+                                            <a data-toggle="tab" onclick="sortBy('new')" href="" role="tab" aria-expanded="true">جدیدترین</a>
+                                        </li>*@
+                                        <li>
+                                            <a data-toggle="tab" onclick="sortBy('most-seller')" href="" role="tab"
+                                               aria-expanded="false">پرفروش‌ ترین‌</a>
+                                        </li>
+                                        <li>
+                                            <a data-toggle="tab" onclick="sortBy('down-price')" href="" role="tab"
+                                               aria-expanded="false">ارزان ‌ترین</a>
+                                        </li>
+                                        <li>
+                                            <a data-toggle="tab" onclick="sortBy('top-price')" href="" role="tab"
+                                               aria-expanded="false">گران ‌ترین</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-content default text-center" id="withproduct">
+                                    <div class="tab-pane active" id="related" role="tabpanel" aria-expanded="true">
+                                        <div class="container no-padding-right">
+                                            <ul class="row listing-items">
+                                                <li class="col-xl-3 col-lg-4 col-md-6 col-12 no-padding position-relative">
+                                                    <div class="skeleton-loader-product-card">
+                                                        <div class="ph-item">
+                                                            <div class="pr-0 pl-0">
+                                                                <div class="ph-row">
+                                                                    <div class="ph-col-12 big ph-h-230"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ph-item">
+                                                            <div class="pr-0 pl-0">
+                                                                <div class="ph-row mb-0">
+                                                                    <div class="ph-col-12 big ph-h-20"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ph-item">
+                                                            <div class="pr-0 pl-0">
+                                                                <div class="ph-row">
+                                                                    <div class="ph-col-12 big ph-h-20"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ph-item">
+                                                            <div class="pr-0 pl-0">
+                                                                <div class="ph-row">
+                                                                    <div class="ph-col-8 big ph-h-40"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ph-item direction-rtl">
+                                                            <div class="pr-0 pl-0">
+                                                                <div class="ph-row">
+                                                                    <div class="ph-col-8 big ph-h-40"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-content default hidden" id="noProduct">
+                                    <div class="tab-pane active" id="related" role="tabpanel" aria-expanded="true">
+                                        <div class="container no-padding-right">
+                                            <div class="message-light">
+                                                جستجو برای این ترکیب از فیلترها با هیچ کالایی هم&zwnj;خوانی نداشت.
+                                            </div>
+                                            <div class="container" style="padding-right: 5%">
+                                                <p>تلاش کنید:</p>
+                                                <p>- تعدادی از فیلترها را حذف کنید.</p>
+                                                <p>- در جستجو از عبارت&zwnj;های متداول&zwnj;تر استفاده کنید.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                    </div>
+
+
+
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+
+</main>
+
+
+
+@section JS{
+    <script>
+        window.addEventListener("load", function (event) {
+            lazyload();
+        });
+    </script>
+
+    <script type="text/javascript" src="/assets/js/toastr.min.js"></script>
+    <script type="text/javascript">toastr.options = {"positionClass":"toast-bottom-left"};</script>    <!--  theia-sticky-sidebar -->
+    <script src="/template/js/ResizeSensor.min.js"></script>
+    <script src="/template/js/theia-sticky-sidebar.min.js"></script>
+    <script>
+        const boxs = document.querySelectorAll('input[type="checkbox"]');
+        const queries = window.location.search ?
+            window.location.search.slice(1).split('&') :
+            [];
+        boxs.forEach(box => {
+            box.addEventListener('change', onFilter)
+        });
+
+        function onFilter(e) {
+            const {name, checked} = e.target;
+            const value = e.target.dataset.value;
+            const searchName = queries.map(query => query.split('=')[0])
+            const queryIndex = searchName.indexOf(name);
+
+            if (queryIndex !== -1 && !checked) {
+                queries.splice(queryIndex, 1);
+            } else if (queryIndex === -1 && checked) {
+                queries.push(`${name}=${value}`)
+            }
+
+            const newSearch = queries.join('&');
+            window.history.pushState("", "", `?${newSearch}`);
+            var url = window.location.href;
+            getProducts(url);
+        }
+
+        priceFilter = function () {
+            var min = document.getElementById('skip-value-lower').value;
+            var max = document.getElementById('skip-value-upper').value;
+            var url = new URL(window.location.href);
+            var query_string = url.search;
+            var search_params = new URLSearchParams(query_string);
+            search_params.delete('price_min');
+            search_params.delete('price_max');
+            search_params.append('price_min', min);
+            search_params.append('price_max', max);
+            url.search = search_params.toString();
+            var new_url = url.toString();
+            window.history.pushState("", "", new_url);
+            getProducts(url);
+        };
+
+        sortBy = function (sort) {
+            var url = new URL(window.location.href);
+            var query_string = url.search;
+            var search_params = new URLSearchParams(query_string);
+            search_params.delete('sortBy');
+            search_params.append('sortBy', sort);
+            url.search = search_params.toString();
+            var new_url = url.toString();
+            window.history.pushState("", "", new_url);
+            getProducts(url);
+        };
+
+        function getProducts(url) {
+            var Customurl='';
+            try {
+                Customurl  = url.replace('/parentCategory/','/filter/')
+
+            } catch (e) {
+                Customurl  = url.href.replace('/parentCategory/','/filter/')
+
+            }
+            // $('#loading').show();
+            $('.skeleton-loader-product-card').show();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: Customurl,
+                type: 'POST',
+            }).done(function (data) {
+                //$('.products').html('');
+                //$('.products').html(data);
+                $('.listing-items').html('');
+                $('.listing-items').html(data);
+                lazyload();
+                console.log(data.filters);
+                // $('#loading').hide();
+                $('.skeleton-loader-product-card').hide();
+            }).fail(function () {
+                // $('#loading').hide();
+                $('.skeleton-loader-product-card').hide();
+                toastr.warning('خطایی در حین انجام عملیات رخ داد', 'اوپس...');
+            });
+        }
+        $(document).ready(function(){
+            getProducts(window.location.href)
+        })
+    </script>
+    @*<script type="text/javascript">
+
+                $(function () {
+                    $('body').on('click', '.pagination a', function (e) {
+                        e.preventDefault();
+
+                        // $('#loading').show();
+
+                        var url = $(this).attr('href');
+                        getProducts(url);
+                        window.history.pushState("", "", url);
+                    });
+
+
+                    function getProducts(url) {
+                        $.ajax({
+                            url: url
+                        }).done(function (data) {
+                            $('.products').html(data);
+                            lazyload();
+                            // $('#loading').hide();
+                            $('.skeleton-loader-product-card').hide();
+                        }).fail(function () {
+                            toastr.warning('خطایی در حین انجام عملیات رخ داد', 'اوپس...');
+                        });
+                    }
+                });
+        </script>*@
+    <script src="~/Template/js/wNumb.js" type="text/javascript"></script>
+    <script>
+        var skipSlider = document.getElementById('slider-non-linear-step');
+        var $sliderFrom = document.querySelector('.js-slider-range-from');
+        var $sliderTo = document.querySelector('.js-slider-range-to');
+        var min = parseInt($sliderFrom.dataset.range),
+            max = parseInt($sliderTo.dataset.range);
+        noUiSlider.create(skipSlider, {
+            start: [$sliderFrom.value, $sliderTo.value],
+            connect: true,
+            direction: 'rtl',
+            format: wNumb({
+                thousand: ','
+            }),
+            step: 1000,
+            range: {
+                'min': min,
+                'max': max
+            }
+        });
+    </script>
+    <script>
+        var skipValues = [
+            document.getElementById('skip-value-lower'),
+            document.getElementById('skip-value-upper')
+        ];
+
+        skipSlider.noUiSlider.on('update', function (values, handle) {
+            skipValues[handle].value = values[handle];
+        });
+    </script>
+
+
+
+
+    <script>
+        var skipSlider = document.getElementById('slider-non-linear-step');
+        var $sliderFrom = document.querySelector('.js-slider-range-from');
+        var $sliderTo = document.querySelector('.js-slider-range-to');
+        var min = parseInt($sliderFrom.dataset.range),
+            max = parseInt($sliderTo.dataset.range);
+        noUiSlider.create(skipSlider, {
+            start: [$sliderFrom.value, $sliderTo.value],
+            connect: true,
+            direction: 'rtl',
+            format: wNumb({
+                thousand: ','
+            }),
+            step: 1000,
+            range: {
+                'min': min,
+                'max': max
+            }
+        });
+    </script>
+    <script>
+        var skipValues = [
+            document.getElementById('skip-value-lower'),
+            document.getElementById('skip-value-upper')
+        ];
+
+        skipSlider.noUiSlider.on('update', function (values, handle) {
+            skipValues[handle].value = values[handle];
+        });
+    </script>
+
+    <script>
+        var skipSliderModal = document.getElementById('slider-non-linear-step-modal');
+        var $sliderFromModal = document.querySelector('.js-slider-range-from-modal');
+        var $sliderToModal = document.querySelector('.js-slider-range-to-modal');
+        var min = parseInt($sliderFromModal.dataset.range),
+            max = parseInt($sliderToModal.dataset.range);
+        noUiSlider.create(skipSliderModal, {
+            start: [$sliderFromModal.value, $sliderToModal.value],
+            connect: true,
+            direction: 'rtl',
+            format: wNumb({
+                thousand: ','
+            }),
+            step: 10000,
+            range: {
+                'min': min,
+                'max': max
+            }
+        });
+    </script>
+    <script>
+        var skipValuesModal = [
+            document.getElementById('skip-value-lower-modal'),
+            document.getElementById('skip-value-upper-modal')
+        ];
+
+        skipSliderModal.noUiSlider.on('update', function (values, handle) {
+            skipValuesModal[handle].value = values[handle];
+        });
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            $(".filterItem").on("keyup", function() {
+                var value = $(this).val();
+                $(this).parent().siblings('.filter-option').find('.checkbox').filter(function() {
+                    $(this).toggle($("> label ",this).text().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+
+
+    <!-- For Js Create -->
+
+    <script>
+        $(document).on("click", ".remove-cart-item", function () {
+            var CartId = $(this).data('id');
+            $('#remove-button-card').data('id', CartId);
+            $('#add-button-card').data('id', CartId);
+            $('#remove-cart-item').modal('show');
+        });
+    </script>
+    <script>
+        $(".remove-cart-product").click(function (e) {
+            e.preventDefault();
+            var ID = $('#remove-button-card').data('id');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: '#',
+                method: "DELETE",
+                data: {id: ID},
+                success: function (data) {
+                    $('#cart-view').html('');
+                    $('#cart-view').html(data);
+                    $('#remove-cart-item').modal('hide');
+                    update_cart();
+                }
+            });
+        });
+
+
+        $('.transfer-to-future-purchases').click(function (e) {
+            e.preventDefault();
+            var ID = $('#add-button-card').data('id');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: '#',
+                method: "PATCH",
+                data: {id: ID},
+                success: function (data) {
+                    $('#cart-view').html('');
+                    $('#cart-view').html(data);
+                    $('#remove-cart-item').modal('hide');
+                    update_cart();
+                }
+            });
+        });
+
+        update_cart = function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: '#',
+                method: "GET",
+                data: {},
+                success: function (data) {
+                    $('#cart_show').html('');
+                    $('#cart_show').html(data);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            fetch_product_data();
+
+            function fetch_product_data(query = '') {
+                $.ajax({
+                    url: "#",
+                    method: 'GET',
+                    data: {query: query},
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.status === 200) {
+                            if (data.categorys.length === 0 && data.keywords.length === 0) {
+                                $('#results').html('');
+                                $('#results').append('<li class="list-group-item contsearch"><a href="/search?q=' + data.query + '" class="gsearch"><i class="fa fa-search"></i> نمایش همه نتایج برای <span style="color: #5DC0CD;font-weight: bold" >' + data.query + '</span></a></li>');
+                            } else {
+                                $('#results').html('');
+                                if (data.categorys.length > 0) {
+                                    jQuery.each(data.categorys, function (key, value) {
+                                        jQuery('#results').append('<li class="list-group-item contsearch"><a href="/search/' + value.url + '?q=' + value.label + '" class="gsearch"><i class="fa fa-search"></i> همه کالا های دسته <span style="color: #5DC0CD;font-weight: bold" >' + value.label + '</span></a></li>');
+                                    });
+                                }
+
+                                if (data.keywords.length > 0 && data.categorys.length > 0) {
+                                    $('#results').append('<hr>');
+                                }
+
+                                if (data.keywords.length > 0) {
+                                    jQuery.each(data.keywords, function (key, value) {
+                                        jQuery('#results').append('<li class="list-group-item contsearch"><a href="/search?q=' + value.keyword + '" class="gsearch">' + value.keyword + '</a></li>');
+                                    });
+                                }
+
+                            }
+                        }
+                    }
+                })
+            }
+
+
+                $(document).on('keyup', '#gsearchsimple', function () {
+                    var query = $('#gsearchsimple').val();
+                    var obj = $('#gsearchsimple');
+                    setTimeout(function(){
+                        var search = obj.val();
+                        if(search==query){
+                            doSearch(query)
+                        }
+                    },1000)
+
+                });
+
+                function doSearch(query){
+                    var n = query.length;
+                    if (n > 2) {
+                        fetch_product_data(query);
+                    } else {
+                        $('#results').empty().append('<div class="pr-2"><span>بیشترین جستجوهای اخیر:</span></div>\n' +
+                            '<ul class="search-results-trends" id="search-trends">');
+                        $('#search-trends').append('<li><a href="/search?q=لباسشویی" >لباسشویی</a></li>');
+                        $('#search-trends').append('<li><a href="/search?q=الجی" >الجی</a></li>');
+                        $('#search-trends').append('<li><a href="/search?q=جارو برقی" >جارو برقی</a></li>');
+                        $('#results').append('</ul>');
+                    }
+                }
+            });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            fetch_product_data();
+
+            function fetch_product_data(query = '') {
+                $.ajax({
+                    url: "#",
+                    method: 'GET',
+                    data: {query: query},
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.status === 200) {
+                            alert('www')
+                            if (data.categorys.length === 0 && data.keywords.length === 0) {
+                                $('#resultsMobile').html('');
+                                $('#resultsMobile').append('<li class="list-group-item contsearch"><a href="/search?q=' + data.query + '" class="gsearch"><i class="fa fa-search"></i> نمایش همه نتایج برای <span style="color: #5DC0CD;font-weight: bold" >' + data.query + '</span></a></li>');
+                            } else {
+                                $('#resultsMobile').html('');
+                                if (data.categorys.length > 0) {
+                                    jQuery.each(data.categorys, function (key, value) {
+                                        jQuery('#resultsMobile').append('<li class="list-group-item contsearch"><a href="/search/' + value.url + '?q=' + value.label + '" class="gsearch"><i class="fa fa-search"></i> همه کالا های دسته <span style="color: #5DC0CD;font-weight: bold" >' + value.label + '</span></a></li>');
+                                    });
+                                }
+
+                                if (data.keywords.length > 0 && data.categorys.length > 0) {
+                                    $('#resultsMobile').append('<hr>');
+                                }
+
+                                if (data.keywords.length > 0) {
+                                    jQuery.each(data.keywords, function (key, value) {
+                                        jQuery('#resultsMobile').append('<li class="list-group-item contsearch"><a href="/search?q=' + value.keyword + '" class="gsearch">' + value.keyword + '</a></li>');
+                                    });
+                                }
+
+                            }
+                        }
+                    }
+                })
+            }
+
+                $(document).on('keyup', '#gsearchsimpleMobile', function () {
+                    var query = $('#gsearchsimpleMobile').val();
+                    var obj = $('#gsearchsimpleMobile');
+                    setTimeout(function(){
+                        var search = obj.val();
+                        if(search==query){
+                            doSearchMobile(query)
+                        }
+                    },1000)
+
+                });
+
+                function doSearchMobile(query){
+                    var n = query.length;
+                    if (n > 2) {
+                        fetch_product_data(query);
+                    } else {
+                        $('#resultsMobile').html('');
+                        $('#resultsMobile').append('<div class="pr-2"><span>بیشترین جستجوهای اخیر:</span></div>\n' +
+                            '                            <ul class="search-results-trends" id="search-trends">');
+                        $('#search-trends-mobile').append('<li><a href="/search?q=لباسشویی" >لباسشویی</a></li>');
+                        $('#search-trends-mobile').append('<li><a href="/search?q=الجی" >الجی</a></li>');
+                        $('#search-trends-mobile').append('<li><a href="/search?q=جارو برقی" >جارو برقی</a></li>');
+                        $('#resultsMobile').append('</ul>');
+                    }
+                }
+            });
+    </script>
+
+    <script>
+        saveSubscribe = function () {
+            $('#loading').show();
+            var email = document.getElementById('emailsubscribe').value;
+            ValidateEmail(email);
+        };
+
+        function ValidateEmail(inputText) {
+            var mailformat = /^\w+([\.-]?\w+)*@@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if (inputText.match(mailformat)) {
+                var data = $('#subscribeForm').serialize();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '/subscribes',
+                    type: "POST",
+                    data: data,
+                    success: function (response) {
+                        $('#loading').hide();
+                        toastr.success(response.message);
+                        document.getElementById("subscribeForm").reset();
+                    },
+                    error: function (xhr) {
+                        $('#loading').hide();
+                        if (xhr.status === 422) {
+                            jQuery.each(xhr.responseJSON.errors, function (key, value) {
+                                toastr.error(value);
+                            });
+                            document.getElementById("subscribeForm").reset();
+                        }
+                        if (xhr.status !== 422) {
+                            toastr.warning(xhr.responseJSON.errors);
+                        }
+                    }
+                });
+            } else {
+                $('#loading').hide();
+                toastr.warning('ایمیل را به درستی وارد نمایید.');
+                document.getElementById("subscribeForm").email.focus();
+                return false;
+            }
+        }
+    </script>
+}
+
